@@ -1,3 +1,27 @@
 <resources>
-    <string name="app_name">IB2026FranciscoPG</string>
+
+    <!-- App -->
+    <string name="app_name">Iberdrola Clientes</string>
+
+    <!-- MainActivity -->
+    <string name="main_activity_greeting_user">Hola, FRANCISCO</string>
+    <string name="main_activity_address_placeholder">Urb REPRESA II - SAN FRANC...</string>
+    <string name="main_activity_promo_title">Tarjeta Iberdrola</string>
+    <string name="main_activity_promo_desc">Una tarjeta con la que podrás acumular saldo por tus compras, sea cual sea tu banco.</string>
+    <string name="main_activity_my_energy_title">Mi Energía</string>
+    <string name="main_activity_cd_profile">Perfil</string>
+    <string name="main_activity_cd_edit_address">Editar dirección</string>
+
+    <!-- Common (keep if used across screens) -->
+    <string name="consumo_actual">Consumo\nactual</string>
+    <string name="no_tienes_facturas">No tienes\nfacturas</string>
+    <string name="mis_accesos">Mis Accesos</string>
+
+    <!-- Navigation -->
+    <string name="nav_inicio">Inicio</string>
+    <string name="nav_consumo">Consumo</string>
+    <string name="nav_iberdrola">Mi Iberdrola</string>
+    <string name="nav_productos">Productos</string>
+    <string name="nav_gestiones">Gestiones</string>
+
 </resources>
