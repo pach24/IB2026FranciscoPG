@@ -1,5 +1,6 @@
 package com.iberdrola.practicas2026.FranciscoPG
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -37,6 +38,8 @@ class MainActivity : AppCompatActivity() {
 
     // Configura los eventos de click de la vista
     private fun setupListeners() {
-
+        binding.cardFacturas.root.setOnClickListener {
+            startActivity(Intent(this, MyInvoicesActivity::class.java))
+        }
     }
 }

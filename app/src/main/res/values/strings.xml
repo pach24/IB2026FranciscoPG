@@ -24,4 +24,7 @@
     <string name="nav_productos">Productos</string>
     <string name="nav_gestiones">Gestiones</string>
 
+    <!-- MyInvoicesActivity -->
+    <string name="my_invoices_back"><u>Atrás</u></string>
+
 </resources>
