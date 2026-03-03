@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_background"
+    tools:context=".MainActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/main_activity_content_padding_bottom">
+
+            <!-- Fondo Verde con curvas -->
+            <ImageView
+                android:id="@+id/headerBackground"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/main_activity_header_height"
+                android:contentDescription="@null"
+                android:src="@drawable/bg_header_curved"
+                android:scaleType="fitXY"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Saludo y Perfil -->
+            <TextView
+                android:id="@+id/tvGreeting"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/main_activity_greeting_user"
+                tools:text="Hola, FRANCISCO"
+                android:textColor="@color/color_text_on_primary"
+                android:textSize="@dimen/main_activity_greeting_text_size"
+                android:fontFamily="@font/misans_bold"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/main_activity_greeting_margin_top"
+                android:layout_marginStart="@dimen/margin_large"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivProfile"
+                android:layout_width="@dimen/main_activity_profile_size"
+                android:layout_height="@dimen/main_activity_profile_size"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:background="@drawable/bg_circle_white"
+                android:padding="@dimen/main_activity_profile_padding"
+                android:src="@drawable/ic_user_outline"
+                android:contentDescription="@string/main_activity_cd_profile"
+                app:tint="@color/color_brand_primary"
+                app:layout_constraintTop_toTopOf="@+id/tvGreeting"
+                app:layout_constraintBottom_toBottomOf="@+id/tvGreeting"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Dirección -->
+            <TextView
+                android:id="@+id/tvAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/main_activity_address_placeholder"
+                android:fontFamily="@font/misans_bold"
+                android:textColor="@color/color_text_on_primary"
+                android:textSize="@dimen/main_activity_address_text_size"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/main_activity_address_margin_top"
+                app:layout_constraintTop_toBottomOf="@+id/tvGreeting"
+                app:layout_constraintStart_toStartOf="@+id/tvGreeting" />
+
+            <ImageView
+                android:id="@+id/ivEditAddress"
+                android:layout_width="@dimen/main_activity_edit_icon_size"
+                android:layout_height="@dimen/main_activity_edit_icon_size"
+                android:contentDescription="@string/main_activity_cd_edit_address"
+                android:src="@drawable/ic_edit"
+                app:tint="@color/color_text_on_primary"
+                android:layout_marginStart="@dimen/main_activity_edit_icon_margin_start"
+                app:layout_constraintTop_toTopOf="@+id/tvAddress"
+                app:layout_constraintBottom_toBottomOf="@+id/tvAddress"
+                app:layout_constraintStart_toEndOf="@+id/tvAddress" />
+
+            <!-- Tarjeta Promocional Iberdrola -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvPromo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/main_activity_promo_card_height"
+                android:layout_marginHorizontal="@dimen/margin_large"
+                android:layout_marginTop="@dimen/main_activity_promo_card_margin_top"
+                app:cardCornerRadius="@dimen/radius_large"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/color_promo_background"
+                app:layout_constraintTop_toBottomOf="@+id/tvAddress">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="TODO"
+                    android:rotationX="0">
+
+                    <!-- Imagen tarjeta iberdrola -->
+                    <ImageView
+                        android:id="@+id/ivPromo"
+                        android:layout_width="@dimen/main_activity_promo_image_width"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/img_iberdrola_card"
+                        android:scaleType="centerCrop"
+                        android:paddingStart="@dimen/main_activity_promo_image_padding_start"
+                        android:contentDescription="@null"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <!-- Textos-->
+                    <TextView
+                        android:id="@+id/tvPromoTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_large"
+                        android:layout_marginTop="@dimen/margin_large"
+                        android:layout_marginEnd="@dimen/margin_large"
+                        android:text="@string/main_activity_promo_title"
+                        android:fontFamily="@font/misans_bold"
+                        android:textColor="@color/color_text_primary"
+                        android:textSize="@dimen/main_activity_promo_title_text_size"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ivPromo"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvPromoDesc"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/main_activity_promo_desc_margin_top"
+                        android:layout_marginEnd="@dimen/margin_large"
+                        android:text="@string/main_activity_promo_desc"
+                        android:fontFamily="@font/misans_medium"
+                        android:textColor="@color/color_text_primary"
+                        android:textSize="@dimen/text_size_large"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/tvPromoTitle"
+                        app:layout_constraintTop_toBottomOf="@+id/tvPromoTitle" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Título Mi Energía -->
+            <TextView
+                android:id="@+id/tvMiEnergia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/main_activity_my_energy_title"
+                android:fontFamily="@font/misans_bold"
+                android:textColor="@color/color_text_primary"
+                android:textSize="@dimen/main_activity_my_energy_title_text_size"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/main_activity_my_energy_margin_top"
+                android:layout_marginStart="@dimen/margin_large"
+                app:layout_constraintTop_toBottomOf="@+id/cvPromo"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!-- Carrusel de tarjetas de Energía -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:clipToPadding="false"
+                android:paddingStart="@dimen/margin_large"
+                android:paddingEnd="@dimen/margin_large"
+                android:scrollbars="none"
+                app:layout_constraintTop_toBottomOf="@+id/tvMiEnergia">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Tarjeta Facturas -->
+                    <include
+                        android:id="@+id/cardFacturas"
+                        layout="@layout/item_invoices_card" />
+
+                    <!-- Tarjeta Consumo (si haces otro XML) -->
+                    <!-- <include
+                        android:id="@+id/cardConsumo"
+                        layout="@layout/card_consumo" /> -->
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
