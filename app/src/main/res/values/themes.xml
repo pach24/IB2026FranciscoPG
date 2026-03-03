@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.IberdrolaPracticas" parent="Theme.Material3.Light.NoActionBar">
+    <style name="Theme.IB2026FranciscoPG" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/iberdrola_green</item>
         <item name="colorSecondary">@color/iberdrola_green</item>
         <item name="android:statusBarColor">@color/iberdrola_green</item>
