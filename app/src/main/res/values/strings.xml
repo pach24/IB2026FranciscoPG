@@ -4,7 +4,7 @@
     <string name="app_name">Iberdrola Clientes</string>
 
     <!-- MainActivity -->
-    <string name="main_activity_greeting_user">Hola, FRANCISCO</string>
+    <string name="main_activity_greeting_user">Hola, %s</string>
     <string name="main_activity_address_placeholder">Urb REPRESA II - SAN FRANC...</string>
     <string name="main_activity_promo_title">Tarjeta Iberdrola</string>
     <string name="main_activity_promo_desc">Una tarjeta con la que podrás acumular saldo por tus compras, sea cual sea tu banco.</string>
