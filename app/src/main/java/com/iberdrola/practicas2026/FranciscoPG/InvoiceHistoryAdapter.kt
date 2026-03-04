@@ -11,16 +11,17 @@ import com.iberdrola.practicas2026.FranciscoPG.databinding.ItemInvoiceHeaderBind
 import com.iberdrola.practicas2026.FranciscoPG.databinding.ItemInvoiceRowBinding
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListItem
 
-class InvoiceHistoryAdapter : ListAdapter<InvoiceListItem, RecyclerView.ViewHolder>(InvoiceDiffCallback()) {
+// Explicit constructor added to receive click events as lambda
+class InvoiceHistoryAdapter(
+    private val onInvoiceClicked: (String) -> Unit
+) : ListAdapter<InvoiceListItem, RecyclerView.ViewHolder>(InvoiceDiffCallback()) {
 
-    // Definimos identificadores constantes para nuestros ViewTypes
     companion object {
         private const val VIEW_TYPE_HEADER = 0
         private const val VIEW_TYPE_INVOICE = 1
     }
 
     override fun getItemViewType(position: Int): Int {
-        // Devuelve el ViewType en función de la clase del elemento actual
         return when (getItem(position)) {
             is InvoiceListItem.HeaderYear -> VIEW_TYPE_HEADER
             is InvoiceListItem.InvoiceItem -> VIEW_TYPE_INVOICE
@@ -38,7 +39,7 @@ class InvoiceHistoryAdapter : ListAdapter<InvoiceListItem, RecyclerView.ViewHold
                 val binding = ItemInvoiceRowBinding.inflate(inflater, parent, false)
                 InvoiceViewHolder(binding)
             }
-            else -> throw IllegalArgumentException("ViewType desconocido")
+            else -> throw IllegalArgumentException("Unknown ViewType")
         }
     }
 
@@ -49,8 +50,6 @@ class InvoiceHistoryAdapter : ListAdapter<InvoiceListItem, RecyclerView.ViewHold
             is InvoiceViewHolder -> holder.bind(item as InvoiceListItem.InvoiceItem)
         }
     }
-
-    // --- ViewHolders ---
 
     inner class HeaderViewHolder(private val binding: ItemInvoiceHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -68,27 +67,26 @@ class InvoiceHistoryAdapter : ListAdapter<InvoiceListItem, RecyclerView.ViewHold
             binding.tvInvoiceAmount.text = item.amount
             binding.tvInvoiceStatus.text = item.statusText
 
-            // Lógica para cambiar el color del Pill (Chip) de estado
             val context = binding.root.context
 
+            // Trigger lambda from Presentation logic
+            binding.root.setOnClickListener {
+                onInvoiceClicked(item.id)
+            }
+
             if (item.isPaid) {
-                // Estado: PAGADA (Verde)
                 binding.tvInvoiceStatus.setBackgroundResource(R.drawable.bg_status_paid)
-                // Color corporativo iberdrola_dark_green o un verde oscuro específico
                 binding.tvInvoiceStatus.setTextColor(ContextCompat.getColor(context, R.color.iberdrola_dark_green))
             } else {
-                // Estado: PENDIENTE DE PAGO (Rojo)
                 binding.tvInvoiceStatus.setBackgroundResource(R.drawable.bg_status_unpaid)
-                // El rojo oscuro que usaste en tu XML original
                 binding.tvInvoiceStatus.setTextColor(android.graphics.Color.parseColor("#B72727"))
             }
         }
     }
 
-    // --- DiffUtil para optimización ---
+    // Explicit type bounds applied to avoid compilation issues
     class InvoiceDiffCallback : DiffUtil.ItemCallback<InvoiceListItem>() {
         override fun areItemsTheSame(oldItem: InvoiceListItem, newItem: InvoiceListItem): Boolean {
-            // Son el mismo elemento si ambos son Headers del mismo año, o Facturas con mismo ID
             return when {
                 oldItem is InvoiceListItem.HeaderYear && newItem is InvoiceListItem.HeaderYear ->
                     oldItem.year == newItem.year
@@ -99,7 +97,6 @@ class InvoiceHistoryAdapter : ListAdapter<InvoiceListItem, RecyclerView.ViewHold
         }
 
         override fun areContentsTheSame(oldItem: InvoiceListItem, newItem: InvoiceListItem): Boolean {
-            // Verifica si el contenido interno ha cambiado
             return oldItem == newItem
         }
     }
