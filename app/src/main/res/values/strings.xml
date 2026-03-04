@@ -27,4 +27,8 @@
     <!-- MyInvoicesActivity -->
     <string name="my_invoices_back"><u>Atrás</u></string>
 
+    <string name="tab_light">Luz</string>
+    <string name="tab_gas">Gas</string>
+
+
 </resources>
