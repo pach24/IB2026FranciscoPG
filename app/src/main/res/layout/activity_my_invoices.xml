@@ -110,7 +110,7 @@
         app:layout_constraintTop_toBottomOf="@id/tvAddress"
         app:tabIndicator="@drawable/bg_tab_indicator"
         app:tabIndicatorHeight="6dp"
-
+        app:tabIndicatorColor="@null"
         app:tabIndicatorFullWidth="false"
         app:tabGravity="start"
         app:tabMode="scrollable"
@@ -141,7 +141,9 @@
         android:layout_marginTop="@dimen/margin_small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tabLayout" />
+        app:layout_constraintTop_toBottomOf="@id/tabLayout"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
