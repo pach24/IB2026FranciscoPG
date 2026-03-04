@@ -30,5 +30,14 @@
     <string name="tab_light">Luz</string>
     <string name="tab_gas">Gas</string>
 
+    <!-- Mis Facturas: Fragmento -->
+    <string name="title_latest_invoice">Última factura</string>
+    <string name="title_invoice_history">Histórico de facturas</string>
+    <string name="download_invoice">Descargar factura</string>
+
+    <!-- Estados de Factura -->
+    <string name="invoice_status_unpaid">Pendiente de Pago</string>
+    <string name="invoice_status_paid">Pagada</string>
+
 
 </resources>

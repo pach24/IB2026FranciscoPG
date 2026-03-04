@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_background">
+
+    <!-- ESTADO DE CARGA: Shimmer (Animación de barrido) envolviendo el skeleton -->
+    <!-- Se ancla directamente a la parte superior (parent) con un margen -->
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerLatestInvoice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_large"
+        android:layout_marginTop="@dimen/margin_large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shimmer_auto_start="true"
+        app:shimmer_duration="1200">
+
+        <include layout="@layout/skeleton_latest_invoice_card" />
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <!-- ESTADO DE ÉXITO: Tarjeta Real (Oculta por defecto) -->
+    <!-- Igual que el shimmer, se ancla a la parte superior (parent) -->
+    <include
+        android:id="@+id/cardLatestInvoice"
+        layout="@layout/view_latest_invoice_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_large"
+        android:layout_marginTop="@dimen/margin_large"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <!--
+         BARRERA INVISIBLE:
+         Esta barrera asegura que el contenido de "Historial" se coloque siempre
+         debajo del elemento más bajo (ya sea el shimmer o la tarjeta real).
+    -->
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrierLatestInvoice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="shimmerLatestInvoice, cardLatestInvoice" />
+
+    <!-- SECCIÓN: HISTORIAL DE FACTURAS -->
+    <TextView
+        android:id="@+id/tvHistoryTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:fontFamily="@font/misans_bold"
+        android:text="@string/title_invoice_history"
+        android:textColor="#2D3A3A"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrierLatestInvoice"
+        tools:text="Histórico de facturas" />
+
+    <!-- BOTÓN DE FILTRAR -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnFilter"
+        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:text="Filtrar"
+        android:textStyle="bold"
+        android:textColor="@color/iberdrola_dark_green"
+        android:textSize="14sp"
+        android:fontFamily="@font/misans_bold"
+        app:icon="@drawable/ic_filter"
+        app:iconTint="@color/iberdrola_dark_green"
+        app:iconPadding="8dp"
+        app:strokeColor="@color/iberdrola_dark_green"
+        app:strokeWidth="2dp"
+        app:cornerRadius="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrierLatestInvoice" />
+
+    <!-- (Aquí irá posteriormente tu RecyclerView para el listado de facturas) -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

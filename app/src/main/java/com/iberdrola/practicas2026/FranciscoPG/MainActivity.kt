@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.iberdrola.practicas2026.FranciscoPG.MyInvoicesActivity
 import com.iberdrola.practicas2026.FranciscoPG.databinding.ActivityMainBinding
 import com.iberdrola.practicas2026.FranciscoPG.presentation.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             binding.headerBackground.layoutParams = headerParams
 
             // 3. Bajamos los elementos (textos e icono) sumándole el espacio de la barra de estado al margen superior
-            // Esto mantiene la fidelidad visual de Figma/Preview
+            // Esto mantiene la fidelidad visual
             val greetingParams = binding.tvGreeting.layoutParams as android.view.ViewGroup.MarginLayoutParams
             val originalMarginTop = resources.getDimensionPixelSize(R.dimen.main_activity_greeting_margin_top)
             greetingParams.topMargin = originalMarginTop + systemBars.top
@@ -59,7 +60,6 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // Forzamos los iconos de la barra a BLANCOS (isAppearanceLightStatusBars = false)
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = false
     }
 
