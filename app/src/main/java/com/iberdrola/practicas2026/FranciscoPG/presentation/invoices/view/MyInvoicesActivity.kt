@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG
+package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view
 
 import android.graphics.Color
 import android.os.Bundle
@@ -12,7 +12,9 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import com.iberdrola.practicas2026.FranciscoPG.databinding.ActivityMyInvoicesBinding
-import com.iberdrola.practicas2026.FranciscoPG.FeedbackBottomSheetFragment
+import com.iberdrola.practicas2026.FranciscoPG.R
+import com.iberdrola.practicas2026.FranciscoPG.presentation.feedback.FeedbackBottomSheetFragment
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.adapter.InvoicePagerAdapter
 
 @AndroidEntryPoint
 class MyInvoicesActivity : AppCompatActivity() {

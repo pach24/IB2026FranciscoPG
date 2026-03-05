@@ -1,5 +1,6 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -79,7 +80,7 @@ class InvoiceHistoryAdapter(
                 binding.tvInvoiceStatus.setTextColor(ContextCompat.getColor(context, R.color.iberdrola_dark_green))
             } else {
                 binding.tvInvoiceStatus.setBackgroundResource(R.drawable.bg_status_unpaid)
-                binding.tvInvoiceStatus.setTextColor(android.graphics.Color.parseColor("#B72727"))
+                binding.tvInvoiceStatus.setTextColor(Color.parseColor("#B72727"))
             }
         }
     }

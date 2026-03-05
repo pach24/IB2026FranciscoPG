@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG
+package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.iberdrola.practicas2026.FranciscoPG.databinding.FragmentInvoiceListBinding
 import com.iberdrola.practicas2026.FranciscoPG.databinding.ViewLatestInvoiceCardBinding
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.MyInvoicesViewModel
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.MyInvoicesViewModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.adapter.InvoiceHistoryAdapter
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListItem
 import dagger.hilt.android.AndroidEntryPoint

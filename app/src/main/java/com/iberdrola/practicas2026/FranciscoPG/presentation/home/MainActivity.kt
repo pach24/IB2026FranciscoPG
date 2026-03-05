@@ -1,15 +1,17 @@
-package com.iberdrola.practicas2026.FranciscoPG
+package com.iberdrola.practicas2026.FranciscoPG.presentation.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.iberdrola.practicas2026.FranciscoPG.MyInvoicesActivity
+import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.databinding.ActivityMainBinding
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view.MyInvoicesActivity
 import com.iberdrola.practicas2026.FranciscoPG.presentation.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
             // 3. Bajamos los elementos (textos e icono) sumándole el espacio de la barra de estado al margen superior
             // Esto mantiene la fidelidad visual
-            val greetingParams = binding.tvGreeting.layoutParams as android.view.ViewGroup.MarginLayoutParams
+            val greetingParams = binding.tvGreeting.layoutParams as ViewGroup.MarginLayoutParams
             val originalMarginTop = resources.getDimensionPixelSize(R.dimen.main_activity_greeting_margin_top)
             greetingParams.topMargin = originalMarginTop + systemBars.top
             binding.tvGreeting.layoutParams = greetingParams
