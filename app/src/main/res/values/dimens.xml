@@ -100,4 +100,14 @@
     <dimen name="m3_comp_skeleton_card_status_height">24dp</dimen>
     <dimen name="m3_comp_skeleton_corner_radius">4dp</dimen>
 
+    <!--    my invoices -->
+    <dimen name="back_btn_overlay_width">80dp</dimen>
+    <dimen name="back_btn_overlay_height">30dp</dimen>
+    <dimen name="min_touch_target_size">48dp</dimen>
+    <dimen name="tab_divider_height">2dp</dimen>
+    <dimen name="tab_indicator_height">6dp</dimen>
+
+
+    
+
 </resources>

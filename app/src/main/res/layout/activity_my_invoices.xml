@@ -37,14 +37,14 @@
     <!-- Overlay transparente para gestionar el clic de toda la zona "Atrás" -->
     <View
         android:id="@+id/btnBack"
-        android:layout_width="80dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/back_btn_overlay_width"
+        android:layout_height="@dimen/back_btn_overlay_height"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:contentDescription="@string/my_invoices_back"
         android:focusable="true"
-        android:minWidth="48dp"
-        android:minHeight="48dp"
+        android:minWidth="@dimen/min_touch_target_size"
+        android:minHeight="@dimen/min_touch_target_size"
         app:layout_constraintBottom_toBottomOf="@id/ivBackIcon"
         app:layout_constraintEnd_toEndOf="@id/tvBackText"
         app:layout_constraintStart_toStartOf="@id/ivBackIcon"
@@ -62,11 +62,11 @@
         android:textColor="@color/black"
         android:textSize="@dimen/m3_sys_typescale_title1"
         android:textStyle="bold"
+        android:text="@string/my_invoices_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivBackIcon"
-        tools:text="Mis facturas"
-        android:text="Mis facturas" />
+        tools:text="@string/my_invoices_title" />
 
     <TextView
         android:id="@+id/tvAddress"
@@ -76,19 +76,19 @@
         android:layout_marginTop="@dimen/m3_sys_spacing_1"
         android:layout_marginEnd="@dimen/m3_sys_spacing_3"
         android:fontFamily="@font/misans_bold"
-        android:textColor="#333333"
+        android:textColor="@color/dark_grey_text"
         android:textSize="@dimen/m3_sys_typescale_subhead"
         android:textStyle="bold"
+        android:text="@string/my_invoices_mock_address"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        tools:text="C/ PALMA - ARTA KM 49, 5 , 4°A -PINTO - MADRID"
-        android:text="C/ PALMA - ARTA KM 49, 5 , 4°A -PINTO - MADRID" />
+        tools:text="@string/my_invoices_mock_address" />
 
     <View
         android:id="@+id/tabDivider"
         android:layout_width="0dp"
-        android:layout_height="2dp"
+        android:layout_height="@dimen/tab_divider_height"
         android:layout_marginStart="@dimen/m3_sys_spacing_3"
         android:layout_marginEnd="@dimen/m3_sys_spacing_3"
         android:background="@color/tab_misfacturas"
@@ -108,7 +108,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvAddress"
         app:tabIndicator="@drawable/bg_tab_indicator"
-        app:tabIndicatorHeight="6dp"
+        app:tabIndicatorHeight="@dimen/tab_indicator_height"
         app:tabIndicatorColor="@null"
         app:tabIndicatorFullWidth="false"
         app:tabGravity="start"

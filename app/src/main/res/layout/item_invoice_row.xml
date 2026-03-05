@@ -82,7 +82,7 @@
         android:layout_width="@dimen/m3_sys_spacing_0"
         android:layout_height="@dimen/m3_comp_divider_thickness"
         android:layout_marginTop="@dimen/m3_sys_spacing_custom_14"
-        android:background="#E5E8E8"
+        android:background="@color/divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvInvoiceStatus" />
