@@ -1,0 +1,19 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:pathData="M12,21A9,9 0 1,1 12,3A9,9 0 1,1 12,21Z"
+        android:strokeWidth="1.5"
+        android:strokeColor="#167A4D" />
+    <path
+        android:pathData="M8.5,10.7A1.2,1.2 0 1,1 8.5,8.3A1.2,1.2 0 1,1 8.5,10.7Z M15.5,10.7A1.2,1.2 0 1,1 15.5,8.3A1.2,1.2 0 1,1 15.5,10.7Z"
+        android:fillColor="#167A4D" />
+    <!-- Boca (Sonrisa abierta) -->
+    <path
+        android:pathData="M7.5,14A4.5,4.5 0 0,0 16.5,14Z"
+        android:strokeWidth="1.5"
+        android:strokeColor="#167A4D"
+        android:strokeLineJoin="round" />
+</vector>

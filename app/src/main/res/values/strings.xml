@@ -39,5 +39,10 @@
     <string name="invoice_status_unpaid">Pendiente de Pago</string>
     <string name="invoice_status_paid">Pagada</string>
 
+    <!-- Feedback de Bottom Sheet -->
+    <string name="feedback_title">Tu opinión nos importa</string>
+    <string name="feedback_subtitle">¿Cómo de probable es que recomiendes esta app a amigos o familiares para que realicen sus gestiones?</string>
+    <string name="feedback_later"><u>Responder más tarde</u></string>
+
 
 </resources>

@@ -2,12 +2,17 @@ package com.iberdrola.practicas2026.FranciscoPG
 
 import android.graphics.Color
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import com.iberdrola.practicas2026.FranciscoPG.databinding.ActivityMyInvoicesBinding
+import com.iberdrola.practicas2026.FranciscoPG.FeedbackBottomSheetFragment
 
 @AndroidEntryPoint
 class MyInvoicesActivity : AppCompatActivity() {
@@ -17,32 +22,47 @@ class MyInvoicesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Modifica la barra de estado solo para esta Activity antes de inflar la vista
-        setupStatusBar()
+        setupSystemBars()
 
         binding = ActivityMyInvoicesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        applyWindowInsets()
         setupListeners()
         setupViewPager()
+        setupBackNavigation()
     }
 
-    private fun setupStatusBar() {
-        // Obtenemos el controlador de la ventana (WindowInsetsController)
-        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+    // Configura la barra de estado con la API moderna Edge-to-Edge
+    private fun setupSystemBars() {
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.light(Color.WHITE, Color.WHITE)
+        )
+    }
 
-        // Indicamos que los iconos de la barra de estado deben ser oscuros (true)
-        // porque el fondo será blanco/claro
-        windowInsetsController.isAppearanceLightStatusBars = true
-
-        // Cambiamos el color de fondo de la barra de estado a blanco
-        window.statusBarColor = Color.WHITE
+    // Aplica los insets de la ventana para que la vista no quede oculta por la barra de estado
+    private fun applyWindowInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
     }
 
     private fun setupListeners() {
         binding.btnBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+    }
+
+    // Intercepta el evento de retroceso para mostrar el BottomSheet temporalmente
+    private fun setupBackNavigation() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val bottomSheet = FeedbackBottomSheetFragment.newInstance()
+                bottomSheet.show(supportFragmentManager, FeedbackBottomSheetFragment.TAG)
+            }
+        })
     }
 
     private fun setupViewPager() {

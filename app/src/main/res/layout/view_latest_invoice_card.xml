@@ -19,7 +19,6 @@
         android:layout_height="wrap_content"
         android:padding="15dp">
 
-        <!-- Título principal -->
         <TextView
             android:id="@+id/tvCardTitle"
             android:layout_width="0dp"
@@ -33,7 +32,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Subtítulo (Tipo de factura) -->
         <TextView
             android:id="@+id/tvInvoiceType"
             android:layout_width="0dp"
@@ -47,7 +45,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvCardTitle" />
 
-        <!-- Icono superior derecho (Bombilla o Llama) -->
         <ImageView
             android:id="@+id/ivSupplyIcon"
             android:layout_width="38dp"
@@ -58,7 +55,6 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
 
-        <!-- Importe Grande -->
         <TextView
             android:id="@+id/tvInvoiceAmount"
             android:layout_width="wrap_content"
@@ -70,9 +66,22 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvInvoiceType"
-            tools:text="20,00 €" />
+            tools:text="20,00" />
 
-        <!-- Periodo de fechas -->
+        <!-- TextView separado para la moneda con un tamaño menor -->
+        <TextView
+            android:id="@+id/tvInvoiceCurrency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/misans_bold"
+            android:textColor="#333333"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@id/tvInvoiceAmount"
+            app:layout_constraintStart_toEndOf="@id/tvInvoiceAmount"
+            tools:text="€" />
+
         <TextView
             android:id="@+id/tvInvoiceDateRange"
             android:layout_width="wrap_content"
@@ -85,7 +94,6 @@
             app:layout_constraintTop_toBottomOf="@id/tvInvoiceAmount"
             tools:text="01 feb. 2024 - 04 mar. 2024" />
 
-        <!-- Línea divisoria gris -->
         <View
             android:id="@+id/dividerLine"
             android:layout_width="0dp"
@@ -96,7 +104,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvInvoiceDateRange" />
 
-        <!-- Pill (Chip) de Estado -->
         <TextView
             android:id="@+id/tvInvoiceStatus"
             android:layout_width="wrap_content"
