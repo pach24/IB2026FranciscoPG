@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- Color gris claro neutral para el skeleton -->
+    <solid android:color="#E0E0E0" />
+    <!-- Bordes redondeados para un aspecto más moderno -->
+    <corners android:radius="8dp" />
+</shape>
