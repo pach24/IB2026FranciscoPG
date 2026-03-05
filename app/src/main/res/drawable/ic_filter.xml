@@ -17,14 +17,14 @@
     <path
         android:pathData="M16,8 m-2,0 a2,2 0 1,1 4,0 a2,2 0 1,1 -4,0"
         android:strokeWidth="2"
-        android:strokeColor="#315F54"
+        android:strokeColor="@color/iberdrola_dark_green"
         android:fillColor="#00000000" />
 
     <!-- Línea derecha -->
     <path
         android:pathData="M18,8 L20,8"
         android:strokeWidth="2"
-        android:strokeColor="#315F54"
+        android:strokeColor="@color/iberdrola_dark_green"
         android:strokeLineCap="round"
         android:strokeLineJoin="round" />
 
@@ -33,7 +33,7 @@
     <path
         android:pathData="M4,16 L6,16"
         android:strokeWidth="2"
-        android:strokeColor="#315F54"
+        android:strokeColor="@color/iberdrola_dark_green"
         android:strokeLineCap="round"
         android:strokeLineJoin="round" />
 
@@ -41,14 +41,14 @@
     <path
         android:pathData="M8,16 m-2,0 a2,2 0 1,1 4,0 a2,2 0 1,1 -4,0"
         android:strokeWidth="2"
-        android:strokeColor="#315F54"
+        android:strokeColor="@color/iberdrola_dark_green"
         android:fillColor="#00000000" />
 
     <!-- Línea derecha -->
     <path
         android:pathData="M10,16 L20,16"
         android:strokeWidth="2"
-        android:strokeColor="#315F54"
+        android:strokeColor="@color/iberdrola_dark_green"
         android:strokeLineCap="round"
         android:strokeLineJoin="round" />
 

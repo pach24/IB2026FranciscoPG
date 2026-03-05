@@ -28,8 +28,12 @@
 
     <color name="tab_misfacturas">#c6d7d1</color>
 
+    <color name="red_600">#B72727</color>
+    <color name="red_100">#f1bfbf</color>
 
-
-
+    <color name="handler_color">#c3d5cf</color>
+    <color name="statuspaid">#b1dec8</color>
+    <!-- Skeleton -->
+    <color name="color_skeleton_background">#E0E0E0</color>
 
 </resources>

@@ -2,7 +2,6 @@ package com.iberdrola.practicas2026.FranciscoPG.presentation.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 1. Habilitamos la visualización edge-to-edge
+        // 1. Habilitamos la visualización edge-to-edge (el contenido dibuja debajo de las barras de sistema)
         enableEdgeToEdge()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -36,35 +35,33 @@ class MainActivity : AppCompatActivity() {
         setupListeners()
     }
 
-    // Configura los insets y asegura que los iconos de la barra de estado sean blancos
     private fun setupInsetsAndStatusBar() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+        // Escuchamos los insets en la raíz de la vista
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
 
-            // 1. Aplicamos el padding de sistema solo a los laterales y abajo al contenedor general
-            view.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom)
+            // 1. El padding general (lateral y abajo) se aplica a todo el scroll
+            // El padding top se lo damos SÓLO al TextView de saludo y la foto de perfil.
+            // Al hacer esto, el fondo verde (ImageView) sigue dibujándose hasta el tope de la pantalla
+            // cubriendo el espacio detrás del StatusBar, pero el texto y los iconos bajan lo necesario.
 
-            // 2. Ajustamos la altura del fondo verde para que absorba el tamaño de la barra de estado
-            // sin que el borde curvo inferior suba más de lo que debería.
-            val headerParams = binding.headerBackground.layoutParams
-            // Usamos el valor original definido en dimens (ej. 250dp) + la altura de la statusBar
-            val originalHeaderHeight = resources.getDimensionPixelSize(R.dimen.main_activity_header_height)
-            headerParams.height = originalHeaderHeight + systemBars.top
-            binding.headerBackground.layoutParams = headerParams
+            // Padding lateral y bottom al ScrollView principal para no ocultar contenido
+            binding.root.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom)
 
-            // 3. Bajamos los elementos (textos e icono) sumándole el espacio de la barra de estado al margen superior
-            // Esto mantiene la fidelidad visual
-            val greetingParams = binding.tvGreeting.layoutParams as ViewGroup.MarginLayoutParams
-            val originalMarginTop = resources.getDimensionPixelSize(R.dimen.main_activity_greeting_margin_top)
-            greetingParams.topMargin = originalMarginTop + systemBars.top
+            // 2. Padding Top seguro: Se lo sumamos dinámicamente al margen superior del saludo.
+            // Usamos la dimensión M3 que definiste en tu XML (m3_sys_spacing_4 que equivale a 32dp)
+            val baseMarginTop = resources.getDimensionPixelSize(R.dimen.m3_sys_spacing_4)
+
+            val greetingParams = binding.tvGreeting.layoutParams as android.view.ViewGroup.MarginLayoutParams
+            greetingParams.topMargin = baseMarginTop + systemBars.top
             binding.tvGreeting.layoutParams = greetingParams
 
             insets
         }
 
+        // Aseguramos que los iconos de la barra de estado se vean blancos sobre el fondo verde
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = false
     }
-
 
     private fun setupObservers() {
         viewModel.userName.observe(this) { name ->
@@ -72,8 +69,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Configura los eventos de click de la vista
     private fun setupListeners() {
+        // Usar include binding requiere acceder a la vista raíz (root)
         binding.cardFacturas.root.setOnClickListener {
             startActivity(Intent(this, MyInvoicesActivity::class.java))
         }

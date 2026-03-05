@@ -5,82 +5,82 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="0dp"
+    app:cardCornerRadius="@dimen/m3_comp_card_corner_radius"
+    app:cardElevation="@dimen/m3_sys_spacing_0"
     app:strokeColor="#E5E8E8"
-    app:strokeWidth="1dp">
+    app:strokeWidth="@dimen/m3_comp_divider_thickness">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="15dp">
+        android:padding="@dimen/m3_sys_spacing_custom_15">
 
-        <!-- Skeleton Título (Coincide con tvCardTitle: textSize 14sp -> aprox 16dp height) -->
+        <!-- Skeleton Título -->
         <View
             android:id="@+id/skeletonTitle"
-            android:layout_width="100dp"
-            android:layout_height="16dp"
+            android:layout_width="@dimen/m3_comp_skeleton_card_title_width"
+            android:layout_height="@dimen/m3_comp_skeleton_card_title_height"
             android:background="@drawable/bg_skeleton_placeholder"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Skeleton Subtítulo (Coincide con tvInvoiceType: marginTop 4dp, textSize 10sp -> aprox 12dp height) -->
+        <!-- Skeleton Subtítulo -->
         <View
             android:id="@+id/skeletonSubtitle"
-            android:layout_width="70dp"
-            android:layout_height="12dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="@dimen/m3_comp_skeleton_card_subtitle_width"
+            android:layout_height="@dimen/m3_comp_skeleton_card_subtitle_height"
+            android:layout_marginTop="@dimen/m3_sys_spacing_1"
             android:background="@drawable/bg_skeleton_placeholder"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/skeletonTitle" />
 
-        <!-- Skeleton Icono (Coincide con ivSupplyIcon: 38x38dp, top_toTopOf parent) -->
+        <!-- Skeleton Icono -->
         <View
             android:id="@+id/skeletonIcon"
-            android:layout_width="28dp"
-            android:layout_height="38dp"
+            android:layout_width="@dimen/m3_comp_skeleton_card_icon_width"
+            android:layout_height="@dimen/m3_comp_skeleton_card_icon_height"
             android:background="@drawable/bg_skeleton_placeholder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginEnd="4dp"/>
+            android:layout_marginEnd="@dimen/m3_sys_spacing_half"/>
 
-        <!-- Skeleton Importe (Coincide con tvInvoiceAmount: marginTop 24dp tras el subtítulo, textSize 24sp -> aprox 28dp height) -->
+        <!-- Skeleton Importe -->
         <View
             android:id="@+id/skeletonAmount"
-            android:layout_width="90dp"
-            android:layout_height="24dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="@dimen/m3_comp_skeleton_card_amount_width"
+            android:layout_height="@dimen/m3_comp_skeleton_card_amount_height"
+            android:layout_marginTop="@dimen/m3_sys_spacing_2"
             android:background="@drawable/bg_skeleton_placeholder"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/skeletonSubtitle" />
 
-        <!-- Skeleton Fechas (Coincide con tvInvoiceDateRange: marginTop 4dp, textSize 10sp -> aprox 12dp height) -->
+        <!-- Skeleton Fechas -->
         <View
             android:id="@+id/skeletonDates"
-            android:layout_width="150dp"
-            android:layout_height="12dp"
-            android:layout_marginTop="12dp"
+            android:layout_width="@dimen/m3_comp_skeleton_card_dates_width"
+            android:layout_height="@dimen/m3_comp_skeleton_card_dates_height"
+            android:layout_marginTop="@dimen/m3_sys_spacing_custom_12"
             android:background="@drawable/bg_skeleton_placeholder"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/skeletonAmount" />
 
-        <!-- Línea divisoria (Coincide con dividerLine: marginTop 10dp tras fechas) -->
+        <!-- Línea divisoria -->
         <View
             android:id="@+id/dividerLine"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="12dp"
-            android:background="#E5E8E8"
+            android:layout_width="@dimen/m3_sys_spacing_0"
+            android:layout_height="@dimen/m3_comp_divider_thickness"
+            android:layout_marginTop="@dimen/m3_sys_spacing_custom_12"
+            android:background="@color/color_stroke_neutral"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/skeletonDates" />
 
-        <!-- Skeleton Pill de Estado (Coincide con tvInvoiceStatus: marginTop 12dp tras el divider, height approx 24dp por padding) -->
+        <!-- Skeleton Pill de Estado -->
         <View
             android:id="@+id/skeletonStatus"
-            android:layout_width="115dp"
-            android:layout_height="24dp"
-            android:layout_marginTop="12dp"
+            android:layout_width="@dimen/m3_comp_skeleton_card_status_width"
+            android:layout_height="@dimen/m3_comp_skeleton_card_status_height"
+            android:layout_marginTop="@dimen/m3_sys_spacing_custom_12"
             android:background="@drawable/bg_skeleton_status"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dividerLine" />

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- App -->
@@ -12,9 +13,9 @@
     <string name="main_activity_cd_profile">Perfil</string>
     <string name="main_activity_cd_edit_address">Editar dirección</string>
 
-    <!-- Common (keep if used across screens) -->
-    <string name="consumo_actual">Consumo\nactual</string>
-    <string name="no_tienes_facturas">No tienes\nfacturas</string>
+    <!-- Common -->
+    <string name="consumo_actual">"Consumo\nactual"</string>
+    <string name="no_tienes_facturas">"No tienes\nfacturas"</string>
     <string name="mis_accesos">Mis Accesos</string>
 
     <!-- Navigation -->
@@ -25,7 +26,9 @@
     <string name="nav_gestiones">Gestiones</string>
 
     <!-- MyInvoicesActivity -->
-    <string name="my_invoices_back"><u>Atrás</u></string>
+    <!-- Para que funcione el subrayado en Android, lo mejor es hacerlo por código (SpannableString o paintFlags).
+         Aquí guardamos el texto plano para que el proyecto compile -->
+    <string name="my_invoices_back">Atrás</string>
 
     <string name="tab_light">Luz</string>
     <string name="tab_gas">Gas</string>
@@ -34,6 +37,9 @@
     <string name="title_latest_invoice">Última factura</string>
     <string name="title_invoice_history">Histórico de facturas</string>
     <string name="download_invoice">Descargar factura</string>
+    <string name="action_filter">Filtrar</string>
+    <string name="card_title_latest_invoice">Última factura</string>
+    <string name="invoice_type_light">Factura Luz</string>
 
     <!-- Estados de Factura -->
     <string name="invoice_status_unpaid">Pendiente de Pago</string>
@@ -42,7 +48,9 @@
     <!-- Feedback de Bottom Sheet -->
     <string name="feedback_title">Tu opinión nos importa</string>
     <string name="feedback_subtitle">¿Cómo de probable es que recomiendes esta app a amigos o familiares para que realicen sus gestiones?</string>
-    <string name="feedback_later"><u>Responder más tarde</u></string>
+    <string name="feedback_later">Responder más tarde</string>
 
+    <!-- Behaviors de Android X -->
+    <string name="appbar_scrolling_view_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
 
 </resources>

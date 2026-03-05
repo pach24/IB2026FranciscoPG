@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <solid android:color="#c3d5cf" /> <!-- Color gris claro similar al de la imagen -->
-    <corners android:radius="8dp" />
+    <solid android:color="@color/handler_color" /> <!-- Color gris claro similar al de la imagen -->
+    <corners android:radius="@dimen/m3_comp_shape_corner_radius_small" />
 </shape>

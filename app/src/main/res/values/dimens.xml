@@ -1,45 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- DP: spacing -->
-    <dimen name="margin_small">8dp</dimen>
-    <dimen name="margin_medium">16dp</dimen>
-    <dimen name="margin_large">24dp</dimen>
+    <!-- ========================================== -->
+    <!-- M3 SYSTEM TOKENS: TIPOGRAFÍA (Estilo iOS)  -->
+    <!-- ========================================== -->
+    <dimen name="m3_sys_typescale_title1">28sp</dimen>             <!-- Saludo principal y Títulos de pantalla -->
+    <dimen name="m3_sys_typescale_title2">22sp</dimen>             <!-- Títulos de sección -->
+    <dimen name="m3_sys_typescale_title3">20sp</dimen>             <!-- Títulos de BottomSheets o modales -->
+    <dimen name="m3_sys_typescale_headline_medium">24sp</dimen>    <!-- Cantidad principal (20,00) -->
+    <dimen name="m3_sys_typescale_headline">17sp</dimen>           <!-- Títulos dentro de tarjetas o navegación -->
+    <dimen name="m3_sys_typescale_headline_small">18sp</dimen>     <!-- Símbolo de moneda (€) -->
+    <dimen name="m3_sys_typescale_body_large">16sp</dimen>         <!-- Textos descriptivos principales o botones -->
+    <dimen name="m3_sys_typescale_subhead">15sp</dimen>            <!-- Textos secundarios y direcciones -->
+    <dimen name="m3_sys_typescale_label">14sp</dimen>              <!-- Botones pequeños, chips y labels -->
+    <dimen name="m3_sys_typescale_body_small">12sp</dimen>         <!-- Subtítulo de factura -->
+    <dimen name="m3_sys_typescale_micro">10sp</dimen>              <!-- Estado (Pendiente de pago) -->
 
-    <!-- DP: radius -->
-    <dimen name="radius_medium">16dp</dimen>
-    <dimen name="radius_large">20dp</dimen>
+    <!-- ========================================== -->
+    <!-- M3 SYSTEM TOKENS: ESPACIADO (Retícula 8dp) -->
+    <!-- ========================================== -->
+    <dimen name="m3_sys_spacing_0">0dp</dimen>
+    <dimen name="m3_sys_spacing_half">4dp</dimen>
+    <dimen name="m3_sys_spacing_custom_6">6dp</dimen>              <!-- Espaciado excepcional (padding pills) -->
+    <dimen name="m3_sys_spacing_1">8dp</dimen>
+    <dimen name="m3_sys_spacing_custom_10">10dp</dimen>            <!-- Espaciado excepcional (header top) -->
+    <dimen name="m3_sys_spacing_custom_12">12dp</dimen>            <!-- Espaciado excepcional (márgenes listas) -->
+    <dimen name="m3_sys_spacing_custom_14">14dp</dimen>            <!-- Espaciado excepcional (márgenes listas) -->
+    <dimen name="m3_sys_spacing_custom_15">15dp</dimen>            <!-- Espaciado excepcional (padding tarjetas) -->
+    <dimen name="m3_sys_spacing_2">16dp</dimen>
+    <dimen name="m3_sys_spacing_3">24dp</dimen>
+    <dimen name="m3_sys_spacing_4">32dp</dimen>
+    <dimen name="m3_sys_spacing_5">40dp</dimen>
 
-    <!-- SP: typography (generic) -->
-    <dimen name="text_size_medium">14sp</dimen>
-    <dimen name="text_size_large">16sp</dimen>
-    <dimen name="text_size_xlarge">20sp</dimen>
-    <dimen name="text_size_xxlarge">26sp</dimen>
+    <!-- ========================================== -->
+    <!-- M3 COMPONENT TOKENS: TARJETAS Y HOME       -->
+    <!-- ========================================== -->
+    <dimen name="m3_comp_avatar_size">48dp</dimen>
+    <dimen name="m3_comp_icon_size">24dp</dimen>
+    <dimen name="m3_comp_card_main_icon_size">38dp</dimen>         <!-- Icono principal de la tarjeta (Luz/Gas) -->
+    <dimen name="m3_comp_card_corner_radius">16dp</dimen>
+    <dimen name="m3_comp_promo_card_min_height">144dp</dimen>
+    <dimen name="m3_comp_promo_image_width">100dp</dimen>
 
-    <!-- MainActivity: DP -->
-    <dimen name="main_activity_header_height">380dp</dimen>
-    <dimen name="main_activity_content_padding_bottom">24dp</dimen>
+    <!-- ========================================== -->
+    <!-- M3 COMPONENT TOKENS: BOTTOM SHEET          -->
+    <!-- ========================================== -->
+    <dimen name="m3_comp_bottomsheet_drag_width">60dp</dimen>
+    <dimen name="m3_comp_bottomsheet_drag_height">6dp</dimen>
+    <dimen name="m3_comp_feedback_face_size">48dp</dimen>
+    <dimen name="m3_comp_bottomsheet_corner_radius">24dp</dimen>
 
-    <dimen name="main_activity_greeting_margin_top">50dp</dimen>
-    <dimen name="main_activity_address_margin_top">8dp</dimen>
+    <!-- ========================================== -->
+    <!-- M3 COMPONENT TOKENS: LISTAS                -->
+    <!-- ========================================== -->
+    <dimen name="m3_comp_list_icon_size">30dp</dimen>              <!-- Icono de flecha en listas -->
 
-    <dimen name="main_activity_profile_size">44dp</dimen>
-    <dimen name="main_activity_profile_padding">8dp</dimen>
+    <!-- ========================================== -->
+    <!-- M3 COMPONENT TOKENS: BOTONES E INTERFACES  -->
+    <!-- ========================================== -->
+    <dimen name="m3_comp_divider_thickness">1dp</dimen>
+    <dimen name="m3_comp_stroke_width_thick">2dp</dimen>           <!-- Bordes gruesos de tarjetas/shapes -->
+    <dimen name="m3_comp_button_stroke_width">2dp</dimen>
+    <dimen name="m3_comp_button_corner_radius_full">50dp</dimen>
+    <dimen name="m3_comp_shape_corner_radius_small">8dp</dimen>    <!-- Radios para pills y drag handles -->
 
-    <dimen name="main_activity_edit_icon_size">20dp</dimen>
-    <dimen name="main_activity_edit_icon_margin_start">8dp</dimen>
+    <!-- ========================================== -->
+    <!-- M3 COMPONENT TOKENS: SKELETON / SHIMMER    -->
+    <!-- ========================================== -->
+    <!-- Listas y Headers -->
+    <dimen name="m3_comp_skeleton_year_width">40dp</dimen>
+    <dimen name="m3_comp_skeleton_year_height">18dp</dimen>
+    <dimen name="m3_comp_skeleton_list_date_width">80dp</dimen>
+    <dimen name="m3_comp_skeleton_list_date_height">18dp</dimen>
+    <dimen name="m3_comp_skeleton_list_type_width">70dp</dimen>
+    <dimen name="m3_comp_skeleton_list_type_height">14dp</dimen>
+    <dimen name="m3_comp_skeleton_list_status_width">110dp</dimen>
+    <dimen name="m3_comp_skeleton_list_status_height">22dp</dimen>
+    <dimen name="m3_comp_skeleton_list_arrow_width">14dp</dimen>
+    <dimen name="m3_comp_skeleton_list_arrow_height">20dp</dimen>
+    <dimen name="m3_comp_skeleton_list_amount_width">60dp</dimen>
+    <dimen name="m3_comp_skeleton_list_amount_height">18dp</dimen>
+    <dimen name="m3_comp_skeleton_header_title_width">160dp</dimen>
+    <dimen name="m3_comp_skeleton_header_title_height">22dp</dimen>
+    <dimen name="m3_comp_skeleton_header_btn_width">105dp</dimen>
+    <dimen name="m3_comp_skeleton_header_btn_height">36dp</dimen>
 
-    <dimen name="main_activity_promo_card_height">160dp</dimen>
-    <dimen name="main_activity_promo_card_margin_top">30dp</dimen>
-    <dimen name="main_activity_promo_image_width">100dp</dimen>
-    <dimen name="main_activity_promo_image_padding_start">10dp</dimen>
-    <dimen name="main_activity_promo_desc_margin_top">4dp</dimen>
-
-    <dimen name="main_activity_my_energy_margin_top">70dp</dimen>
-
-    <!-- MainActivity: SP -->
-    <dimen name="main_activity_greeting_text_size">30sp</dimen>
-    <dimen name="main_activity_address_text_size">20sp</dimen>
-    <dimen name="main_activity_promo_title_text_size">18sp</dimen>
-    <dimen name="main_activity_my_energy_title_text_size">22sp</dimen>
+    <!-- Tarjeta Principal -->
+    <dimen name="m3_comp_skeleton_card_title_width">100dp</dimen>
+    <dimen name="m3_comp_skeleton_card_title_height">16dp</dimen>
+    <dimen name="m3_comp_skeleton_card_subtitle_width">70dp</dimen>
+    <dimen name="m3_comp_skeleton_card_subtitle_height">12dp</dimen>
+    <dimen name="m3_comp_skeleton_card_icon_width">28dp</dimen>
+    <dimen name="m3_comp_skeleton_card_icon_height">38dp</dimen>
+    <dimen name="m3_comp_skeleton_card_amount_width">90dp</dimen>
+    <dimen name="m3_comp_skeleton_card_amount_height">24dp</dimen>
+    <dimen name="m3_comp_skeleton_card_dates_width">150dp</dimen>
+    <dimen name="m3_comp_skeleton_card_dates_height">12dp</dimen>
+    <dimen name="m3_comp_skeleton_card_status_width">115dp</dimen>
+    <dimen name="m3_comp_skeleton_card_status_height">24dp</dimen>
+    <dimen name="m3_comp_skeleton_corner_radius">4dp</dimen>
 
 </resources>
