@@ -24,6 +24,9 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".MyInvoicesActivity"
+            android:exported="false" />
 
 
     </application>

@@ -29,7 +29,7 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/tvTitle"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="- -" />
+        android:text="20,00€" />
 
     <TextView
         android:id="@+id/tvTitle"

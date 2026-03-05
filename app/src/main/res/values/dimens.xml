@@ -19,7 +19,7 @@
     <dimen name="main_activity_header_height">380dp</dimen>
     <dimen name="main_activity_content_padding_bottom">24dp</dimen>
 
-    <dimen name="main_activity_greeting_margin_top">60dp</dimen>
+    <dimen name="main_activity_greeting_margin_top">50dp</dimen>
     <dimen name="main_activity_address_margin_top">8dp</dimen>
 
     <dimen name="main_activity_profile_size">44dp</dimen>
