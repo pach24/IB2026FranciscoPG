@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="false"
+    android:focusable="false"
+    android:backgroundTint="@color/white"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/iberdrola_dark_green"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <TextView
+            android:id="@+id/tvCardTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/misans_bold"
+            android:text="Última factura"
+            android:textColor="#2D3A3A"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/ivSupplyIcon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvInvoiceType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/misans_regular"
+            android:text="Factura Luz"
+            android:textColor="#596565"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@id/ivSupplyIcon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvCardTitle" />
+
+        <ImageView
+            android:id="@+id/ivSupplyIcon"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:src="@drawable/ic_lightbulb"
+            app:tint="@color/iberdrola_dark_green"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvInvoiceAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/misans_bold"
+            android:textColor="#333333"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvInvoiceType"
+            tools:text="20,00" />
+
+        <!-- TextView separado para la moneda con un tamaño menor -->
+        <TextView
+            android:id="@+id/tvInvoiceCurrency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/misans_bold"
+            android:textColor="#333333"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@id/tvInvoiceAmount"
+            app:layout_constraintStart_toEndOf="@id/tvInvoiceAmount"
+            tools:text="€" />
+
+        <TextView
+            android:id="@+id/tvInvoiceDateRange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/misans_regular"
+            android:textColor="#7A8585"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvInvoiceAmount"
+            tools:text="01 feb. 2024 - 04 mar. 2024" />
+
+        <View
+            android:id="@+id/dividerLine"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="#E5E8E8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvInvoiceDateRange" />
+
+        <TextView
+            android:id="@+id/tvInvoiceStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_status_unpaid"
+            android:fontFamily="@font/misans_bold"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:textColor="#B72727"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dividerLine"
+            tools:text="Pendiente de Pago" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

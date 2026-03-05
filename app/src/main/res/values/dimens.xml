@@ -1,0 +1,45 @@
+<resources>
+
+    <!-- DP: spacing -->
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+
+    <!-- DP: radius -->
+    <dimen name="radius_medium">16dp</dimen>
+    <dimen name="radius_large">20dp</dimen>
+
+    <!-- SP: typography (generic) -->
+    <dimen name="text_size_medium">14sp</dimen>
+    <dimen name="text_size_large">16sp</dimen>
+    <dimen name="text_size_xlarge">20sp</dimen>
+    <dimen name="text_size_xxlarge">26sp</dimen>
+
+    <!-- MainActivity: DP -->
+    <dimen name="main_activity_header_height">380dp</dimen>
+    <dimen name="main_activity_content_padding_bottom">24dp</dimen>
+
+    <dimen name="main_activity_greeting_margin_top">50dp</dimen>
+    <dimen name="main_activity_address_margin_top">8dp</dimen>
+
+    <dimen name="main_activity_profile_size">44dp</dimen>
+    <dimen name="main_activity_profile_padding">8dp</dimen>
+
+    <dimen name="main_activity_edit_icon_size">20dp</dimen>
+    <dimen name="main_activity_edit_icon_margin_start">8dp</dimen>
+
+    <dimen name="main_activity_promo_card_height">160dp</dimen>
+    <dimen name="main_activity_promo_card_margin_top">30dp</dimen>
+    <dimen name="main_activity_promo_image_width">100dp</dimen>
+    <dimen name="main_activity_promo_image_padding_start">10dp</dimen>
+    <dimen name="main_activity_promo_desc_margin_top">4dp</dimen>
+
+    <dimen name="main_activity_my_energy_margin_top">70dp</dimen>
+
+    <!-- MainActivity: SP -->
+    <dimen name="main_activity_greeting_text_size">30sp</dimen>
+    <dimen name="main_activity_address_text_size">20sp</dimen>
+    <dimen name="main_activity_promo_title_text_size">18sp</dimen>
+    <dimen name="main_activity_my_energy_title_text_size">22sp</dimen>
+
+</resources>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_background"
+    tools:context=".MyInvoicesActivity">
+
+    <ImageView
+        android:id="@+id/ivBackIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginTop="@dimen/margin_large"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/iberdrola_dark_green" />
+
+    <TextView
+        android:id="@+id/tvBackText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_small"
+        android:fontFamily="@font/misans_bold"
+        android:text="@string/my_invoices_back"
+        android:textColor="@color/iberdrola_dark_green"
+        android:textSize="@dimen/text_size_large"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/ivBackIcon"
+        app:layout_constraintStart_toEndOf="@id/ivBackIcon"
+        app:layout_constraintTop_toTopOf="@id/ivBackIcon" />
+
+    <!-- Overlay transparente para gestionar el clic de toda la zona "Atrás"  -->
+
+    <View
+        android:id="@+id/btnBack"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:contentDescription="@string/my_invoices_back"
+        android:focusable="true"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toBottomOf="@id/ivBackIcon"
+        app:layout_constraintEnd_toEndOf="@id/tvBackText"
+        app:layout_constraintStart_toStartOf="@id/ivBackIcon"
+        app:layout_constraintTop_toTopOf="@id/ivBackIcon"
+        tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
+
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginTop="@dimen/margin_large"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:fontFamily="@font/misans_bold"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivBackIcon"
+        tools:text="Mis facturas"
+        android:text="Mis facturas"/>
+
+    <TextView
+        android:id="@+id/tvAddress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:fontFamily="@font/misans_bold"
+        android:textColor="#333333"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        tools:text="C/ PALMA - ARTA KM 49, 5 , 4°A -PINTO - MADRID"
+        android:text="C/ PALMA - ARTA KM 49, 5 , 4°A -PINTO - MADRID"/>
+
+    <View
+        android:id="@+id/tabDivider"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:background="@color/tab_misfacturas"
+        app:layout_constraintBottom_toBottomOf="@id/tabLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvAddress"
+        app:tabIndicator="@drawable/bg_tab_indicator"
+        app:tabIndicatorHeight="6dp"
+        app:tabIndicatorColor="@null"
+        app:tabIndicatorFullWidth="false"
+        app:tabGravity="start"
+        app:tabMode="scrollable"
+        app:tabRippleColor="@android:color/transparent"
+        app:tabSelectedTextColor="@color/black"
+
+        app:tabTextAppearance="@style/CustomTabTextAppearance"
+        app:tabTextColor="@color/light_grey"
+        >
+
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_light" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_gas" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout"
+        app:layout_constraintVertical_bias="1.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
