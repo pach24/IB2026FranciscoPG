@@ -37,11 +37,12 @@
         <!-- Skeleton Icono (Coincide con ivSupplyIcon: 38x38dp, top_toTopOf parent) -->
         <View
             android:id="@+id/skeletonIcon"
-            android:layout_width="38dp"
+            android:layout_width="28dp"
             android:layout_height="38dp"
             android:background="@drawable/bg_skeleton_placeholder"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="4dp"/>
 
         <!-- Skeleton Importe (Coincide con tvInvoiceAmount: marginTop 24dp tras el subtítulo, textSize 24sp -> aprox 28dp height) -->
         <View
