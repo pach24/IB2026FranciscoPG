@@ -4,14 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="10dp">
+    android:paddingTop="@dimen/m3_sys_spacing_custom_10">
 
     <!-- Rectángulo falso para "Histórico de facturas" -->
     <View
         android:id="@+id/skeletonHistoryTitle"
-        android:layout_width="160dp"
-        android:layout_height="22dp"
-        android:layout_marginStart="32dp"
+        android:layout_width="@dimen/m3_comp_skeleton_header_title_width"
+        android:layout_height="@dimen/m3_comp_skeleton_header_title_height"
+        android:layout_marginStart="@dimen/m3_sys_spacing_4"
         android:background="@drawable/bg_skeleton_placeholder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,9 +20,9 @@
     <!-- Rectángulo falso para el Botón Filtrar -->
     <View
         android:id="@+id/skeletonFilterBtn"
-        android:layout_width="105dp"
-        android:layout_height="36dp"
-        android:layout_marginEnd="@dimen/margin_large"
+        android:layout_width="@dimen/m3_comp_skeleton_header_btn_width"
+        android:layout_height="@dimen/m3_comp_skeleton_header_btn_height"
+        android:layout_marginEnd="@dimen/m3_sys_spacing_3"
         android:background="@drawable/bg_skeleton_pill"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

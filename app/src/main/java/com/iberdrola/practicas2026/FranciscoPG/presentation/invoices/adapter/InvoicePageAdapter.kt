@@ -1,9 +1,9 @@
-package com.iberdrola.practicas2026.FranciscoPG
+package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view.InvoiceListFragment
 
 
 class InvoicePagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
@@ -12,8 +12,8 @@ class InvoicePagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(act
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> InvoiceListFragment.newInstance(InvoiceListFragment.SUPPLY_LIGHT)
-            1 -> InvoiceListFragment.newInstance(InvoiceListFragment.SUPPLY_GAS)
+            0 -> InvoiceListFragment.Companion.newInstance(InvoiceListFragment.Companion.SUPPLY_LIGHT)
+            1 -> InvoiceListFragment.Companion.newInstance(InvoiceListFragment.Companion.SUPPLY_GAS)
             else -> throw IllegalArgumentException("Invalid position: $position")
         }
     }

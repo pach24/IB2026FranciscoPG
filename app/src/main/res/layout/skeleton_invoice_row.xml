@@ -9,10 +9,10 @@
     <!-- Skeleton Fecha -->
     <View
         android:id="@+id/skeletonDate"
-        android:layout_width="90dp"
-        android:layout_height="18dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="@dimen/m3_comp_skeleton_list_date_width"
+        android:layout_height="@dimen/m3_comp_skeleton_list_date_height"
+        android:layout_marginTop="@dimen/m3_sys_spacing_2"
+        android:layout_marginStart="@dimen/m3_sys_spacing_1"
         android:background="@drawable/bg_skeleton_placeholder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -20,10 +20,10 @@
     <!-- Skeleton Tipo de Factura -->
     <View
         android:id="@+id/skeletonType"
-        android:layout_width="70dp"
-        android:layout_height="14dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="@dimen/m3_comp_skeleton_list_type_width"
+        android:layout_height="@dimen/m3_comp_skeleton_list_type_height"
+        android:layout_marginTop="@dimen/m3_sys_spacing_half"
+        android:layout_marginStart="@dimen/m3_sys_spacing_1"
         android:background="@drawable/bg_skeleton_placeholder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/skeletonDate" />
@@ -31,20 +31,20 @@
     <!-- Skeleton Estado (Pill) -->
     <View
         android:id="@+id/skeletonStatus"
-        android:layout_width="120dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
-        android:background="@drawable/bg_skeleton_placeholder"
+        android:layout_width="@dimen/m3_comp_skeleton_list_status_width"
+        android:layout_height="@dimen/m3_comp_skeleton_list_status_height"
+        android:layout_marginTop="@dimen/m3_sys_spacing_1"
+        android:layout_marginStart="@dimen/m3_sys_spacing_1"
+        android:background="@drawable/bg_skeleton_status"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/skeletonType" />
 
     <!-- Skeleton Icono Flecha (A la derecha) -->
     <View
         android:id="@+id/skeletonArrow"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="@dimen/m3_comp_skeleton_list_arrow_width"
+        android:layout_height="@dimen/m3_comp_skeleton_list_arrow_height"
+        android:layout_marginEnd="@dimen/m3_sys_spacing_1"
         android:background="@drawable/bg_skeleton_placeholder"
         app:layout_constraintBottom_toBottomOf="@id/skeletonStatus"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,9 +53,9 @@
     <!-- Skeleton Importe (Antes de la flecha) -->
     <View
         android:id="@+id/skeletonAmount"
-        android:layout_width="60dp"
-        android:layout_height="18dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="@dimen/m3_comp_skeleton_list_amount_width"
+        android:layout_height="@dimen/m3_comp_skeleton_list_amount_height"
+        android:layout_marginEnd="@dimen/m3_sys_spacing_custom_12"
         android:background="@drawable/bg_skeleton_placeholder"
         app:layout_constraintBottom_toBottomOf="@id/skeletonArrow"
         app:layout_constraintEnd_toStartOf="@id/skeletonArrow"
@@ -64,10 +64,10 @@
     <!-- Línea divisoria gris -->
     <View
         android:id="@+id/dividerLine"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="24dp"
-        android:background="#E5E8E8"
+        android:layout_width="@dimen/m3_sys_spacing_0"
+        android:layout_height="@dimen/m3_comp_divider_thickness"
+        android:layout_marginTop="@dimen/m3_sys_spacing_custom_14"
+        android:background="@color/color_stroke_neutral"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/skeletonStatus" />

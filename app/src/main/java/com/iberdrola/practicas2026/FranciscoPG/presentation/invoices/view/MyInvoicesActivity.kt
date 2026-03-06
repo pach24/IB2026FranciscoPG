@@ -1,9 +1,7 @@
-package com.iberdrola.practicas2026.FranciscoPG
+package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -12,7 +10,9 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import com.iberdrola.practicas2026.FranciscoPG.databinding.ActivityMyInvoicesBinding
-import com.iberdrola.practicas2026.FranciscoPG.FeedbackBottomSheetFragment
+import com.iberdrola.practicas2026.FranciscoPG.R
+import com.iberdrola.practicas2026.FranciscoPG.presentation.feedback.FeedbackBottomSheetFragment
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.adapter.InvoicePagerAdapter
 
 @AndroidEntryPoint
 class MyInvoicesActivity : AppCompatActivity() {
@@ -33,11 +33,9 @@ class MyInvoicesActivity : AppCompatActivity() {
         setupBackNavigation()
     }
 
-    // Configura la barra de estado con la API moderna Edge-to-Edge
+    // Configura la barra de estado respetando el modo oscuro/claro del sistema
     private fun setupSystemBars() {
-        enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.light(Color.WHITE, Color.WHITE)
-        )
+        enableEdgeToEdge()
     }
 
     // Aplica los insets de la ventana para que la vista no quede oculta por la barra de estado

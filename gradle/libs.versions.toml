@@ -28,6 +28,9 @@ okhttp = "4.12.0"
 
 # Base de datos (Room)
 room = "2.6.1"
+jetbrainsKotlinJvm = "2.0.21"
+
+javaxInject = "1"
 
 [libraries]
 # Core y UI
@@ -65,9 +68,13 @@ room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 
+javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javaxInject" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hiltAndroid = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 # Plugin KSP
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+android-library = { id = "com.android.library", version.ref = "agp" }

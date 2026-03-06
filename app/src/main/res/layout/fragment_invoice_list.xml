@@ -7,51 +7,55 @@
     android:layout_height="match_parent"
     android:background="@color/color_background">
 
-    <!--
-      APPBARLAYOUT: Contiene todo lo que está por encima de la lista.
-      Define qué partes colapsan (desaparecen) y qué partes se quedan fijas.
-    -->
+    <!-- APPBARLAYOUT: Define áreas colapsables vs pegajosas -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        app:elevation="0dp"
+        app:elevation="@dimen/m3_sys_spacing_0"
         app:liftOnScroll="false">
 
-        <!--
-          PARTE COLAPSABLE (La Tarjeta de Última Factura)
-          app:layout_scrollFlags="scroll" hace que desaparezca al subir
-          y reaparezca al bajar.
-        -->
+        <!-- PARTE COLAPSABLE (Tarjeta de Última Factura) -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll">
 
-            <!-- ESTADO CARGA: Tarjeta -->
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/shimmerLatestInvoice"
-                android:layout_width="0dp"
+            <!-- ESTADO CARGA: Contenedor Card para el Skeleton -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvSkeletonLatestInvoice"
+                android:layout_width="@dimen/m3_sys_spacing_0"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="32dp"
-                android:layout_marginTop="0dp"
+                android:layout_marginHorizontal="@dimen/m3_sys_spacing_4"
+                android:layout_marginTop="@dimen/m3_sys_spacing_0"
+                app:cardBackgroundColor="@color/color_surface"
+                app:cardCornerRadius="@dimen/m3_comp_card_corner_radius"
+                app:cardElevation="@dimen/m3_sys_spacing_0"
+                app:strokeColor="@color/handler_color"
+                app:strokeWidth="@dimen/m3_comp_divider_thickness"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:shimmer_auto_start="true"
-                app:shimmer_duration="1200">
-                <include layout="@layout/skeleton_latest_invoice_card" />
-            </com.facebook.shimmer.ShimmerFrameLayout>
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmerLatestInvoice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:shimmer_auto_start="true"
+                    app:shimmer_duration="1200">
+                    <include layout="@layout/skeleton_latest_invoice_card" />
+                </com.facebook.shimmer.ShimmerFrameLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- ESTADO ÉXITO: Tarjeta Real -->
             <include
                 android:id="@+id/cardLatestInvoice"
                 layout="@layout/view_latest_invoice_card"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/m3_sys_spacing_0"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="32dp"
-                android:layout_marginTop="0dp"
+                android:layout_marginHorizontal="@dimen/m3_sys_spacing_4"
+                android:layout_marginTop="@dimen/m3_sys_spacing_0"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -60,20 +64,16 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!--
-          PARTE FIJA (Sticky Header: Título Histórico y Botón Filtrar)
-          Al NO tener "app:layout_scrollFlags", esta vista se quedará pegada arriba
-          cuando la parte anterior colapse.
-        -->
+        <!-- PARTE FIJA (Sticky Header: Título Histórico y Botón Filtrar) -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layoutStickyHeader"
-            android:paddingTop="10dp"
+            android:paddingTop="@dimen/m3_sys_spacing_custom_10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/color_background"
-            android:paddingBottom="8dp">
+            android:paddingBottom="@dimen/m3_sys_spacing_1">
 
-            <!-- ESTADO CARGA: Skeleton del Título y Botón Filtrar -->
+            <!-- ESTADO CARGA: Skeleton del Header -->
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/shimmerStickyHeader"
                 android:layout_width="match_parent"
@@ -81,14 +81,10 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:shimmer_auto_start="true"
                 app:shimmer_duration="1200">
-
-                <!-- Importamos el layout extraído -->
                 <include layout="@layout/skeleton_sticky_header" />
-
             </com.facebook.shimmer.ShimmerFrameLayout>
 
-            <!-- ESTADO ÉXITO: Grupo real del Título y Botón (Oculto por defecto) -->
-            <!-- Usamos un "Group" de ConstraintLayout para ocultar/mostrar ambos a la vez -->
+            <!-- ESTADO ÉXITO: Grupo real (Oculto por defecto) -->
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/groupStickyHeaderReal"
                 android:layout_width="wrap_content"
@@ -99,13 +95,13 @@
 
             <TextView
                 android:id="@+id/tvHistoryTitle"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/m3_sys_spacing_0"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="@dimen/m3_sys_spacing_4"
                 android:fontFamily="@font/misans_bold"
                 android:text="@string/title_invoice_history"
-                android:textColor="#2D3A3A"
-                android:textSize="16sp"
+                android:textColor="@color/color_text_high_emphasis"
+                android:textSize="@dimen/m3_sys_typescale_body_large"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -117,35 +113,31 @@
                 style="@style/Widget.Material3.Button.OutlinedButton.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_large"
-                android:text="Filtrar"
+                android:layout_marginEnd="@dimen/m3_sys_spacing_3"
+                android:text="@string/action_filter"
                 android:textStyle="bold"
                 android:textColor="@color/iberdrola_dark_green"
-                android:textSize="14sp"
+                android:textSize="@dimen/m3_sys_typescale_label"
                 android:fontFamily="@font/misans_bold"
                 app:icon="@drawable/ic_filter"
                 app:iconTint="@color/iberdrola_dark_green"
-                app:iconPadding="8dp"
+                app:iconPadding="@dimen/m3_sys_spacing_1"
                 app:strokeColor="@color/iberdrola_dark_green"
-                app:strokeWidth="2dp"
-                app:cornerRadius="50dp"
+                app:strokeWidth="@dimen/m3_comp_button_stroke_width"
+                app:cornerRadius="@dimen/m3_comp_button_corner_radius_full"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!--
-  ZONA DE LA LISTA:
-  El behavior "ScrollingViewBehavior" es MÁGICO. Vincula el scroll del RecyclerView
-  con el AppBarLayout, empujando la tarjeta hacia arriba al scrollear.
--->
+    <!-- ZONA DE LA LISTA: Vinculada al AppBarLayout -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Shimmer de Lista (Visible por defecto durante la carga) -->
+        <!-- ESTADO CARGA: Shimmer de Lista -->
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmerHistory"
             android:layout_width="match_parent"
@@ -157,37 +149,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingHorizontal="@dimen/margin_large">
+                android:paddingHorizontal="@dimen/m3_sys_spacing_3">
 
-                <!-- Primero el año falso -->
                 <include layout="@layout/skeleton_invoice_header" />
-
-                <!-- Luego las facturas falsas -->
                 <include layout="@layout/skeleton_invoice_row" />
-
                 <include layout="@layout/skeleton_invoice_row" />
-
                 <include layout="@layout/skeleton_invoice_row" />
-
                 <include layout="@layout/skeleton_invoice_row" />
 
             </LinearLayout>
         </com.facebook.shimmer.ShimmerFrameLayout>
 
-        <!-- Lista Real (Oculta por defecto) -->
-        <!-- Kotlin se encarga de poner visibility="visible" y llenarla de datos -->
+        <!-- ESTADO ÉXITO: Lista Real -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvInvoiceHistory"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingHorizontal="@dimen/margin_large"
-            android:paddingBottom="40dp"
+            android:paddingHorizontal="@dimen/m3_sys_spacing_3"
+            android:paddingBottom="@dimen/m3_sys_spacing_5"
             android:visibility="gone"
             tools:listitem="@layout/item_invoice_row"
             tools:visibility="visible" />
 
     </FrameLayout>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

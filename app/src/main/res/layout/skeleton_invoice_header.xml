@@ -8,11 +8,11 @@
 
     <View
         android:id="@+id/skeletonYear"
-        android:layout_width="40dp"
-        android:layout_height="18dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="@dimen/m3_comp_skeleton_year_width"
+        android:layout_height="@dimen/m3_comp_skeleton_year_height"
+        android:layout_marginTop="@dimen/m3_sys_spacing_custom_10"
+        android:layout_marginBottom="@dimen/m3_sys_spacing_custom_10"
+        android:layout_marginStart="@dimen/m3_sys_spacing_1"
         android:background="@drawable/bg_skeleton_placeholder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
