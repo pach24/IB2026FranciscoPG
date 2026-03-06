@@ -178,6 +178,7 @@
 
             <!-- Carrusel de tarjetas de Energía -->
             <HorizontalScrollView
+                android:id="@+id/horizontalScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/m3_sys_spacing_2"
@@ -199,6 +200,17 @@
 
                 </LinearLayout>
             </HorizontalScrollView>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switchMockMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/m3_sys_spacing_3"
+                android:layout_marginStart="@dimen/m3_sys_spacing_3"
+                android:text="@string/switch_mock_mode"
+                android:checked="true"
+                app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView"
+                app:layout_constraintStart_toStartOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

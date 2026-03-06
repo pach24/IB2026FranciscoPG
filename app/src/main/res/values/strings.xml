@@ -39,5 +39,6 @@
         <string name="my_invoices_title">Mis facturas</string>
         <string name="my_invoices_mock_address">C/ PALMA - ARTA KM 49, 5 , 4°A -PINTO - MADRID</string>
 
+    <string name="switch_mock_mode">Modo Mock (Retromock)</string>
 
 </resources>

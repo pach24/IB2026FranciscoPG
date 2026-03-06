@@ -39,6 +39,9 @@ dependencies {
 
     implementation(project(":domain"))
 
+    // Inyección de dependencias
+    implementation(libs.javax.inject)
+
     // Corrutinas
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)

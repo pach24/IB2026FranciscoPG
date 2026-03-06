@@ -63,4 +63,7 @@
     <color name="handler_color">#c3d5cf</color>           <!-- Drag handle del BottomSheet -->
     <color name="tab_misfacturas">#c6d7d1</color>         <!-- Indicador y divisor del TabLayout -->
 
+
+    <color name="snackbar">#f2ec7c</color>
+
 </resources>
