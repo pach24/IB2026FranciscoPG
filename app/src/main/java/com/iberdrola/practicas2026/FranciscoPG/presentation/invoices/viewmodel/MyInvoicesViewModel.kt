@@ -34,7 +34,7 @@ class MyInvoicesViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 Log.d("DI", "VM: Llamando UseCase...")
-                val result = getInvoicesUseCase(supplyType, useMock)
+                val result = getInvoicesUseCase(supplyType)
                 Log.d("DI", "VM: Result = ${result.isSuccess}")
                 result.fold(
                     onSuccess = { invoices ->
