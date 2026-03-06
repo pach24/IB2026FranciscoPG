@@ -22,7 +22,7 @@
     <string name="main_activity_promo_desc">Una tarjeta con la que podrás acumular saldo por tus compras, sea cual sea tu banco.</string>
     <string name="main_activity_promo_title">Tarjeta Iberdrola</string>
     <string name="mis_accesos">Mis Accesos</string>
-    <string name="my_invoices_back">Atrás</string>
+    <string name="my_invoices_back"><u>Atrás</u></string>
     <string name="nav_consumo">Consumo</string>
     <string name="nav_gestiones">Gestiones</string>
     <string name="nav_iberdrola">Mi Iberdrola</string>

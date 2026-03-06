@@ -22,20 +22,31 @@
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll">
 
-            <!-- ESTADO CARGA: Tarjeta -->
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/shimmerLatestInvoice"
+            <!-- ESTADO CARGA: Contenedor Card para el Skeleton -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvSkeletonLatestInvoice"
                 android:layout_width="@dimen/m3_sys_spacing_0"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/m3_sys_spacing_4"
                 android:layout_marginTop="@dimen/m3_sys_spacing_0"
+                app:cardBackgroundColor="@color/color_surface"
+                app:cardCornerRadius="@dimen/m3_comp_card_corner_radius"
+                app:cardElevation="@dimen/m3_sys_spacing_0"
+                app:strokeColor="@color/handler_color"
+                app:strokeWidth="@dimen/m3_comp_divider_thickness"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:shimmer_auto_start="true"
-                app:shimmer_duration="1200">
-                <include layout="@layout/skeleton_latest_invoice_card" />
-            </com.facebook.shimmer.ShimmerFrameLayout>
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmerLatestInvoice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:shimmer_auto_start="true"
+                    app:shimmer_duration="1200">
+                    <include layout="@layout/skeleton_latest_invoice_card" />
+                </com.facebook.shimmer.ShimmerFrameLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- ESTADO ÉXITO: Tarjeta Real -->
             <include
@@ -89,7 +100,7 @@
                 android:layout_marginStart="@dimen/m3_sys_spacing_4"
                 android:fontFamily="@font/misans_bold"
                 android:text="@string/title_invoice_history"
-                android:textColor="#2D3A3A"
+                android:textColor="@color/color_text_high_emphasis"
                 android:textSize="@dimen/m3_sys_typescale_body_large"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"

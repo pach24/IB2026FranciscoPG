@@ -59,7 +59,7 @@
         android:layout_marginTop="@dimen/m3_sys_spacing_3"
         android:layout_marginEnd="@dimen/m3_sys_spacing_3"
         android:fontFamily="@font/misans_bold"
-        android:textColor="@color/black"
+        android:textColor="@color/dark_grey_text"
         android:textSize="@dimen/m3_sys_typescale_title1"
         android:textStyle="bold"
         android:text="@string/my_invoices_title"
@@ -114,7 +114,7 @@
         app:tabGravity="start"
         app:tabMode="scrollable"
         app:tabRippleColor="@android:color/transparent"
-        app:tabSelectedTextColor="@color/black"
+        app:tabSelectedTextColor="@color/color_text_high_emphasis"
         app:tabTextAppearance="@style/CustomTabTextAppearance"
         app:tabTextColor="@color/light_grey">
 

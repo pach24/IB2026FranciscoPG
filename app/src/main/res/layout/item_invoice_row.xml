@@ -17,7 +17,7 @@
         android:layout_marginTop="@dimen/m3_sys_spacing_custom_14"
         android:layout_marginStart="@dimen/m3_sys_spacing_1"
         android:fontFamily="@font/misans_bold"
-        android:textColor="@color/black"
+        android:textColor="@color/dark_grey_text"
         android:textSize="@dimen/m3_sys_typescale_label"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

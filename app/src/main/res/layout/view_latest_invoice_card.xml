@@ -7,8 +7,7 @@
     android:layout_height="wrap_content"
     android:clickable="false"
     android:focusable="false"
-    android:backgroundTint="@color/white"
-    app:cardBackgroundColor="@color/white"
+    app:cardBackgroundColor="@color/color_surface"
     app:cardCornerRadius="@dimen/m3_comp_card_corner_radius"
     app:cardElevation="@dimen/m3_sys_spacing_0"
     app:strokeColor="@color/handler_color"
@@ -25,7 +24,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/misans_bold"
             android:text="@string/card_title_latest_invoice"
-            android:textColor="@color/black"
+            android:textColor="@color/dark_grey_text"
             android:textSize="@dimen/m3_sys_typescale_label"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@id/ivSupplyIcon"
@@ -68,14 +67,14 @@
             app:layout_constraintTop_toBottomOf="@id/tvInvoiceType"
             tools:text="20,00" />
 
-        <!-- TextView separado para la moneda con un tamaño menor -->
+        <!-- CORREGIDO: Eliminado #333333 y reemplazado por @color/dark_grey -->
         <TextView
             android:id="@+id/tvInvoiceCurrency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/m3_sys_spacing_half"
             android:fontFamily="@font/misans_bold"
-            android:textColor="#333333"
+            android:textColor="@color/dark_grey"
             android:textSize="@dimen/m3_sys_typescale_headline_small"
             android:textStyle="bold"
             app:layout_constraintBaseline_toBaselineOf="@id/tvInvoiceAmount"
