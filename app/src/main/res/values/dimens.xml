@@ -37,7 +37,7 @@
     <!-- ========================================== -->
     <dimen name="m3_comp_avatar_size">48dp</dimen>
     <dimen name="m3_comp_icon_size">24dp</dimen>
-    <dimen name="m3_comp_card_main_icon_size">38dp</dimen>         <!-- Icono principal de la tarjeta (Luz/Gas) -->
+    <dimen name="m3_comp_card_main_icon_size">32dp</dimen>         <!-- Icono principal de la tarjeta (Luz/Gas) -->
     <dimen name="m3_comp_card_corner_radius">16dp</dimen>
     <dimen name="m3_comp_promo_card_min_height">144dp</dimen>
     <dimen name="m3_comp_promo_image_width">100dp</dimen>
@@ -90,8 +90,8 @@
     <dimen name="m3_comp_skeleton_card_title_height">16dp</dimen>
     <dimen name="m3_comp_skeleton_card_subtitle_width">70dp</dimen>
     <dimen name="m3_comp_skeleton_card_subtitle_height">12dp</dimen>
-    <dimen name="m3_comp_skeleton_card_icon_width">28dp</dimen>
-    <dimen name="m3_comp_skeleton_card_icon_height">38dp</dimen>
+    <dimen name="m3_comp_skeleton_card_icon_width">24dp</dimen>
+    <dimen name="m3_comp_skeleton_card_icon_height">32dp</dimen>
     <dimen name="m3_comp_skeleton_card_amount_width">90dp</dimen>
     <dimen name="m3_comp_skeleton_card_amount_height">24dp</dimen>
     <dimen name="m3_comp_skeleton_card_dates_width">150dp</dimen>

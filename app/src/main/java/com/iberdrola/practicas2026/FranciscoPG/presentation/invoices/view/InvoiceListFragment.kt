@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.databinding.FragmentInvoiceListBinding
 import com.iberdrola.practicas2026.FranciscoPG.databinding.ViewLatestInvoiceCardBinding
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.MyInvoicesViewModel
@@ -72,8 +73,11 @@ class InvoiceListFragment : Fragment() {
         }
     }
 
+    // Actualiza los textos e iconos de la tarjeta en función del tipo de suministro
     private fun showRealData() {
         binding?.let { b ->
+            // Si el skeleton está dentro de un contenedor en el fragment_invoice_list.xml,
+            // asegurate de ocultarlo adecuadamente (ej: b.cvSkeletonLatestInvoice.visibility = View.GONE)
             b.shimmerLatestInvoice.stopShimmer()
             b.shimmerLatestInvoice.visibility = View.GONE
             b.cardLatestInvoice.root.visibility = View.VISIBLE
@@ -93,6 +97,13 @@ class InvoiceListFragment : Fragment() {
             cardBinding.tvInvoiceAmount.text = "20,00 €"
             cardBinding.tvInvoiceDateRange.text = "01 feb. 2024 - 04 mar. 2024"
             cardBinding.tvInvoiceStatus.text = "Pendiente de Pago"
+
+            // Dependiendo del tipo de suministro, mostramos un icono diferente
+            if (supplyType == SUPPLY_GAS) {
+                cardBinding.ivSupplyIcon.setImageResource(R.drawable.ic_gas) // Asegúrate de tener este drawable
+            } else {
+                cardBinding.ivSupplyIcon.setImageResource(R.drawable.ic_light)
+            }
 
             b.cardLatestInvoice.root.setOnClickListener {
                 viewModel.onFeatureNotAvailable()

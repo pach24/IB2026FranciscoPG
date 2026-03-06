@@ -48,7 +48,7 @@
             android:id="@+id/ivSupplyIcon"
             android:layout_width="@dimen/m3_comp_card_main_icon_size"
             android:layout_height="@dimen/m3_comp_card_main_icon_size"
-            android:src="@drawable/ic_lightbulb"
+            android:src="@drawable/ic_light"
             app:tint="@color/iberdrola_dark_green"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
