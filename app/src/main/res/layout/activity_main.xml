@@ -84,8 +84,8 @@
             <!-- Icono Editar Dirección -->
             <ImageView
                 android:id="@+id/ivEditAddress"
-                android:layout_width="@dimen/m3_comp_icon_size"
-                android:layout_height="@dimen/m3_comp_icon_size"
+                android:layout_width="@dimen/m3_comp_icon_size_custom_20"
+                android:layout_height="@dimen/m3_comp_icon_size_custom_20"
                 android:contentDescription="@string/main_activity_cd_edit_address"
                 android:src="@drawable/ic_edit"
                 app:tint="@color/white"
