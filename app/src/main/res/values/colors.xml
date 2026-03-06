@@ -1,35 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Brand -->
-    <color name="color_brand_primary">#007f32</color>
-
-    <!-- Surfaces -->
-    <color name="color_background">#FFFFFF</color>
-    <color name="color_surface">#FFFFFF</color>
-    <color name="color_promo_background">#d9f1e3</color>
-
-    <!-- Textos -->
-    <color name="color_text_primary">#000000</color>
-    <color name="color_text_on_primary">#FFFFFF</color>
-
-    <!-- Strokes -->
-    <color name="color_stroke_success">#778a84</color>
-    <color name="color_stroke_neutral">#D9D9D9</color>
-
-
-    <color name="iberdrola_green">#007f32</color>
-    <color name="light_green_bg">#d9f1e3</color>
-    <color name="white">#FFFFFF</color>
-    <color name="dark_grey">#3A3A3A</color>
-    <color name="light_grey">#6c6c6c</color>
+    <!-- ========================================== -->
+    <!-- BASE                                       -->
+    <!-- ========================================== -->
     <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
 
+    <!-- ========================================== -->
+    <!-- MARCA IBERDROLA                            -->
+    <!-- ========================================== -->
+    <!-- Duplicado: color_brand_primary == iberdrola_green -->
+    <color name="iberdrola_green">#007f32</color>
+    <color name="color_brand_primary">#007f32</color>
     <color name="iberdrola_dark_green">#2d5f51</color>
 
-    <color name="tab_misfacturas">#c6d7d1</color>
+    <!-- ========================================== -->
+    <!-- FONDOS Y SUPERFICIES                       -->
+    <!-- ========================================== -->
+    <!-- Duplicado: color_background == color_surface == white -->
+    <color name="color_background">#FFFFFF</color>
+    <color name="color_surface">#FFFFFF</color>
+    <!-- Duplicado: color_promo_background == light_green_bg -->
+    <color name="color_promo_background">#d9f1e3</color>
+    <color name="light_green_bg">#d9f1e3</color>
+    <color name="color_skeleton_background">#E0E0E0</color>
 
+    <!-- ========================================== -->
+    <!-- TEXTO                                      -->
+    <!-- ========================================== -->
+    <!-- Duplicado: color_text_primary == black -->
+    <color name="color_text_primary">#000000</color>
+    <color name="color_text_high_emphasis">#121212</color> <!-- Casi negro -->
 
+    <color name="dark_grey_text">#333333</color>
+    <color name="dark_grey">#3A3A3A</color>
+    <color name="color_text_title">#2D3A3A</color>
+    <color name="color_text_secondary">#596565</color>
+    <color name="color_text_subtitle">#7A8585</color>
+    <color name="light_grey">#6c6c6c</color>
+    <color name="color_text_on_primary">#FFFFFF</color>    <!-- Texto sobre fondo de marca -->
 
+    <!-- ========================================== -->
+    <!-- BORDES Y SEPARADORES                       -->
+    <!-- ========================================== -->
+    <!-- Duplicado: color_divider == divider -->
+    <color name="color_divider">#E5E8E8</color>
+    <color name="divider">#E5E8E8</color>
+    <color name="color_stroke_neutral">#D9D9D9</color>
+    <color name="color_stroke_success">#778a84</color>
 
+    <!-- ========================================== -->
+    <!-- ESTADO / SEMÁNTICO                         -->
+    <!-- ========================================== -->
+    <color name="statuspaid">#b1dec8</color>              <!-- Estado: Pagada -->
+    <color name="red_100">#f1bfbf</color>                 <!-- Fondo estado error suave -->
+    <color name="red_600">#B72727</color>                 <!-- Texto/icono estado error -->
+
+    <!-- ========================================== -->
+    <!-- COMPONENTES UI                             -->
+    <!-- ========================================== -->
+    <color name="handler_color">#c3d5cf</color>           <!-- Drag handle del BottomSheet -->
+    <color name="tab_misfacturas">#c6d7d1</color>         <!-- Indicador y divisor del TabLayout -->
 
 </resources>

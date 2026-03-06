@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ========================================== -->
+    <!-- MARCA IBERDROLA (Desaturados para Dark Mode)-->
+    <!-- ========================================== -->
+    <!-- Se aclara ligeramente el verde para mejorar el contraste en fondos oscuros -->
+    <color name="color_brand_primary">#4DA570</color>
+    <color name="iberdrola_dark_green">#276553</color>
+
+    <!-- ========================================== -->
+    <!-- FONDOS Y SUPERFICIES                       -->
+    <!-- ========================================== -->
+    <!-- En Material 3 se usa gris oscuro #121212 en lugar de negro puro -->
+    <color name="color_background">#121212</color>
+    <color name="color_surface">#1E1E1E</color>
+
+    <!-- Fondos promocionales: oscurecidos pero manteniendo el tinte verde -->
+    <color name="color_promo_background">#1A3326</color>
+    <color name="light_green_bg">#2DC274</color>
+    <color name="color_skeleton_background">#2C2C2C</color>
+
+    <!-- ========================================== -->
+    <!-- TEXTO                                      -->
+    <!-- ========================================== -->
+    <!-- Inversión de tonos oscuros a claros -->
+
+    <color name="color_text_primary">#E3E3E3</color>
+    <color name="color_text_dark">#E3E3E3</color>
+    <color name="dark_grey_text">#E3E3E3</color>
+    <color name="dark_grey">#CCCCCC</color>
+    <color name="color_text_high_emphasis">#F5F5F5</color> <!-- Casi blanco -->
+
+    <!-- Títulos y textos secundarios -->
+    <color name="color_text_title">#F0F0F0</color>
+    <color name="color_text_secondary">#A0AAB2</color>
+    <color name="color_text_subtitle">#8A9696</color>
+    <color name="light_grey">#999999</color>
+
+    <!-- Al usar un verde desaturado como primario, el texto oscuro contrasta mejor -->
+    <color name="color_text_on_primary">#121212</color>
+
+    <!-- ========================================== -->
+    <!-- BORDES Y SEPARADORES                       -->
+    <!-- ========================================== -->
+    <color name="color_divider">#333333</color>
+    <color name="divider">#333333</color>
+    <color name="color_stroke_neutral">#444444</color>
+    <color name="color_stroke_success">#4DA570</color>
+
+    <!-- ========================================== -->
+    <!-- ESTADO / SEMÁNTICO                         -->
+    <!-- ========================================== -->
+    <color name="statuspaid">#173B2A</color>              <!-- Fondo chip verde oscuro -->
+    <color name="red_100">#4A1919</color>                 <!-- Fondo error oscuro -->
+    <color name="red_600">#E57373</color>                 <!-- Texto/icono error claro -->
+
+    <!-- ========================================== -->
+    <!-- COMPONENTES UI                             -->
+    <!-- ========================================== -->
+    <color name="handler_color">#4A5954</color>
+    <color name="tab_misfacturas">#4A5954</color>
+
+</resources>

@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG
+package com.iberdrola.practicas2026.FranciscoPG.presentation.feedback
 
 import android.content.DialogInterface
 import android.graphics.Paint

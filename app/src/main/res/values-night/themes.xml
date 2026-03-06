@@ -1,6 +1,21 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Tema base de la aplicación con soporte DayNight -->
     <style name="Theme.IB2026FranciscoPG" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:fontFamily">@font/misans</item>
+        <!-- Colores Principales -->
+        <item name="colorPrimary">@color/color_brand_primary</item>
+        <item name="colorOnPrimary">@color/color_text_on_primary</item>
+
+        <!-- Fondos y Superficies -->
+        <item name="android:colorBackground">@color/color_background</item>
+        <item name="colorSurface">@color/color_surface</item>
+
+        <!-- Status Bar -->
+        <!-- En Material 3 se suele igualar la barra de estado al fondo general en lugar del color primario -->
+        <item name="android:statusBarColor">@color/color_background</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+
+        <!-- Tipografía -->
+        <item name="android:fontFamily">@font/misans_regular</item>
+        <item name="fontFamily">@font/misans</item>
     </style>
 </resources>
