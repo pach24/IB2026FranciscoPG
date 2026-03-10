@@ -4,6 +4,7 @@ package com.iberdrola.practicas2026.FranciscoPG.di
 import android.content.Context
 import co.infinum.retromock.Retromock
 import com.google.gson.GsonBuilder
+import com.iberdrola.practicas2026.FranciscoPG.DeviceUtils.isEmulator
 import com.iberdrola.practicas2026.data.network.InvoiceApiService
 import com.iberdrola.practicas2026.FranciscoPG.data.repository.ConfigurationRepositoryImpl
 import com.iberdrola.practicas2026.FranciscoPG.data.repository.InvoiceRepositoryImpl
@@ -25,12 +26,20 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
+    @Provides
+    @Singleton
+    fun provideBaseUrl(): String {
+        return if (isEmulator()) {
+            "http://10.0.2.2:3001/"
+        } else {
+            "http://localhost:3001"     //Mi  dispositivo no lo coge con "http://10.0.2.2:3001/"
+        }
+    }
     @Provides @Singleton
-    fun provideRetrofit(): Retrofit {
+    fun provideRetrofit(baseUrl: String): Retrofit {
         val gson = GsonBuilder().setLenient().create()
         return Retrofit.Builder()
-            .baseUrl("https://francisco-pacheco.com/")
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
@@ -43,7 +52,9 @@ object AppModule {
             .build()
     }
 
-    @Provides @Singleton @Named("RealApi")
+    @Provides
+    @Singleton
+    @Named("RealApi")
     fun provideRealApiService(retrofit: Retrofit): InvoiceApiService = retrofit.create(InvoiceApiService::class.java)
 
     @Provides @Singleton @Named("MockApi")
