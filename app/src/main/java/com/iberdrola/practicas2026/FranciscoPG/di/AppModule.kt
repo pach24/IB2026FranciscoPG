@@ -30,7 +30,7 @@ object AppModule {
     fun provideRetrofit(): Retrofit {
         val gson = GsonBuilder().setLenient().create()
         return Retrofit.Builder()
-            .baseUrl("https://api.iberdrola.com/")
+            .baseUrl("https://francisco-pacheco.com/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
