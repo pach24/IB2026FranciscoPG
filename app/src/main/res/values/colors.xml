@@ -10,9 +10,10 @@
     <!-- ========================================== -->
     <!-- MARCA IBERDROLA                            -->
     <!-- ========================================== -->
-    <!-- Duplicado: color_brand_primary == iberdrola_green -->
-    <color name="iberdrola_green">#007f32</color>
-    <color name="color_brand_primary">#007f32</color>
+
+    <color name="iberdrola_green">#00A443</color>
+    <color name="iberdrola_sky">#0DA9FF</color>
+    <color name="color_brand_primary">#00A443</color>
     <color name="iberdrola_dark_green">#2d5f51</color>
 
     <!-- ========================================== -->
