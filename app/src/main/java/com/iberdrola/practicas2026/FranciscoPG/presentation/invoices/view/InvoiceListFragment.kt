@@ -1,6 +1,9 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view
 
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -107,6 +110,7 @@ class InvoiceListFragment : Fragment() {
 
     private fun showData(invoices: List<com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice>) {
         binding?.let { b ->
+            // Gestión de Shimmers
             b.shimmerLatestInvoice?.stopShimmer()
             b.shimmerLatestInvoice?.visibility = View.GONE
             b.cardLatestInvoice.root.visibility = View.VISIBLE
@@ -125,7 +129,23 @@ class InvoiceListFragment : Fragment() {
 
                 cardBinding.tvCardTitle.text = "Última factura"
                 cardBinding.tvInvoiceType.text = "Factura $supplyType"
-                cardBinding.tvInvoiceAmount.text = "%.2f €".format(latestInvoice.amount)
+
+                // --- LÓGICA DEL IMPORTE CON TAMAÑO DINÁMICO ---
+                val rawAmount = "%.2f €".format(latestInvoice.amount)
+                val spannableAmount = SpannableString(rawAmount)
+
+
+                val euroIndex = rawAmount.indexOf("€")
+                if (euroIndex != -1) {
+                    spannableAmount.setSpan(
+                        RelativeSizeSpan(0.8f),
+                        euroIndex,
+                        rawAmount.length,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                }
+                cardBinding.tvInvoiceAmount.text = spannableAmount
+
                 cardBinding.tvInvoiceDateRange.text = "${latestInvoice.periodStart} - ${latestInvoice.periodEnd}"
                 cardBinding.tvInvoiceStatus.text = latestInvoice.status
 
@@ -133,7 +153,6 @@ class InvoiceListFragment : Fragment() {
                 cardBinding.ivSupplyIcon.setImageResource(iconRes)
             }
 
-            // Convertir Domain Models a InvoiceListItem para RecyclerView
             val listItems = invoicesToListItems(invoices)
             historyAdapter.submitList(listItems)
         }

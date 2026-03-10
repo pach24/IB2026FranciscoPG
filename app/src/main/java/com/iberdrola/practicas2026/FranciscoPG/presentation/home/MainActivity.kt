@@ -2,6 +2,9 @@ package com.iberdrola.practicas2026.FranciscoPG.presentation.home
 import android.widget.TextView
 import android.content.Intent
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         setupInsetsAndStatusBar()
         setupObservers()
         setupListeners()
+        setFormattedAmount("20,00 €")
     }
 
     private fun setupInsetsAndStatusBar() {
@@ -102,7 +106,7 @@ class MainActivity : AppCompatActivity() {
             com.google.android.material.R.id.snackbar_text
         )
 
-        textView.typeface = resources.getFont(R.font.misans_bold)
+        textView.typeface = resources.getFont(R.font.iberpangea_bold)
 
         if (isMockEnabled) {
             snackbar.setBackgroundTint(getColor(R.color.snackbar))
@@ -113,5 +117,22 @@ class MainActivity : AppCompatActivity() {
         }
 
         snackbar.show()
+    }
+
+    private fun setFormattedAmount(amount: String) {
+        val spannable = SpannableString(amount)
+        val euroIndex = amount.indexOf("€")
+
+        if (euroIndex != -1) {
+            spannable.setSpan(
+                RelativeSizeSpan(0.8f), // Reduce el símbolo al 50% del tamaño (24sp -> 12sp)
+                euroIndex,
+                amount.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
+
+        // Accedemos a través del binding del include
+        binding.cardFacturas.tvValue.text = spannable
     }
 }

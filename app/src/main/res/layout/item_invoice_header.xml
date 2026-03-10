@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/m3_sys_spacing_custom_10"
         android:layout_marginBottom="@dimen/m3_sys_spacing_custom_10"
-        android:fontFamily="@font/misans_bold"
+        android:fontFamily="@font/iberpangea_bold"
         android:textColor="@color/dark_grey_text"
         android:textSize="@dimen/m3_sys_typescale_label"
         android:paddingHorizontal="@dimen/m3_sys_spacing_1"
