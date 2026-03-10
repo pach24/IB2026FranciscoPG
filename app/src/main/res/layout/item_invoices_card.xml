@@ -25,14 +25,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/dark_grey_text"
-        android:fontFamily="@font/misans_bold"
+        android:fontFamily="@font/iberpangea_bold"
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_marginTop="16dp"
-        android:text="20,00€"
         app:layout_constraintTop_toBottomOf="@+id/ivIcon"
         app:layout_constraintStart_toStartOf="parent"
-        android:paddingEnd="@dimen/m3_sys_spacing_1"/>
+        android:paddingEnd="@dimen/m3_sys_spacing_1"
+        tools:text="20,00€" />
 
     <!-- Se mantiene en la parte inferior -->
     <TextView
@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/dark_grey_text"
         android:textSize="@dimen/m3_sys_typescale_headline_small"
-        android:fontFamily="@font/misans_medium"
+        android:fontFamily="@font/iberpangea_regular"
         android:layout_marginTop="@dimen/m3_sys_spacing_1"
         android:text="@string/my_invoices_title"
         app:layout_constraintTop_toBottomOf="@id/tvValue"

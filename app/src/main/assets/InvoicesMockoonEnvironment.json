@@ -1,0 +1,94 @@
+{
+  "uuid": "c4c29cf0-45e0-4a6a-9ad0-21d64bdaa7e3",
+  "lastMigration": 33,
+  "name": "InvoicesMockEnvironment",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 3001,
+  "hostname": "",
+  "folders": [],
+  "routes": [
+    {
+      "uuid": "d49a8220-1690-4756-94e5-ccb6b92e55e6",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "api/invoices_mockoon.json",
+      "responses": [
+        {
+          "uuid": "0c71dc55-da20-4760-b3d3-2b3c88df5049",
+          "body": "{\r\n  \"numFacturas\": 6,\r\n  \"facturas\": [\r\n    {\r\n      \"id\": \"1\",\r\n      \"descEstado\": \"Pendiente de pago\",\r\n      \"importeOrdenacion\": 20.30,\r\n      \"fechaCobro\": \"08/03/2027\",\r\n      \"fechaInicio\": \"08/02/2027\",\r\n      \"fechaFin\": \"08/03/2027\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"2\",\r\n      \"descEstado\": \"Pendiente de pago\",\r\n      \"importeOrdenacion\": 20.10,\r\n      \"fechaCobro\": \"06/02/2026\",\r\n      \"fechaInicio\": \"06/01/2026\",\r\n      \"fechaFin\": \"06/02/2024\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"3\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 150.43,\r\n      \"fechaCobro\": \"06/11/2025\",\r\n      \"fechaInicio\": \"06/10/2025\",\r\n      \"fechaFin\": \"06/11/2023\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"4\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 45.50,\r\n      \"fechaCobro\": \"15/12/2023\",\r\n      \"fechaInicio\": \"15/11/2023\",\r\n      \"fechaFin\": \"15/12/2023\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    },\r\n    {\r\n      \"id\": \"5\",\r\n      \"descEstado\": \"Pendiente de pago\",\r\n      \"importeOrdenacion\": 80.25,\r\n      \"fechaCobro\": \"10/09/2022\",\r\n      \"fechaInicio\": \"10/08/2022\",\r\n      \"fechaFin\": \"10/09/2022\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    },\r\n    {\r\n      \"id\": \"6\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 60.00,\r\n      \"fechaCobro\": \"20/05/2021\",\r\n      \"fechaInicio\": \"20/04/2021\",\r\n      \"fechaFin\": \"20/05/2021\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    }\r\n  ]\r\n}\r\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    }
+  ],
+  "rootChildren": [
+    {
+      "type": "route",
+      "uuid": "d49a8220-1690-4756-94e5-ccb6b92e55e6"
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    },
+    {
+      "key": "Access-Control-Allow-Origin",
+      "value": "*"
+    },
+    {
+      "key": "Access-Control-Allow-Methods",
+      "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+    },
+    {
+      "key": "Access-Control-Allow-Headers",
+      "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "data": [],
+  "callbacks": []
+}

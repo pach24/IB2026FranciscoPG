@@ -3,8 +3,8 @@
         <item name="colorPrimary">@color/iberdrola_green</item>
         <item name="colorSecondary">@color/iberdrola_green</item>
         <item name="android:statusBarColor">@color/iberdrola_green</item>
-        <item name="android:fontFamily">@font/misans_regular</item>
-        <item name="fontFamily">@font/misans</item>
+
+
     </style>
 
 </resources>

@@ -1,7 +1,7 @@
 <resources>
     <!-- MyInvoices -->
     <style name="CustomTabTextAppearance" parent="TextAppearance.Material3.TitleSmall">
-        <item name="android:fontFamily">@font/misans_bold</item>
+        <item name="android:fontFamily">@font/iberpangea_bold</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
         <item name="textAllCaps">false</item>
