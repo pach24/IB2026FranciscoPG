@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view
+﻿package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.R
 
@@ -45,7 +46,7 @@ fun InvoiceHeaderItemComposable(
             .fillMaxWidth()
             .background(colorResource(R.color.color_background))
             .padding(
-                horizontal = dimensionResource(R.dimen.m3_sys_spacing_1),
+                horizontal = dimensionResource(R.dimen.m3_sys_spacing_4),
                 vertical = dimensionResource(R.dimen.m3_sys_spacing_custom_10)
             ),
         fontFamily = InvoiceFontBold,
@@ -73,23 +74,25 @@ fun InvoiceRowItemComposable(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = dimensionResource(R.dimen.m3_sys_spacing_custom_14)),
+                .padding(
+                    top = dimensionResource(R.dimen.m3_sys_spacing_custom_14),
+                    start = dimensionResource(R.dimen.m3_sys_spacing_4),
+                    end = dimensionResource(R.dimen.m3_sys_spacing_4)
+                ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = date,
-                    modifier = Modifier.padding(start = dimensionResource(R.dimen.m3_sys_spacing_1)),
                     fontFamily = InvoiceFontBold,
                     fontWeight = FontWeight.Bold,
                     fontSize = dimensionResource(R.dimen.m3_sys_typescale_label).value.sp,
                     color = colorResource(R.color.dark_grey_text)
                 )
-
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = type,
-                    modifier = Modifier.padding(start = dimensionResource(R.dimen.m3_sys_spacing_1)),
                     fontFamily = InvoiceFontRegular,
                     fontSize = dimensionResource(R.dimen.m3_sys_typescale_body_small).value.sp,
                     color = colorResource(R.color.light_grey)
@@ -98,10 +101,7 @@ fun InvoiceRowItemComposable(
                 Text(
                     text = status,
                     modifier = Modifier
-                        .padding(
-                            start = dimensionResource(R.dimen.m3_sys_spacing_1),
-                            top = dimensionResource(R.dimen.m3_sys_spacing_1)
-                        )
+                        .padding(top = dimensionResource(R.dimen.m3_sys_spacing_1))
                         .background(
                             color = colorResource(R.color.red_100),
                             shape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_shape_corner_radius_small))
@@ -118,8 +118,7 @@ fun InvoiceRowItemComposable(
             }
 
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(end = dimensionResource(R.dimen.m3_sys_spacing_half))
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = amount,
@@ -154,9 +153,8 @@ fun SkeletonInvoiceHeaderItemComposable(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .background(androidx.compose.ui.graphics.Color.Transparent)
             .padding(
-                start = dimensionResource(R.dimen.m3_sys_spacing_1),
-                top = dimensionResource(R.dimen.m3_sys_spacing_custom_10),
-                bottom = dimensionResource(R.dimen.m3_sys_spacing_custom_10)
+                horizontal = dimensionResource(R.dimen.m3_sys_spacing_4),
+                vertical = dimensionResource(R.dimen.m3_sys_spacing_custom_10)
             )
     ) {
         SkeletonPlaceholder(
@@ -184,17 +182,17 @@ fun SkeletonInvoiceRowItemComposable(modifier: Modifier = Modifier) {
                 SkeletonPlaceholder(
                     width = dimensionResource(R.dimen.m3_comp_skeleton_list_date_width),
                     height = dimensionResource(R.dimen.m3_comp_skeleton_list_date_height),
-                    modifier = Modifier.padding(start = dimensionResource(R.dimen.m3_sys_spacing_1))
+                    modifier = Modifier.padding(start = dimensionResource(R.dimen.m3_sys_spacing_4))
                 )
-                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_half)))
+                Spacer(modifier = Modifier.height(8.dp))
                 SkeletonPlaceholder(
                     width = dimensionResource(R.dimen.m3_comp_skeleton_list_type_width),
                     height = dimensionResource(R.dimen.m3_comp_skeleton_list_type_height),
-                    modifier = Modifier.padding(start = dimensionResource(R.dimen.m3_sys_spacing_1))
+                    modifier = Modifier.padding(start = dimensionResource(R.dimen.m3_sys_spacing_4))
                 )
                 Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_1)))
                 Box(
-                    modifier = Modifier.padding(start = dimensionResource(R.dimen.m3_sys_spacing_1))
+                    modifier = Modifier.padding(start = dimensionResource(R.dimen.m3_sys_spacing_4))
                 ) {
                     SkeletonPlaceholder(
                         width = dimensionResource(R.dimen.m3_comp_skeleton_list_status_width),
@@ -206,7 +204,7 @@ fun SkeletonInvoiceRowItemComposable(modifier: Modifier = Modifier) {
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(end = dimensionResource(R.dimen.m3_sys_spacing_1))
+                modifier = Modifier.padding(end = dimensionResource(R.dimen.m3_sys_spacing_2))
             ) {
                 SkeletonPlaceholder(
                     width = dimensionResource(R.dimen.m3_comp_skeleton_list_amount_width),
@@ -237,11 +235,11 @@ private fun SkeletonPlaceholder(
     modifier: Modifier = Modifier,
     shape: RoundedCornerShape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_skeleton_corner_radius))
 ) {
-    Box(
-        modifier = modifier
-            .width(width)
-            .height(height)
-            .background(colorResource(R.color.color_skeleton_background), shape)
+    ShimmerBox(
+        width = width,
+        height = height,
+        modifier = modifier,
+        shape = shape
     )
 }
 

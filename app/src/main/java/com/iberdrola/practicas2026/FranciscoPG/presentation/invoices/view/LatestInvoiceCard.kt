@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view
+﻿package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -43,7 +43,8 @@ fun LatestInvoiceCardComposable(
     dateRange: String,
     modifier: Modifier = Modifier,
     supplyType: String = "Factura Luz",
-    status: String = "Pendiente de Pago"
+    status: String = "Pendiente de Pago",
+    iconRes: Int = R.drawable.ic_light
 ) {
     Card(
         modifier = modifier
@@ -85,7 +86,7 @@ fun LatestInvoiceCardComposable(
                 }
 
                 Icon(
-                    painter = painterResource(R.drawable.ic_light),
+                    painter = painterResource(iconRes),
                     contentDescription = null,
                     tint = colorResource(R.color.iberdrola_dark_green),
                     modifier = Modifier.size(dimensionResource(R.dimen.m3_comp_card_main_icon_size))
@@ -171,7 +172,7 @@ fun SkeletonLatestInvoiceCardComposable(modifier: Modifier = Modifier) {
                         width = dimensionResource(R.dimen.m3_comp_skeleton_card_title_width),
                         height = dimensionResource(R.dimen.m3_comp_skeleton_card_title_height)
                     )
-                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_1)))
+                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_half)))
                     SkeletonBox(
                         width = dimensionResource(R.dimen.m3_comp_skeleton_card_subtitle_width),
                         height = dimensionResource(R.dimen.m3_comp_skeleton_card_subtitle_height)
@@ -184,19 +185,19 @@ fun SkeletonLatestInvoiceCardComposable(modifier: Modifier = Modifier) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_2)))
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_custom_10)))
             SkeletonBox(
                 width = dimensionResource(R.dimen.m3_comp_skeleton_card_amount_width),
                 height = dimensionResource(R.dimen.m3_comp_skeleton_card_amount_height)
             )
 
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_custom_12)))
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_half)))
             SkeletonBox(
                 width = dimensionResource(R.dimen.m3_comp_skeleton_card_dates_width),
                 height = dimensionResource(R.dimen.m3_comp_skeleton_card_dates_height)
             )
 
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_custom_12)))
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_custom_10)))
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -205,14 +206,10 @@ fun SkeletonLatestInvoiceCardComposable(modifier: Modifier = Modifier) {
             )
 
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_custom_12)))
-            Box(
-                modifier = Modifier
-                    .width(dimensionResource(R.dimen.m3_comp_skeleton_card_status_width))
-                    .height(dimensionResource(R.dimen.m3_comp_skeleton_card_status_height))
-                    .background(
-                        color = colorResource(R.color.color_skeleton_background),
-                        shape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_shape_corner_radius_small))
-                    )
+            ShimmerBox(
+                width = dimensionResource(R.dimen.m3_comp_skeleton_card_status_width),
+                height = dimensionResource(R.dimen.m3_comp_skeleton_card_status_height),
+                shape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_shape_corner_radius_small))
             )
         }
     }
@@ -220,14 +217,10 @@ fun SkeletonLatestInvoiceCardComposable(modifier: Modifier = Modifier) {
 
 @Composable
 private fun SkeletonBox(width: androidx.compose.ui.unit.Dp, height: androidx.compose.ui.unit.Dp) {
-    Box(
-        modifier = Modifier
-            .width(width)
-            .height(height)
-            .background(
-                color = colorResource(R.color.color_skeleton_background),
-                shape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_skeleton_corner_radius))
-            )
+    ShimmerBox(
+        width = width,
+        height = height,
+        shape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_skeleton_corner_radius))
     )
 }
 
@@ -241,7 +234,7 @@ private fun SkeletonBox(width: androidx.compose.ui.unit.Dp, height: androidx.com
 private fun PreviewLatestInvoiceCardComposable() {
     MaterialTheme {
         LatestInvoiceCardComposable(
-            amount = "20,00€",
+            amount = "20,00 \u20AC",
             dateRange = "01 feb. 2024 - 04 mar. 2024"
         )
     }

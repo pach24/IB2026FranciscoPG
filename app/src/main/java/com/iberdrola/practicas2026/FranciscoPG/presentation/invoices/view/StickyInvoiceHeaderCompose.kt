@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view
+﻿package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view
 
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
@@ -11,10 +11,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,7 +28,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.R
 
@@ -90,6 +89,7 @@ fun StickyInvoiceHeaderComposable(
         }
     }
 }
+
 @Composable
 fun SkeletonStickyInvoiceHeaderComposable(modifier: Modifier = Modifier) {
     Row(
@@ -131,11 +131,11 @@ private fun SkeletonHeaderPlaceholder(
     modifier: Modifier = Modifier,
     shape: RoundedCornerShape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_skeleton_corner_radius))
 ) {
-    Box(
-        modifier = modifier
-            .width(width)
-            .height(height)
-            .background(colorResource(R.color.color_skeleton_background), shape)
+    ShimmerBox(
+        width = width,
+        height = height,
+        modifier = modifier,
+        shape = shape
     )
 }
 
