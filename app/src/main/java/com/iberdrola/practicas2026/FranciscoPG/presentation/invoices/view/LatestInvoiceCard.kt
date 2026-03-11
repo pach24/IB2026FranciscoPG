@@ -44,6 +44,7 @@ fun LatestInvoiceCardComposable(
     modifier: Modifier = Modifier,
     supplyType: String = "Factura Luz",
     status: String = "Pendiente de Pago",
+    isPaid: Boolean = false,
     iconRes: Int = R.drawable.ic_light
 ) {
     Card(
@@ -127,7 +128,7 @@ fun LatestInvoiceCardComposable(
                 text = status,
                 modifier = Modifier
                     .background(
-                        color = colorResource(R.color.red_100),
+                        color = colorResource(if (isPaid) R.color.statuspaid else R.color.red_100),
                         shape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_shape_corner_radius_small))
                     )
                     .padding(
@@ -137,7 +138,7 @@ fun LatestInvoiceCardComposable(
                 fontFamily = IberFontBold,
                 fontWeight = FontWeight.Bold,
                 fontSize = dimensionResource(R.dimen.m3_sys_typescale_micro).value.sp,
-                color = colorResource(R.color.red_600)
+                color = colorResource(if (isPaid) R.color.iberdrola_dark_green else R.color.red_600)
             )
         }
     }
@@ -235,7 +236,9 @@ private fun PreviewLatestInvoiceCardComposable() {
     MaterialTheme {
         LatestInvoiceCardComposable(
             amount = "20,00 \u20AC",
-            dateRange = "01 feb. 2024 - 04 mar. 2024"
+            dateRange = "01 feb. 2024 - 04 mar. 2024",
+            status = "Pagada",
+            isPaid = true
         )
     }
 }

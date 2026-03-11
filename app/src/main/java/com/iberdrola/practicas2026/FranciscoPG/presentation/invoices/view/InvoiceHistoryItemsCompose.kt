@@ -62,6 +62,7 @@ fun InvoiceRowItemComposable(
     type: String,
     status: String,
     amount: String,
+    isPaid: Boolean = false,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
@@ -90,7 +91,7 @@ fun InvoiceRowItemComposable(
                     fontSize = dimensionResource(R.dimen.m3_sys_typescale_label).value.sp,
                     color = colorResource(R.color.dark_grey_text)
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+
                 Text(
                     text = type,
                     fontFamily = InvoiceFontRegular,
@@ -103,7 +104,7 @@ fun InvoiceRowItemComposable(
                     modifier = Modifier
                         .padding(top = dimensionResource(R.dimen.m3_sys_spacing_1))
                         .background(
-                            color = colorResource(R.color.red_100),
+                            color = colorResource(if (isPaid) R.color.light_green_bg else R.color.red_100),
                             shape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_shape_corner_radius_small))
                         )
                         .padding(
@@ -113,7 +114,7 @@ fun InvoiceRowItemComposable(
                     fontFamily = InvoiceFontBold,
                     fontWeight = FontWeight.Bold,
                     fontSize = dimensionResource(R.dimen.m3_sys_typescale_micro).value.sp,
-                    color = colorResource(R.color.red_600)
+                    color = colorResource(if (isPaid) R.color.iberdrola_dark_green else R.color.red_600)
                 )
             }
 
@@ -184,7 +185,7 @@ fun SkeletonInvoiceRowItemComposable(modifier: Modifier = Modifier) {
                     height = dimensionResource(R.dimen.m3_comp_skeleton_list_date_height),
                     modifier = Modifier.padding(start = dimensionResource(R.dimen.m3_sys_spacing_4))
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(2.dp))
                 SkeletonPlaceholder(
                     width = dimensionResource(R.dimen.m3_comp_skeleton_list_type_width),
                     height = dimensionResource(R.dimen.m3_comp_skeleton_list_type_height),
@@ -259,7 +260,23 @@ private fun PreviewInvoiceRowItemComposable() {
             date = "8 de marzo",
             type = "Factura Luz",
             status = "Pendiente de Pago",
-            amount = "20,00 €"
+            amount = "20,00 €",
+            isPaid = false
+        )
+    }
+}
+
+@Preview(name = "Invoice Row Paid - Light", showBackground = true)
+@Preview(name = "Invoice Row Paid - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+private fun PreviewInvoiceRowItemPaidComposable() {
+    MaterialTheme {
+        InvoiceRowItemComposable(
+            date = "8 de marzo",
+            type = "Factura Luz",
+            status = "Pagada",
+            amount = "20,00 €",
+            isPaid = true
         )
     }
 }
