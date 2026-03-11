@@ -1,6 +1,6 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.home
 
-import android.content.Intent
+
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -16,9 +16,22 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.view.WindowInsetsControllerCompat
 import com.iberdrola.practicas2026.FranciscoPG.R
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view.MyInvoicesActivity
 import com.iberdrola.practicas2026.FranciscoPG.presentation.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListItem
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view.InvoiceListComposeScreen
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view.MyInvoicesComposeScreen
+
+
+private object AppRoutes {
+    const val HOME = "home"
+    const val MY_INVOICES = "my_invoices"
+}
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -37,6 +50,7 @@ class MainActivity : AppCompatActivity() {
             val useMock by viewModel.useMock.observeAsState(true)
             val mockModeChanged by viewModel.mockModeChanged.observeAsState()
             val snackbarHostState = remember { SnackbarHostState() }
+            val navController = rememberNavController()
 
             val mockModeMessage = if (useMock) {
                 stringResource(R.string.main_mock_activated)
@@ -63,16 +77,85 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            MainScreen(
-                userName = userName,
-                isMockEnabled = useMock,
-                onMockModeChanged = viewModel::updateMockMode,
-                // Make sure to use this@MainActivity so the Intent gets the right Context!
-                onInvoicesCardClick = { startActivity(Intent(this@MainActivity, MyInvoicesActivity::class.java)) },
-                snackbarHostState = snackbarHostState,
-                snackbarContainerColor = snackbarContainer,
-                snackbarContentColor = snackbarContent
-            )
-        } // <--- Notice that setContent is now properly closed down here!
+            NavHost(
+                navController = navController,
+                startDestination = AppRoutes.HOME
+            ) {
+                composable(AppRoutes.HOME) {
+                    MainScreen(
+                        userName = userName,
+                        isMockEnabled = useMock,
+                        onMockModeChanged = viewModel::updateMockMode,
+                        onInvoicesCardClick = {
+                            navController.navigate(AppRoutes.MY_INVOICES) {
+                                launchSingleTop = true
+                                restoreState = true
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                            }
+                        },
+                        snackbarHostState = snackbarHostState,
+                        snackbarContainerColor = snackbarContainer,
+                        snackbarContentColor = snackbarContent
+                    )
+                }
+
+                composable(AppRoutes.MY_INVOICES) {
+                    MyInvoicesComposeScreen(
+                        address = stringResource(R.string.my_invoices_mock_address),
+                        onBackClick = { navController.popBackStack() },
+                        lightTabContent = {
+                            InvoiceListComposeScreen(
+                                isLoading = false,
+                                latestInvoiceAmount = "20,00 €",
+                                latestInvoiceDateRange = "01 feb. 2024 - 04 mar. 2024",
+                                latestInvoiceType = "Factura Luz",
+                                latestInvoiceStatus = "Pendiente de Pago",
+                                historyItems = sampleInvoices("Factura Luz"),
+                                onLatestInvoiceClick = {},
+                                onFilterClick = {},
+                                onHistoryItemClick = {}
+                            )
+                        },
+                        gasTabContent = {
+                            InvoiceListComposeScreen(
+                                isLoading = false,
+                                latestInvoiceAmount = "34,50 €",
+                                latestInvoiceDateRange = "11 feb. 2024 - 10 mar. 2024",
+                                latestInvoiceType = "Factura Gas",
+                                latestInvoiceStatus = "Pendiente de Pago",
+                                historyItems = sampleInvoices("Factura Gas"),
+                                onLatestInvoiceClick = {},
+                                onFilterClick = {},
+                                onHistoryItemClick = {}
+                            )
+                        }
+                    )
+                }
+            }
+
+        }
+
+         // <--- Notice that setContent is now properly closed down here!
     }
 }
+private fun sampleInvoices(type: String): List<InvoiceListItem> = listOf(
+    InvoiceListItem.HeaderYear("2024"),
+    InvoiceListItem.InvoiceItem(
+        id = "inv-1-$type",
+        date = "8 de marzo",
+        type = type,
+        amount = "20,00 €",
+        statusText = "Pendiente de Pago",
+        isPaid = false
+    ),
+    InvoiceListItem.InvoiceItem(
+        id = "inv-2-$type",
+        date = "1 de febrero",
+        type = type,
+        amount = "54,21 €",
+        statusText = "Pagada",
+        isPaid = true
+    )
+)
