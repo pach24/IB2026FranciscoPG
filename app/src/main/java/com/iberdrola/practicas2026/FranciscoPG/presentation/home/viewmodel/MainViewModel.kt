@@ -1,11 +1,12 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.home.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetMockModeUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.SetMockModeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -14,15 +15,15 @@ class MainViewModel @Inject constructor(
     private val setMockModeUseCase: SetMockModeUseCase
 ) : ViewModel() {
 
-    private val _userName = MutableLiveData<String>()
-    val userName: LiveData<String> get() = _userName
+    private val _userName = MutableStateFlow("")
+    val userName: StateFlow<String> = _userName.asStateFlow()
 
-    private val _useMock = MutableLiveData<Boolean>()
-    val useMock: LiveData<Boolean> get() = _useMock
+    private val _useMock = MutableStateFlow(false)
+    val useMock: StateFlow<Boolean> = _useMock.asStateFlow()
 
-    // Evento para avisar a la UI del cambio de modo
-    private val _mockModeChanged = MutableLiveData<Boolean>()
-    val mockModeChanged: LiveData<Boolean> get() = _mockModeChanged
+    // Evento one-shot para avisar a la UI del cambio de modo (null = no hay evento pendiente)
+    private val _mockModeChanged = MutableStateFlow<Boolean?>(null)
+    val mockModeChanged: StateFlow<Boolean?> = _mockModeChanged.asStateFlow()
 
     init {
         loadUserData()
@@ -37,5 +38,9 @@ class MainViewModel @Inject constructor(
         setMockModeUseCase(isEnabled)
         _useMock.value = isEnabled
         _mockModeChanged.value = isEnabled
+    }
+
+    fun onMockModeEventConsumed() {
+        _mockModeChanged.value = null
     }
 }
