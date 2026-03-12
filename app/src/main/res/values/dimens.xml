@@ -38,6 +38,7 @@
     <dimen name="m3_comp_avatar_size">48dp</dimen>
     <dimen name="m3_comp_icon_size_custom_20">20dp</dimen>
     <dimen name="m3_comp_icon_size">24dp</dimen>
+    <dimen name="m3_comp_icon_size_custom_28">28dp</dimen>
     <dimen name="m3_comp_card_main_icon_size">32dp</dimen>         <!-- Icono principal de la tarjeta (Luz/Gas) -->
     <dimen name="m3_comp_card_corner_radius">16dp</dimen>
     <dimen name="m3_comp_promo_card_min_height">144dp</dimen>
@@ -83,7 +84,7 @@
     <dimen name="m3_comp_skeleton_list_amount_height">18dp</dimen>
     <dimen name="m3_comp_skeleton_header_title_width">160dp</dimen>
     <dimen name="m3_comp_skeleton_header_title_height">22dp</dimen>
-    <dimen name="m3_comp_skeleton_header_btn_width">105dp</dimen>
+    <dimen name="m3_comp_skeleton_header_btn_width">120dp</dimen>
     <dimen name="m3_comp_skeleton_header_btn_height">36dp</dimen>
 
     <!-- Tarjeta Principal -->

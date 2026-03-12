@@ -1,138 +1,320 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.home
-import android.widget.TextView
-import android.content.Intent
+
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.RelativeSizeSpan
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import com.google.android.material.snackbar.Snackbar
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.iberdrola.practicas2026.FranciscoPG.R
-import com.iberdrola.practicas2026.FranciscoPG.databinding.ActivityMainBinding
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view.MyInvoicesActivity
-import com.iberdrola.practicas2026.FranciscoPG.presentation.main.MainViewModel
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens.InvoiceListComposeScreen
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens.MyInvoicesComposeScreen
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.InvoiceListUiState
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.MyInvoicesViewModel
+import com.iberdrola.practicas2026.FranciscoPG.presentation.home.viewmodel.MainViewModel
+import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.MainScreen
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+
+private object AppRoutes {
+    const val HOME = "home"
+    const val MY_INVOICES = "my_invoices"
+}
+
+private object SupplyType {
+    const val LIGHT = "luz"
+    const val GAS = "gas"
+}
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        setupInsetsAndStatusBar()
-        setupObservers()
-        setupListeners()
-        setFormattedAmount("20,00 €")
+        setContent {
+            IberdrolaTheme {
+
+            val userName by viewModel.userName.observeAsState("FRANCISCO")
+            val useMock by viewModel.useMock.observeAsState(true)
+            val mockModeChanged by viewModel.mockModeChanged.observeAsState()
+
+            val snackbarHostState = remember { SnackbarHostState() }
+            val navController = rememberNavController()
+
+            val mockModeMessage =
+                if (useMock) stringResource(R.string.main_mock_activated)
+                else stringResource(R.string.main_mock_disabled)
+
+            val snackbarContainer =
+                if (useMock) colorResource(R.color.snackbar)
+                else colorResource(R.color.iberdrola_green)
+
+            val snackbarContent =
+                if (useMock) colorResource(R.color.black)
+                else colorResource(R.color.white)
+
+            LaunchedEffect(mockModeChanged) {
+                mockModeChanged?.let {
+                    snackbarHostState.showSnackbar(
+                        message = mockModeMessage,
+                        duration = SnackbarDuration.Long
+                    )
+                }
+            }
+
+            NavHost(
+                navController = navController,
+                startDestination = AppRoutes.HOME
+            ) {
+
+                composable(AppRoutes.HOME) {
+
+                    MainScreen(
+                        userName = userName,
+                        isMockEnabled = useMock,
+                        onMockModeChanged = viewModel::updateMockMode,
+                        onInvoicesCardClick = {
+
+                            navController.navigate(AppRoutes.MY_INVOICES) {
+
+                                launchSingleTop = true
+                                restoreState = true
+
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                            }
+                        },
+                        snackbarHostState = snackbarHostState,
+                        snackbarContainerColor = snackbarContainer,
+                        snackbarContentColor = snackbarContent
+                    )
+                }
+
+                composable(AppRoutes.MY_INVOICES) {
+
+                    val lightViewModel: MyInvoicesViewModel =
+                        hiltViewModel(key = "light_invoices_vm")
+
+                    val gasViewModel: MyInvoicesViewModel =
+                        hiltViewModel(key = "gas_invoices_vm")
+
+                    val lightState by lightViewModel.listUiState
+                        .observeAsState(InvoiceListUiState.Loading)
+
+                    val gasState by gasViewModel.listUiState
+                        .observeAsState(InvoiceListUiState.Loading)
+
+                    val lightShowDialog by lightViewModel.showDialogEvent.observeAsState(false)
+                    val gasShowDialog by gasViewModel.showDialogEvent.observeAsState(false)
+
+                    val scope = rememberCoroutineScope()
+
+                    val lightListState = rememberLazyListState()
+                    val gasListState = rememberLazyListState()
+
+                    LaunchedEffect(useMock) {
+                        lightViewModel.fetchInvoices(SupplyType.LIGHT, useMock)
+                        gasViewModel.fetchInvoices(SupplyType.GAS, useMock)
+                    }
+
+                    MyInvoicesComposeScreen(
+                        address = stringResource(R.string.my_invoices_mock_address),
+                        onBackClick = { navController.popBackStack() },
+                        onTabReselected = { index ->
+                            scope.launch {
+                                if (index == 0) {
+                                    lightListState.animateScrollToItem(0)
+                                } else {
+                                    gasListState.animateScrollToItem(0)
+                                }
+                            }
+                        },
+                        lightTabContent = {
+
+                            InvoiceTabContent(
+                                uiState = lightState,
+                                listState = lightListState,
+                                onFeatureNotAvailable = lightViewModel::onFeatureNotAvailable,
+                                onRefresh = { lightViewModel.fetchInvoices(SupplyType.LIGHT, useMock) }
+                            )
+                        },
+                        gasTabContent = {
+
+                            InvoiceTabContent(
+                                uiState = gasState,
+                                listState = gasListState,
+                                onFeatureNotAvailable = gasViewModel::onFeatureNotAvailable,
+                                onRefresh = { gasViewModel.fetchInvoices(SupplyType.GAS, useMock) }
+                            )
+                        }
+                    )
+
+                    if (lightShowDialog || gasShowDialog) {
+
+                        AlertDialog(
+                            onDismissRequest = {
+
+                                if (lightShowDialog) lightViewModel.onDialogHandled()
+                                if (gasShowDialog) gasViewModel.onDialogHandled()
+                            },
+                            title = { Text("Informacion") },
+                            text = { Text("Esta funcionalidad aun no esta disponible.") },
+                            confirmButton = {
+
+                                TextButton(
+                                    onClick = {
+                                        if (lightShowDialog) lightViewModel.onDialogHandled()
+                                        if (gasShowDialog) gasViewModel.onDialogHandled()
+                                    }
+                                ) {
+                                    Text("Aceptar")
+                                }
+                            }
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun InvoiceTabContent(
+    uiState: InvoiceListUiState,
+    listState: androidx.compose.foundation.lazy.LazyListState,
+    onFeatureNotAvailable: () -> Unit,
+    onRefresh: () -> Unit
+) {
+    var lastSuccess by remember { mutableStateOf<InvoiceListUiState.Success?>(null) }
+
+    LaunchedEffect(uiState) {
+        if (uiState is InvoiceListUiState.Success) {
+            lastSuccess = uiState
+        }
     }
 
-    private fun setupInsetsAndStatusBar() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+    val isRefreshing = uiState is InvoiceListUiState.Loading && lastSuccess != null
 
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+    when (uiState) {
+        is InvoiceListUiState.Loading -> {
+            val cached = lastSuccess
 
-            binding.root.setPadding(
-                systemBars.left,
-                0,
-                systemBars.right,
-                systemBars.bottom
-            )
-
-            val baseMarginTop = resources.getDimensionPixelSize(R.dimen.m3_sys_spacing_4)
-
-            val greetingParams =
-                binding.tvGreeting.layoutParams as android.view.ViewGroup.MarginLayoutParams
-
-            greetingParams.topMargin = baseMarginTop + systemBars.top
-            binding.tvGreeting.layoutParams = greetingParams
-
-            insets
-        }
-
-        WindowInsetsControllerCompat(window, window.decorView)
-            .isAppearanceLightStatusBars = false
-    }
-
-    private fun setupObservers() {
-
-        viewModel.userName.observe(this) { name ->
-            binding.tvGreeting.text =
-                getString(R.string.main_activity_greeting_user, name)
-        }
-
-        viewModel.useMock.observe(this) { isMockEnabled ->
-            if (binding.switchMockMode.isChecked != isMockEnabled) {
-                binding.switchMockMode.isChecked = isMockEnabled
+            if (cached == null) {
+                InvoiceListComposeScreen(
+                    isLoading = true,
+                    isRefreshing = false,
+                    latestInvoiceAmount = "",
+                    latestInvoiceDateRange = "",
+                    latestInvoiceType = "",
+                    latestInvoiceStatus = "",
+                    latestInvoiceIsPaid = false,
+                    latestInvoiceIconRes = R.drawable.ic_light,
+                    historyItems = emptyList(),
+                    listState = listState,
+                    onLatestInvoiceClick = onFeatureNotAvailable,
+                    onFilterClick = onFeatureNotAvailable,
+                    onHistoryItemClick = { onFeatureNotAvailable() },
+                    onRefresh = onRefresh
+                )
+            } else {
+                InvoiceListComposeScreen(
+                    isLoading = false,
+                    isRefreshing = true,
+                    latestInvoiceAmount = cached.latestInvoice?.amount ?: "",
+                    latestInvoiceDateRange = cached.latestInvoice?.dateRange ?: "",
+                    latestInvoiceType = cached.latestInvoice?.supplyTypeLabel ?: "",
+                    latestInvoiceStatus = cached.latestInvoice?.status ?: "",
+                    latestInvoiceIsPaid = cached.latestInvoice?.isPaid ?: false,
+                    latestInvoiceIconRes = cached.latestInvoice?.iconRes ?: R.drawable.ic_light,
+                    historyItems = cached.historyItems,
+                    listState = listState,
+                    onLatestInvoiceClick = onFeatureNotAvailable,
+                    onFilterClick = onFeatureNotAvailable,
+                    onHistoryItemClick = { onFeatureNotAvailable() },
+                    onRefresh = onRefresh
+                )
             }
         }
 
-        viewModel.mockModeChanged.observe(this) { isMockEnabled ->
-            showMockSnackbar(isMockEnabled)
-        }
-    }
-
-    private fun setupListeners() {
-
-        binding.cardFacturas.root.setOnClickListener {
-            startActivity(Intent(this, MyInvoicesActivity::class.java))
-        }
-
-        binding.switchMockMode.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.updateMockMode(isChecked)
-        }
-    }
-    private fun showMockSnackbar(isMockEnabled: Boolean) {
-
-        val message = if (isMockEnabled) {
-            "Modo MOCK activado: los datos son simulados"
-        } else {
-            "Modo REAL activado"
-        }
-
-        val snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
-
-        val textView = snackbar.view.findViewById<TextView>(
-            com.google.android.material.R.id.snackbar_text
-        )
-
-        textView.typeface = resources.getFont(R.font.iberpangea_bold)
-
-        if (isMockEnabled) {
-            snackbar.setBackgroundTint(getColor(R.color.snackbar))
-            textView.setTextColor(getColor(R.color.black))
-        } else {
-            snackbar.setBackgroundTint(getColor(R.color.iberdrola_green))
-            textView.setTextColor(getColor(R.color.white))
-        }
-
-        snackbar.show()
-    }
-
-    private fun setFormattedAmount(amount: String) {
-        val spannable = SpannableString(amount)
-        val euroIndex = amount.indexOf("€")
-
-        if (euroIndex != -1) {
-            spannable.setSpan(
-                RelativeSizeSpan(0.8f), // Reduce el símbolo al 50% del tamaño (24sp -> 12sp)
-                euroIndex,
-                amount.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        is InvoiceListUiState.Error -> {
+            InvoiceListComposeScreen(
+                isLoading = false,
+                isRefreshing = false,
+                latestInvoiceAmount = "",
+                latestInvoiceDateRange = uiState.message,
+                latestInvoiceType = "",
+                latestInvoiceStatus = "",
+                latestInvoiceIsPaid = false,
+                latestInvoiceIconRes = R.drawable.ic_light,
+                historyItems = emptyList(),
+                listState = listState,
+                onLatestInvoiceClick = onFeatureNotAvailable,
+                onFilterClick = onFeatureNotAvailable,
+                onHistoryItemClick = { onFeatureNotAvailable() },
+                onRefresh = onRefresh
             )
         }
 
-        // Accedemos a través del binding del include
-        binding.cardFacturas.tvValue.text = spannable
+        is InvoiceListUiState.Success -> {
+            val latestInvoice = uiState.latestInvoice
+
+            InvoiceListComposeScreen(
+                isLoading = false,
+                isRefreshing = false,
+                latestInvoiceAmount = latestInvoice?.amount ?: "",
+                latestInvoiceDateRange = latestInvoice?.dateRange ?: "",
+                latestInvoiceType = latestInvoice?.supplyTypeLabel ?: "",
+                latestInvoiceStatus = latestInvoice?.status ?: "",
+                latestInvoiceIsPaid = latestInvoice?.isPaid ?: false,
+                latestInvoiceIconRes = latestInvoice?.iconRes ?: R.drawable.ic_light,
+                historyItems = uiState.historyItems,
+                listState = listState,
+                onLatestInvoiceClick = onFeatureNotAvailable,
+                onFilterClick = onFeatureNotAvailable,
+                onHistoryItemClick = { onFeatureNotAvailable() },
+                onRefresh = onRefresh
+            )
+        }
     }
 }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
