@@ -91,6 +91,7 @@ fun InvoiceRowItemComposable(
                     fontSize = dimensionResource(R.dimen.m3_sys_typescale_label).value.sp,
                     color = colorResource(R.color.dark_grey_text)
                 )
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
                     text = type,
@@ -185,7 +186,7 @@ fun SkeletonInvoiceRowItemComposable(modifier: Modifier = Modifier) {
                     height = dimensionResource(R.dimen.m3_comp_skeleton_list_date_height),
                     modifier = Modifier.padding(start = dimensionResource(R.dimen.m3_sys_spacing_4))
                 )
-                Spacer(modifier = Modifier.height(2.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 SkeletonPlaceholder(
                     width = dimensionResource(R.dimen.m3_comp_skeleton_list_type_width),
                     height = dimensionResource(R.dimen.m3_comp_skeleton_list_type_height),

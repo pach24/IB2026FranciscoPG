@@ -7,7 +7,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -16,11 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -55,10 +56,8 @@ class MainActivity : AppCompatActivity() {
 
         enableEdgeToEdge()
 
-        WindowInsetsControllerCompat(window, window.decorView)
-            .isAppearanceLightStatusBars = false
-
         setContent {
+            IberdrolaTheme {
 
             val userName by viewModel.userName.observeAsState("FRANCISCO")
             val useMock by viewModel.useMock.observeAsState(true)
@@ -161,7 +160,8 @@ class MainActivity : AppCompatActivity() {
                             InvoiceTabContent(
                                 uiState = lightState,
                                 listState = lightListState,
-                                onFeatureNotAvailable = lightViewModel::onFeatureNotAvailable
+                                onFeatureNotAvailable = lightViewModel::onFeatureNotAvailable,
+                                onRefresh = { lightViewModel.fetchInvoices(SupplyType.LIGHT, useMock) }
                             )
                         },
                         gasTabContent = {
@@ -169,7 +169,8 @@ class MainActivity : AppCompatActivity() {
                             InvoiceTabContent(
                                 uiState = gasState,
                                 listState = gasListState,
-                                onFeatureNotAvailable = gasViewModel::onFeatureNotAvailable
+                                onFeatureNotAvailable = gasViewModel::onFeatureNotAvailable,
+                                onRefresh = { gasViewModel.fetchInvoices(SupplyType.GAS, useMock) }
                             )
                         }
                     )
@@ -207,62 +208,108 @@ class MainActivity : AppCompatActivity() {
 private fun InvoiceTabContent(
     uiState: InvoiceListUiState,
     listState: androidx.compose.foundation.lazy.LazyListState,
-    onFeatureNotAvailable: () -> Unit
+    onFeatureNotAvailable: () -> Unit,
+    onRefresh: () -> Unit
 ) {
+    var lastSuccess by remember { mutableStateOf<InvoiceListUiState.Success?>(null) }
+
+    LaunchedEffect(uiState) {
+        if (uiState is InvoiceListUiState.Success) {
+            lastSuccess = uiState
+        }
+    }
+
+    val isRefreshing = uiState is InvoiceListUiState.Loading && lastSuccess != null
 
     when (uiState) {
-
         is InvoiceListUiState.Loading -> {
+            val cached = lastSuccess
 
-            InvoiceListComposeScreen(
-                isLoading = true,
-                latestInvoiceAmount = "",
-                latestInvoiceDateRange = "",
-                latestInvoiceType = "",
-                latestInvoiceStatus = "",
-                latestInvoiceIconRes = R.drawable.ic_light,
-                historyItems = emptyList(),
-                listState = listState,
-                onLatestInvoiceClick = onFeatureNotAvailable,
-                onFilterClick = onFeatureNotAvailable,
-                onHistoryItemClick = { onFeatureNotAvailable() }
-            )
+            if (cached == null) {
+                InvoiceListComposeScreen(
+                    isLoading = true,
+                    isRefreshing = false,
+                    latestInvoiceAmount = "",
+                    latestInvoiceDateRange = "",
+                    latestInvoiceType = "",
+                    latestInvoiceStatus = "",
+                    latestInvoiceIsPaid = false,
+                    latestInvoiceIconRes = R.drawable.ic_light,
+                    historyItems = emptyList(),
+                    listState = listState,
+                    onLatestInvoiceClick = onFeatureNotAvailable,
+                    onFilterClick = onFeatureNotAvailable,
+                    onHistoryItemClick = { onFeatureNotAvailable() },
+                    onRefresh = onRefresh
+                )
+            } else {
+                InvoiceListComposeScreen(
+                    isLoading = false,
+                    isRefreshing = true,
+                    latestInvoiceAmount = cached.latestInvoice?.amount ?: "",
+                    latestInvoiceDateRange = cached.latestInvoice?.dateRange ?: "",
+                    latestInvoiceType = cached.latestInvoice?.supplyTypeLabel ?: "",
+                    latestInvoiceStatus = cached.latestInvoice?.status ?: "",
+                    latestInvoiceIsPaid = cached.latestInvoice?.isPaid ?: false,
+                    latestInvoiceIconRes = cached.latestInvoice?.iconRes ?: R.drawable.ic_light,
+                    historyItems = cached.historyItems,
+                    listState = listState,
+                    onLatestInvoiceClick = onFeatureNotAvailable,
+                    onFilterClick = onFeatureNotAvailable,
+                    onHistoryItemClick = { onFeatureNotAvailable() },
+                    onRefresh = onRefresh
+                )
+            }
         }
 
         is InvoiceListUiState.Error -> {
-
             InvoiceListComposeScreen(
                 isLoading = false,
+                isRefreshing = false,
                 latestInvoiceAmount = "",
                 latestInvoiceDateRange = uiState.message,
                 latestInvoiceType = "",
                 latestInvoiceStatus = "",
+                latestInvoiceIsPaid = false,
                 latestInvoiceIconRes = R.drawable.ic_light,
                 historyItems = emptyList(),
                 listState = listState,
                 onLatestInvoiceClick = onFeatureNotAvailable,
                 onFilterClick = onFeatureNotAvailable,
-                onHistoryItemClick = { onFeatureNotAvailable() }
+                onHistoryItemClick = { onFeatureNotAvailable() },
+                onRefresh = onRefresh
             )
         }
 
         is InvoiceListUiState.Success -> {
-
             val latestInvoice = uiState.latestInvoice
 
             InvoiceListComposeScreen(
                 isLoading = false,
+                isRefreshing = false,
                 latestInvoiceAmount = latestInvoice?.amount ?: "",
                 latestInvoiceDateRange = latestInvoice?.dateRange ?: "",
                 latestInvoiceType = latestInvoice?.supplyTypeLabel ?: "",
                 latestInvoiceStatus = latestInvoice?.status ?: "",
+                latestInvoiceIsPaid = latestInvoice?.isPaid ?: false,
                 latestInvoiceIconRes = latestInvoice?.iconRes ?: R.drawable.ic_light,
                 historyItems = uiState.historyItems,
                 listState = listState,
                 onLatestInvoiceClick = onFeatureNotAvailable,
                 onFilterClick = onFeatureNotAvailable,
-                onHistoryItemClick = { onFeatureNotAvailable() }
+                onHistoryItemClick = { onFeatureNotAvailable() },
+                onRefresh = onRefresh
             )
         }
     }
 }
+}
+
+
+
+
+
+
+
+
+

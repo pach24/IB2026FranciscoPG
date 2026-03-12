@@ -1,4 +1,4 @@
-﻿package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel
+package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -25,6 +25,7 @@ data class LatestInvoiceUiModel(
     val dateRange: String,
     val supplyTypeLabel: String,
     val status: String,
+    val isPaid: Boolean,
     val iconRes: Int
 )
 
@@ -53,7 +54,7 @@ class MyInvoicesViewModel @Inject constructor(
     val showDialogEvent: LiveData<Boolean> get() = _showDialogEvent
 
     fun fetchInvoices(supplyType: String, useMock: Boolean = true) {
-        Log.d("🔥DI", "VM: fetchInvoices($supplyType, mock=$useMock)")
+        Log.d("??DI", "VM: fetchInvoices($supplyType, mock=$useMock)")
         _uiState.value = InvoiceUiState.Loading
         _listUiState.value = InvoiceListUiState.Loading
         viewModelScope.launch {
@@ -76,7 +77,7 @@ class MyInvoicesViewModel @Inject constructor(
                     }
                 )
             } catch (e: Exception) {
-                Log.e("🔥DI", "VM: EXCEPTION", e)
+                Log.e("??DI", "VM: EXCEPTION", e)
                 _uiState.value = InvoiceUiState.Error(e.message ?: "Error desconocido")
                 _listUiState.value = InvoiceListUiState.Error(e.message ?: "Error desconocido")
             }
@@ -103,6 +104,7 @@ class MyInvoicesViewModel @Inject constructor(
                 dateRange = "${invoice.periodStart} - ${invoice.periodEnd}",
                 supplyTypeLabel = "Factura $supplyTypeLabel",
                 status = invoice.status,
+                isPaid = invoice.status.contains("Pagada", ignoreCase = true),
                 iconRes = iconRes
             )
         }
@@ -118,7 +120,6 @@ class MyInvoicesViewModel @Inject constructor(
         supplyTypeLabel: String
     ): List<InvoiceListItem> {
         val grouped = invoices
-            .sortedByDescending { it.chargeDate }
             .groupBy { it.chargeDate.takeLast(4) }
 
         val result = mutableListOf<InvoiceListItem>()
@@ -171,3 +172,5 @@ class MyInvoicesViewModel @Inject constructor(
         }
     }
 }
+
+
