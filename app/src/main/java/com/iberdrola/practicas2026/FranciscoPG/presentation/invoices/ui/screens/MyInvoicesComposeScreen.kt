@@ -1,4 +1,4 @@
-﻿package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view
+﻿package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -52,7 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.R
-import com.iberdrola.practicas2026.FranciscoPG.presentation.feedback.FeedbackBottomSheetComposable
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.FeedbackBottomSheetComposable
 import kotlinx.coroutines.launch
 
 private val InvoicesBold = FontFamily(Font(R.font.iberpangea_bold, FontWeight.Bold))
@@ -76,12 +76,12 @@ fun MyInvoicesComposeScreen(
     var showFeedbackSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    // Intercepta el botón nativo de Android (gesture/hardware back)
+    // Intercepta el bot�n nativo de Android (gesture/hardware back)
     BackHandler {
         showFeedbackSheet = true
     }
 
-    // Detección swipe vs click para el indicador de tabs
+    // Detecci�n swipe vs click para el indicador de tabs
     var isTabClick by remember { mutableStateOf(false) }
     LaunchedEffect(pagerState) {
         snapshotFlow {
@@ -91,7 +91,7 @@ fun MyInvoicesComposeScreen(
                 pagerState.currentPageOffsetFraction
             )
         }.collect { (settled, target, fraction) ->
-            // Si la fracción se mueve y target==settled → es swipe manual → reset flag
+            // Si la fracci�n se mueve y target==settled ? es swipe manual ? reset flag
             if (target == settled && fraction != 0f) {
                 isTabClick = false
             }
@@ -104,7 +104,7 @@ fun MyInvoicesComposeScreen(
             .background(colorResource(R.color.color_background))
             .statusBarsPadding()
     ) {
-        /* BOTÓN ATRÁS */
+        /* BOT�N ATR�S */
         Row(
             modifier = Modifier
                 .padding(start = 16.dp, top = 16.dp)
@@ -127,7 +127,7 @@ fun MyInvoicesComposeScreen(
             )
         }
 
-        /* TÍTULOS */
+        /* T�TULOS */
         Text(
             text = stringResource(R.string.my_invoices_title),
             modifier = Modifier.padding(start = 16.dp, top = 24.dp, end = 16.dp),
@@ -202,8 +202,8 @@ fun MyInvoicesComposeScreen(
         }
     }
 
-    // BottomSheet de feedback: se muestra tanto con el botón atrás personalizado
-    // como con el gesto/botón nativo de Android gracias al BackHandler de arriba.
+    // BottomSheet de feedback: se muestra tanto con el bot�n atr�s personalizado
+    // como con el gesto/bot�n nativo de Android gracias al BackHandler de arriba.
     if (showFeedbackSheet) {
         ModalBottomSheet(
             onDismissRequest = {
@@ -250,9 +250,9 @@ private fun StretchTabIndicator(
 
     val rawPosition = pagerState.currentPage + pagerState.currentPageOffsetFraction
 
-    // ─── VELOCIDADES ──────────────────────────────────────────────────────────
-    val clickDurationMs = 100  // click en tab: transición suave
-    // ─────────────────────────────────────────────────────────────────────────
+    // --- VELOCIDADES ----------------------------------------------------------
+    val clickDurationMs = 100  // click en tab: transici�n suave
+    // -------------------------------------------------------------------------
 
     val animatedPosition by animateFloatAsState(
         targetValue = rawPosition,
@@ -290,3 +290,4 @@ private fun StretchTabIndicator(
         )
     }
 }
+

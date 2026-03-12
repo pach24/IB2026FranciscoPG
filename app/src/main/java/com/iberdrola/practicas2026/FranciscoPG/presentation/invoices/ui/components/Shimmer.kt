@@ -1,4 +1,4 @@
-﻿package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view
+package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -70,3 +70,4 @@ fun ShimmerBox(
             .background(brush)
     )
 }
+

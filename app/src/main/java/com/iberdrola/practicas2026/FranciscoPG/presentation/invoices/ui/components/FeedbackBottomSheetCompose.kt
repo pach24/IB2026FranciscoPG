@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.feedback
+package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
 
 import android.content.res.Configuration
 import androidx.annotation.DrawableRes
@@ -159,3 +159,4 @@ private fun PreviewFeedbackBottomSheetComposable() {
         FeedbackBottomSheetComposable()
     }
 }
+

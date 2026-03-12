@@ -1,4 +1,4 @@
-﻿package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view
+package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
@@ -156,3 +156,4 @@ private fun PreviewSkeletonStickyInvoiceHeaderComposable() {
         SkeletonStickyInvoiceHeaderComposable()
     }
 }
+

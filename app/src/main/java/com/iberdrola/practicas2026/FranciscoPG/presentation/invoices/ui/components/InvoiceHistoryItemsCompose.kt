@@ -1,4 +1,4 @@
-ï»¿package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view
+package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -261,7 +261,7 @@ private fun PreviewInvoiceRowItemComposable() {
             date = "8 de marzo",
             type = "Factura Luz",
             status = "Pendiente de Pago",
-            amount = "20,00 â‚¬",
+            amount = "20,00 €",
             isPaid = false
         )
     }
@@ -276,7 +276,7 @@ private fun PreviewInvoiceRowItemPaidComposable() {
             date = "8 de marzo",
             type = "Factura Luz",
             status = "Pagada",
-            amount = "20,00 â‚¬",
+            amount = "20,00 €",
             isPaid = true
         )
     }

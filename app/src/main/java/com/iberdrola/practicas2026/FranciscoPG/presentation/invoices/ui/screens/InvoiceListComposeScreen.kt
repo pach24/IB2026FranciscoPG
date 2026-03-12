@@ -1,4 +1,4 @@
-﻿package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view
+﻿package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens
 
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
@@ -29,7 +30,18 @@ import androidx.compose.ui.unit.dp
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListItem
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.InvoiceHeaderItemComposable
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.InvoiceRowItemComposable
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.LatestInvoiceCardComposable
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.SkeletonInvoiceRowItemComposable
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.SkeletonLatestInvoiceCardComposable
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.SkeletonStickyInvoiceHeaderComposable
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.StickyInvoiceHeaderComposable
+@OptIn(
+    ExperimentalFoundationApi::class,
+    ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3ExpressiveApi::class
+)
 @Composable
 fun InvoiceListComposeScreen(
     isLoading: Boolean,
@@ -56,7 +68,7 @@ fun InvoiceListComposeScreen(
         onRefresh = onRefresh,
         modifier = modifier.fillMaxSize(),
         indicator = {
-            PullToRefreshDefaults.Indicator(
+            PullToRefreshDefaults.LoadingIndicator(
                 state = pullToRefreshState,
                 isRefreshing = isRefreshing,
                 color = MaterialTheme.colorScheme.primary,
@@ -155,7 +167,7 @@ private fun PreviewInvoiceListComposeScreen() {
         InvoiceListComposeScreen(
             isLoading = false,
             isRefreshing = false,
-            latestInvoiceAmount = "20,00 €",
+            latestInvoiceAmount = "20,00 �",
             latestInvoiceDateRange = "01 feb. 2024 - 04 mar. 2024",
             latestInvoiceType = "Factura Luz",
             latestInvoiceStatus = "Pendiente de Pago",
@@ -192,6 +204,13 @@ private fun PreviewInvoiceListComposeScreenLoading() {
         )
     }
 }
+
+
+
+
+
+
+
 
 
 

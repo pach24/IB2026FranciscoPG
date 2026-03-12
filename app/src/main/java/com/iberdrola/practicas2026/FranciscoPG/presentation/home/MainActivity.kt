@@ -1,4 +1,4 @@
-﻿package com.iberdrola.practicas2026.FranciscoPG.presentation.home
+package com.iberdrola.practicas2026.FranciscoPG.presentation.home
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -28,11 +28,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.iberdrola.practicas2026.FranciscoPG.R
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view.InvoiceListComposeScreen
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.view.MyInvoicesComposeScreen
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens.InvoiceListComposeScreen
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens.MyInvoicesComposeScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.InvoiceListUiState
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.MyInvoicesViewModel
-import com.iberdrola.practicas2026.FranciscoPG.presentation.main.MainViewModel
+import com.iberdrola.practicas2026.FranciscoPG.presentation.home.viewmodel.MainViewModel
+import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.MainScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -304,6 +305,10 @@ private fun InvoiceTabContent(
     }
 }
 }
+
+
+
+
 
 
 

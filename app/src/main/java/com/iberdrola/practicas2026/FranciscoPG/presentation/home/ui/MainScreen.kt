@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.home
+package com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
