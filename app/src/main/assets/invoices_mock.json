@@ -1,5 +1,5 @@
 {
-  "numFacturas": 6,
+  "numFacturas": 12,
   "facturas": [
     {
       "id": "1",
@@ -53,6 +53,60 @@
       "fechaCobro": "20/05/2021",
       "fechaInicio": "20/04/2021",
       "fechaFin": "20/05/2021",
+      "tipoSuministro": "GAS"
+    },
+    {
+      "id": "7",
+      "descEstado": "Pendiente de pago",
+      "importeOrdenacion": 95.30,
+      "fechaCobro": "12/04/2024",
+      "fechaInicio": "12/03/2024",
+      "fechaFin": "12/04/2024",
+      "tipoSuministro": "LUZ"
+    },
+    {
+      "id": "8",
+      "descEstado": "Pagada",
+      "importeOrdenacion": 210.15,
+      "fechaCobro": "18/01/2024",
+      "fechaInicio": "18/12/2023",
+      "fechaFin": "18/01/2024",
+      "tipoSuministro": "LUZ"
+    },
+    {
+      "id": "9",
+      "descEstado": "Pagada",
+      "importeOrdenacion": 32.80,
+      "fechaCobro": "25/07/2023",
+      "fechaInicio": "25/06/2023",
+      "fechaFin": "25/07/2023",
+      "tipoSuministro": "GAS"
+    },
+    {
+      "id": "10",
+      "descEstado": "Pendiente de pago",
+      "importeOrdenacion": 67.90,
+      "fechaCobro": "03/10/2023",
+      "fechaInicio": "03/09/2023",
+      "fechaFin": "03/10/2023",
+      "tipoSuministro": "GAS"
+    },
+    {
+      "id": "11",
+      "descEstado": "Pagada",
+      "importeOrdenacion": 112.25,
+      "fechaCobro": "22/08/2022",
+      "fechaInicio": "22/07/2022",
+      "fechaFin": "22/08/2022",
+      "tipoSuministro": "LUZ"
+    },
+    {
+      "id": "12",
+      "descEstado": "Pendiente de pago",
+      "importeOrdenacion": 40.00,
+      "fechaCobro": "30/11/2021",
+      "fechaInicio": "30/10/2021",
+      "fechaFin": "30/11/2021",
       "tipoSuministro": "GAS"
     }
   ]

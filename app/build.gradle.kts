@@ -1,7 +1,7 @@
-plugins {
+﻿plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    // Aplicar KSP y Hilt
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hiltAndroid)
 }
@@ -38,6 +38,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 }
 
@@ -58,11 +59,25 @@ dependencies {
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.fragment.ktx)
 
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.runtime.livedata)
+    implementation("androidx.compose.foundation:foundation")
+    implementation(libs.androidx.constraintlayout.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    debugImplementation(libs.androidx.compose.ui.tooling)
+
+
+
     // Corrutinas
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
 
-    // Hilt (Inyección de Dependencias)
+    // Hilt (InyecciÃ³n de Dependencias)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler) // Cambiado a ksp
 
