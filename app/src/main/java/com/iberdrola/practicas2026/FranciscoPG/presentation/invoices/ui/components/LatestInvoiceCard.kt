@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
+﻿package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -124,21 +124,9 @@ fun LatestInvoiceCardComposable(
 
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_custom_12)))
 
-            Text(
+            StatusPillComposable(
                 text = status,
-                modifier = Modifier
-                    .background(
-                        color = colorResource(if (isPaid) R.color.statuspaid else R.color.red_100),
-                        shape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_shape_corner_radius_small))
-                    )
-                    .padding(
-                        horizontal = dimensionResource(R.dimen.m3_sys_spacing_custom_12),
-                        vertical = dimensionResource(R.dimen.m3_sys_spacing_custom_6)
-                    ),
-                fontFamily = IberFontBold,
-                fontWeight = FontWeight.Bold,
-                fontSize = dimensionResource(R.dimen.m3_sys_typescale_micro).value.sp,
-                color = colorResource(if (isPaid) R.color.iberdrola_dark_green else R.color.red_600)
+                isPaid = isPaid
             )
         }
     }
@@ -255,3 +243,4 @@ private fun PreviewSkeletonLatestInvoiceCardComposable() {
         SkeletonLatestInvoiceCardComposable()
     }
 }
+

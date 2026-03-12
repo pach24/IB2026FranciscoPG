@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
+ï»¿package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -100,22 +100,10 @@ fun InvoiceRowItemComposable(
                     color = colorResource(R.color.light_grey)
                 )
 
-                Text(
+                StatusPillComposable(
                     text = status,
-                    modifier = Modifier
-                        .padding(top = dimensionResource(R.dimen.m3_sys_spacing_1))
-                        .background(
-                            color = colorResource(if (isPaid) R.color.light_green_bg else R.color.red_100),
-                            shape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_shape_corner_radius_small))
-                        )
-                        .padding(
-                            horizontal = dimensionResource(R.dimen.m3_sys_spacing_custom_10),
-                            vertical = dimensionResource(R.dimen.m3_sys_spacing_half)
-                        ),
-                    fontFamily = InvoiceFontBold,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = dimensionResource(R.dimen.m3_sys_typescale_micro).value.sp,
-                    color = colorResource(if (isPaid) R.color.iberdrola_dark_green else R.color.red_600)
+                    isPaid = isPaid,
+                    modifier = Modifier.padding(top = dimensionResource(R.dimen.m3_sys_spacing_1))
                 )
             }
 
@@ -261,7 +249,7 @@ private fun PreviewInvoiceRowItemComposable() {
             date = "8 de marzo",
             type = "Factura Luz",
             status = "Pendiente de Pago",
-            amount = "20,00 €",
+            amount = "20,00 ï¿½",
             isPaid = false
         )
     }
@@ -276,7 +264,7 @@ private fun PreviewInvoiceRowItemPaidComposable() {
             date = "8 de marzo",
             type = "Factura Luz",
             status = "Pagada",
-            amount = "20,00 €",
+            amount = "20,00 ï¿½",
             isPaid = true
         )
     }
@@ -295,3 +283,4 @@ private fun PreviewSkeletonInvoiceHeaderItemComposable() {
 private fun PreviewSkeletonInvoiceRowItemComposable() {
     MaterialTheme { SkeletonInvoiceRowItemComposable() }
 }
+
