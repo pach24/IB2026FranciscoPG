@@ -139,8 +139,8 @@ object AppModule {
     // ── Repositories ─────────────────────────────────────────────────────────
 
     @Provides @Singleton
-    fun provideConfigurationRepository(invoiceDao: InvoiceDao): ConfigurationRepository {
-        return ConfigurationRepositoryImpl(invoiceDao)
+    fun provideConfigurationRepository(): ConfigurationRepository {
+        return ConfigurationRepositoryImpl()
     }
 
     @Provides @Singleton
