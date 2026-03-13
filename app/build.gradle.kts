@@ -16,7 +16,6 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -43,7 +42,6 @@ android {
 }
 
 dependencies {
-
     implementation(project(":domain"))
     implementation(project(":data"))
 
@@ -59,27 +57,29 @@ dependencies {
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.fragment.ktx)
 
+
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.runtime.livedata)
     implementation("androidx.compose.foundation:foundation")
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.androidx.navigation.compose)
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     debugImplementation(libs.androidx.compose.ui.tooling)
 
-
+    implementation(libs.androidx.compose.material3)
 
     // Corrutinas
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
 
-    // Hilt (InyecciÃ³n de Dependencias)
+    // Hilt
     implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler) // Cambiado a ksp
+    ksp(libs.hilt.compiler)
 
     // Retrofit & Red
     implementation(libs.retrofit)
@@ -87,10 +87,10 @@ dependencies {
     implementation(libs.okhttp.logging)
     implementation(libs.retromock)
 
-    // Room (Base de datos local)
+    // Room
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
-    ksp(libs.room.compiler) // Cambiado a ksp
+    ksp(libs.room.compiler)
 
     // Testing
     testImplementation(libs.junit)

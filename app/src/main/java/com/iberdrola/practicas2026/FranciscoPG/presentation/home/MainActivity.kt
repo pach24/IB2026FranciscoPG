@@ -1,10 +1,13 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.home
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.SnackbarDuration
@@ -18,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,6 +35,8 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.MainScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.viewmodel.MainViewModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens.InvoiceListComposeScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens.MyInvoicesComposeScreen
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.FeedbackSheetState
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.FeedbackViewModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.InvoiceListUiState
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.MyInvoicesViewModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
@@ -119,11 +125,14 @@ class MainActivity : AppCompatActivity() {
                             hiltViewModel(key = "light_invoices_vm")
                         val gasViewModel: MyInvoicesViewModel =
                             hiltViewModel(key = "gas_invoices_vm")
+                        val feedbackViewModel: FeedbackViewModel = hiltViewModel()
 
                         val lightState by lightViewModel.listUiState.collectAsStateWithLifecycle()
                         val gasState by gasViewModel.listUiState.collectAsStateWithLifecycle()
                         val lightShowDialog by lightViewModel.showDialogEvent.collectAsStateWithLifecycle()
                         val gasShowDialog by gasViewModel.showDialogEvent.collectAsStateWithLifecycle()
+                        val sheetState by feedbackViewModel.sheetState.collectAsStateWithLifecycle()
+
 
                         val scope = rememberCoroutineScope()
                         val lightListState = rememberLazyListState()
@@ -136,7 +145,14 @@ class MainActivity : AppCompatActivity() {
 
                         MyInvoicesComposeScreen(
                             address = stringResource(R.string.my_invoices_mock_address),
-                            onBackClick = { navController.popBackStack() },
+                            feedbackSheetState = sheetState,
+                            onBackClick = {
+                                Log.d("Feedback", "Back pulsado en facturas -> evaluando feedback")
+                                feedbackViewModel.onExitInvoices()
+                            },
+                            onFeedbackFaceClick = { feedbackViewModel.onFeedbackRated() },
+                            onFeedbackLaterClick = { feedbackViewModel.onFeedbackLater() },
+                            onFeedbackDismiss = { feedbackViewModel.onSheetDismissed() },
                             onTabReselected = { index ->
                                 scope.launch {
                                     if (index == 0) lightListState.animateScrollToItem(0)
@@ -164,6 +180,13 @@ class MainActivity : AppCompatActivity() {
                                 )
                             }
                         )
+
+
+                        LaunchedEffect(Unit) {
+                            feedbackViewModel.navigateBack.collect {
+                                navController.popBackStack()
+                            }
+                        }
 
                         if (lightShowDialog || gasShowDialog) {
                             AlertDialog(

@@ -8,12 +8,17 @@ import com.google.gson.GsonBuilder
 import com.iberdrola.practicas2026.FranciscoPG.DeviceUtils.isEmulator
 import com.iberdrola.practicas2026.data.network.InvoiceApiService
 import com.iberdrola.practicas2026.FranciscoPG.data.repository.ConfigurationRepositoryImpl
+import com.iberdrola.practicas2026.FranciscoPG.data.repository.FeedbackRepositoryImpl
 import com.iberdrola.practicas2026.FranciscoPG.data.repository.InvoiceRepositoryImpl
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.ConfigurationRepository
+import com.iberdrola.practicas2026.FranciscoPG.domain.repository.FeedbackRepository
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.InvoiceRepository
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetMockModeUseCase
+import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.IncrementExitCounterUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.SetMockModeUseCase
+import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ShouldShowFeedbackPromptUseCase
+import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.UpdateFeedbackInteractionUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -135,5 +140,27 @@ object AppModule {
     @Provides @Singleton
     fun provideSetMockModeUseCase(configRepository: ConfigurationRepository): SetMockModeUseCase {
         return SetMockModeUseCase(configRepository)
+    }
+
+    // ── Feedback ──────────────────────────────────────────────────────────────
+
+    @Provides @Singleton
+    fun provideFeedbackRepository(@ApplicationContext context: Context): FeedbackRepository {
+        return FeedbackRepositoryImpl(context)
+    }
+
+    @Provides @Singleton
+    fun provideIncrementExitCounterUseCase(feedbackRepository: FeedbackRepository): IncrementExitCounterUseCase {
+        return IncrementExitCounterUseCase(feedbackRepository)
+    }
+
+    @Provides @Singleton
+    fun provideShouldShowFeedbackPromptUseCase(feedbackRepository: FeedbackRepository): ShouldShowFeedbackPromptUseCase {
+        return ShouldShowFeedbackPromptUseCase(feedbackRepository)
+    }
+
+    @Provides @Singleton
+    fun provideUpdateFeedbackInteractionUseCase(feedbackRepository: FeedbackRepository): UpdateFeedbackInteractionUseCase {
+        return UpdateFeedbackInteractionUseCase(feedbackRepository)
     }
 }
