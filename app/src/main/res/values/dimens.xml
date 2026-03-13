@@ -31,6 +31,7 @@
     <dimen name="m3_sys_spacing_3">24dp</dimen>
     <dimen name="m3_sys_spacing_4">32dp</dimen>
     <dimen name="m3_sys_spacing_5">40dp</dimen>
+    <dimen name="m3_sys_spacing_6">64dp</dimen>
 
     <!-- ========================================== -->
     <!-- M3 COMPONENT TOKENS: TARJETAS Y HOME       -->
@@ -101,6 +102,13 @@
     <dimen name="m3_comp_skeleton_card_status_width">115dp</dimen>
     <dimen name="m3_comp_skeleton_card_status_height">24dp</dimen>
     <dimen name="m3_comp_skeleton_corner_radius">4dp</dimen>
+
+    <!-- ========================================== -->
+    <!-- M3 COMPONENT TOKENS: EMPTY / ERROR STATES  -->
+    <!-- ========================================== -->
+    <dimen name="m3_comp_empty_state_icon_size">90dp</dimen>
+    <dimen name="m3_comp_error_state_icon_size">90dp</dimen>
+    <dimen name="m3_comp_empty_state_button_corner_radius">24dp</dimen>
 
     <!--    my invoices -->
     <dimen name="back_btn_overlay_width">80dp</dimen>
