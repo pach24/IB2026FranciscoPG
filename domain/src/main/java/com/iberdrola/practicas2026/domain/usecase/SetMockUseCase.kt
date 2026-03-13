@@ -7,7 +7,7 @@ import javax.inject.Inject
 class SetMockModeUseCase @Inject constructor(
     private val configRepository: ConfigurationRepository
 ) {
-    operator fun invoke(enabled: Boolean) {
+    suspend operator fun invoke(enabled: Boolean) {
         configRepository.setMockEnabled(enabled)
     }
 }

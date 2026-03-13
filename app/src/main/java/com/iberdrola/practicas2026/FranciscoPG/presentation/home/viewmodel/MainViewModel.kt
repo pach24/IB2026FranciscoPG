@@ -1,12 +1,14 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.home.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetMockModeUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.SetMockModeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,9 +37,11 @@ class MainViewModel @Inject constructor(
     }
 
     fun updateMockMode(isEnabled: Boolean) {
-        setMockModeUseCase(isEnabled)
-        _useMock.value = isEnabled
-        _mockModeChanged.value = isEnabled
+        viewModelScope.launch {
+            setMockModeUseCase(isEnabled)
+            _useMock.value = isEnabled
+            _mockModeChanged.value = isEnabled
+        }
     }
 
     fun onMockModeEventConsumed() {

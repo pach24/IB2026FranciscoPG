@@ -3,9 +3,12 @@ package com.iberdrola.practicas2026.FranciscoPG.di
 
 import android.content.Context
 import android.util.Log
+import androidx.room.Room
 import co.infinum.retromock.Retromock
 import com.google.gson.GsonBuilder
 import com.iberdrola.practicas2026.FranciscoPG.DeviceUtils.isEmulator
+import com.iberdrola.practicas2026.data.local.AppDatabase
+import com.iberdrola.practicas2026.data.local.InvoiceDao
 import com.iberdrola.practicas2026.data.network.InvoiceApiService
 import com.iberdrola.practicas2026.FranciscoPG.data.repository.ConfigurationRepositoryImpl
 import com.iberdrola.practicas2026.FranciscoPG.data.repository.FeedbackRepositoryImpl
@@ -105,6 +108,26 @@ object AppModule {
             .build()
     }
 
+    // ── Room ──────────────────────────────────────────────────────────────────
+
+    @Provides
+    @Singleton
+    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "iberdrola_db"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideInvoiceDao(database: AppDatabase): InvoiceDao {
+        return database.invoiceDao()
+    }
+
+    // ── API Services ─────────────────────────────────────────────────────────
+
     @Provides
     @Singleton
     @Named("RealApi")
@@ -113,18 +136,21 @@ object AppModule {
     @Provides @Singleton @Named("MockApi")
     fun provideMockApiService(retromock: Retromock): InvoiceApiService = retromock.create(InvoiceApiService::class.java)
 
+    // ── Repositories ─────────────────────────────────────────────────────────
+
     @Provides @Singleton
-    fun provideConfigurationRepository(): ConfigurationRepository {
-        return ConfigurationRepositoryImpl()
+    fun provideConfigurationRepository(invoiceDao: InvoiceDao): ConfigurationRepository {
+        return ConfigurationRepositoryImpl(invoiceDao)
     }
 
     @Provides @Singleton
     fun provideInvoiceRepository(
         @Named("RealApi") realApi: InvoiceApiService,
         @Named("MockApi") mockApi: InvoiceApiService,
-        configRepository: ConfigurationRepository
+        configRepository: ConfigurationRepository,
+        invoiceDao: InvoiceDao
     ): InvoiceRepository {
-        return InvoiceRepositoryImpl(realApi, mockApi, configRepository)
+        return InvoiceRepositoryImpl(realApi, mockApi, configRepository, invoiceDao)
     }
 
     @Provides @Singleton
