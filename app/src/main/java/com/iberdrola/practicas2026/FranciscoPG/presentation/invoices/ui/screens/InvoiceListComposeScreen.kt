@@ -33,6 +33,7 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.Invoi
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.InvoiceHeaderItemComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.InvoiceRowItemComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.LatestInvoiceCardComposable
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.ShimmerHost
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.SkeletonInvoiceRowItemComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.SkeletonLatestInvoiceCardComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.SkeletonStickyInvoiceHeaderComposable
@@ -78,29 +79,30 @@ fun InvoiceListComposeScreen(
         }
     ) {
         if (isLoading) {
-            // Skeleton usando los composables que ya existen en el proyecto
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(bottom = 32.dp)
-            ) {
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    SkeletonLatestInvoiceCardComposable(
-                        modifier = Modifier.padding(horizontal = 24.dp)
-                    )
-                }
+            // ShimmerHost comparte una sola transición para todos los ShimmerBox
+            ShimmerHost {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(bottom = 32.dp)
+                ) {
+                    item {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        SkeletonLatestInvoiceCardComposable(
+                            modifier = Modifier.padding(horizontal = 24.dp)
+                        )
+                    }
 
-                item {
-                    SkeletonStickyInvoiceHeaderComposable(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(colorResource(R.color.color_background))
-                    )
-                }
+                    item {
+                        SkeletonStickyInvoiceHeaderComposable(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(colorResource(R.color.color_background))
+                        )
+                    }
 
-                // Mostrar 6 filas skeleton como placeholder de la lista
-                items(6) {
-                    SkeletonInvoiceRowItemComposable()
+                    items(6) {
+                        SkeletonInvoiceRowItemComposable()
+                    }
                 }
             }
         } else {

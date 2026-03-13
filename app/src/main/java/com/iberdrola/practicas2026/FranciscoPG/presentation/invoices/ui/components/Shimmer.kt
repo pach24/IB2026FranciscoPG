@@ -12,19 +12,41 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntSize
 import com.iberdrola.practicas2026.FranciscoPG.R
+
+/**
+ * Progreso normalizado (0f..1f) compartido por todos los ShimmerBox
+ * dentro de un mismo [ShimmerHost]. Evita crear N transiciones infinitas
+ * independientes cuando hay muchos skeletons en pantalla.
+ */
+val LocalShimmerProgress = compositionLocalOf { 0f }
+
+@Composable
+fun ShimmerHost(content: @Composable () -> Unit) {
+    val transition = rememberInfiniteTransition(label = "shimmerShared")
+    val progress by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1200, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "shimmerProgress"
+    )
+    CompositionLocalProvider(LocalShimmerProgress provides progress) {
+        content()
+    }
+}
 
 @Composable
 fun ShimmerBox(
@@ -40,34 +62,19 @@ fun ShimmerBox(
         baseColor.copy(alpha = 0.7f)
     )
 
-    val transition = rememberInfiniteTransition(label = "shimmer")
-    val sizeState = remember { mutableStateOf(IntSize.Zero) }
-    val widthPx = sizeState.value.width.toFloat()
-    val heightPx = sizeState.value.height.toFloat()
-
-    val offsetX by transition.animateFloat(
-        initialValue = -widthPx,
-        targetValue = widthPx * 2f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1200, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "shimmerOffset"
-    )
+    val progress = LocalShimmerProgress.current
 
     val brush = Brush.linearGradient(
         colors = shimmerColors,
-        start = Offset(offsetX, 0f),
-        end = Offset(offsetX + widthPx, heightPx)
+        start = Offset(progress * 1000f - 500f, 0f),
+        end = Offset(progress * 1000f, height.value)
     )
 
     Box(
         modifier = modifier
             .width(width)
             .height(height)
-            .onGloballyPositioned { sizeState.value = it.size }
             .clip(shape)
             .background(brush)
     )
 }
-
