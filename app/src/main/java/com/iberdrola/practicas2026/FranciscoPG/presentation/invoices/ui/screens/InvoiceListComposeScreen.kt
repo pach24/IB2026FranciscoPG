@@ -3,7 +3,6 @@
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -120,9 +119,8 @@ fun InvoiceListComposeScreen(
                         status = latestInvoiceStatus,
                         isPaid = latestInvoiceIsPaid,
                         iconRes = latestInvoiceIconRes,
-                        modifier = Modifier
-                            .padding(horizontal = Spacing.dp24)
-                            .clickable { onLatestInvoiceClick() }
+                        onClick = onLatestInvoiceClick,
+                        modifier = Modifier.padding(horizontal = Spacing.dp24)
                     )
                 }
 

@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -164,7 +165,7 @@ fun MainScreen(
                                 vertical = Spacing.dp16
                             )
                     ) {
-                        ItemInvoiceCard(modifier = Modifier.clickable { onInvoicesCardClick() })
+                        ItemInvoiceCard(onClick = onInvoicesCardClick)
                     }
 
                     Spacer(modifier = Modifier.height(Spacing.dp16))
@@ -315,18 +316,23 @@ private fun PromoCard() {
 }
 
 @Composable
-fun ItemInvoiceCard(modifier: Modifier = Modifier) {
+fun ItemInvoiceCard(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
     val cardShape = RoundedCornerShape(Radius.dp16)
 
     Box(
         modifier = modifier
             .padding(end = Spacing.dp16)
-            .background(color = colorResource(R.color.color_surface), shape = cardShape)
+            .clip(cardShape)
+            .background(color = colorResource(R.color.color_surface))
             .border(
                 width = Stroke.dp2,
                 color = colorResource(R.color.color_divider),
                 shape = cardShape
             )
+            .clickable(onClick = onClick)
             .padding(horizontal = Spacing.dp24, vertical = Spacing.dp18)
     ) {
         Column {

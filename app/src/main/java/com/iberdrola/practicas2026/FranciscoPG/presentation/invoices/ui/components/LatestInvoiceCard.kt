@@ -49,9 +49,11 @@ fun LatestInvoiceCardComposable(
     supplyType: String = "Factura Luz",
     status: String = "Pendiente de Pago",
     isPaid: Boolean = false,
-    iconRes: Int = R.drawable.ic_light
+    iconRes: Int = R.drawable.ic_light,
+    onClick: () -> Unit = {}
 ) {
     Card(
+        onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
             .border(
