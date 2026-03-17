@@ -6,8 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.SnackbarDuration
@@ -21,7 +19,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,6 +30,8 @@ import androidx.navigation.compose.rememberNavController
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.MainScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.viewmodel.MainViewModel
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.EmptyStateComposable
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.ErrorStateComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens.InvoiceListComposeScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens.MyInvoicesComposeScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.FeedbackSheetState
@@ -133,7 +132,6 @@ class MainActivity : AppCompatActivity() {
                         val gasShowDialog by gasViewModel.showDialogEvent.collectAsStateWithLifecycle()
                         val sheetState by feedbackViewModel.sheetState.collectAsStateWithLifecycle()
 
-
                         val scope = rememberCoroutineScope()
                         val lightListState = rememberLazyListState()
                         val gasListState = rememberLazyListState()
@@ -143,9 +141,27 @@ class MainActivity : AppCompatActivity() {
                             gasViewModel.fetchInvoices(SupplyType.GAS, useMock)
                         }
 
+                        // Determinar si ambos tabs han terminado de cargar
+                        val bothLoaded = lightState !is InvoiceListUiState.Loading
+                                && gasState !is InvoiceListUiState.Loading
+
+                        // Empty state global: ambos tabs terminaron y ninguno tiene facturas
+                        val isGlobalEmpty = bothLoaded
+                                && lightState is InvoiceListUiState.Empty
+                                && gasState is InvoiceListUiState.Empty
+
+                        // Auto-seleccionar el primer tab con datos
+                        val defaultTabIndex = when {
+                            lightState is InvoiceListUiState.Success -> 0
+                            gasState is InvoiceListUiState.Success -> 1
+                            else -> 0
+                        }
+
                         MyInvoicesComposeScreen(
                             address = stringResource(R.string.my_invoices_mock_address),
                             feedbackSheetState = sheetState,
+                            isGlobalEmpty = isGlobalEmpty,
+                            defaultTabIndex = defaultTabIndex,
                             onBackClick = {
                                 Log.d("Feedback", "Back pulsado en facturas -> evaluando feedback")
                                 feedbackViewModel.onExitInvoices()
@@ -270,22 +286,28 @@ private fun InvoiceTabContent(
             }
         }
 
-        is InvoiceListUiState.Error -> {
-            InvoiceListComposeScreen(
-                isLoading = false,
-                isRefreshing = false,
-                latestInvoiceAmount = "",
-                latestInvoiceDateRange = uiState.message,
-                latestInvoiceType = "",
-                latestInvoiceStatus = "",
-                latestInvoiceIsPaid = false,
-                latestInvoiceIconRes = R.drawable.ic_light,
-                historyItems = emptyList(),
-                listState = listState,
-                onLatestInvoiceClick = onFeatureNotAvailable,
-                onFilterClick = onFeatureNotAvailable,
-                onHistoryItemClick = { onFeatureNotAvailable() },
-                onRefresh = onRefresh
+        is InvoiceListUiState.Empty -> {
+            EmptyStateComposable(
+                title = stringResource(R.string.empty_state_tab_title),
+                subtitle = stringResource(R.string.empty_state_tab_subtitle)
+            )
+        }
+
+        is InvoiceListUiState.ServerError -> {
+            ErrorStateComposable(
+                title = stringResource(R.string.error_server_title),
+                subtitle = stringResource(R.string.error_server_subtitle),
+                iconRes = R.drawable.ic_server_error,
+                onRetryClick = onRefresh
+            )
+        }
+
+        is InvoiceListUiState.ConnectionError -> {
+            ErrorStateComposable(
+                title = stringResource(R.string.error_connection_title),
+                subtitle = stringResource(R.string.error_connection_subtitle),
+                iconRes = R.drawable.ic_connection_error,
+                onRetryClick = onRefresh
             )
         }
 

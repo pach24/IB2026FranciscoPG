@@ -13,6 +13,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 // ── UI States ─────────────────────────────────────────────────────────────────
@@ -34,11 +38,18 @@ data class LatestInvoiceUiModel(
 
 sealed class InvoiceListUiState {
     object Loading : InvoiceListUiState()
+
     data class Success(
         val latestInvoice: LatestInvoiceUiModel?,
-        val historyItems: List<InvoiceListItem>
+        val historyItems: List<InvoiceListItem>,
+        val invoiceCount: Int
     ) : InvoiceListUiState()
-    data class Error(val message: String) : InvoiceListUiState()
+
+    object Empty : InvoiceListUiState()
+
+    data class ServerError(val message: String) : InvoiceListUiState()
+
+    data class ConnectionError(val message: String) : InvoiceListUiState()
 }
 
 // ── ViewModel ─────────────────────────────────────────────────────────────────
@@ -73,16 +84,12 @@ class MyInvoicesViewModel @Inject constructor(
                     },
                     onFailure = { error ->
                         Log.e("MyInvoicesVM", "ERROR", error)
-                        val msg = error.message ?: "Error desconocido"
-                        _uiState.value = InvoiceUiState.Error(msg)
-                        _listUiState.value = InvoiceListUiState.Error(msg)
+                        handleError(error)
                     }
                 )
             } catch (e: Exception) {
                 Log.e("MyInvoicesVM", "EXCEPTION", e)
-                val msg = e.message ?: "Error desconocido"
-                _uiState.value = InvoiceUiState.Error(msg)
-                _listUiState.value = InvoiceListUiState.Error(msg)
+                handleError(e)
             }
         }
     }
@@ -97,10 +104,40 @@ class MyInvoicesViewModel @Inject constructor(
 
     // ── Helpers privados ──────────────────────────────────────────────────────
 
+    private fun handleError(error: Throwable) {
+        val msg = error.message ?: "Error desconocido"
+        _uiState.value = InvoiceUiState.Error(msg)
+        _listUiState.value = classifyError(error)
+    }
+
+    private fun classifyError(error: Throwable): InvoiceListUiState {
+        val msg = error.message ?: "Error desconocido"
+        return when (error) {
+            is UnknownHostException,
+            is ConnectException,
+            is SocketTimeoutException -> {
+                InvoiceListUiState.ConnectionError(msg)
+            }
+            is HttpException -> {
+                InvoiceListUiState.ServerError(msg)
+            }
+            is java.io.IOException -> {
+                InvoiceListUiState.ConnectionError(msg)
+            }
+            else -> {
+                InvoiceListUiState.ServerError(msg)
+            }
+        }
+    }
+
     private fun buildListUiState(
         invoices: List<Invoice>,
         supplyType: String
     ): InvoiceListUiState {
+        if (invoices.isEmpty()) {
+            return InvoiceListUiState.Empty
+        }
+
         val supplyTypeLabel = supplyTypeLabel(supplyType)
         val iconRes = supplyTypeIconRes(supplyType)
         val latestInvoice = invoices.firstOrNull()?.let { invoice ->
@@ -115,7 +152,8 @@ class MyInvoicesViewModel @Inject constructor(
         }
         return InvoiceListUiState.Success(
             latestInvoice = latestInvoice,
-            historyItems = invoicesToListItems(invoices, supplyTypeLabel)
+            historyItems = invoicesToListItems(invoices, supplyTypeLabel),
+            invoiceCount = invoices.size
         )
     }
 
