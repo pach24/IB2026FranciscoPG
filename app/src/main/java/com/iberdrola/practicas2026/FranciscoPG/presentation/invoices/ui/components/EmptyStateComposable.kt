@@ -1,6 +1,5 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,6 +23,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.R
@@ -81,8 +81,7 @@ fun EmptyStateComposable(
     }
 }
 
-@Preview(name = "Empty State - Light", showBackground = true)
-@Preview(name = "Empty State - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@DevicePreview
 @Composable
 private fun PreviewEmptyStateComposable() {
     MaterialTheme {
@@ -93,7 +92,7 @@ private fun PreviewEmptyStateComposable() {
     }
 }
 
-@Preview(name = "Empty State Global - Light", showBackground = true)
+@DevicePreview
 @Composable
 private fun PreviewEmptyStateGlobalComposable() {
     MaterialTheme {

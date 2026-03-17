@@ -1,6 +1,5 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +26,8 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.R
@@ -49,6 +50,7 @@ fun StickyInvoiceHeaderComposable(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
+        // Título: "Histórico de facturas"
         Text(
             text = stringResource(R.string.title_invoice_history),
             modifier = Modifier
@@ -60,6 +62,7 @@ fun StickyInvoiceHeaderComposable(
             color = colorResource(R.color.color_text_high_emphasis)
         )
 
+        // Botón de filtro
         OutlinedButton(
             onClick = onFilterClick,
             modifier = Modifier.padding(end = dimensionResource(R.dimen.m3_sys_spacing_3)),
@@ -73,11 +76,13 @@ fun StickyInvoiceHeaderComposable(
                 contentColor = colorResource(R.color.iberdrola_dark_green)
             )
         ) {
+            // Icono de filtro
             Icon(
                 painter = painterResource(R.drawable.ic_filter),
                 contentDescription = null,
                 tint = colorResource(R.color.iberdrola_dark_green)
             )
+            // Texto del botón: "Filtrar"
             Text(
                 text = stringResource(R.string.action_filter),
                 modifier = Modifier.padding(start = dimensionResource(R.dimen.m3_sys_spacing_1)),
@@ -103,20 +108,20 @@ fun SkeletonStickyInvoiceHeaderComposable(modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-
+        // Título: "Histórico de facturas"
         SkeletonHeaderPlaceholder(
             width = dimensionResource(R.dimen.m3_comp_skeleton_header_title_width),
             height = dimensionResource(R.dimen.m3_comp_skeleton_header_title_height),
             modifier = Modifier
-
-                .padding(start = dimensionResource(R.dimen.m3_sys_spacing_4))
+                .padding(start = dimensionResource(R.dimen.m3_sys_spacing_4), top = dimensionResource(R.dimen.m3_sys_spacing_half))
         )
 
+        // Botón de filtro
         SkeletonHeaderPlaceholder(
             width = dimensionResource(R.dimen.m3_comp_skeleton_header_btn_width),
             height = dimensionResource(R.dimen.m3_comp_skeleton_header_btn_height),
             modifier = Modifier
-                .padding(end = dimensionResource(R.dimen.m3_sys_spacing_3)),
+                .padding(end = dimensionResource(R.dimen.m3_sys_spacing_3), top = dimensionResource(R.dimen.m3_sys_spacing_custom_6)),
             shape = RoundedCornerShape(
                 dimensionResource(R.dimen.m3_comp_button_corner_radius_full)
             )
@@ -139,8 +144,8 @@ private fun SkeletonHeaderPlaceholder(
     )
 }
 
-@Preview(name = "Sticky Header - Light", showBackground = true)
-@Preview(name = "Sticky Header - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+// Histórico de facturas
+@DevicePreview
 @Composable
 private fun PreviewStickyInvoiceHeaderComposable() {
     MaterialTheme {
@@ -148,12 +153,28 @@ private fun PreviewStickyInvoiceHeaderComposable() {
     }
 }
 
-@Preview(name = "Skeleton Sticky Header - Light", showBackground = true)
-@Preview(name = "Skeleton Sticky Header - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+// Skeleton del histórico de facturas
+@DevicePreview
 @Composable
 private fun PreviewSkeletonStickyInvoiceHeaderComposable() {
     MaterialTheme {
         SkeletonStickyInvoiceHeaderComposable()
+    }
+}
+
+// Overlay: histórico de facturas + skeleton superpuesto
+@DevicePreview
+@Composable
+private fun PreviewStickyHeaderOverlayAlignment() {
+    MaterialTheme {
+        Box {
+            // Histórico de facturas (real)
+            StickyInvoiceHeaderComposable()
+            // Skeleton del histórico de facturas (superpuesto)
+            SkeletonStickyInvoiceHeaderComposable(
+                modifier = Modifier.alpha(0.8f)
+            )
+        }
     }
 }
 

@@ -1,6 +1,5 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
 
-import android.content.res.Configuration
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
 import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.R
 
@@ -151,8 +151,7 @@ fun FeedbackBottomSheetComposable(
     }
 }
 
-@Preview(name = "Feedback BottomSheet - Light", showBackground = true)
-@Preview(name = "Feedback BottomSheet - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@DevicePreview
 @Composable
 private fun PreviewFeedbackBottomSheetComposable() {
     MaterialTheme {

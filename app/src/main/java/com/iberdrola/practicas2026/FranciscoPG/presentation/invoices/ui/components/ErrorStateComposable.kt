@@ -1,6 +1,5 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,6 +25,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
 import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.R
 
@@ -96,8 +96,7 @@ fun ErrorStateComposable(
     }
 }
 
-@Preview(name = "Server Error - Light", showBackground = true)
-@Preview(name = "Server Error - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@DevicePreview
 @Composable
 private fun PreviewServerErrorStateComposable() {
     MaterialTheme {
@@ -110,8 +109,7 @@ private fun PreviewServerErrorStateComposable() {
     }
 }
 
-@Preview(name = "Connection Error - Light", showBackground = true)
-@Preview(name = "Connection Error - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@DevicePreview
 @Composable
 private fun PreviewConnectionErrorStateComposable() {
     MaterialTheme {

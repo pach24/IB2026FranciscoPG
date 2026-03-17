@@ -1,6 +1,5 @@
 ﻿package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.R
@@ -40,6 +41,7 @@ fun InvoiceHeaderItemComposable(
     year: String,
     modifier: Modifier = Modifier
 ) {
+    // Año de agrupación: "2024", "2023"...
     Text(
         text = year,
         modifier = modifier
@@ -84,6 +86,7 @@ fun InvoiceRowItemComposable(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column(modifier = Modifier.weight(1f)) {
+                // Fecha de la factura: "8 de marzo"
                 Text(
                     text = date,
                     fontFamily = InvoiceFontBold,
@@ -93,6 +96,7 @@ fun InvoiceRowItemComposable(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // Tipo de factura: "Factura Luz", "Factura Gas"
                 Text(
                     text = type,
                     fontFamily = InvoiceFontRegular,
@@ -100,6 +104,7 @@ fun InvoiceRowItemComposable(
                     color = colorResource(R.color.light_grey)
                 )
 
+                // Estado: "Pagada" / "Pendiente de Pago"
                 StatusPillComposable(
                     text = status,
                     isPaid = isPaid,
@@ -110,6 +115,7 @@ fun InvoiceRowItemComposable(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                // Importe: "20,00 €"
                 Text(
                     text = amount,
                     fontFamily = InvoiceFontRegular,
@@ -117,6 +123,7 @@ fun InvoiceRowItemComposable(
                     color = colorResource(R.color.light_grey)
                 )
                 Spacer(modifier = Modifier.width(dimensionResource(R.dimen.m3_sys_spacing_half)))
+                // Flecha de navegación
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_right),
                     contentDescription = null,
@@ -127,6 +134,7 @@ fun InvoiceRowItemComposable(
         }
 
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_custom_14)))
+        // Divisor horizontal
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -147,9 +155,11 @@ fun SkeletonInvoiceHeaderItemComposable(modifier: Modifier = Modifier) {
                 vertical = dimensionResource(R.dimen.m3_sys_spacing_custom_10)
             )
     ) {
+        // Año de agrupación: "2024", "2023"...
         SkeletonPlaceholder(
             width = dimensionResource(R.dimen.m3_comp_skeleton_year_width),
-            height = dimensionResource(R.dimen.m3_comp_skeleton_year_height)
+            height = dimensionResource(R.dimen.m3_comp_skeleton_year_height),
+            modifier = Modifier.padding(top = 1.dp)
         )
     }
 }
@@ -164,51 +174,57 @@ fun SkeletonInvoiceRowItemComposable(modifier: Modifier = Modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = dimensionResource(R.dimen.m3_sys_spacing_2)),
+                .padding(
+                    top = dimensionResource(R.dimen.m3_sys_spacing_custom_14),
+                    start = dimensionResource(R.dimen.m3_sys_spacing_4),
+                    end = dimensionResource(R.dimen.m3_sys_spacing_4)
+                ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column(modifier = Modifier.weight(1f)) {
+                // Fecha de la factura
                 SkeletonPlaceholder(
                     width = dimensionResource(R.dimen.m3_comp_skeleton_list_date_width),
                     height = dimensionResource(R.dimen.m3_comp_skeleton_list_date_height),
-                    modifier = Modifier.padding(start = dimensionResource(R.dimen.m3_sys_spacing_4))
+                    modifier = Modifier.padding(top = dimensionResource(R.dimen.m3_sys_spacing_custom_2))
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(15.dp))
+                // Tipo de factura: "Factura Luz", "Factura Gas"
                 SkeletonPlaceholder(
                     width = dimensionResource(R.dimen.m3_comp_skeleton_list_type_width),
-                    height = dimensionResource(R.dimen.m3_comp_skeleton_list_type_height),
-                    modifier = Modifier.padding(start = dimensionResource(R.dimen.m3_sys_spacing_4))
+                    height = dimensionResource(R.dimen.m3_comp_skeleton_list_type_height)
                 )
-                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_1)))
-                Box(
-                    modifier = Modifier.padding(start = dimensionResource(R.dimen.m3_sys_spacing_4))
-                ) {
-                    SkeletonPlaceholder(
-                        width = dimensionResource(R.dimen.m3_comp_skeleton_list_status_width),
-                        height = dimensionResource(R.dimen.m3_comp_skeleton_list_status_height),
-                        shape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_shape_corner_radius_small))
-                    )
-                }
+                // Estado: "Pagada" / "Pendiente de Pago"
+                SkeletonPlaceholder(
+                    width = dimensionResource(R.dimen.m3_comp_skeleton_list_status_width),
+                    height = dimensionResource(R.dimen.m3_comp_skeleton_list_status_height),
+                    modifier = Modifier.padding(top = dimensionResource(R.dimen.m3_sys_spacing_custom_14)),
+                    shape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_shape_corner_radius_small))
+                )
             }
 
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(end = dimensionResource(R.dimen.m3_sys_spacing_2))
+                verticalAlignment = Alignment.CenterVertically
             ) {
+                // Importe: "20,00 €"
                 SkeletonPlaceholder(
                     width = dimensionResource(R.dimen.m3_comp_skeleton_list_amount_width),
-                    height = dimensionResource(R.dimen.m3_comp_skeleton_list_amount_height)
+                    height = dimensionResource(R.dimen.m3_comp_skeleton_list_amount_height),
+                    modifier = Modifier.padding(end = dimensionResource(R.dimen.m3_sys_spacing_half))
                 )
-                Spacer(modifier = Modifier.width(dimensionResource(R.dimen.m3_sys_spacing_custom_12)))
+                Spacer(modifier = Modifier.width(dimensionResource(R.dimen.m3_sys_spacing_custom_6)))
+                // Flecha de navegación
                 SkeletonPlaceholder(
                     width = dimensionResource(R.dimen.m3_comp_skeleton_list_arrow_width),
-                    height = dimensionResource(R.dimen.m3_comp_skeleton_list_arrow_height)
+                    height = dimensionResource(R.dimen.m3_comp_skeleton_list_arrow_height),
+                    modifier = modifier.padding(end = dimensionResource(R.dimen.m3_sys_spacing_1))
                 )
             }
         }
 
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_custom_14)))
+        // Divisor horizontal
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -233,15 +249,15 @@ private fun SkeletonPlaceholder(
     )
 }
 
-@Preview(name = "Invoice Header - Light", showBackground = true)
-@Preview(name = "Invoice Header - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+// Cabecera de año del histórico
+@DevicePreview
 @Composable
 private fun PreviewInvoiceHeaderItemComposable() {
     MaterialTheme { InvoiceHeaderItemComposable(year = "2024") }
 }
 
-@Preview(name = "Invoice Row - Light", showBackground = true)
-@Preview(name = "Invoice Row - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+// Fila de factura (pendiente de pago)
+@DevicePreview
 @Composable
 private fun PreviewInvoiceRowItemComposable() {
     MaterialTheme {
@@ -249,14 +265,14 @@ private fun PreviewInvoiceRowItemComposable() {
             date = "8 de marzo",
             type = "Factura Luz",
             status = "Pendiente de Pago",
-            amount = "20,00 �",
+            amount = "20,00 €",
             isPaid = false
         )
     }
 }
 
-@Preview(name = "Invoice Row Paid - Light", showBackground = true)
-@Preview(name = "Invoice Row Paid - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+// Fila de factura (pagada)
+@DevicePreview
 @Composable
 private fun PreviewInvoiceRowItemPaidComposable() {
     MaterialTheme {
@@ -264,23 +280,56 @@ private fun PreviewInvoiceRowItemPaidComposable() {
             date = "8 de marzo",
             type = "Factura Luz",
             status = "Pagada",
-            amount = "20,00 �",
+            amount = "20,00 €",
             isPaid = true
         )
     }
 }
 
-@Preview(name = "Skeleton Header - Light", showBackground = true)
-@Preview(name = "Skeleton Header - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+// Skeleton de la cabecera de año
+@DevicePreview
 @Composable
 private fun PreviewSkeletonInvoiceHeaderItemComposable() {
     MaterialTheme { SkeletonInvoiceHeaderItemComposable() }
 }
 
-@Preview(name = "Skeleton Row - Light", showBackground = true)
-@Preview(name = "Skeleton Row - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+// Skeleton de la fila de factura
+@DevicePreview
 @Composable
 private fun PreviewSkeletonInvoiceRowItemComposable() {
     MaterialTheme { SkeletonInvoiceRowItemComposable() }
 }
 
+// Overlay: cabecera + fila con skeletons superpuestos
+@DevicePreview
+@Composable
+private fun PreviewOverlaySkeletonOnRow() {
+    MaterialTheme {
+        ShimmerHost {
+            Column {
+                Box {
+                    // Cabecera de año (real)
+                    InvoiceHeaderItemComposable(year = "2024")
+                    // Skeleton de la cabecera (superpuesto)
+                    SkeletonInvoiceHeaderItemComposable(
+                        modifier = Modifier.alpha(0.9f)
+                    )
+                }
+                Box {
+                    // Fila de factura (real)
+                    InvoiceRowItemComposable(
+                        date = "8 de marzo",
+                        type = "Factura Luz",
+                        status = "Pendiente de Pago",
+                        amount = "20,00 €",
+                        isPaid = false
+                    )
+                    // Skeleton de la fila (superpuesto)
+                    SkeletonInvoiceRowItemComposable(
+                        modifier = Modifier.alpha(0.9f)
+                    )
+                }
+            }
+        }
+    }
+}

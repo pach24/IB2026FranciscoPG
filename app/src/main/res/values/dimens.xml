@@ -2,25 +2,27 @@
 <resources>
 
     <!-- ========================================== -->
-    <!-- M3 SYSTEM TOKENS: TIPOGRAFÍA (Estilo iOS)  -->
+    <!-- M3 SYSTEM TOKENS: TIPOGRAFÍA  -->
     <!-- ========================================== -->
-    <dimen name="m3_sys_typescale_title1">28sp</dimen>             <!-- Saludo principal y Títulos de pantalla -->
-    <dimen name="m3_sys_typescale_title2">22sp</dimen>             <!-- Títulos de sección -->
-    <dimen name="m3_sys_typescale_title3">20sp</dimen>             <!-- Títulos de BottomSheets o modales -->
-    <dimen name="m3_sys_typescale_headline_medium">24sp</dimen>    <!-- Cantidad principal (20,00) -->
-    <dimen name="m3_sys_typescale_headline">17sp</dimen>           <!-- Títulos dentro de tarjetas o navegación -->
-    <dimen name="m3_sys_typescale_headline_small">18sp</dimen>     <!-- Símbolo de moneda (€) -->
-    <dimen name="m3_sys_typescale_body_large">16sp</dimen>         <!-- Textos descriptivos principales o botones -->
-    <dimen name="m3_sys_typescale_subhead">15sp</dimen>            <!-- Textos secundarios y direcciones -->
-    <dimen name="m3_sys_typescale_label">14sp</dimen>              <!-- Botones pequeños, chips y labels -->
-    <dimen name="m3_sys_typescale_body_small">12sp</dimen>         <!-- Subtítulo de factura -->
-    <dimen name="m3_sys_typescale_micro">10sp</dimen>              <!-- Estado (Pendiente de pago) -->
+    <dimen name="m3_sys_typescale_title1">28dp</dimen>             <!-- Saludo principal y Títulos de pantalla -->
+    <dimen name="m3_sys_typescale_title2">22dp</dimen>             <!-- Títulos de sección -->
+    <dimen name="m3_sys_typescale_title3">20dp</dimen>             <!-- Títulos de BottomSheets o modales -->
+    <dimen name="m3_sys_typescale_headline_medium">24dp</dimen>    <!-- Cantidad principal (20,00) -->
+    <dimen name="m3_sys_typescale_headline">17dp</dimen>           <!-- Títulos dentro de tarjetas o navegación -->
+    <dimen name="m3_sys_typescale_headline_small">18dp</dimen>     <!-- Símbolo de moneda (€) -->
+    <dimen name="m3_sys_typescale_body_large">16dp</dimen>         <!-- Textos descriptivos principales o botones -->
+    <dimen name="m3_sys_typescale_subhead">15dp</dimen>            <!-- Textos secundarios y direcciones -->
+    <dimen name="m3_sys_typescale_label">14dp</dimen>              <!-- Botones pequeños, chips y labels -->
+    <dimen name="m3_sys_typescale_body_small">12dp</dimen>         <!-- Subtítulo de factura -->
+    <dimen name="m3_sys_typescale_micro">10dp</dimen>              <!-- Estado (Pendiente de pago) -->
 
     <!-- ========================================== -->
     <!-- M3 SYSTEM TOKENS: ESPACIADO (Retícula 8dp) -->
     <!-- ========================================== -->
     <dimen name="m3_sys_spacing_0">0dp</dimen>
+    <dimen name="m3_sys_spacing_custom_2">2dp</dimen>
     <dimen name="m3_sys_spacing_half">4dp</dimen>
+    <dimen name="m3_sys_spacing_custom_5">5dp</dimen>
     <dimen name="m3_sys_spacing_custom_6">6dp</dimen>              <!-- Espaciado excepcional (padding pills) -->
     <dimen name="m3_sys_spacing_1">8dp</dimen>
     <dimen name="m3_sys_spacing_custom_10">10dp</dimen>            <!-- Espaciado excepcional (header top) -->

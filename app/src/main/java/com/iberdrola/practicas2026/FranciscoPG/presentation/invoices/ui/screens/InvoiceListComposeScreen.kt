@@ -25,15 +25,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListItem
+import androidx.compose.foundation.layout.Box
 
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.InvoiceHeaderItemComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.InvoiceRowItemComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.LatestInvoiceCardComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.ShimmerHost
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.SkeletonInvoiceHeaderItemComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.SkeletonInvoiceRowItemComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.SkeletonLatestInvoiceCardComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.SkeletonStickyInvoiceHeaderComposable
@@ -79,27 +82,35 @@ fun InvoiceListComposeScreen(
         }
     ) {
         if (isLoading) {
-            // ShimmerHost comparte una sola transición para todos los ShimmerBox
             ShimmerHost {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(bottom = 32.dp)
                 ) {
+                    // Skeleton: Última factura (card)
                     item {
                         Spacer(modifier = Modifier.height(16.dp))
                         SkeletonLatestInvoiceCardComposable(
-                            modifier = Modifier.padding(horizontal = 24.dp)
+                            modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 10.dp)
                         )
                     }
 
+                    // Skeleton: Sticky header (histórico de facturas + botón filtro)
                     item {
                         SkeletonStickyInvoiceHeaderComposable(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(colorResource(R.color.color_background))
+                                .padding(bottom = 12.dp)
                         )
                     }
 
+                    // Skeleton: Cabecera de año ("2024", "2023"...)
+                    item {
+                        SkeletonInvoiceHeaderItemComposable(modifier = Modifier.padding(bottom = 8.dp))
+                    }
+
+                    // Skeleton: Filas de facturas
                     items(6) {
                         SkeletonInvoiceRowItemComposable()
                     }
@@ -111,13 +122,13 @@ fun InvoiceListComposeScreen(
                 state = listState,
                 contentPadding = PaddingValues(bottom = 32.dp)
             ) {
-                /* ITEM 1: MARGIN + TARJETA (Se colapsa al hacer scroll) */
+                // Última factura (card)
                 item {
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(18.dp))
                     LatestInvoiceCardComposable(
                         amount = latestInvoiceAmount,
                         dateRange = latestInvoiceDateRange,
-                        supplyType = latestInvoiceType,   // parametro correcto: supplyType
+                        supplyType = latestInvoiceType,
                         status = latestInvoiceStatus,
                         isPaid = latestInvoiceIsPaid,
                         iconRes = latestInvoiceIconRes,
@@ -127,7 +138,7 @@ fun InvoiceListComposeScreen(
                     )
                 }
 
-                /* STICKY HEADER: HISTORICO (Se queda fijo arriba) */
+                // Sticky header (histórico de facturas + botón filtro)
                 stickyHeader {
                     StickyInvoiceHeaderComposable(
                         modifier = Modifier
@@ -138,12 +149,14 @@ fun InvoiceListComposeScreen(
                     )
                 }
 
-                /* LISTA DE FACTURAS */
+                // Histórico de facturas (cabeceras de año + filas)
                 items(historyItems) { item ->
                     when (item) {
+                        // Cabecera de año ("2024", "2023"...)
                         is InvoiceListItem.HeaderYear -> {
                             InvoiceHeaderItemComposable(year = item.year)
                         }
+                        // Fila de factura (fecha, tipo, estado, importe)
                         is InvoiceListItem.InvoiceItem -> {
                             InvoiceRowItemComposable(
                                 date = item.date,
@@ -161,6 +174,18 @@ fun InvoiceListComposeScreen(
     }
 }
 
+private val mockHistoryItems = listOf(
+    InvoiceListItem.HeaderYear("2024"),
+    InvoiceListItem.InvoiceItem("1", "8 de marzo", "Factura Luz", "45,20 €", "Pagada", true),
+    InvoiceListItem.InvoiceItem("2", "10 de febrero", "Factura Gas", "32,50 €", "Pagada", true),
+    InvoiceListItem.InvoiceItem("3", "12 de enero", "Factura Luz", "58,90 €", "Pendiente de Pago", false),
+    InvoiceListItem.HeaderYear("2023"),
+    InvoiceListItem.InvoiceItem("4", "5 de diciembre", "Factura Luz", "41,00 €", "Pagada", true),
+    InvoiceListItem.InvoiceItem("5", "3 de noviembre", "Factura Gas", "29,80 €", "Pagada", true),
+    InvoiceListItem.InvoiceItem("6", "7 de octubre", "Factura Luz", "37,60 €", "Pendiente de Pago", false)
+)
+
+// Pantalla de facturas con datos mockeados
 @Preview(name = "Invoice List - Light", showBackground = true)
 @Preview(name = "Invoice List - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
@@ -169,13 +194,13 @@ private fun PreviewInvoiceListComposeScreen() {
         InvoiceListComposeScreen(
             isLoading = false,
             isRefreshing = false,
-            latestInvoiceAmount = "20,00 �",
+            latestInvoiceAmount = "20,00 €",
             latestInvoiceDateRange = "01 feb. 2024 - 04 mar. 2024",
             latestInvoiceType = "Factura Luz",
             latestInvoiceStatus = "Pendiente de Pago",
             latestInvoiceIsPaid = false,
             latestInvoiceIconRes = R.drawable.ic_light,
-            historyItems = emptyList(),
+            historyItems = mockHistoryItems,
             onLatestInvoiceClick = {},
             onFilterClick = {},
             onHistoryItemClick = {},
@@ -184,6 +209,7 @@ private fun PreviewInvoiceListComposeScreen() {
     }
 }
 
+// Pantalla de facturas en estado skeleton
 @Preview(name = "Invoice List Skeleton - Light", showBackground = true)
 @Preview(name = "Invoice List Skeleton - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
@@ -207,9 +233,50 @@ private fun PreviewInvoiceListComposeScreenLoading() {
     }
 }
 
-
-
-
+// Overlay: datos reales + skeleton superpuesto con opacidad
+@OptIn(ExperimentalFoundationApi::class)
+@Preview(name = "Overlay - Light", showBackground = true)
+@Preview(name = "Overlay - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+private fun PreviewInvoiceListOverlay() {
+    MaterialTheme {
+        Box {
+            // Pantalla con datos reales
+            InvoiceListComposeScreen(
+                isLoading = false,
+                isRefreshing = false,
+                latestInvoiceAmount = "20,00 €",
+                latestInvoiceDateRange = "01 feb. 2024 - 04 mar. 2024",
+                latestInvoiceType = "Factura Luz",
+                latestInvoiceStatus = "Pendiente de Pago",
+                latestInvoiceIsPaid = false,
+                latestInvoiceIconRes = R.drawable.ic_light,
+                historyItems = mockHistoryItems,
+                onLatestInvoiceClick = {},
+                onFilterClick = {},
+                onHistoryItemClick = {},
+                onRefresh = {}
+            )
+            // Skeleton superpuesto con opacidad
+            InvoiceListComposeScreen(
+                isLoading = true,
+                isRefreshing = false,
+                latestInvoiceAmount = "",
+                latestInvoiceDateRange = "",
+                latestInvoiceType = "",
+                latestInvoiceStatus = "",
+                latestInvoiceIsPaid = false,
+                latestInvoiceIconRes = R.drawable.ic_light,
+                historyItems = emptyList(),
+                onLatestInvoiceClick = {},
+                onFilterClick = {},
+                onHistoryItemClick = {},
+                onRefresh = {},
+                modifier = Modifier.alpha(0.8f)
+            )
+        }
+    }
+}
 
 
 
