@@ -20,7 +20,7 @@ class InvoiceRepositoryImpl @Inject constructor(
     private val invoiceDao: InvoiceDao
 ) : InvoiceRepository {
 
-    override suspend fun getInvoices(supplyType: String): Result<List<Invoice>> {
+    override suspend fun getInvoices(supplyType: String, forceRefresh: Boolean): Result<List<Invoice>> {
         return try {
             if (configRepository.isMockEnabled()) {
                 // Mock: solo devolver datos del JSON, sin tocar Room
@@ -32,9 +32,11 @@ class InvoiceRepositoryImpl @Inject constructor(
                 Result.success(invoices)
             } else {
                 // Real: usar Room como caché
-                val cached = invoiceDao.getInvoicesBySupplyType(supplyType.uppercase())
-                if (cached.isNotEmpty()) {
-                    return Result.success(cached.map { it.toDomain() })
+                if (!forceRefresh) {
+                    val cached = invoiceDao.getInvoicesBySupplyType(supplyType.uppercase())
+                    if (cached.isNotEmpty()) {
+                        return Result.success(cached.map { it.toDomain() })
+                    }
                 }
 
                 val response = realApiService.getInvoices(supplyType)

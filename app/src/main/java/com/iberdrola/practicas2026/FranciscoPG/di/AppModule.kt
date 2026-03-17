@@ -18,6 +18,7 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.repository.FeedbackReposit
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.InvoiceRepository
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetMockModeUseCase
+import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.SortInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.IncrementExitCounterUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.SetMockModeUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ShouldShowFeedbackPromptUseCase
@@ -154,8 +155,16 @@ object AppModule {
     }
 
     @Provides @Singleton
-    fun provideGetInvoicesUseCase(repository: InvoiceRepository): GetInvoicesUseCase {
-        return GetInvoicesUseCase(repository)
+    fun provideSortInvoicesUseCase(): SortInvoicesUseCase {
+        return SortInvoicesUseCase()
+    }
+
+    @Provides @Singleton
+    fun provideGetInvoicesUseCase(
+        repository: InvoiceRepository,
+        sortInvoicesUseCase: SortInvoicesUseCase
+    ): GetInvoicesUseCase {
+        return GetInvoicesUseCase(repository, sortInvoicesUseCase)
     }
 
     @Provides @Singleton
