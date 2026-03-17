@@ -1,6 +1,5 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,16 +19,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.R
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Stroke
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Skeleton
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 
 private val StickyHeaderBold = FontFamily(Font(R.font.iberpangea_bold, FontWeight.Bold))
 
@@ -43,29 +46,31 @@ fun StickyInvoiceHeaderComposable(
             .fillMaxWidth()
             .background(colorResource(R.color.color_background))
             .padding(
-                top = dimensionResource(R.dimen.m3_sys_spacing_custom_10),
-                bottom = dimensionResource(R.dimen.m3_sys_spacing_1)
+                top = Spacing.dp10,
+                bottom = Spacing.dp8
             ),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
+        // Título: "Histórico de facturas"
         Text(
             text = stringResource(R.string.title_invoice_history),
             modifier = Modifier
                 .weight(1f)
-                .padding(start = dimensionResource(R.dimen.m3_sys_spacing_4)),
+                .padding(start = Spacing.dp32),
             fontFamily = StickyHeaderBold,
             fontWeight = FontWeight.Bold,
-            fontSize = dimensionResource(R.dimen.m3_sys_typescale_body_large).value.sp,
+            fontSize = TextSize.sp16,
             color = colorResource(R.color.color_text_high_emphasis)
         )
 
+        // Botón de filtro
         OutlinedButton(
             onClick = onFilterClick,
-            modifier = Modifier.padding(end = dimensionResource(R.dimen.m3_sys_spacing_3)),
-            shape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_button_corner_radius_full)),
+            modifier = Modifier.padding(end = Spacing.dp24),
+            shape = RoundedCornerShape(Radius.dp50),
             border = BorderStroke(
-                width = dimensionResource(R.dimen.m3_comp_button_stroke_width),
+                width = Stroke.dp2,
                 color = colorResource(R.color.iberdrola_dark_green)
             ),
             colors = ButtonDefaults.outlinedButtonColors(
@@ -73,17 +78,19 @@ fun StickyInvoiceHeaderComposable(
                 contentColor = colorResource(R.color.iberdrola_dark_green)
             )
         ) {
+            // Icono de filtro
             Icon(
                 painter = painterResource(R.drawable.ic_filter),
                 contentDescription = null,
                 tint = colorResource(R.color.iberdrola_dark_green)
             )
+            // Texto del botón: "Filtrar"
             Text(
                 text = stringResource(R.string.action_filter),
-                modifier = Modifier.padding(start = dimensionResource(R.dimen.m3_sys_spacing_1)),
+                modifier = Modifier.padding(start = Spacing.dp8),
                 fontFamily = StickyHeaderBold,
                 fontWeight = FontWeight.Bold,
-                fontSize = dimensionResource(R.dimen.m3_sys_typescale_label).value.sp,
+                fontSize = TextSize.sp14,
                 color = colorResource(R.color.iberdrola_dark_green)
             )
         }
@@ -97,28 +104,28 @@ fun SkeletonStickyInvoiceHeaderComposable(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .background(colorResource(R.color.color_background))
             .padding(
-                top = dimensionResource(R.dimen.m3_sys_spacing_custom_10),
-                bottom = dimensionResource(R.dimen.m3_sys_spacing_1)
+                top = Spacing.dp10,
+                bottom = Spacing.dp8
             ),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-
+        // Título: "Histórico de facturas"
         SkeletonHeaderPlaceholder(
-            width = dimensionResource(R.dimen.m3_comp_skeleton_header_title_width),
-            height = dimensionResource(R.dimen.m3_comp_skeleton_header_title_height),
+            width = Skeleton.headerTitleW,
+            height = Skeleton.headerTitleH,
             modifier = Modifier
-
-                .padding(start = dimensionResource(R.dimen.m3_sys_spacing_4))
+                .padding(start = Spacing.dp32, top = Spacing.dp4)
         )
 
+        // Botón de filtro
         SkeletonHeaderPlaceholder(
-            width = dimensionResource(R.dimen.m3_comp_skeleton_header_btn_width),
-            height = dimensionResource(R.dimen.m3_comp_skeleton_header_btn_height),
+            width = Skeleton.headerBtnW,
+            height = Skeleton.headerBtnH,
             modifier = Modifier
-                .padding(end = dimensionResource(R.dimen.m3_sys_spacing_3)),
+                .padding(end = Spacing.dp24, top = Spacing.dp6),
             shape = RoundedCornerShape(
-                dimensionResource(R.dimen.m3_comp_button_corner_radius_full)
+                Radius.dp50
             )
         )
     }
@@ -129,7 +136,7 @@ private fun SkeletonHeaderPlaceholder(
     width: Dp,
     height: Dp,
     modifier: Modifier = Modifier,
-    shape: RoundedCornerShape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_skeleton_corner_radius))
+    shape: RoundedCornerShape = RoundedCornerShape(Radius.dp4)
 ) {
     ShimmerBox(
         width = width,
@@ -139,8 +146,8 @@ private fun SkeletonHeaderPlaceholder(
     )
 }
 
-@Preview(name = "Sticky Header - Light", showBackground = true)
-@Preview(name = "Sticky Header - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+// Histórico de facturas
+@DevicePreview
 @Composable
 private fun PreviewStickyInvoiceHeaderComposable() {
     MaterialTheme {
@@ -148,12 +155,28 @@ private fun PreviewStickyInvoiceHeaderComposable() {
     }
 }
 
-@Preview(name = "Skeleton Sticky Header - Light", showBackground = true)
-@Preview(name = "Skeleton Sticky Header - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+// Skeleton del histórico de facturas
+@DevicePreview
 @Composable
 private fun PreviewSkeletonStickyInvoiceHeaderComposable() {
     MaterialTheme {
         SkeletonStickyInvoiceHeaderComposable()
+    }
+}
+
+// Overlay: histórico de facturas + skeleton superpuesto
+@DevicePreview
+@Composable
+private fun PreviewStickyHeaderOverlayAlignment() {
+    MaterialTheme {
+        Box {
+            // Histórico de facturas (real)
+            StickyInvoiceHeaderComposable()
+            // Skeleton del histórico de facturas (superpuesto)
+            SkeletonStickyInvoiceHeaderComposable(
+                modifier = Modifier.alpha(0.8f)
+            )
+        }
     }
 }
 

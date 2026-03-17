@@ -4,6 +4,6 @@
 
     <solid android:color="@color/color_skeleton_background" />
 
-    <corners android:radius="@dimen/m3_comp_skeleton_corner_radius" />
+    <corners android:radius="@dimen/radius_4" />
 
 </shape>

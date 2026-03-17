@@ -6,6 +6,6 @@
     <solid android:color="@color/color_skeleton_background" />
 
     <!-- Se reutiliza el radio de 8dp ya existente en dimens.xml -->
-    <corners android:radius="@dimen/m3_comp_shape_corner_radius_small" />
+    <corners android:radius="@dimen/radius_8" />
 
 </shape>

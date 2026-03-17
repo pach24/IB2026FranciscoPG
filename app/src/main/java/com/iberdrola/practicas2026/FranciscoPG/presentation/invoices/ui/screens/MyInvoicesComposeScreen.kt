@@ -45,13 +45,15 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.EmptyStateComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.FeedbackBottomSheetComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.FeedbackSheetState
 import kotlinx.coroutines.launch
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IconSize
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Stroke
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 
 private val InvoicesBold = FontFamily(Font(R.font.iberpangea_bold, FontWeight.Bold))
 private val InvoicesRegular = FontFamily(Font(R.font.iberpangea_regular, FontWeight.Normal))
@@ -122,7 +124,7 @@ fun MyInvoicesComposeScreen(
         /* BOTON ATRAS */
         Row(
             modifier = Modifier
-                .padding(start = 16.dp, top = 16.dp)
+                .padding(start = Spacing.dp16, top = Spacing.dp16)
                 .clickable { onBackClick() },
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -130,32 +132,31 @@ fun MyInvoicesComposeScreen(
                 painter = painterResource(R.drawable.ic_arrow_back),
                 contentDescription = null,
                 tint = colorResource(R.color.iberdrola_dark_green),
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(IconSize.dp24)
             )
             Text(
                 text = stringResource(R.string.my_invoices_back),
-                modifier = Modifier.padding(start = 8.dp),
+                modifier = Modifier.padding(start = Spacing.dp8),
                 textDecoration = TextDecoration.Underline,
                 fontFamily = InvoicesBold,
                 color = colorResource(R.color.iberdrola_dark_green),
-                fontSize = 16.sp
-            )
+                fontSize = TextSize.sp16            )
         }
 
         /* TITULOS */
         Text(
             text = stringResource(R.string.my_invoices_title),
-            modifier = Modifier.padding(start = 16.dp, top = 24.dp, end = 16.dp),
+            modifier = Modifier.padding(start = Spacing.dp16, top = Spacing.dp24, end = Spacing.dp16),
             fontFamily = InvoicesBold,
-            fontSize = 32.sp,
+            fontSize = TextSize.sp32,
             color = colorResource(R.color.dark_grey_text)
         )
 
         Text(
             text = address,
-            modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp),
+            modifier = Modifier.padding(start = Spacing.dp16, top = Spacing.dp8, end = Spacing.dp16),
             fontFamily = InvoicesBold,
-            fontSize = 18.sp,
+            fontSize = TextSize.sp18,
             color = colorResource(R.color.dark_grey_text)
         )
 
@@ -168,12 +169,12 @@ fun MyInvoicesComposeScreen(
             )
         } else {
             /* TABS + INDICADOR */
-            Box(modifier = Modifier.padding(top = 16.dp)) {
+            Box(modifier = Modifier.padding(top = Spacing.dp16)) {
                 Box(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth()
-                        .height(1.dp)
+                        .height(Stroke.dp1)
                         .background(colorResource(R.color.tab_misfacturas))
                 )
 
@@ -181,14 +182,14 @@ fun MyInvoicesComposeScreen(
                     selectedTabIndex = pagerState.currentPage,
                     modifier = Modifier.fillMaxWidth(),
                     containerColor = Color.Transparent,
-                    edgePadding = 16.dp,
+                    edgePadding = Spacing.dp16,
                     divider = {},
                     indicator = { tabPositions ->
                         StretchTabIndicator(
                             tabPositions = tabPositions,
                             pagerState = pagerState,
                             isTabClick = isTabClick,
-                            color = colorResource(R.color.iberdrola_dark_green)
+                            color = colorResource(R.color.iberdrola_green)
                         )
                     }
                 ) {
@@ -208,7 +209,7 @@ fun MyInvoicesComposeScreen(
                                 Text(
                                     text = title,
                                     fontFamily = if (isSelected) InvoicesBold else InvoicesRegular,
-                                    fontSize = 14.sp,
+                                    fontSize = TextSize.sp14,
                                     color = if (isSelected) colorResource(R.color.color_text_high_emphasis) else Color.Gray
                                 )
                             }
@@ -259,21 +260,21 @@ private fun ThankYouContent(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(32.dp),
+            .padding(Spacing.dp32),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_face_very_happy),
             contentDescription = null,
             tint = Color.Unspecified,
-            modifier = Modifier.size(48.dp)
+            modifier = Modifier.size(IconSize.dp48)
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(Spacing.dp16))
         Text(
             text = stringResource(R.string.feedback_thank_you),
             style = MaterialTheme.typography.titleMedium,
             textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(Spacing.dp24))
     }
 }
