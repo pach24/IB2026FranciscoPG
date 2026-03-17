@@ -65,7 +65,6 @@ fun MyInvoicesComposeScreen(
     modifier: Modifier = Modifier,
     feedbackSheetState: FeedbackSheetState = FeedbackSheetState.Hidden,
     isGlobalEmpty: Boolean = false,
-    defaultTabIndex: Int = 0,
     onBackClick: () -> Unit = {},
     onFeedbackFaceClick: () -> Unit = {},
     onFeedbackLaterClick: () -> Unit = {},
@@ -76,21 +75,12 @@ fun MyInvoicesComposeScreen(
 ) {
     val tabs = listOf(stringResource(R.string.tab_light), stringResource(R.string.tab_gas))
     val pagerState = rememberPagerState(
-        initialPage = defaultTabIndex,
+        initialPage = 0,
         pageCount = { tabs.size }
     )
     val scope = rememberCoroutineScope()
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-
-    // Auto-selección del tab con datos cuando cambia el defaultTabIndex
-    var hasAutoSelected by remember { mutableStateOf(false) }
-    LaunchedEffect(defaultTabIndex) {
-        if (!hasAutoSelected && defaultTabIndex != pagerState.currentPage) {
-            pagerState.scrollToPage(defaultTabIndex)
-            hasAutoSelected = true
-        }
-    }
 
     // Solo intercepta back cuando NO hay sheet visible;
     // si el sheet está abierto, su propio handler gestiona el back.

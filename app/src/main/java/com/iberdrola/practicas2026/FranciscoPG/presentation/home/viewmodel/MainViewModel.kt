@@ -20,7 +20,7 @@ class MainViewModel @Inject constructor(
     private val _userName = MutableStateFlow("")
     val userName: StateFlow<String> = _userName.asStateFlow()
 
-    private val _useMock = MutableStateFlow(false)
+    private val _useMock = MutableStateFlow(getMockModeUseCase())
     val useMock: StateFlow<Boolean> = _useMock.asStateFlow()
 
     // Evento one-shot para avisar a la UI del cambio de modo (null = no hay evento pendiente)
@@ -29,7 +29,6 @@ class MainViewModel @Inject constructor(
 
     init {
         loadUserData()
-        _useMock.value = getMockModeUseCase()
     }
 
     private fun loadUserData() {

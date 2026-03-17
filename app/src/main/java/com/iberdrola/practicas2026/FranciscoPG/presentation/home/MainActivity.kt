@@ -136,9 +136,13 @@ class MainActivity : AppCompatActivity() {
                         val lightListState = rememberLazyListState()
                         val gasListState = rememberLazyListState()
 
+                        // Recargar facturas al entrar o al cambiar de modo (mock/retrofit)
+                        var previousMock by remember { mutableStateOf(useMock) }
                         LaunchedEffect(useMock) {
-                            lightViewModel.fetchInvoices(SupplyType.LIGHT, useMock)
-                            gasViewModel.fetchInvoices(SupplyType.GAS, useMock)
+                            val modeChanged = useMock != previousMock
+                            previousMock = useMock
+                            lightViewModel.fetchInvoices(SupplyType.LIGHT, useMock, forceRefresh = modeChanged)
+                            gasViewModel.fetchInvoices(SupplyType.GAS, useMock, forceRefresh = modeChanged)
                         }
 
                         // Determinar si ambos tabs han terminado de cargar
@@ -150,18 +154,10 @@ class MainActivity : AppCompatActivity() {
                                 && lightState is InvoiceListUiState.Empty
                                 && gasState is InvoiceListUiState.Empty
 
-                        // Auto-seleccionar el primer tab con datos
-                        val defaultTabIndex = when {
-                            lightState is InvoiceListUiState.Success -> 0
-                            gasState is InvoiceListUiState.Success -> 1
-                            else -> 0
-                        }
-
                         MyInvoicesComposeScreen(
                             address = stringResource(R.string.my_invoices_mock_address),
                             feedbackSheetState = sheetState,
                             isGlobalEmpty = isGlobalEmpty,
-                            defaultTabIndex = defaultTabIndex,
                             onBackClick = {
                                 Log.d("Feedback", "Back pulsado en facturas -> evaluando feedback")
                                 feedbackViewModel.onExitInvoices()

@@ -9,6 +9,7 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -68,14 +69,17 @@ class MyInvoicesViewModel @Inject constructor(
     private val _showDialogEvent = MutableStateFlow(false)
     val showDialogEvent: StateFlow<Boolean> = _showDialogEvent.asStateFlow()
 
-    fun fetchInvoices(supplyType: String, useMock: Boolean = true) {
-        Log.d("MyInvoicesVM", "fetchInvoices($supplyType, mock=$useMock)")
+    private var fetchJob: Job? = null
+
+    fun fetchInvoices(supplyType: String, useMock: Boolean = true, forceRefresh: Boolean = false) {
+        Log.d("MyInvoicesVM", "fetchInvoices($supplyType, mock=$useMock, force=$forceRefresh)")
+        fetchJob?.cancel()
         _uiState.value = InvoiceUiState.Loading
         _listUiState.value = InvoiceListUiState.Loading
 
-        viewModelScope.launch {
+        fetchJob = viewModelScope.launch {
             try {
-                val result = getInvoicesUseCase(supplyType)
+                val result = getInvoicesUseCase(supplyType, forceRefresh = forceRefresh)
                 result.fold(
                     onSuccess = { invoices ->
                         Log.d("MyInvoicesVM", "SUCCESS: ${invoices.size} facturas")
