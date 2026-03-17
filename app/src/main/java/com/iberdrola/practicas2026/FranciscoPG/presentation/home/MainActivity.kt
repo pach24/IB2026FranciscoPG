@@ -26,6 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.MainScreen
@@ -87,10 +88,16 @@ class MainActivity : AppCompatActivity() {
                     mockModeChanged?.let {
                         snackbarHostState.showSnackbar(
                             message = mockModeMessage,
-                            duration = SnackbarDuration.Long
+                            duration = SnackbarDuration.Short
                         )
                         viewModel.onMockModeEventConsumed()
                     }
+                }
+
+                // Descartar snackbar al cambiar de pantalla
+                val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+                LaunchedEffect(currentRoute) {
+                    snackbarHostState.currentSnackbarData?.dismiss()
                 }
 
                 NavHost(

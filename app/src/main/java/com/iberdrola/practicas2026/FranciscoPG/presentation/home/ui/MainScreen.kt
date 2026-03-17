@@ -259,7 +259,6 @@ private fun HeaderContent(userName: String) {
     }
 }
 
-
 @Composable
 private fun PromoCard() {
     Card(
@@ -284,13 +283,13 @@ private fun PromoCard() {
                 modifier = Modifier
                     .width(Component.promoImgW)
                     .fillMaxHeight()
-                    .padding(start = Spacing.dp16)
+
             )
 
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(Spacing.dp24)
+                    .padding(end = Spacing.dp24)
             ) {
                 Text(
                     text = stringResource(R.string.main_activity_promo_title),
@@ -314,6 +313,7 @@ private fun PromoCard() {
         }
     }
 }
+
 
 @Composable
 fun ItemInvoiceCard(

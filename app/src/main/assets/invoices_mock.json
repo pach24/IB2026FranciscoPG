@@ -5,9 +5,9 @@
       "id": "1",
       "descEstado": "Pendiente de pago",
       "importeOrdenacion": 20.00,
-      "fechaCobro": "08/03/2024",
-      "fechaInicio": "08/02/2024",
-      "fechaFin": "08/03/2024",
+      "fechaCobro": "04/03/2024",
+      "fechaInicio": "01/02/2024",
+      "fechaFin": "04/03/2024",
       "tipoSuministro": "LUZ"
     },
     {
@@ -59,8 +59,8 @@
       "id": "7",
       "descEstado": "Pendiente de pago",
       "importeOrdenacion": 95.30,
-      "fechaCobro": "12/04/2024",
-      "fechaInicio": "12/03/2024",
+      "fechaCobro": "12/04/2022",
+      "fechaInicio": "12/03/2022",
       "fechaFin": "12/04/2024",
       "tipoSuministro": "LUZ"
     },
@@ -68,8 +68,8 @@
       "id": "8",
       "descEstado": "Pagada",
       "importeOrdenacion": 210.15,
-      "fechaCobro": "18/01/2024",
-      "fechaInicio": "18/12/2023",
+      "fechaCobro": "18/01/2022",
+      "fechaInicio": "18/12/2022",
       "fechaFin": "18/01/2024",
       "tipoSuministro": "LUZ"
     },

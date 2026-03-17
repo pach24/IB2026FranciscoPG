@@ -9,7 +9,6 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -69,17 +68,18 @@ class MyInvoicesViewModel @Inject constructor(
     private val _showDialogEvent = MutableStateFlow(false)
     val showDialogEvent: StateFlow<Boolean> = _showDialogEvent.asStateFlow()
 
-    private var fetchJob: Job? = null
+    private var fetchGeneration = 0
 
     fun fetchInvoices(supplyType: String, useMock: Boolean = true, forceRefresh: Boolean = false) {
         Log.d("MyInvoicesVM", "fetchInvoices($supplyType, mock=$useMock, force=$forceRefresh)")
-        fetchJob?.cancel()
+        val currentGeneration = ++fetchGeneration
         _uiState.value = InvoiceUiState.Loading
         _listUiState.value = InvoiceListUiState.Loading
 
-        fetchJob = viewModelScope.launch {
+        viewModelScope.launch {
             try {
                 val result = getInvoicesUseCase(supplyType, forceRefresh = forceRefresh)
+                if (currentGeneration != fetchGeneration) return@launch
                 result.fold(
                     onSuccess = { invoices ->
                         Log.d("MyInvoicesVM", "SUCCESS: ${invoices.size} facturas")
@@ -92,6 +92,7 @@ class MyInvoicesViewModel @Inject constructor(
                     }
                 )
             } catch (e: Exception) {
+                if (currentGeneration != fetchGeneration) return@launch
                 Log.e("MyInvoicesVM", "EXCEPTION", e)
                 handleError(e)
             }

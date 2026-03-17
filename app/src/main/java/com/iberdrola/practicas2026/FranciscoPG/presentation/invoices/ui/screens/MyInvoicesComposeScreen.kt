@@ -133,18 +133,18 @@ fun MyInvoicesComposeScreen(
                 fontSize = TextSize.sp16            )
         }
 
-        /* TITULOS */
+        /* Mis facturas */
         Text(
             text = stringResource(R.string.my_invoices_title),
-            modifier = Modifier.padding(start = Spacing.dp16, top = Spacing.dp24, end = Spacing.dp16),
+            modifier = Modifier.padding(start = Spacing.dp24, top = Spacing.dp24, end = Spacing.dp24),
             fontFamily = InvoicesBold,
             fontSize = TextSize.sp32,
             color = colorResource(R.color.dark_grey_text)
         )
-
+        //Dirección
         Text(
             text = address,
-            modifier = Modifier.padding(start = Spacing.dp16, top = Spacing.dp8, end = Spacing.dp16),
+            modifier = Modifier.padding(start = Spacing.dp24, top = Spacing.dp8, end = Spacing.dp24),
             fontFamily = InvoicesBold,
             fontSize = TextSize.sp18,
             color = colorResource(R.color.dark_grey_text)

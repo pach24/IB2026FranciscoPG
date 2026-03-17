@@ -71,7 +71,7 @@ object Stroke {
 /** Componentes específicos */
 object Component {
     val promoMinH = 144.dp
-    val promoImgW = 110.dp
+    val promoImgW = 140.dp
     val dragW = 60.dp
     val dragH = 6.dp
     val backBtnW = 80.dp
