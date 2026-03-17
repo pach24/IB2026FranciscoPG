@@ -24,14 +24,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListItem
 import androidx.compose.foundation.layout.Box
-
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.InvoiceHeaderItemComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.InvoiceRowItemComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.LatestInvoiceCardComposable
@@ -41,6 +38,8 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.componen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.SkeletonLatestInvoiceCardComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.SkeletonStickyInvoiceHeaderComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.StickyInvoiceHeaderComposable
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
+
 @OptIn(
     ExperimentalFoundationApi::class,
     ExperimentalMaterial3Api::class,
@@ -85,13 +84,13 @@ fun InvoiceListComposeScreen(
             ShimmerHost {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(bottom = 32.dp)
+                    contentPadding = PaddingValues(bottom = Spacing.dp32)
                 ) {
                     // Skeleton: Última factura (card)
                     item {
-                        Spacer(modifier = Modifier.height(18.dp))
+                        Spacer(modifier = Modifier.height(Spacing.dp18))
                         SkeletonLatestInvoiceCardComposable(
-                            modifier = Modifier.padding(horizontal = 24.dp)
+                            modifier = Modifier.padding(horizontal = Spacing.dp24)
                         )
                     }
 
@@ -109,11 +108,11 @@ fun InvoiceListComposeScreen(
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 state = listState,
-                contentPadding = PaddingValues(bottom = 32.dp)
+                contentPadding = PaddingValues(bottom = Spacing.dp32)
             ) {
                 // Última factura (card)
                 item {
-                    Spacer(modifier = Modifier.height(18.dp))
+                    Spacer(modifier = Modifier.height(Spacing.dp18))
                     LatestInvoiceCardComposable(
                         amount = latestInvoiceAmount,
                         dateRange = latestInvoiceDateRange,
@@ -122,7 +121,7 @@ fun InvoiceListComposeScreen(
                         isPaid = latestInvoiceIsPaid,
                         iconRes = latestInvoiceIconRes,
                         modifier = Modifier
-                            .padding(horizontal = 24.dp)
+                            .padding(horizontal = Spacing.dp24)
                             .clickable { onLatestInvoiceClick() }
                     )
                 }
@@ -133,7 +132,7 @@ fun InvoiceListComposeScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(colorResource(R.color.color_background))
-                            .padding(vertical = 8.dp),
+                            .padding(vertical = Spacing.dp8),
                         onFilterClick = onFilterClick
                     )
                 }

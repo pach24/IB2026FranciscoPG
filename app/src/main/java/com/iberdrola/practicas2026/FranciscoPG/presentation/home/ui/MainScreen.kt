@@ -45,7 +45,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -55,9 +54,14 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.R
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IconSize
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Stroke
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Component
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 
 private val IberFontRegular = FontFamily(Font(R.font.iberpangea_regular, FontWeight.Normal))
 private val IberFontBold = FontFamily(Font(R.font.iberpangea_bold, FontWeight.Bold))
@@ -74,16 +78,16 @@ fun MainScreen(
 ) {
     val scrollState = rememberScrollState()
     // Definimos cuánto queremos que el fondo verde sobresalga por debajo de la tarjeta
-    val extraBackgroundHeight = 48.dp
+    val extraBackgroundHeight = IconSize.dp48
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = colorResource(R.color.color_background),
-        contentWindowInsets = WindowInsets(0.dp),
+        contentWindowInsets = WindowInsets(Spacing.dp0),
         snackbarHost = {
             SnackbarHost(
                 hostState = snackbarHostState,
-                modifier = Modifier.padding(bottom = 64.dp) // Ajusta este valor según necesites
+                modifier = Modifier.padding(bottom = Spacing.dp64) // Ajusta este valor según necesites
             ) { data ->
                 Snackbar(
                     snackbarData = data,
@@ -103,7 +107,7 @@ fun MainScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(scrollState)
-                    .padding(bottom = dimensionResource(R.dimen.m3_sys_spacing_3))
+                    .padding(bottom = Spacing.dp24)
             ) {
                 // SECCIÓN SUPERIOR: Contiene el fondo dinámico y la cabecera
                 Box(modifier = Modifier.fillMaxWidth()) {
@@ -145,10 +149,10 @@ fun MainScreen(
                         color = colorResource(R.color.color_text_primary),
                         fontFamily = IberFontBold,
                         fontWeight = FontWeight.Bold,
-                        fontSize = dimensionResource(R.dimen.m3_sys_typescale_title2).value.sp,
+                        fontSize = TextSize.sp22,
                         modifier = Modifier.padding(
-                            top = dimensionResource(R.dimen.m3_sys_spacing_4),
-                            start = dimensionResource(R.dimen.m3_sys_spacing_3)
+                            top = Spacing.dp32,
+                            start = Spacing.dp24
                         )
                     )
 
@@ -156,27 +160,27 @@ fun MainScreen(
                         modifier = Modifier
                             .horizontalScroll(rememberScrollState())
                             .padding(
-                                horizontal = dimensionResource(R.dimen.m3_sys_spacing_3),
-                                vertical = dimensionResource(R.dimen.m3_sys_spacing_2)
+                                horizontal = Spacing.dp24,
+                                vertical = Spacing.dp16
                             )
                     ) {
                         ItemInvoiceCard(modifier = Modifier.clickable { onInvoicesCardClick() })
                     }
 
-                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_2)))
+                    Spacer(modifier = Modifier.height(Spacing.dp16))
 
                     // Ajuste opcional: Si el offset deja muy poco espacio al final del scroll,
                     // puedes añadir un Spacer positivo aquí para compensar.
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(start = dimensionResource(R.dimen.m3_sys_spacing_3))
+                        modifier = Modifier.padding(start = Spacing.dp24)
                     ) {
                         Text(
                             text = stringResource(R.string.switch_mock_mode),
                             color = colorResource(R.color.color_text_primary),
                             fontFamily = IberFontRegular
                         )
-                        Spacer(modifier = Modifier.width(dimensionResource(R.dimen.m3_sys_spacing_1)))
+                        Spacer(modifier = Modifier.width(Spacing.dp8))
                         Switch(
                             checked = isMockEnabled,
                             onCheckedChange = onMockModeChanged,
@@ -201,11 +205,11 @@ fun MainScreen(
 
 @Composable
 private fun HeaderContent(userName: String) {
-    Column(modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.m3_sys_spacing_3))) {
+    Column(modifier = Modifier.padding(horizontal = Spacing.dp24)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = dimensionResource(R.dimen.m3_sys_spacing_4)),
+                .padding(top = Spacing.dp32),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -214,11 +218,11 @@ private fun HeaderContent(userName: String) {
                 color = Color.White,
                 fontFamily = IberFontBold,
                 fontWeight = FontWeight.Bold,
-                fontSize = dimensionResource(R.dimen.m3_sys_typescale_title1).value.sp
+                fontSize = TextSize.sp28
             )
             Box(
                 modifier = Modifier
-                    .size(dimensionResource(R.dimen.m3_comp_avatar_size))
+                    .size(IconSize.dp48)
                     .background(
                         color = colorResource(R.color.color_surface),
                         shape = CircleShape
@@ -229,26 +233,26 @@ private fun HeaderContent(userName: String) {
                     painter = painterResource(R.drawable.ic_user_outline),
                     contentDescription = stringResource(R.string.main_activity_cd_profile),
                     tint = colorResource(R.color.color_brand_primary),
-                    modifier = Modifier.size(dimensionResource(R.dimen.m3_comp_icon_size_custom_28))
+                    modifier = Modifier.size(IconSize.dp28)
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_1)))
+        Spacer(modifier = Modifier.height(Spacing.dp8))
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = stringResource(R.string.main_activity_address_placeholder),
                 color = Color.White,
                 fontFamily = IberFontBold,
                 fontWeight = FontWeight.Bold,
-                fontSize = dimensionResource(R.dimen.m3_sys_typescale_subhead).value.sp
+                fontSize = TextSize.sp15
             )
-            Spacer(modifier = Modifier.width(dimensionResource(R.dimen.m3_sys_spacing_1)))
+            Spacer(modifier = Modifier.width(Spacing.dp8))
             Icon(
                 painter = painterResource(R.drawable.ic_edit),
                 contentDescription = stringResource(R.string.main_activity_cd_edit_address),
                 tint = Color.White,
-                modifier = Modifier.size(dimensionResource(R.dimen.m3_comp_icon_size_custom_20))
+                modifier = Modifier.size(IconSize.dp20)
             )
         }
     }
@@ -259,17 +263,17 @@ private fun HeaderContent(userName: String) {
 private fun PromoCard() {
     Card(
         colors = CardDefaults.cardColors(containerColor = colorResource(R.color.color_promo_background)),
-        shape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_card_corner_radius)),
+        shape = RoundedCornerShape(Radius.dp16),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = dimensionResource(R.dimen.m3_sys_spacing_3))
-            .padding(top = dimensionResource(R.dimen.m3_sys_spacing_4))
+            .padding(horizontal = Spacing.dp24)
+            .padding(top = Spacing.dp32)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(IntrinsicSize.Min)
-                .heightIn(min = dimensionResource(R.dimen.m3_comp_promo_card_min_height)),
+                .heightIn(min = Component.promoMinH),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
@@ -277,33 +281,33 @@ private fun PromoCard() {
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .width(dimensionResource(R.dimen.m3_comp_promo_image_width))
+                    .width(Component.promoImgW)
                     .fillMaxHeight()
-                    .padding(start = dimensionResource(R.dimen.m3_sys_spacing_2))
+                    .padding(start = Spacing.dp16)
             )
 
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(dimensionResource(R.dimen.m3_sys_spacing_3))
+                    .padding(Spacing.dp24)
             ) {
                 Text(
                     text = stringResource(R.string.main_activity_promo_title),
                     color = colorResource(R.color.color_text_primary),
                     fontFamily = IberFontBold,
                     fontWeight = FontWeight.Bold,
-                    fontSize = dimensionResource(R.dimen.m3_sys_typescale_headline).value.sp,
-                    lineHeight = 24.sp
+                    fontSize = TextSize.sp17,
+                    lineHeight = TextSize.sp24
                 )
 
-                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_1)))
+                Spacer(modifier = Modifier.height(Spacing.dp8))
 
                 Text(
                     text = stringResource(R.string.main_activity_promo_desc),
                     color = colorResource(R.color.color_text_primary),
                     fontFamily = IberFontRegular,
-                    fontSize = dimensionResource(R.dimen.m3_sys_typescale_subhead).value.sp,
-                    lineHeight = 20.sp
+                    fontSize = TextSize.sp15,
+                    lineHeight = TextSize.sp20
                 )
             }
         }
@@ -312,48 +316,48 @@ private fun PromoCard() {
 
 @Composable
 fun ItemInvoiceCard(modifier: Modifier = Modifier) {
-    val cardShape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_card_corner_radius))
+    val cardShape = RoundedCornerShape(Radius.dp16)
 
     Box(
         modifier = modifier
-            .padding(end = 16.dp)
+            .padding(end = Spacing.dp16)
             .background(color = colorResource(R.color.color_surface), shape = cardShape)
             .border(
-                width = dimensionResource(R.dimen.m3_comp_stroke_width_thick),
+                width = Stroke.dp2,
                 color = colorResource(R.color.color_divider),
                 shape = cardShape
             )
-            .padding(horizontal = 24.dp, vertical = 18.dp)
+            .padding(horizontal = Spacing.dp24, vertical = Spacing.dp18)
     ) {
         Column {
             Icon(
                 painter = painterResource(R.drawable.file_chart_column),
                 contentDescription = null,
                 tint = colorResource(R.color.iberdrola_green),
-                modifier = Modifier.size(28.dp)
+                modifier = Modifier.size(IconSize.dp28)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(Spacing.dp16))
             Text(
                 text = buildAnnotatedString {
                     append("20,00")
-                    withStyle(style = SpanStyle(fontSize = 19.2.sp)) { append("€") }
+                    withStyle(style = SpanStyle(fontSize = 19.sp)) { append("€") }
                 },
                 color = colorResource(R.color.dark_grey_text),
                 fontFamily = IberFontBold,
                 fontWeight = FontWeight.Bold,
-                fontSize = 24.sp,
-                modifier = Modifier.padding(end = dimensionResource(R.dimen.m3_sys_spacing_1))
+                fontSize = TextSize.sp24,
+                modifier = Modifier.padding(end = Spacing.dp8)
             )
 
             Text(
                 text = stringResource(R.string.main_my_invoices_title),
                 color = colorResource(R.color.dark_grey_text),
                 fontFamily = IberFontRegular,
-                fontSize = dimensionResource(R.dimen.m3_sys_typescale_headline_small).value.sp,
+                fontSize = TextSize.sp18,
                 minLines = 2,
                 maxLines = 2,
-                modifier = Modifier.padding(top = dimensionResource(R.dimen.m3_sys_spacing_1))
+                modifier = Modifier.padding(top = Spacing.dp8)
             )
         }
     }

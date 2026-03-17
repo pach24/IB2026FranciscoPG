@@ -5,5 +5,5 @@
     <solid android:color="@color/color_skeleton_background" />
 
     <!-- Radio grande para imitar la forma del botón de filtrar -->
-    <corners android:radius="@dimen/m3_comp_button_corner_radius_full" />
+    <corners android:radius="@dimen/radius_50" />
 </shape>

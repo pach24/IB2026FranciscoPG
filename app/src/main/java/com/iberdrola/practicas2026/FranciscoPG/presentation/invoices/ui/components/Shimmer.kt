@@ -20,9 +20,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.Dp
 import com.iberdrola.practicas2026.FranciscoPG.R
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
 
 /**
  * Progreso normalizado (0f..1f) compartido por todos los ShimmerBox
@@ -53,7 +53,7 @@ fun ShimmerBox(
     width: Dp,
     height: Dp,
     modifier: Modifier = Modifier,
-    shape: RoundedCornerShape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_skeleton_corner_radius))
+    shape: RoundedCornerShape = RoundedCornerShape(Radius.dp4)
 ) {
     val baseColor = colorResource(R.color.color_skeleton_background)
     val shimmerColors = listOf(

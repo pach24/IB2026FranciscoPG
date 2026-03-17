@@ -17,17 +17,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
-import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.R
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IconSize
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Stroke
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 
 private val ErrorStateBold = FontFamily(Font(R.font.iberpangea_bold, FontWeight.Bold))
 private val ErrorStateRegular = FontFamily(Font(R.font.iberpangea_regular, FontWeight.Normal))
@@ -43,7 +45,7 @@ fun ErrorStateComposable(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = dimensionResource(R.dimen.m3_sys_spacing_4)),
+            .padding(horizontal = Spacing.dp32),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -51,37 +53,37 @@ fun ErrorStateComposable(
             painter = painterResource(iconRes),
             contentDescription = null,
             tint = colorResource(R.color.color_stroke_neutral),
-            modifier = Modifier.size(dimensionResource(R.dimen.m3_comp_error_state_icon_size))
+            modifier = Modifier.size(IconSize.dp90)
         )
 
-        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_3)))
+        Spacer(modifier = Modifier.height(Spacing.dp24))
 
         Text(
             text = title,
             fontFamily = ErrorStateBold,
             fontWeight = FontWeight.Bold,
-            fontSize = dimensionResource(R.dimen.m3_sys_typescale_title2).value.sp,
+            fontSize = TextSize.sp22,
             color = colorResource(R.color.dark_grey_text),
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_1)))
+        Spacer(modifier = Modifier.height(Spacing.dp8))
 
         Text(
             text = subtitle,
             fontFamily = ErrorStateRegular,
-            fontSize = dimensionResource(R.dimen.m3_sys_typescale_body_large).value.sp,
+            fontSize = TextSize.sp16,
             color = colorResource(R.color.color_text_subtitle),
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.m3_sys_spacing_3)))
+        Spacer(modifier = Modifier.height(Spacing.dp24))
 
         OutlinedButton(
             onClick = onRetryClick,
-            shape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_empty_state_button_corner_radius)),
+            shape = RoundedCornerShape(Radius.dp24),
             border = BorderStroke(
-                width = dimensionResource(R.dimen.m3_comp_button_stroke_width),
+                width = Stroke.dp2,
                 color = colorResource(R.color.iberdrola_dark_green)
             )
         ) {
@@ -89,7 +91,7 @@ fun ErrorStateComposable(
                 text = stringResource(R.string.error_retry_button),
                 fontFamily = ErrorStateBold,
                 fontWeight = FontWeight.Bold,
-                fontSize = dimensionResource(R.dimen.m3_sys_typescale_label).value.sp,
+                fontSize = TextSize.sp14,
                 color = colorResource(R.color.iberdrola_dark_green)
             )
         }

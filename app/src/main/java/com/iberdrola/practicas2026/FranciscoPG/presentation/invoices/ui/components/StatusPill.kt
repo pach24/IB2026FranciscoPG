@@ -7,7 +7,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -15,6 +14,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.material3.MaterialTheme
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 
 private val StatusFontBold = FontFamily(Font(R.font.iberpangea_bold, FontWeight.Bold))
 
@@ -29,16 +31,16 @@ fun StatusPillComposable(
         modifier = modifier
             .background(
                 color = colorResource(if (isPaid) R.color.statuspaid else R.color.red_100),
-                shape = RoundedCornerShape(dimensionResource(R.dimen.m3_comp_shape_corner_radius_small))
+                shape = RoundedCornerShape(Radius.dp8)
             )
             .padding(
-                horizontal = dimensionResource(R.dimen.m3_sys_spacing_custom_12),
-                vertical = dimensionResource(R.dimen.m3_sys_spacing_half)
+                horizontal = Spacing.dp12,
+                vertical = Spacing.dp4
             ),
         fontFamily = StatusFontBold,
         fontWeight = FontWeight.Bold,
-        fontSize = dimensionResource(R.dimen.m3_sys_typescale_micro).value.sp,
-        lineHeight = (dimensionResource(R.dimen.m3_sys_typescale_micro).value * 1.4f).sp,
+        fontSize = TextSize.sp10,
+        lineHeight = (10f * 1.4f).sp,
         color = colorResource(if (isPaid) R.color.iberdrola_dark_green else R.color.red_600)
     )
 }
