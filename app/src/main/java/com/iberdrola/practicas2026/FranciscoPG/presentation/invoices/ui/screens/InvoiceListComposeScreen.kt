@@ -89,31 +89,20 @@ fun InvoiceListComposeScreen(
                 ) {
                     // Skeleton: Última factura (card)
                     item {
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(18.dp))
                         SkeletonLatestInvoiceCardComposable(
-                            modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 10.dp)
+                            modifier = Modifier.padding(horizontal = 24.dp)
                         )
                     }
 
                     // Skeleton: Sticky header (histórico de facturas + botón filtro)
-                    item {
-                        SkeletonStickyInvoiceHeaderComposable(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(colorResource(R.color.color_background))
-                                .padding(bottom = 12.dp)
-                        )
-                    }
+                    item { SkeletonStickyInvoiceHeaderComposable() }
 
                     // Skeleton: Cabecera de año ("2024", "2023"...)
-                    item {
-                        SkeletonInvoiceHeaderItemComposable(modifier = Modifier.padding(bottom = 8.dp))
-                    }
+                    item { SkeletonInvoiceHeaderItemComposable() }
 
                     // Skeleton: Filas de facturas
-                    items(6) {
-                        SkeletonInvoiceRowItemComposable()
-                    }
+                    items(6) { SkeletonInvoiceRowItemComposable() }
                 }
             }
         } else {
