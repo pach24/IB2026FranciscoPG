@@ -103,21 +103,55 @@ fun InvoiceTabContent(
         }
 
         is InvoiceListUiState.ServerError -> {
-            ErrorStateComposable(
-                title = stringResource(R.string.error_server_title),
-                subtitle = stringResource(R.string.error_server_subtitle),
-                iconRes = R.drawable.ic_server_off,
-                onRetryClick = onRefresh
-            )
+            val pullState = rememberPullToRefreshState()
+            PullToRefreshBox(
+                state = pullState,
+                isRefreshing = false,
+                onRefresh = onRefresh,
+                modifier = Modifier.fillMaxSize(),
+                indicator = {
+                    PullToRefreshDefaults.LoadingIndicator(
+                        state = pullState,
+                        isRefreshing = false,
+                        color = MaterialTheme.colorScheme.primary,
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        modifier = Modifier.align(Alignment.TopCenter)
+                    )
+                }
+            ) {
+                ErrorStateComposable(
+                    title = stringResource(R.string.error_server_title),
+                    subtitle = stringResource(R.string.error_server_subtitle),
+                    iconRes = R.drawable.ic_server_off,
+                    onRetryClick = onRefresh
+                )
+            }
         }
 
         is InvoiceListUiState.ConnectionError -> {
-            ErrorStateComposable(
-                title = stringResource(R.string.error_connection_title),
-                subtitle = stringResource(R.string.error_connection_subtitle),
-                iconRes = R.drawable.ic_connection_error,
-                onRetryClick = onRefresh
-            )
+            val pullState = rememberPullToRefreshState()
+            PullToRefreshBox(
+                state = pullState,
+                isRefreshing = false,
+                onRefresh = onRefresh,
+                modifier = Modifier.fillMaxSize(),
+                indicator = {
+                    PullToRefreshDefaults.LoadingIndicator(
+                        state = pullState,
+                        isRefreshing = false,
+                        color = MaterialTheme.colorScheme.primary,
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        modifier = Modifier.align(Alignment.TopCenter)
+                    )
+                }
+            ) {
+                ErrorStateComposable(
+                    title = stringResource(R.string.error_connection_title),
+                    subtitle = stringResource(R.string.error_connection_subtitle),
+                    iconRes = R.drawable.ic_connection_error,
+                    onRetryClick = onRefresh
+                )
+            }
         }
 
         is InvoiceListUiState.Success -> {

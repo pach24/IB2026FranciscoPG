@@ -230,6 +230,7 @@ private fun InvoicesRoute(
                 onFeatureNotAvailable = electricityViewModel::onFeatureNotAvailable,
                 onRefresh = {
                     electricityViewModel.fetchInvoices(SupplyType.ELECTRICITY, useMock, forceRefresh = true)
+                    gasViewModel.fetchInvoices(SupplyType.GAS, useMock, forceRefresh = true)
                 }
             )
         },
@@ -239,6 +240,7 @@ private fun InvoicesRoute(
                 listState = gasListState,
                 onFeatureNotAvailable = gasViewModel::onFeatureNotAvailable,
                 onRefresh = {
+                    electricityViewModel.fetchInvoices(SupplyType.ELECTRICITY, useMock, forceRefresh = true)
                     gasViewModel.fetchInvoices(SupplyType.GAS, useMock, forceRefresh = true)
                 }
             )
