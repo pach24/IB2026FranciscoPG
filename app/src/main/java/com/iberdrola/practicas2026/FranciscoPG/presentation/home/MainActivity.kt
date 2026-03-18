@@ -176,19 +176,33 @@ private fun InvoicesRoute(
     // Una vez completado el auto-switch, si el usuario vuelve
     // al tab de Electricidad manualmente, verá el Empty State real.
     // Y viceversa
-    val preferredTabIndex = if (bothLoaded
-        && electricityState is InvoiceListUiState.Empty
-        && gasState !is InvoiceListUiState.Empty
-    ) 1 else 0
-
+    // Auto-switch de tab (una sola vez al entrar):
+    // Si Electricidad no tiene facturas pero Gas sí, se cambia
+    // automáticamente al tab de Gas. hasAutoSwitched se activa
+    // de forma síncrona para que preferredTabIndex sea 1 desde
+    // la primera composición, evitando flash de Empty State.
+    // scrollCompleted se activa tras el scroll real, controlando
+    // el shimmer en el tab de Electricidad mientras tanto.
+    // En refreshes posteriores, hasAutoSwitched impide re-disparar.
     var hasAutoSwitched by remember { mutableStateOf(false) }
+    var scrollCompleted by remember { mutableStateOf(false) }
+
+    val wantsAutoSwitch = bothLoaded
+            && electricityState is InvoiceListUiState.Empty
+            && gasState !is InvoiceListUiState.Empty
+
+    if (wantsAutoSwitch) hasAutoSwitched = true
+
+    val preferredTabIndex = if (hasAutoSwitched) 1 else 0
+
     LaunchedEffect(preferredTabIndex) {
-        if (preferredTabIndex == 1) hasAutoSwitched = true
+        if (preferredTabIndex == 1) scrollCompleted = true
     }
+
     val effectiveElectricityState = if (
         electricityState is InvoiceListUiState.Empty
         && !isGlobalEmpty
-        && !hasAutoSwitched
+        && !scrollCompleted
     ) InvoiceListUiState.Loading else electricityState
 
     MyInvoicesComposeScreen(
@@ -215,7 +229,7 @@ private fun InvoicesRoute(
                 listState = electricityListState,
                 onFeatureNotAvailable = electricityViewModel::onFeatureNotAvailable,
                 onRefresh = {
-                    electricityViewModel.fetchInvoices(SupplyType.ELECTRICITY, useMock)
+                    electricityViewModel.fetchInvoices(SupplyType.ELECTRICITY, useMock, forceRefresh = true)
                 }
             )
         },
@@ -225,7 +239,7 @@ private fun InvoicesRoute(
                 listState = gasListState,
                 onFeatureNotAvailable = gasViewModel::onFeatureNotAvailable,
                 onRefresh = {
-                    gasViewModel.fetchInvoices(SupplyType.GAS, useMock)
+                    gasViewModel.fetchInvoices(SupplyType.GAS, useMock, forceRefresh = true)
                 }
             )
         }

@@ -1,18 +1,28 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.EmptyStateComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.ErrorStateComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.InvoiceListUiState
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun InvoiceTabContent(
     uiState: InvoiceListUiState,
@@ -69,10 +79,27 @@ fun InvoiceTabContent(
         }
 
         is InvoiceListUiState.Empty -> {
-            EmptyStateComposable(
-                title = stringResource(R.string.empty_state_tab_title),
-                subtitle = stringResource(R.string.empty_state_tab_subtitle)
-            )
+            val pullState = rememberPullToRefreshState()
+            PullToRefreshBox(
+                state = pullState,
+                isRefreshing = false,
+                onRefresh = onRefresh,
+                modifier = Modifier.fillMaxSize(),
+                indicator = {
+                    PullToRefreshDefaults.LoadingIndicator(
+                        state = pullState,
+                        isRefreshing = false,
+                        color = MaterialTheme.colorScheme.primary,
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        modifier = Modifier.align(Alignment.TopCenter)
+                    )
+                }
+            ) {
+                EmptyStateComposable(
+                    title = stringResource(R.string.empty_state_tab_title),
+                    subtitle = stringResource(R.string.empty_state_tab_subtitle)
+                )
+            }
         }
 
         is InvoiceListUiState.ServerError -> {
