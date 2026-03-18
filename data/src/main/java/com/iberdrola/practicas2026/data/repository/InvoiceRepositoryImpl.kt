@@ -33,39 +33,46 @@ class InvoiceRepositoryImpl @Inject constructor(
                     .map { it.toDomain() }
                 Result.success(invoices)
             } else {
-                // Real: usar Room como caché
-                if (!forceRefresh) {
+                // Room es SSOT: intentar sincronizar con la API
+                // y siempre devolver lo que haya en Room.
+                if (forceRefresh) {
+                    // Intentar traer datos nuevos de la API
+                    try {
+                        val response = realApiService.getInvoices(apiValue)
+                        val newInvoices = response.facturas
+                            .filter { it.tipoSuministro.equals(apiValue, ignoreCase = true) }
+                            .map { it.toDomain() }
+                        invoiceDao.insertAll(newInvoices.map { it.toEntity() })
+                    } catch (_: Exception) {
+                        // API falló, no pasa nada: Room tiene los datos anteriores
+                    }
+                } else {
+                    // Primera carga: intentar sincronizar si Room está vacío
                     val cached = invoiceDao.getInvoicesBySupplyType(apiValue)
-                    if (cached.isNotEmpty()) {
-                        return Result.success(cached.map { it.toDomain() })
+                    if (cached.isEmpty()) {
+                        try {
+                            val response = realApiService.getInvoices(apiValue)
+                            val newInvoices = response.facturas
+                                .filter { it.tipoSuministro.equals(apiValue, ignoreCase = true) }
+                                .map { it.toDomain() }
+                            invoiceDao.insertAll(newInvoices.map { it.toEntity() })
+                        } catch (e: Exception) {
+                            // API falló y Room vacío → error real
+                            return Result.failure(e)
+                        }
                     }
                 }
 
-                val response = realApiService.getInvoices(apiValue)
-                val filteredInvoices = response.facturas
-                    .filter { it.tipoSuministro.equals(apiValue, ignoreCase = true) }
-                    .map { it.toDomain() }
-
-                invoiceDao.insertAll(filteredInvoices.map { it.toEntity() })
-
-                Result.success(filteredInvoices)
+                // Siempre devolver Room como fuente de verdad
+                val allCached = invoiceDao.getInvoicesBySupplyType(apiValue)
+                if (allCached.isNotEmpty()) {
+                    Result.success(allCached.map { it.toDomain() })
+                } else {
+                    Result.success(emptyList())
+                }
             }
         } catch (e: Exception) {
-            // Si la API falla pero hay datos cacheados de cualquier tipo de suministro,
-            // la app ya ha funcionado antes → devolver lista vacía (Empty State)
-            // en vez de error. Esto evita mostrar "Sin conexión" en un tab
-            // mientras el otro muestra facturas desde caché, lo cual sería
-            // contradictorio para el usuario.
-            val hasCache = try {
-                !configRepository.isMockEnabled() && invoiceDao.getCount() > 0
-            } catch (_: Exception) {
-                false
-            }
-            if (hasCache) {
-                Result.success(emptyList())
-            } else {
-                Result.failure(e)
-            }
+            Result.failure(e)
         }
     }
 }

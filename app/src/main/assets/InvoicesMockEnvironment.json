@@ -1,75 +1,13 @@
 {
   "uuid": "c4c29cf0-45e0-4a6a-9ad0-21d64bdaa7e3",
   "lastMigration": 33,
-  "name": "InvoicesMockEnvironment",
+  "name": "InvoicesMockoonEnvironment",
   "endpointPrefix": "",
   "latency": 0,
   "port": 3001,
   "hostname": "",
   "folders": [],
   "routes": [
-    {
-      "uuid": "d49a8220-1690-4756-94e5-ccb6b92e55e6",
-      "type": "http",
-      "documentation": "",
-      "method": "get",
-      "endpoint": "invoices_tipo=GAS.json",
-      "responses": [
-        {
-          "uuid": "0c71dc55-da20-4760-b3d3-2b3c88df5049",
-          "body": "{\r\n  \"numFacturas\": 1,\r\n  \"facturas\": [\r\n    {\r\n      \"id\": \"6\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 620.00,\r\n      \"fechaCobro\": \"20/05/2021\",\r\n      \"fechaInicio\": \"20/04/2021\",\r\n      \"fechaFin\": \"20/05/2021\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    }\r\n  ]\r\n}",
-          "latency": 0,
-          "statusCode": 200,
-          "label": "",
-          "headers": [],
-          "bodyType": "INLINE",
-          "filePath": "",
-          "databucketID": "",
-          "sendFileAsBody": false,
-          "rules": [],
-          "rulesOperator": "OR",
-          "disableTemplating": false,
-          "fallbackTo404": false,
-          "default": true,
-          "crudKey": "id",
-          "callbacks": []
-        }
-      ],
-      "responseMode": null,
-      "streamingMode": null,
-      "streamingInterval": 0
-    },
-    {
-      "uuid": "6bcb3073-69e0-46cd-b884-3848f5201a10",
-      "type": "http",
-      "documentation": "",
-      "method": "get",
-      "endpoint": "invoices_tipo=LUZ.json",
-      "responses": [
-        {
-          "uuid": "bffb157d-1c68-4450-bd88-1e7fe4f448d3",
-          "body": "{\r\n  \"numFacturas\": 2,\r\n  \"facturas\": [\r\n    {\r\n      \"id\": \"101\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 45.30,\r\n      \"fechaCobro\": \"05/01/2024\",\r\n      \"fechaInicio\": \"05/12/2023\",\r\n      \"fechaFin\": \"05/01/2024\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"102\",\r\n      \"descEstado\": \"Pendiente de pago\",\r\n      \"importeOrdenacion\": 52.10,\r\n      \"fechaCobro\": \"05/02/2024\",\r\n      \"fechaInicio\": \"05/01/2024\",\r\n      \"fechaFin\": \"05/02/2024\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    }\r\n  ]\r\n}",
-          "latency": 0,
-          "statusCode": 200,
-          "label": "",
-          "headers": [],
-          "bodyType": "INLINE",
-          "filePath": "",
-          "databucketID": "",
-          "sendFileAsBody": false,
-          "rules": [],
-          "rulesOperator": "OR",
-          "disableTemplating": false,
-          "fallbackTo404": false,
-          "default": true,
-          "crudKey": "id",
-          "callbacks": []
-        }
-      ],
-      "responseMode": null,
-      "streamingMode": null,
-      "streamingInterval": 0
-    },
     {
       "uuid": "a652c605-ac40-4237-83e4-f00db3ffb25a",
       "type": "http",
@@ -78,8 +16,46 @@
       "endpoint": "invoices.json",
       "responses": [
         {
+          "uuid": "1bba9305-48b1-463e-a071-2fbd79702377",
+          "body": "{\r\n  \"numFacturas\": 2,\r\n  \"facturas\": [\r\n    {\r\n      \"id\": \"1\",\r\n      \"descEstado\": \"Pendiente de pago\",\r\n      \"importeOrdenacion\": 65.40,\r\n      \"fechaCobro\": \"15/03/2026\",\r\n      \"fechaInicio\": \"15/02/2026\",\r\n      \"fechaFin\": \"15/03/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"2\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 42.15,\r\n      \"fechaCobro\": \"10/03/2026\",\r\n      \"fechaInicio\": \"10/02/2026\",\r\n      \"fechaFin\": \"10/03/2026\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    }\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
           "uuid": "8fba3c6d-18ce-4e0b-a69e-096ffefc6841",
-          "body": "{\r\n  \"numFacturas\": 4,\r\n  \"facturas\": [\r\n    {\r\n      \"id\": \"10\",\r\n      \"descEstado\": \"Pendiente de pago\",\r\n      \"importeOrdenacion\": 12.50,\r\n      \"fechaCobro\": \"12/03/2026\",\r\n      \"fechaInicio\": \"12/02/2026\",\r\n      \"fechaFin\": \"12/03/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"11\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 38.95,\r\n      \"fechaCobro\": \"15/02/2026\",\r\n      \"fechaInicio\": \"15/01/2026\",\r\n      \"fechaFin\": \"15/02/2026\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    },\r\n    {\r\n      \"id\": \"12\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 24.10,\r\n      \"fechaCobro\": \"01/02/2026\",\r\n      \"fechaInicio\": \"01/01/2026\",\r\n      \"fechaFin\": \"01/02/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"13\",\r\n      \"descEstado\": \"Pendiente de pago\",\r\n      \"importeOrdenacion\": 15.00,\r\n      \"fechaCobro\": \"20/03/2026\",\r\n      \"fechaInicio\": \"20/02/2026\",\r\n      \"fechaFin\": \"20/03/2026\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    }\r\n  ]\r\n}",
+          "body": "{\r\n  \"numFacturas\": 1,\r\n  \"facturas\": [\r\n    {\r\n      \"id\": \"3\",\r\n      \"descEstado\": \"Pendiente de pago\",\r\n      \"importeOrdenacion\": 121.50,\r\n      \"fechaCobro\": \"12/03/2026\",\r\n      \"fechaInicio\": \"12/02/2026\",\r\n      \"fechaFin\": \"12/03/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    }\r\n\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "5e99b272-b735-4db6-9cd6-377a6274492d",
+          "body": "{\r\n  \"numFacturas\": 1,\r\n  \"facturas\": [\r\n    {\r\n      \"id\": \"4\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 20.99,\r\n      \"fechaCobro\": \"20/05/2021\",\r\n      \"fechaInicio\": \"20/04/2021\",\r\n      \"fechaFin\": \"20/05/2021\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    }\r\n  ]\r\n}",
           "latency": 0,
           "statusCode": 200,
           "label": "",
@@ -93,6 +69,25 @@
           "disableTemplating": false,
           "fallbackTo404": false,
           "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "5024e100-7a3f-40a3-b23e-bb785e11a74f",
+          "body": "{}",
+          "latency": 0,
+          "statusCode": 404,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
           "crudKey": "id",
           "callbacks": []
         }
@@ -103,14 +98,6 @@
     }
   ],
   "rootChildren": [
-    {
-      "type": "route",
-      "uuid": "d49a8220-1690-4756-94e5-ccb6b92e55e6"
-    },
-    {
-      "type": "route",
-      "uuid": "6bcb3073-69e0-46cd-b884-3848f5201a10"
-    },
     {
       "type": "route",
       "uuid": "a652c605-ac40-4237-83e4-f00db3ffb25a"

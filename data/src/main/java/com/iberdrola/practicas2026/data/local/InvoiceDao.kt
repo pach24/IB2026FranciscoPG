@@ -17,6 +17,8 @@ interface InvoiceDao {
     @Query("SELECT COUNT(*) FROM invoices")
     suspend fun getCount(): Int
 
+
+
     @Query("DELETE FROM invoices")
     suspend fun deleteAll()
 }
