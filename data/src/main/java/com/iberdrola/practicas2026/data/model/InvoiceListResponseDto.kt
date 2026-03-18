@@ -1,6 +1,8 @@
 package com.iberdrola.practicas2026.data.model
 
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 
 data class InvoiceListResponseDto(
     val numFacturas: Int,
@@ -21,9 +23,10 @@ data class InvoiceDto(
 fun InvoiceDto.toDomain(): Invoice =
     Invoice(
         id = id,
-        status = descEstado,
+        status = InvoiceStatus.fromApiValue(descEstado),
         amount = importeOrdenacion,
         chargeDate = fechaCobro,
         periodStart = fechaInicio,
-        periodEnd = fechaFin
+        periodEnd = fechaFin,
+        supplyType = SupplyType.fromApiValue(tipoSuministro)
     )

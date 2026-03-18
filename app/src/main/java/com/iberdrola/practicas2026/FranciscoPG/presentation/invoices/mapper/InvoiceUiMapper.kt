@@ -2,6 +2,7 @@ package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.mapper
 
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListItem
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.InvoiceUiModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.LatestInvoiceUiModel
@@ -9,9 +10,8 @@ import javax.inject.Inject
 
 class InvoiceUiMapper @Inject constructor() {
 
-    fun map(invoices: List<Invoice>, supplyType: String): InvoiceUiModel {
-        val supplyTypeLabel = supplyTypeLabel(supplyType)
-        val typeLabel = "Factura $supplyTypeLabel"
+    fun map(invoices: List<Invoice>, supplyType: SupplyType): InvoiceUiModel {
+        val typeLabel = "Factura ${supplyTypeLabel(supplyType)}"
         val iconRes = supplyTypeIconRes(supplyType)
 
         val latestInvoice = invoices.firstOrNull()?.let { invoice ->
@@ -19,8 +19,8 @@ class InvoiceUiMapper @Inject constructor() {
                 amount = formatAmount(invoice.amount),
                 dateRange = "${invoice.periodStart} - ${invoice.periodEnd}",
                 supplyTypeLabel = typeLabel,
-                status = invoice.status,
-                isPaid = invoice.status.contains("Pagada", ignoreCase = true),
+                status = invoice.status.apiValue,
+                isPaid = invoice.status.isPaid,
                 iconRes = iconRes
             )
         }
@@ -53,8 +53,8 @@ class InvoiceUiMapper @Inject constructor() {
                         date = formatDateToSpanish(invoice.chargeDate),
                         type = typeLabel,
                         amount = formatAmount(invoice.amount),
-                        statusText = invoice.status,
-                        isPaid = invoice.status.contains("Pagada", ignoreCase = true)
+                        statusText = invoice.status.apiValue,
+                        isPaid = invoice.status.isPaid
                     )
                 )
             }
@@ -74,16 +74,14 @@ class InvoiceUiMapper @Inject constructor() {
 
     private fun formatAmount(amount: Double): String = "%.2f €".format(amount)
 
-    private fun supplyTypeLabel(supplyType: String): String {
-        return if (supplyType.equals("gas", ignoreCase = true)) "Gas" else "Luz"
+    private fun supplyTypeLabel(supplyType: SupplyType): String = when (supplyType) {
+        SupplyType.ELECTRICITY -> "Luz"
+        SupplyType.GAS -> "Gas"
     }
 
-    private fun supplyTypeIconRes(supplyType: String): Int {
-        return if (supplyType.equals("gas", ignoreCase = true)) {
-            R.drawable.ic_gas
-        } else {
-            R.drawable.ic_light
-        }
+    private fun supplyTypeIconRes(supplyType: SupplyType): Int = when (supplyType) {
+        SupplyType.ELECTRICITY -> R.drawable.ic_light
+        SupplyType.GAS -> R.drawable.ic_gas
     }
 
     private companion object {

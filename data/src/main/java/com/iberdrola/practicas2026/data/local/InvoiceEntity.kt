@@ -3,6 +3,8 @@ package com.iberdrola.practicas2026.data.local
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 
 @Entity(tableName = "invoices")
 data class InvoiceEntity(
@@ -18,20 +20,21 @@ data class InvoiceEntity(
 fun InvoiceEntity.toDomain(): Invoice =
     Invoice(
         id = id,
-        status = status,
-        amount = amount,
-        chargeDate = chargeDate,
-        periodStart = periodStart,
-        periodEnd = periodEnd
-    )
-
-fun Invoice.toEntity(supplyType: String): InvoiceEntity =
-    InvoiceEntity(
-        id = id,
-        status = status,
+        status = InvoiceStatus.fromApiValue(status),
         amount = amount,
         chargeDate = chargeDate,
         periodStart = periodStart,
         periodEnd = periodEnd,
-        supplyType = supplyType
+        supplyType = SupplyType.fromApiValue(supplyType)
+    )
+
+fun Invoice.toEntity(): InvoiceEntity =
+    InvoiceEntity(
+        id = id,
+        status = status.apiValue,
+        amount = amount,
+        chargeDate = chargeDate,
+        periodStart = periodStart,
+        periodEnd = periodEnd,
+        supplyType = supplyType.apiValue
     )

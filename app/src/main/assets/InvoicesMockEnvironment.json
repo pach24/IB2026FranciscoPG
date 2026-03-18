@@ -13,7 +13,7 @@
       "type": "http",
       "documentation": "",
       "method": "get",
-      "endpoint": "api/invoices?tipo=GAS.json",
+      "endpoint": "invoices_tipo=GAS.json",
       "responses": [
         {
           "uuid": "0c71dc55-da20-4760-b3d3-2b3c88df5049",
@@ -44,7 +44,7 @@
       "type": "http",
       "documentation": "",
       "method": "get",
-      "endpoint": "api/invoices?tipo=LUZ.json",
+      "endpoint": "invoices_tipo=LUZ.json",
       "responses": [
         {
           "uuid": "bffb157d-1c68-4450-bd88-1e7fe4f448d3",
@@ -75,7 +75,7 @@
       "type": "http",
       "documentation": "",
       "method": "get",
-      "endpoint": "api/invoices.json",
+      "endpoint": "invoices.json",
       "responses": [
         {
           "uuid": "8fba3c6d-18ce-4e0b-a69e-096ffefc6841",

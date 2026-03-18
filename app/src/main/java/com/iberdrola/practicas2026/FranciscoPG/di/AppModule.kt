@@ -16,7 +16,9 @@ import com.iberdrola.practicas2026.FranciscoPG.data.repository.InvoiceRepository
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.ConfigurationRepository
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.FeedbackRepository
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.InvoiceRepository
+import com.iberdrola.practicas2026.FranciscoPG.core.error.ErrorClassifier
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetInvoicesUseCase
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.mapper.InvoiceUiMapper
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetMockModeUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.SortInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.IncrementExitCounterUseCase
@@ -52,9 +54,9 @@ object AppModule {
 
         val emulator = isEmulator()
         val url = if (emulator) {
-            "http://10.0.2.2:3001/api/"
+            "http://10.0.2.2:3001/"
         } else {
-            "http://localhost:3001/api/"
+            "http://localhost:3001/"
         }
         Log.d("🌐 AppModule", "isEmulator=$emulator  →  BASE_URL=$url")
         return url
@@ -176,6 +178,14 @@ object AppModule {
     fun provideSetMockModeUseCase(configRepository: ConfigurationRepository): SetMockModeUseCase {
         return SetMockModeUseCase(configRepository)
     }
+
+    // ── Core helpers ────────────────────────────────────────────────────────
+
+    @Provides
+    fun provideInvoiceUiMapper(): InvoiceUiMapper = InvoiceUiMapper()
+
+    @Provides
+    fun provideErrorClassifier(): ErrorClassifier = ErrorClassifier()
 
     // ── Feedback ──────────────────────────────────────────────────────────────
 

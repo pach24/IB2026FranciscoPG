@@ -10,6 +10,6 @@ interface InvoiceApiService {
 
     @Mock
     @MockResponse(body = "invoices_mock.json")
-    @GET("invoices_tipo=LUZ.json")
+    @GET("invoices_tipo=GAS.json")
     suspend fun getInvoices(@Query("supplyType") supplyType: String): InvoiceListResponseDto
 }

@@ -2,6 +2,7 @@
 package com.iberdrola.practicas2026.FranciscoPG.data.repository
 
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.ConfigurationRepository
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.InvoiceRepository
 import com.iberdrola.practicas2026.data.local.InvoiceDao
@@ -20,33 +21,32 @@ class InvoiceRepositoryImpl @Inject constructor(
     private val invoiceDao: InvoiceDao
 ) : InvoiceRepository {
 
-    override suspend fun getInvoices(supplyType: String, forceRefresh: Boolean): Result<List<Invoice>> {
+    override suspend fun getInvoices(supplyType: SupplyType, forceRefresh: Boolean): Result<List<Invoice>> {
+        val apiValue = supplyType.apiValue
         return try {
             if (configRepository.isMockEnabled()) {
                 // Mock: solo devolver datos del JSON, sin tocar Room
                 delay((1000..3000).random().toLong())
-                val response = mockApiService.getInvoices(supplyType)
+                val response = mockApiService.getInvoices(apiValue)
                 val invoices = response.facturas
-                    .filter { it.tipoSuministro == supplyType.uppercase() }
+                    .filter { it.tipoSuministro.equals(apiValue, ignoreCase = true) }
                     .map { it.toDomain() }
                 Result.success(invoices)
             } else {
                 // Real: usar Room como caché
                 if (!forceRefresh) {
-                    val cached = invoiceDao.getInvoicesBySupplyType(supplyType.uppercase())
+                    val cached = invoiceDao.getInvoicesBySupplyType(apiValue)
                     if (cached.isNotEmpty()) {
                         return Result.success(cached.map { it.toDomain() })
                     }
                 }
 
-                val response = realApiService.getInvoices(supplyType)
+                val response = realApiService.getInvoices(apiValue)
                 val filteredInvoices = response.facturas
-                    .filter { it.tipoSuministro == supplyType.uppercase() }
+                    .filter { it.tipoSuministro.equals(apiValue, ignoreCase = true) }
                     .map { it.toDomain() }
 
-                invoiceDao.insertAll(
-                    filteredInvoices.map { it.toEntity(supplyType.uppercase()) }
-                )
+                invoiceDao.insertAll(filteredInvoices.map { it.toEntity() })
 
                 Result.success(filteredInvoices)
             }
