@@ -52,7 +52,7 @@ fun ErrorStateComposable(
         Icon(
             painter = painterResource(iconRes),
             contentDescription = null,
-            tint = colorResource(R.color.color_stroke_neutral),
+            tint = colorResource(R.color.iberdrola_green),
             modifier = Modifier.size(IconSize.dp90)
         )
 
@@ -105,7 +105,7 @@ private fun PreviewServerErrorStateComposable() {
         ErrorStateComposable(
             title = "Error del servidor",
             subtitle = "No hemos podido cargar tus facturas. Inténtalo de nuevo más tarde.",
-            iconRes = R.drawable.ic_server_error,
+            iconRes = R.drawable.ic_server_off,
             onRetryClick = {}
         )
     }

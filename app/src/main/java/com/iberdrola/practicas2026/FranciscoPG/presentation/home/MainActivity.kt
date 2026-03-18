@@ -35,7 +35,6 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.componen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.ErrorStateComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens.InvoiceListComposeScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens.MyInvoicesComposeScreen
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.FeedbackSheetState
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.FeedbackViewModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.InvoiceListUiState
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.MyInvoicesViewModel
@@ -49,7 +48,7 @@ private object AppRoutes {
 }
 
 private object SupplyType {
-    const val LIGHT = "luz"
+    const val ELECTRICITY = "luz"
     const val GAS = "gas"
 }
 
@@ -127,20 +126,20 @@ class MainActivity : AppCompatActivity() {
 
                     composable(AppRoutes.MY_INVOICES) {
 
-                        val lightViewModel: MyInvoicesViewModel =
-                            hiltViewModel(key = "light_invoices_vm")
+                        val electricityViewModel: MyInvoicesViewModel =
+                            hiltViewModel(key = "electricity_invoices_vm")
                         val gasViewModel: MyInvoicesViewModel =
                             hiltViewModel(key = "gas_invoices_vm")
                         val feedbackViewModel: FeedbackViewModel = hiltViewModel()
 
-                        val lightState by lightViewModel.listUiState.collectAsStateWithLifecycle()
+                        val electricityState by electricityViewModel.listUiState.collectAsStateWithLifecycle()
                         val gasState by gasViewModel.listUiState.collectAsStateWithLifecycle()
-                        val lightShowDialog by lightViewModel.showDialogEvent.collectAsStateWithLifecycle()
+                        val electricityShowDialog by electricityViewModel.showDialogEvent.collectAsStateWithLifecycle()
                         val gasShowDialog by gasViewModel.showDialogEvent.collectAsStateWithLifecycle()
                         val sheetState by feedbackViewModel.sheetState.collectAsStateWithLifecycle()
 
                         val scope = rememberCoroutineScope()
-                        val lightListState = rememberLazyListState()
+                        val electricityListState = rememberLazyListState()
                         val gasListState = rememberLazyListState()
 
                         // Recargar facturas al entrar o al cambiar de modo (mock/retrofit)
@@ -148,23 +147,46 @@ class MainActivity : AppCompatActivity() {
                         LaunchedEffect(useMock) {
                             val modeChanged = useMock != previousMock
                             previousMock = useMock
-                            lightViewModel.fetchInvoices(SupplyType.LIGHT, useMock, forceRefresh = modeChanged)
+                            electricityViewModel.fetchInvoices(SupplyType.ELECTRICITY, useMock, forceRefresh = modeChanged)
                             gasViewModel.fetchInvoices(SupplyType.GAS, useMock, forceRefresh = modeChanged)
                         }
 
                         // Determinar si ambos tabs han terminado de cargar
-                        val bothLoaded = lightState !is InvoiceListUiState.Loading
+                        val bothLoaded = electricityState !is InvoiceListUiState.Loading
                                 && gasState !is InvoiceListUiState.Loading
 
                         // Empty state global: ambos tabs terminaron y ninguno tiene facturas
                         val isGlobalEmpty = bothLoaded
-                                && lightState is InvoiceListUiState.Empty
+                                && electricityState is InvoiceListUiState.Empty
                                 && gasState is InvoiceListUiState.Empty
+
+                        // Auto-switch de tab:
+                        // Si Electricidad no tiene facturas pero Gas sí, se cambia
+                        // automáticamente al tab de Gas. Mientras tanto, Electricidad
+                        // muestra shimmer para evitar un flash de Empty State.
+                        // Una vez completado el auto-switch, si el usuario vuelve
+                        // al tab de Electricidad manualmente, verá el Empty State real.
+                        // Y viceversa
+                        val preferredTabIndex = if (bothLoaded
+                            && electricityState is InvoiceListUiState.Empty
+                            && gasState !is InvoiceListUiState.Empty
+                        ) 1 else 0
+
+                        var hasAutoSwitched by remember { mutableStateOf(false) }
+                        LaunchedEffect(preferredTabIndex) {
+                            if (preferredTabIndex == 1) hasAutoSwitched = true
+                        }
+                        val effectiveElectricityState = if (
+                            electricityState is InvoiceListUiState.Empty
+                            && !isGlobalEmpty
+                            && !hasAutoSwitched
+                        ) InvoiceListUiState.Loading else electricityState
 
                         MyInvoicesComposeScreen(
                             address = stringResource(R.string.my_invoices_mock_address),
                             feedbackSheetState = sheetState,
                             isGlobalEmpty = isGlobalEmpty,
+                            preferredTabIndex = preferredTabIndex,
                             onBackClick = {
                                 Log.d("Feedback", "Back pulsado en facturas -> evaluando feedback")
                                 feedbackViewModel.onExitInvoices()
@@ -174,17 +196,17 @@ class MainActivity : AppCompatActivity() {
                             onFeedbackDismiss = { feedbackViewModel.onSheetDismissed() },
                             onTabReselected = { index ->
                                 scope.launch {
-                                    if (index == 0) lightListState.animateScrollToItem(0)
+                                    if (index == 0) electricityListState.animateScrollToItem(0)
                                     else gasListState.animateScrollToItem(0)
                                 }
                             },
-                            lightTabContent = {
+                            electricityTabContent = {
                                 InvoiceTabContent(
-                                    uiState = lightState,
-                                    listState = lightListState,
-                                    onFeatureNotAvailable = lightViewModel::onFeatureNotAvailable,
+                                    uiState = effectiveElectricityState,
+                                    listState = electricityListState,
+                                    onFeatureNotAvailable = electricityViewModel::onFeatureNotAvailable,
                                     onRefresh = {
-                                        lightViewModel.fetchInvoices(SupplyType.LIGHT, useMock)
+                                        electricityViewModel.fetchInvoices(SupplyType.ELECTRICITY, useMock)
                                     }
                                 )
                             },
@@ -207,10 +229,10 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
 
-                        if (lightShowDialog || gasShowDialog) {
+                        if (electricityShowDialog || gasShowDialog) {
                             AlertDialog(
                                 onDismissRequest = {
-                                    if (lightShowDialog) lightViewModel.onDialogHandled()
+                                    if (electricityShowDialog) electricityViewModel.onDialogHandled()
                                     if (gasShowDialog) gasViewModel.onDialogHandled()
                                 },
                                 title = { Text(text = "Informacion") },
@@ -218,7 +240,7 @@ class MainActivity : AppCompatActivity() {
                                 confirmButton = {
                                     TextButton(
                                         onClick = {
-                                            if (lightShowDialog) lightViewModel.onDialogHandled()
+                                            if (electricityShowDialog) electricityViewModel.onDialogHandled()
                                             if (gasShowDialog) gasViewModel.onDialogHandled()
                                         }
                                     ) {
@@ -300,7 +322,7 @@ private fun InvoiceTabContent(
             ErrorStateComposable(
                 title = stringResource(R.string.error_server_title),
                 subtitle = stringResource(R.string.error_server_subtitle),
-                iconRes = R.drawable.ic_server_error,
+                iconRes = R.drawable.ic_server_off,
                 onRetryClick = onRefresh
             )
         }

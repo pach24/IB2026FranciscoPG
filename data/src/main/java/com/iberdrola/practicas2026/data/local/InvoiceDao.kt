@@ -14,6 +14,9 @@ interface InvoiceDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(invoices: List<InvoiceEntity>)
 
+    @Query("SELECT COUNT(*) FROM invoices")
+    suspend fun getCount(): Int
+
     @Query("DELETE FROM invoices")
     suspend fun deleteAll()
 }

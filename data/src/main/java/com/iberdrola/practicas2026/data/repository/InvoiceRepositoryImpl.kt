@@ -51,7 +51,21 @@ class InvoiceRepositoryImpl @Inject constructor(
                 Result.success(filteredInvoices)
             }
         } catch (e: Exception) {
-            Result.failure(e)
+            // Si la API falla pero hay datos cacheados de cualquier tipo de suministro,
+            // la app ya ha funcionado antes → devolver lista vacía (Empty State)
+            // en vez de error. Esto evita mostrar "Sin conexión" en un tab
+            // mientras el otro muestra facturas desde caché, lo cual sería
+            // contradictorio para el usuario.
+            val hasCache = try {
+                !configRepository.isMockEnabled() && invoiceDao.getCount() > 0
+            } catch (_: Exception) {
+                false
+            }
+            if (hasCache) {
+                Result.success(emptyList())
+            } else {
+                Result.failure(e)
+            }
         }
     }
 }

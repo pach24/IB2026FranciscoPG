@@ -45,16 +45,16 @@ object AppModule {
     fun provideBaseUrl(): String {
         // ─── CONFIGURACIÓN DE RED ────────────────────────────────────────────
         // EMULADOR:        usa 10.0.2.2 (alias del host en AVD)
-        // DISPOSITIVO FÍSICO: pon aquí la IP local de tu PC (ej: 192.168.1.100)
-        //                  Encuéntrala con `ipconfig` (Win) o `ifconfig` (Mac/Linux)
-        val DEVICE_HOST_IP = "192.168.1.100"   // ← CAMBIA ESTO por tu IP local
+        // DISPOSITIVO FÍSICO: funciona con localhost pero es necesario
+        // la redirección del puerto 3001 al tlf ( comando  adb reverse tcp:3001 tcp:3001 )
+        // en cada ejecución
         // ────────────────────────────────────────────────────────────────────
 
         val emulator = isEmulator()
         val url = if (emulator) {
-            "http://10.0.2.2:3001/"
+            "http://10.0.2.2:3001/api/"
         } else {
-            "http://localhost:3001/"
+            "http://localhost:3001/api/"
         }
         Log.d("🌐 AppModule", "isEmulator=$emulator  →  BASE_URL=$url")
         return url

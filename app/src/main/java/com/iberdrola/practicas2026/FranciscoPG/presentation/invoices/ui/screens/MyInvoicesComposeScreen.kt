@@ -65,12 +65,13 @@ fun MyInvoicesComposeScreen(
     modifier: Modifier = Modifier,
     feedbackSheetState: FeedbackSheetState = FeedbackSheetState.Hidden,
     isGlobalEmpty: Boolean = false,
+    preferredTabIndex: Int = 0,
     onBackClick: () -> Unit = {},
     onFeedbackFaceClick: () -> Unit = {},
     onFeedbackLaterClick: () -> Unit = {},
     onFeedbackDismiss: () -> Unit = {},
     onTabReselected: (Int) -> Unit = {},
-    lightTabContent: @Composable () -> Unit = {},
+    electricityTabContent: @Composable () -> Unit = {},
     gasTabContent: @Composable () -> Unit = {}
 ) {
     val tabs = listOf(stringResource(R.string.tab_light), stringResource(R.string.tab_gas))
@@ -102,6 +103,13 @@ fun MyInvoicesComposeScreen(
             if (target == settled && fraction != 0f) {
                 isTabClick = false
             }
+        }
+    }
+
+    // Auto-seleccionar tab preferido (Luz vacía → Gas)
+    LaunchedEffect(preferredTabIndex) {
+        if (pagerState.currentPage != preferredTabIndex) {
+            pagerState.scrollToPage(preferredTabIndex)
         }
     }
 
@@ -214,7 +222,7 @@ fun MyInvoicesComposeScreen(
                 beyondViewportPageCount = 1
             ) { page ->
                 when (page) {
-                    0 -> lightTabContent()
+                    0 -> electricityTabContent()
                     1 -> gasTabContent()
                 }
             }
