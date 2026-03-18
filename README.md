@@ -1,10 +1,10 @@
 # IB2026FranciscoPG
 
-A native Android application built with **Jetpack Compose**, designed to provide a smooth experience for managing and visualizing energy invoices, featuring real-time data switching and a modular architecture.
+Aplicacion nativa Android construida con **Jetpack Compose** para la gestion y visualizacion de facturas energeticas, con cambio de fuente de datos en tiempo real y arquitectura modular.
 
-> **Project Status:** v1.0.0 – March 2026  
+> **Estado del proyecto:** v1.0.0 – Marzo 2026
 
-**Clean Architecture • MVVM • Multi-Module • Reactive UI**
+**Clean Architecture · MVVM · Multi-Modulo · UI Reactiva**
 
 ![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white)
@@ -14,84 +14,164 @@ A native Android application built with **Jetpack Compose**, designed to provide
 
 ---
 
-## 📄 Overview
+## Descripcion general
 
-This app is a showcase of modern software engineering. The project implements a fully decoupled **three-layer Clean Architecture**, allowing business logic to operate independently from the UI framework or data source.
+Aplicacion que implementa una arquitectura **Clean Architecture de tres capas** desacopladas, permitiendo que la logica de negocio opere de forma independiente al framework de UI o la fuente de datos.
 
-The project’s key differentiator lies in its **data flexibility**: through a robust dependency injection system, the user can switch between a local (Mock) environment and a real server with a single tap — ideal for technical demos and isolated development environments.
+El diferenciador clave es la **flexibilidad de datos**: mediante inyeccion de dependencias, el usuario puede alternar entre un entorno local (RetroMock) y un servidor real (Retrofit + Mockoon) con un solo tap, ideal para demos tecnicas y entornos de desarrollo aislados.
 
 ---
 
-## 🖼️ Visual Gallery
+## Galeria visual
 
-Below are the key user interface features:
-
-| **Home & Toggle** | **Invoice List** | **Dark Mode** | **Loading Mode (Skeleton)** |
+| **Home y Toggle** | **Lista de facturas** | **Modo oscuro** | **Carga (Skeleton)** |
 |:---:|:---:|:---:|:---:|
 | <img src="https://github.com/user-attachments/assets/dcf1a14e-8e42-484e-8a96-6494a95260fd" width="200" alt="Home Screen"> | <img src="https://github.com/user-attachments/assets/a28f8004-6db8-41c2-8fcc-19d075e1b6b6" width="200" alt="Invoice List"> | <img src="https://github.com/user-attachments/assets/9184baaf-bded-4ed5-a37c-647225b8b08c" width="200" alt="Details"> | <img src="https://github.com/user-attachments/assets/0c46c50d-5581-4269-a2a9-f8d200f2f71e" width="200" alt="Shimmer"> |
-| *Dashboard with Mock/Live mode switch.* | *Grouped by type (Electricity/Gas) and status.* | *View in dark mode.* | *Smooth loading experience with Shimmer placeholders.* |
+| *Dashboard con switch RetroMock/Retrofit.* | *Agrupadas por tipo (Luz/Gas) y estado.* | *Vista en modo oscuro.* | *Carga fluida con placeholders Shimmer.* |
 
 ---
 
-## 💡 Key Features
+## Funcionalidades principales
 
-* **🔄 Dual Data Source Strategy:** Instantly switch between `Retrofit` (real API) and `Retromock` (local JSON) without restarting the app.  
-* **📊 Smart Invoice Management:** Optimized listing with category grouping (Electricity/Gas), chronological sorting, and visual highlight for the latest invoice received.  
-* **✨ Modern UI/UX:**
-  * Fully built with **Material 3**.
-  * **Pull-to-refresh** with expressive loading indicators.
-  * **Skeleton Loading** and Shimmer for instant loading perception.
-* **🏗️ Strict Modularization:** Physical separation of responsibilities to improve build times and ensure scalable code.
-
----
-
-## 🏛️ Architecture
-
-The project follows **SOLID** principles and Google’s official recommendations for building robust applications.
-
-### 🧩 Module Structure
-
-1. **`:app` (Presentation Layer):** Contains the UI (Compose), ViewModels, and Hilt configuration. Implements **UDF (Unidirectional Data Flow)** via `StateFlow`.  
-2. **`:domain` (Business Layer):** Pure Kotlin module. Defines business entities, repository contracts (interfaces), and **Use Cases**.  
-3. **`:data` (Data Layer):** Repository implementations, DTOs, Retrofit services, and the logic for data source switching.
+- **Doble fuente de datos:** Cambio instantaneo entre `Retrofit` (API real via Mockoon) y `RetroMock` (JSON local) sin reiniciar la app.
+- **Gestion inteligente de facturas:** Listado optimizado con agrupacion por categoria (Luz/Gas), ordenacion cronologica y destacado visual de la ultima factura.
+- **UI/UX moderna:**
+  - Construida integramente con **Material 3 Expressive**.
+  - **Pull-to-refresh** con indicadores de carga expresivos en todos los estados (datos, vacio, error).
+  - **Skeleton Loading** con Shimmer para percepcion de carga instantanea.
+  - Auto-switch de tab inteligente (si un tipo de suministro esta vacio, navega al que tiene datos).
+- **Estados de error diferenciados:** Error de servidor y error de conexion con iconografia y mensajes distintos, boton de reintento y pull-to-refresh.
 
 ---
 
-## 🚀 Tech Stack
+## Arquitectura
 
-* **Language:** Kotlin + Coroutines & Flow  
-* **UI Framework:** Jetpack Compose (Material 3)  
-* **Dependency Injection:** Hilt (Dagger) for clean and testable dependency management  
-* **Networking:** Retrofit + OkHttp + Retromock  
-* **Navigation:** Navigation Compose with type-safe route handling  
-* **State Management:** MVVM with `StateFlow` and `collectAsStateWithLifecycle()`
+El proyecto sigue los principios **SOLID** y las recomendaciones oficiales de Google para aplicaciones robustas.
+
+### Estructura de modulos
+
+```
+IB2026FranciscoPG/
+├── :app (Capa de Presentacion)
+│   ├── di/              # Modulos Hilt (AppModule, inyeccion de dependencias)
+│   ├── core/            # Utilidades transversales (ErrorClassifier)
+│   └── presentation/
+│       ├── home/        # MainActivity, MainScreen, MainViewModel
+│       ├── invoices/    # Pantallas, componentes, ViewModel y mapper de facturas
+│       └── theme/       # Tokens de diseno (Spacing, TextSize, Radius...)
+├── :domain (Capa de Negocio)
+│   ├── model/           # Entidades de dominio (Invoice, SupplyType, InvoiceStatus)
+│   ├── repository/      # Contratos (interfaces)
+│   └── usecase/         # Casos de uso (GetInvoices, SortInvoices)
+└── :data (Capa de Datos)
+    ├── local/           # Room (InvoiceDao, InvoiceEntity)
+    ├── model/           # DTOs (InvoiceDto, mappers)
+    ├── network/         # Retrofit + Retromock (InvoiceApiService)
+    └── repository/      # Implementaciones de repositorio
+```
+
+1. **`:app` (Presentacion):** UI en Compose, ViewModels con `StateFlow`, y configuracion Hilt. Implementa **UDF (Unidirectional Data Flow)**.
+2. **`:domain` (Negocio):** Modulo Kotlin puro sin dependencias Android. Define entidades, enums de dominio (`SupplyType`, `InvoiceStatus`), contratos de repositorio y casos de uso.
+3. **`:data` (Datos):** Implementaciones de repositorio, DTOs, servicios Retrofit/Retromock, cache con Room y logica de seleccion de fuente de datos.
+
+---
+
+## Stack tecnologico
+
+| Categoria | Tecnologia |
+|---|---|
+| **Lenguaje** | Kotlin + Coroutines & Flow |
+| **UI** | Jetpack Compose (Material 3 Expressive) |
+| **Inyeccion de dependencias** | Hilt (Dagger) |
+| **Networking** | Retrofit + OkHttp + Retromock |
+| **Base de datos local** | Room |
+| **Navegacion** | Navigation Compose |
+| **Gestion de estado** | MVVM con `StateFlow` + `collectAsStateWithLifecycle()` |
+| **Mock server** | Mockoon (servidor local REST) |
 
 ---
 
-## 💾 Installation and Usage
+## Instalacion y puesta en marcha
 
-### Prerequisites
+### Requisitos previos
 
-* Android Studio Giraffe or higher  
-* JDK 11  
-* Min SDK: 29  
+- Android Studio Giraffe o superior
+- JDK 11+
+- Min SDK: 29
+- [Mockoon](https://mockoon.com/) instalado (para el modo Retrofit)
 
-### Steps
+### 1. Clonar el repositorio
 
-1. **Clone the repository:**
-    ```bash
-    git clone https://github.com/tu-usuario/IB2026FranciscoPG.git
-    ```
-2. **API Configuration:**
-    For “Live” mode, configure your local IP in `AppModule` if using a physical device. By default, it points to `10.0.2.2:3001` (the emulator’s localhost).  
-3. **Run:** Sync Gradle and launch the `:app` module.
+```bash
+git clone https://github.com/pach24/IB2026FranciscoPG.git
+cd IB2026FranciscoPG
+```
+
+### 2. Configurar Mockoon (modo Retrofit)
+
+> [!WARNING]
+> ### ⚠️ ARCHIVO DE ENTORNO REQUERIDO
+> Para que el modo **Retrofit** funcione, debes importar manualmente el siguiente archivo en tu aplicación **Mockoon**:
+>
+> 📂 **Ruta:** `app/src/main/assets/InvoicesMockEnvironment.json`
+>
+> **Instrucciones rápidas:**
+> 1. Abre **Mockoon**.
+> 2. `File` > `Open environment` (o `Ctrl+O`).
+> 3. Selecciona el archivo en la ruta indicada arriba.
+> 4. Asegúrate de que el servidor esté en **Play** sobre el puerto `3001`.
+
+
+
+### 3. Configuracion de red
+
+La app detecta automaticamente si se ejecuta en emulador o dispositivo fisico:
+
+| Entorno | URL base | Notas |
+|---|---|---|
+| **Emulador AVD** | `http://10.0.2.2:3001/` | `10.0.2.2` es el alias del host en el emulador de Android |
+| **Dispositivo fisico** | `http://localhost:3001/` | Requiere redireccion de puerto antes de cada ejecucion |
+
+#### Dispositivo fisico: redireccion de puerto
+
+Antes de ejecutar la app en un dispositivo fisico conectado por USB, ejecutar:
+
+```bash
+adb reverse tcp:3001 tcp:3001
+```
+
+> Este comando redirige el puerto 3001 del dispositivo al puerto 3001 del equipo donde corre Mockoon. Hay que repetirlo cada vez que se reconecta el dispositivo.
+
+### 4. Ejecutar la app
+
+1. Sincronizar Gradle en Android Studio.
+2. Seleccionar el modulo `:app` como configuracion de ejecucion.
+3. Lanzar en emulador o dispositivo.
+
+### 5. Alternar modo de datos
+
+En la pantalla principal, el switch en la esquina inferior derecha permite alternar entre:
+
+- **RetroMock:** Datos simulados desde un JSON local embebido en la app. No requiere Mockoon ni conexion de red.
+- **Retrofit (Mockoon):** Llamadas HTTP reales contra el servidor Mockoon local. Requiere que Mockoon este en ejecucion.
 
 ---
 
-## 📚 Lessons Learned
+## Modos de datos en detalle
 
-* **Dynamic Injection:** Implementing Hilt to swap data providers at runtime.  
-* **Complex State Management:** Using `Sealed Interfaces` to represent UI states (`Loading`, `Success`, `Error`), eliminating impossible states.  
-* **Modularization:** Benefits of isolating business logic (`domain`) in a pure Kotlin module with no Android dependencies, simplifying unit testing.
+### RetroMock (mock local)
+
+- Usa el fichero `invoices_mock.json` incluido en `assets/`.
+- Simula latencia aleatoria (1-3 segundos) para reproducir condiciones reales.
+- No requiere configuracion de red.
+- Ideal para desarrollo rapido y pruebas offline.
+
+### Retrofit + Mockoon (servidor local)
+
+- Llamadas HTTP reales contra los endpoints configurados en Mockoon.
+- Los datos se cachean en **Room** para acceso offline posterior.
+- Si la API falla pero hay cache disponible, la app muestra los datos cacheados en lugar de un error.
+- Permite modificar las respuestas en Mockoon en tiempo real para probar distintos escenarios (facturas vacias, errores de servidor, etc.).
 
 ---
+
