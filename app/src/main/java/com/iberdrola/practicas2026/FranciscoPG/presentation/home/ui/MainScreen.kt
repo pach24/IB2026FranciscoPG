@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -168,37 +169,39 @@ fun MainScreen(
                         ItemInvoiceCard(onClick = onInvoicesCardClick)
                     }
 
-                    Spacer(modifier = Modifier.height(Spacing.dp16))
-
-                    // Ajuste opcional: Si el offset deja muy poco espacio al final del scroll,
-                    // puedes añadir un Spacer positivo aquí para compensar.
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(start = Spacing.dp24)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.switch_mock_mode),
-                            color = colorResource(R.color.color_text_primary),
-                            fontFamily = IberFontRegular
-                        )
-                        Spacer(modifier = Modifier.width(Spacing.dp8))
-                        Switch(
-                            checked = isMockEnabled,
-                            onCheckedChange = onMockModeChanged,
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = colorResource(R.color.color_surface),
-                                checkedTrackColor = colorResource(R.color.iberdrola_green),
-                                checkedBorderColor = colorResource(R.color.iberdrola_green),
-                                uncheckedThumbColor = colorResource(R.color.light_grey),
-                                uncheckedTrackColor = colorResource(R.color.color_surface),
-                                uncheckedBorderColor = colorResource(R.color.light_grey)
-                            )
-                        )
-                    }
-
                     // Compensación del offset para que el scroll termine correctamente
                     Spacer(modifier = Modifier.height(extraBackgroundHeight))
                 }
+            }
+
+            // Switch fijo en esquina inferior derecha, por encima del snackbar
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = Spacing.dp16, bottom = 120.dp)
+            ) {
+                Text(
+                    text = stringResource(
+                        if (isMockEnabled) R.string.switch_mock_mode_retromock
+                        else R.string.switch_mock_mode_retrofit
+                    ),
+                    color = colorResource(R.color.color_text_primary),
+                    fontFamily = IberFontRegular
+                )
+                Spacer(modifier = Modifier.width(Spacing.dp8))
+                Switch(
+                    checked = isMockEnabled,
+                    onCheckedChange = onMockModeChanged,
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = colorResource(R.color.color_surface),
+                        checkedTrackColor = colorResource(R.color.iberdrola_green),
+                        checkedBorderColor = colorResource(R.color.iberdrola_green),
+                        uncheckedThumbColor = colorResource(R.color.light_grey),
+                        uncheckedTrackColor = colorResource(R.color.color_surface),
+                        uncheckedBorderColor = colorResource(R.color.light_grey)
+                    )
+                )
             }
         }
     }

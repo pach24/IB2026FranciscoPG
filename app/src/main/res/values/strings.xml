@@ -41,9 +41,10 @@
         <string name="my_invoices_title">Mis facturas</string>
         <string name="my_invoices_mock_address">C/ PALMA - ARTA KM 49, 5 , 4°A -PINTO - MADRID</string>
 
-    <string name="switch_mock_mode">Modo Mock (Retromock)</string>
-    <string name="main_mock_activated">Modo MOCK activado: los datos son simulados</string>
-    <string name="main_mock_disabled">Modo REAL activado</string>
+    <string name="switch_mock_mode_retromock">RetroMock</string>
+    <string name="switch_mock_mode_retrofit">Retrofit (Mockoon)</string>
+    <string name="main_mock_activated">Modo RetroMock activado: los datos son simulados</string>
+    <string name="main_mock_disabled">Modo Retrofit (Mockoon) activado</string>
 
     <!-- Empty states -->
     <string name="empty_state_tab_title">Aún no tienes facturas</string>
