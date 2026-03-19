@@ -39,6 +39,7 @@ object Spacing {
     val dp24 = 24.dp
     val dp32 = 32.dp
     val dp40 = 40.dp
+    val dp48 = 48.dp
     val dp64 = 64.dp
 }
 

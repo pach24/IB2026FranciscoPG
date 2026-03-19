@@ -28,6 +28,7 @@ fun InvoiceTabContent(
     uiState: InvoiceListUiState,
     listState: LazyListState,
     onFeatureNotAvailable: () -> Unit,
+    onFilterClick: () -> Unit,
     onRefresh: () -> Unit
 ) {
     var lastSuccess by remember { mutableStateOf<InvoiceListUiState.Success?>(null) }
@@ -53,9 +54,9 @@ fun InvoiceTabContent(
                     latestInvoiceIconRes = R.drawable.ic_light,
                     historyItems = emptyList(),
                     listState = listState,
-                    onLatestInvoiceClick = onFeatureNotAvailable,
-                    onFilterClick = onFeatureNotAvailable,
-                    onHistoryItemClick = { onFeatureNotAvailable() },
+                    onLatestInvoiceClick = {},
+                    onFilterClick = {},
+                    onHistoryItemClick = {},
                     onRefresh = onRefresh
                 )
             } else {
@@ -71,7 +72,7 @@ fun InvoiceTabContent(
                     historyItems = cached.historyItems,
                     listState = listState,
                     onLatestInvoiceClick = onFeatureNotAvailable,
-                    onFilterClick = onFeatureNotAvailable,
+                    onFilterClick = onFilterClick,
                     onHistoryItemClick = { onFeatureNotAvailable() },
                     onRefresh = onRefresh
                 )
@@ -167,7 +168,7 @@ fun InvoiceTabContent(
                 historyItems = uiState.historyItems,
                 listState = listState,
                 onLatestInvoiceClick = onFeatureNotAvailable,
-                onFilterClick = onFeatureNotAvailable,
+                onFilterClick = onFilterClick,
                 onHistoryItemClick = { onFeatureNotAvailable() },
                 onRefresh = onRefresh
             )

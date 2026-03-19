@@ -173,7 +173,7 @@ fun MyInvoicesComposeScreen(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth()
-                        .height(Stroke.dp1)
+                        .height(Stroke.dp2)
                         .background(colors.tabMisFacturas)
                 )
 

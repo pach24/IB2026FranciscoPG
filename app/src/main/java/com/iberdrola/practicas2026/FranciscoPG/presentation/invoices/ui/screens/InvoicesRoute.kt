@@ -1,6 +1,11 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
@@ -8,6 +13,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -58,6 +64,9 @@ fun InvoicesRoute(
     val electricityListState = rememberLazyListState()
     val gasListState = rememberLazyListState()
 
+    // Filter screen state: null = list, 0 = electricity filter, 1 = gas filter
+    var showFilterForTab by remember { mutableStateOf<Int?>(null) }
+
     // Recargar facturas al entrar o al cambiar de modo (mock/retrofit)
     var previousMock by remember { mutableStateOf(useMock) }
     LaunchedEffect(useMock) {
@@ -77,13 +86,6 @@ fun InvoicesRoute(
             && gasState is InvoiceListUiState.Empty
 
     // Auto-switch de tab (una sola vez al entrar):
-    // Si Electricidad no tiene facturas pero Gas sí, se cambia
-    // automáticamente al tab de Gas. hasAutoSwitched se activa
-    // de forma síncrona para que preferredTabIndex sea 1 desde
-    // la primera composición, evitando flash de Empty State.
-    // scrollCompleted se activa tras el scroll real, controlando
-    // el shimmer en el tab de Electricidad mientras tanto.
-    // En refreshes posteriores, hasAutoSwitched impide re-disparar.
     var hasAutoSwitched by remember { mutableStateOf(false) }
     var scrollCompleted by remember { mutableStateOf(false) }
 
@@ -108,41 +110,68 @@ fun InvoicesRoute(
         gasViewModel.fetchInvoices(SupplyType.GAS, useMock, forceRefresh = true)
     }
 
-    MyInvoicesComposeScreen(
-        address = stringResource(R.string.my_invoices_mock_address),
-        feedbackSheetState = sheetState,
-        isGlobalEmpty = isGlobalEmpty,
-        preferredTabIndex = preferredTabIndex,
-        onBackClick = {
-            Log.d("InvoicesRoute", "Back pressed, evaluating feedback")
-            feedbackViewModel.onExitInvoices()
-        },
-        onFeedbackFaceClick = { feedbackViewModel.onFeedbackRated() },
-        onFeedbackLaterClick = { feedbackViewModel.onFeedbackLater() },
-        onFeedbackDismiss = { feedbackViewModel.onSheetDismissed() },
-        onTabReselected = { index ->
-            scope.launch {
-                if (index == 0) electricityListState.animateScrollToItem(0)
-                else gasListState.animateScrollToItem(0)
+    // Track active tab for filter
+    var activeTab by remember { mutableIntStateOf(0) }
+
+    AnimatedContent(
+        targetState = showFilterForTab,
+        transitionSpec = {
+            if (targetState != null) {
+                slideInHorizontally { it } togetherWith slideOutHorizontally { -it }
+            } else {
+                slideInHorizontally { -it } togetherWith slideOutHorizontally { it }
             }
         },
-        electricityTabContent = {
-            InvoiceTabContent(
-                uiState = effectiveElectricityState,
-                listState = electricityListState,
-                onFeatureNotAvailable = electricityViewModel::onFeatureNotAvailable,
-                onRefresh = refreshBoth
+        label = "filter_transition"
+    ) { filterTab ->
+        if (filterTab != null) {
+            val activeVm = if (filterTab == 0) electricityViewModel else gasViewModel
+            BackHandler { showFilterForTab = null }
+            FilterRoute(
+                tab = filterTab,
+                onBack = { showFilterForTab = null },
+                viewModel = activeVm
             )
-        },
-        gasTabContent = {
-            InvoiceTabContent(
-                uiState = gasState,
-                listState = gasListState,
-                onFeatureNotAvailable = gasViewModel::onFeatureNotAvailable,
-                onRefresh = refreshBoth
+        } else {
+            MyInvoicesComposeScreen(
+                address = stringResource(R.string.my_invoices_mock_address),
+                feedbackSheetState = sheetState,
+                isGlobalEmpty = isGlobalEmpty,
+                preferredTabIndex = preferredTabIndex,
+                onBackClick = {
+                    Log.d("InvoicesRoute", "Back pressed, evaluating feedback")
+                    feedbackViewModel.onExitInvoices()
+                },
+                onFeedbackFaceClick = { feedbackViewModel.onFeedbackRated() },
+                onFeedbackLaterClick = { feedbackViewModel.onFeedbackLater() },
+                onFeedbackDismiss = { feedbackViewModel.onSheetDismissed() },
+                onTabReselected = { index ->
+                    scope.launch {
+                        if (index == 0) electricityListState.animateScrollToItem(0)
+                        else gasListState.animateScrollToItem(0)
+                    }
+                },
+                electricityTabContent = {
+                    InvoiceTabContent(
+                        uiState = effectiveElectricityState,
+                        listState = electricityListState,
+                        onFeatureNotAvailable = electricityViewModel::onFeatureNotAvailable,
+                        onFilterClick = { showFilterForTab = 0 },
+                        onRefresh = refreshBoth
+                    )
+                },
+                gasTabContent = {
+                    InvoiceTabContent(
+                        uiState = gasState,
+                        listState = gasListState,
+                        onFeatureNotAvailable = gasViewModel::onFeatureNotAvailable,
+                        onFilterClick = { showFilterForTab = 1 },
+                        onRefresh = refreshBoth
+                    )
+                }
             )
         }
-    )
+    }
 
     LaunchedEffect(Unit) {
         feedbackViewModel.navigateBack.collect {

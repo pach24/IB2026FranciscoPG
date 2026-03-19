@@ -4,6 +4,7 @@ import com.iberdrola.practicas2026.FranciscoPG.core.error.ErrorClassifier
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
+import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.FilterInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.mapper.InvoiceUiMapper
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListItem
@@ -12,7 +13,10 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -31,6 +35,7 @@ class MyInvoicesViewModelTest {
     private val testDispatcher = StandardTestDispatcher()
 
     private lateinit var getInvoicesUseCase: GetInvoicesUseCase
+    private lateinit var filterInvoicesUseCase: FilterInvoicesUseCase
     private lateinit var invoiceUiMapper: InvoiceUiMapper
     private lateinit var errorClassifier: ErrorClassifier
     private lateinit var viewModel: MyInvoicesViewModel
@@ -57,9 +62,10 @@ class MyInvoicesViewModelTest {
         Dispatchers.setMain(testDispatcher)
 
         getInvoicesUseCase = mockk()
+        filterInvoicesUseCase = FilterInvoicesUseCase()
         invoiceUiMapper = mockk()
         errorClassifier = ErrorClassifier()
-        viewModel = MyInvoicesViewModel(getInvoicesUseCase, invoiceUiMapper, errorClassifier)
+        viewModel = MyInvoicesViewModel(getInvoicesUseCase, filterInvoicesUseCase, invoiceUiMapper, errorClassifier)
     }
 
     @After
@@ -80,12 +86,19 @@ class MyInvoicesViewModelTest {
         coEvery { getInvoicesUseCase(SupplyType.ELECTRICITY, any(), any()) } returns Result.success(sampleInvoices)
         every { invoiceUiMapper.map(sampleInvoices, SupplyType.ELECTRICITY) } returns sampleUiModel
 
+        // Collect stateIn flow to activate it
+        val collector = launch(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.listUiState.collect {}
+        }
+
         viewModel.fetchInvoices(SupplyType.ELECTRICITY)
         advanceUntilIdle()
 
         val listState = viewModel.listUiState.value
         assertTrue(listState is InvoiceListUiState.Success)
         assertEquals(2, (listState as InvoiceListUiState.Success).invoiceCount)
+
+        collector.cancel()
     }
 
     // Sin facturas, emite Empty
@@ -93,10 +106,16 @@ class MyInvoicesViewModelTest {
     fun `fetchInvoices success with empty list emits Empty`() = runTest {
         coEvery { getInvoicesUseCase(SupplyType.ELECTRICITY, any(), any()) } returns Result.success(emptyList())
 
+        val collector = launch(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.listUiState.collect {}
+        }
+
         viewModel.fetchInvoices(SupplyType.ELECTRICITY)
         advanceUntilIdle()
 
         assertEquals(InvoiceListUiState.Empty, viewModel.listUiState.value)
+
+        collector.cancel()
     }
 
     // Error de red se clasifica como ConnectionError
@@ -105,10 +124,16 @@ class MyInvoicesViewModelTest {
         coEvery { getInvoicesUseCase(SupplyType.ELECTRICITY, any(), any()) } returns
                 Result.failure(UnknownHostException("no host"))
 
+        val collector = launch(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.listUiState.collect {}
+        }
+
         viewModel.fetchInvoices(SupplyType.ELECTRICITY)
         advanceUntilIdle()
 
         assertTrue(viewModel.listUiState.value is InvoiceListUiState.ConnectionError)
+
+        collector.cancel()
     }
 
     // Error generico se clasifica como ServerError
@@ -117,10 +142,16 @@ class MyInvoicesViewModelTest {
         coEvery { getInvoicesUseCase(SupplyType.ELECTRICITY, any(), any()) } returns
                 Result.failure(RuntimeException("server error"))
 
+        val collector = launch(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.listUiState.collect {}
+        }
+
         viewModel.fetchInvoices(SupplyType.ELECTRICITY)
         advanceUntilIdle()
 
         assertTrue(viewModel.listUiState.value is InvoiceListUiState.ServerError)
+
+        collector.cancel()
     }
 
     // Excepcion no controlada tambien emite estado de error
@@ -128,10 +159,16 @@ class MyInvoicesViewModelTest {
     fun `fetchInvoices exception emits error state`() = runTest {
         coEvery { getInvoicesUseCase(SupplyType.GAS, any(), any()) } throws RuntimeException("crash")
 
+        val collector = launch(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.listUiState.collect {}
+        }
+
         viewModel.fetchInvoices(SupplyType.GAS)
         advanceUntilIdle()
 
         assertTrue(viewModel.listUiState.value is InvoiceListUiState.ServerError)
+
+        collector.cancel()
     }
 
     // Pulsar funcionalidad no disponible activa el dialogo
@@ -155,10 +192,16 @@ class MyInvoicesViewModelTest {
         coEvery { getInvoicesUseCase(SupplyType.ELECTRICITY, forceRefresh = true, any()) } returns
                 Result.success(emptyList())
 
+        val collector = launch(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.listUiState.collect {}
+        }
+
         viewModel.fetchInvoices(SupplyType.ELECTRICITY, forceRefresh = true)
         advanceUntilIdle()
 
         assertEquals(InvoiceListUiState.Empty, viewModel.listUiState.value)
+
+        collector.cancel()
     }
 
     // Llamadas rapidas consecutivas: solo el ultimo resultado se aplica (generation check)
@@ -167,6 +210,10 @@ class MyInvoicesViewModelTest {
         // First call returns slowly with data
         coEvery { getInvoicesUseCase(SupplyType.ELECTRICITY, any(), any()) } returns Result.success(sampleInvoices)
         every { invoiceUiMapper.map(any(), any()) } returns sampleUiModel
+
+        val collector = launch(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.listUiState.collect {}
+        }
 
         // Second call returns empty
         viewModel.fetchInvoices(SupplyType.ELECTRICITY)
@@ -177,5 +224,7 @@ class MyInvoicesViewModelTest {
 
         // Should show Empty (second call), not Success (first call)
         assertEquals(InvoiceListUiState.Empty, viewModel.listUiState.value)
+
+        collector.cancel()
     }
 }
