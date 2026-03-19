@@ -22,6 +22,21 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.I
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.MyInvoicesViewModel
 import kotlinx.coroutines.launch
 
+/**
+ * Determina el tab inicial preferido en función del estado de cada suministro.
+ * Devuelve 1 (Gas) solo si ambos han cargado, Electricidad está vacía y Gas no.
+ */
+fun resolvePreferredTabIndex(
+    electricityState: InvoiceListUiState,
+    gasState: InvoiceListUiState,
+    bothLoaded: Boolean
+): Int {
+    val wantsAutoSwitch = bothLoaded
+            && electricityState is InvoiceListUiState.Empty
+            && gasState !is InvoiceListUiState.Empty
+    return if (wantsAutoSwitch) 1 else 0
+}
+
 @Composable
 fun InvoicesRoute(
     useMock: Boolean,
@@ -72,11 +87,9 @@ fun InvoicesRoute(
     var hasAutoSwitched by remember { mutableStateOf(false) }
     var scrollCompleted by remember { mutableStateOf(false) }
 
-    val wantsAutoSwitch = bothLoaded
-            && electricityState is InvoiceListUiState.Empty
-            && gasState !is InvoiceListUiState.Empty
-
-    if (wantsAutoSwitch) hasAutoSwitched = true
+    if (resolvePreferredTabIndex(electricityState, gasState, bothLoaded) == 1) {
+        hasAutoSwitched = true
+    }
 
     val preferredTabIndex = if (hasAutoSwitched) 1 else 0
 
