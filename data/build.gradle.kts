@@ -52,6 +52,9 @@ dependencies {
     implementation(libs.okhttp.logging)
     implementation(libs.retromock)
 
+    // DataStore
+    implementation(libs.datastore.preferences)
+
     // Room (Base de datos local)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
@@ -59,7 +62,7 @@ dependencies {
 
     // Testing
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
-
-
 }

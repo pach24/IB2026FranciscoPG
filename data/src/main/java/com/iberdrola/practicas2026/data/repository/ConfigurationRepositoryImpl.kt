@@ -12,7 +12,7 @@ class ConfigurationRepositoryImpl @Inject constructor() : ConfigurationRepositor
 
     override fun isMockEnabled(): Boolean = mockEnabled
 
-    override fun setMockEnabled(enabled: Boolean) {
+    override suspend fun setMockEnabled(enabled: Boolean) {
         mockEnabled = enabled
     }
 }

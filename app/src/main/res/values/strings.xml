@@ -11,6 +11,7 @@
     <string name="feedback_later">Responder más tarde</string>
     <string name="feedback_subtitle">¿Cómo de probable es que recomiendes esta app a amigos o familiares para que realicen sus gestiones?</string>
     <string name="feedback_title">Tu opinión nos importa</string>
+    <string name="feedback_thank_you">Gracias por tu valoración</string>
     <string name="invoice_status_paid">Pagada</string>
     <string name="invoice_status_unpaid">Pendiente de Pago</string>
     <string name="invoice_type_light">Factura Luz</string>
@@ -40,8 +41,27 @@
         <string name="my_invoices_title">Mis facturas</string>
         <string name="my_invoices_mock_address">C/ PALMA - ARTA KM 49, 5 , 4°A -PINTO - MADRID</string>
 
-    <string name="switch_mock_mode">Modo Mock (Retromock)</string>
-    <string name="main_mock_activated">Modo MOCK activado: los datos son simulados</string>
-    <string name="main_mock_disabled">Modo REAL activado</string>
+    <string name="switch_mock_mode_retromock">RetroMock</string>
+    <string name="switch_mock_mode_retrofit">Retrofit (Mockoon)</string>
+    <string name="main_mock_activated">Modo RetroMock activado: los datos son simulados</string>
+    <string name="main_mock_disabled">Modo Retrofit (Mockoon) activado</string>
+
+    <!-- Empty states -->
+    <string name="empty_state_tab_title">Aún no tienes facturas</string>
+    <string name="empty_state_tab_subtitle">Cuando se generen tus facturas de luz o gas\nlas verás aquí.</string>
+    <string name="empty_state_global_title">Aún no tienes facturas</string>
+    <string name="empty_state_global_subtitle">Cuando se generen tus facturas de luz o gas\nlas verás aquí.</string>
+
+    <!-- Error states -->
+    <string name="error_server_title">Error del servidor</string>
+    <string name="error_server_subtitle">No hemos podido cargar tus facturas. Inténtalo de nuevo más tarde.</string>
+    <string name="error_connection_title">Sin conexión</string>
+    <string name="error_connection_subtitle">Comprueba tu conexión a internet e inténtalo de nuevo.</string>
+    <string name="error_retry_button">Reintentar</string>
+
+    <!-- Dialog factura no disponible -->
+    <string name="dialog_info_title">Información</string>
+    <string name="dialog_feature_not_available">Esta funcionalidad aún no está disponible.</string>
+    <string name="dialog_accept">Aceptar</string>
 
 </resources>

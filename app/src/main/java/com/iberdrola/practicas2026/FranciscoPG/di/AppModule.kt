@@ -1,19 +1,29 @@
-// Archivo: AppModule.kt (Ubicación: di)
 package com.iberdrola.practicas2026.FranciscoPG.di
 
 import android.content.Context
 import android.util.Log
+import androidx.room.Room
 import co.infinum.retromock.Retromock
 import com.google.gson.GsonBuilder
 import com.iberdrola.practicas2026.FranciscoPG.DeviceUtils.isEmulator
+import com.iberdrola.practicas2026.data.local.AppDatabase
+import com.iberdrola.practicas2026.data.local.InvoiceDao
 import com.iberdrola.practicas2026.data.network.InvoiceApiService
 import com.iberdrola.practicas2026.FranciscoPG.data.repository.ConfigurationRepositoryImpl
+import com.iberdrola.practicas2026.FranciscoPG.data.repository.FeedbackRepositoryImpl
 import com.iberdrola.practicas2026.FranciscoPG.data.repository.InvoiceRepositoryImpl
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.ConfigurationRepository
+import com.iberdrola.practicas2026.FranciscoPG.domain.repository.FeedbackRepository
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.InvoiceRepository
+import com.iberdrola.practicas2026.FranciscoPG.core.error.ErrorClassifier
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetInvoicesUseCase
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.mapper.InvoiceUiMapper
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetMockModeUseCase
+import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.SortInvoicesUseCase
+import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.IncrementExitCounterUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.SetMockModeUseCase
+import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ShouldShowFeedbackPromptUseCase
+import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.UpdateFeedbackInteractionUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,9 +46,9 @@ object AppModule {
     fun provideBaseUrl(): String {
         // ─── CONFIGURACIÓN DE RED ────────────────────────────────────────────
         // EMULADOR:        usa 10.0.2.2 (alias del host en AVD)
-        // DISPOSITIVO FÍSICO: pon aquí la IP local de tu PC (ej: 192.168.1.100)
-        //                  Encuéntrala con `ipconfig` (Win) o `ifconfig` (Mac/Linux)
-        val DEVICE_HOST_IP = "192.168.1.100"   // ← CAMBIA ESTO por tu IP local
+        // DISPOSITIVO FÍSICO: funciona con localhost pero es necesario
+        // la redirección del puerto 3001 al tlf ( comando  adb reverse tcp:3001 tcp:3001 )
+        // en cada ejecución
         // ────────────────────────────────────────────────────────────────────
 
         val emulator = isEmulator()
@@ -47,7 +57,7 @@ object AppModule {
         } else {
             "http://localhost:3001/"
         }
-        Log.d("🌐 AppModule", "isEmulator=$emulator  →  BASE_URL=$url")
+        Log.d("AppModule", "isEmulator=$emulator, BASE_URL=$url")
         return url
     }
 
@@ -55,7 +65,7 @@ object AppModule {
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
         val logging = HttpLoggingInterceptor { message ->
-            Log.d("🌐 OkHttp", message)
+            Log.d("OkHttp", message)
         }.apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
@@ -65,13 +75,13 @@ object AppModule {
             // Interceptor extra para loguear la URL exacta antes de cada llamada
             .addInterceptor { chain ->
                 val request = chain.request()
-                Log.d("🌐 OkHttp", "→ ${request.method} ${request.url}")
+                Log.d("OkHttp", "${request.method} ${request.url}")
                 try {
                     val response = chain.proceed(request)
-                    Log.d("🌐 OkHttp", "← ${response.code} ${request.url}")
+                    Log.d("OkHttp", "Response ${response.code} ${request.url}")
                     response
                 } catch (e: Exception) {
-                    Log.e("🌐 OkHttp", "✗ ERROR conectando a ${request.url}: ${e.javaClass.simpleName}: ${e.message}")
+                    Log.e("OkHttp", "Error connecting to ${request.url}: ${e.javaClass.simpleName}: ${e.message}")
                     throw e
                 }
             }
@@ -84,7 +94,7 @@ object AppModule {
     @Singleton
     fun provideRetrofit(baseUrl: String, okHttpClient: OkHttpClient): Retrofit {
         val gson = GsonBuilder().setLenient().create()
-        Log.d("🌐 AppModule", "Creando Retrofit con baseUrl=$baseUrl")
+        Log.d("AppModule", "Creating Retrofit with baseUrl=$baseUrl")
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(okHttpClient)
@@ -100,6 +110,26 @@ object AppModule {
             .build()
     }
 
+    // ── Room ──────────────────────────────────────────────────────────────────
+
+    @Provides
+    @Singleton
+    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "iberdrola_db"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideInvoiceDao(database: AppDatabase): InvoiceDao {
+        return database.invoiceDao()
+    }
+
+    // ── API Services ─────────────────────────────────────────────────────────
+
     @Provides
     @Singleton
     @Named("RealApi")
@@ -107,6 +137,8 @@ object AppModule {
 
     @Provides @Singleton @Named("MockApi")
     fun provideMockApiService(retromock: Retromock): InvoiceApiService = retromock.create(InvoiceApiService::class.java)
+
+    // ── Repositories ─────────────────────────────────────────────────────────
 
     @Provides @Singleton
     fun provideConfigurationRepository(): ConfigurationRepository {
@@ -117,14 +149,23 @@ object AppModule {
     fun provideInvoiceRepository(
         @Named("RealApi") realApi: InvoiceApiService,
         @Named("MockApi") mockApi: InvoiceApiService,
-        configRepository: ConfigurationRepository
+        configRepository: ConfigurationRepository,
+        invoiceDao: InvoiceDao
     ): InvoiceRepository {
-        return InvoiceRepositoryImpl(realApi, mockApi, configRepository)
+        return InvoiceRepositoryImpl(realApi, mockApi, configRepository, invoiceDao)
     }
 
     @Provides @Singleton
-    fun provideGetInvoicesUseCase(repository: InvoiceRepository): GetInvoicesUseCase {
-        return GetInvoicesUseCase(repository)
+    fun provideSortInvoicesUseCase(): SortInvoicesUseCase {
+        return SortInvoicesUseCase()
+    }
+
+    @Provides @Singleton
+    fun provideGetInvoicesUseCase(
+        repository: InvoiceRepository,
+        sortInvoicesUseCase: SortInvoicesUseCase
+    ): GetInvoicesUseCase {
+        return GetInvoicesUseCase(repository, sortInvoicesUseCase)
     }
 
     @Provides @Singleton
@@ -135,5 +176,35 @@ object AppModule {
     @Provides @Singleton
     fun provideSetMockModeUseCase(configRepository: ConfigurationRepository): SetMockModeUseCase {
         return SetMockModeUseCase(configRepository)
+    }
+
+    // ── Core helpers ────────────────────────────────────────────────────────
+
+    @Provides
+    fun provideInvoiceUiMapper(): InvoiceUiMapper = InvoiceUiMapper()
+
+    @Provides
+    fun provideErrorClassifier(): ErrorClassifier = ErrorClassifier()
+
+    // ── Feedback ──────────────────────────────────────────────────────────────
+
+    @Provides @Singleton
+    fun provideFeedbackRepository(@ApplicationContext context: Context): FeedbackRepository {
+        return FeedbackRepositoryImpl(context)
+    }
+
+    @Provides @Singleton
+    fun provideIncrementExitCounterUseCase(feedbackRepository: FeedbackRepository): IncrementExitCounterUseCase {
+        return IncrementExitCounterUseCase(feedbackRepository)
+    }
+
+    @Provides @Singleton
+    fun provideShouldShowFeedbackPromptUseCase(feedbackRepository: FeedbackRepository): ShouldShowFeedbackPromptUseCase {
+        return ShouldShowFeedbackPromptUseCase(feedbackRepository)
+    }
+
+    @Provides @Singleton
+    fun provideUpdateFeedbackInteractionUseCase(feedbackRepository: FeedbackRepository): UpdateFeedbackInteractionUseCase {
+        return UpdateFeedbackInteractionUseCase(feedbackRepository)
     }
 }
