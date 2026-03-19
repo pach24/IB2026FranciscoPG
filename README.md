@@ -113,7 +113,7 @@ cd IB2026FranciscoPG
 > ### ⚠️ ARCHIVO DE ENTORNO REQUERIDO
 > Para que el modo **Retrofit** funcione, debes importar manualmente el siguiente archivo en tu aplicación **Mockoon**:
 >
-> 📂 **Ruta:** `app/src/main/assets/InvoicesMockEnvironment.json`
+> 📂 **Ruta:** `app/src/main/assets/InvoicesMockoonEnvironment.json`
 >
 > **Instrucciones rápidas:**
 > 1. Abre **Mockoon**.
