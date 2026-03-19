@@ -26,7 +26,7 @@ El diferenciador clave es la **flexibilidad de datos**: mediante inyeccion de de
 
 | **Home y Toggle** | **Lista de facturas** | **Modo oscuro** | **Carga (Skeleton)** |
 |:---:|:---:|:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/dcf1a14e-8e42-484e-8a96-6494a95260fd" width="200" alt="Home Screen"> | <img src="https://github.com/user-attachments/assets/a28f8004-6db8-41c2-8fcc-19d075e1b6b6" width="200" alt="Invoice List"> | <img src="https://github.com/user-attachments/assets/9184baaf-bded-4ed5-a37c-647225b8b08c" width="200" alt="Details"> | <img src="https://github.com/user-attachments/assets/0c46c50d-5581-4269-a2a9-f8d200f2f71e" width="200" alt="Shimmer"> |
+| <img src="https://github.com/user-attachments/assets/4cb9ae6e-f1ad-49a6-819b-8f3505f8040d" width="200" height="444"> | <img src="https://github.com/user-attachments/assets/55b3ef88-dfef-4814-8a6e-8817fe082685" width="200" height="444"> | <img src="https://github.com/user-attachments/assets/aea05f67-f74e-4cf5-a991-c6ebb5231d7f" width="200" height="444"> | <img src="https://github.com/user-attachments/assets/f42a0bcb-c080-4991-9b0c-bcbe56320f33" width="200" height="444"> |
 | *Dashboard con switch RetroMock/Retrofit.* | *Agrupadas por tipo (Luz/Gas) y estado.* | *Vista en modo oscuro.* | *Carga fluida con placeholders Shimmer.* |
 
 ---
