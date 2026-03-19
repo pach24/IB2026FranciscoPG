@@ -37,7 +37,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
@@ -49,6 +48,7 @@ import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.EmptyStateComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.FeedbackBottomSheetComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.FeedbackSheetState
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import kotlinx.coroutines.launch
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IconSize
@@ -82,6 +82,7 @@ fun MyInvoicesComposeScreen(
     val scope = rememberCoroutineScope()
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val colors = IberdrolaTheme.colors
 
     // Solo intercepta back cuando NO hay sheet visible;
     // si el sheet está abierto, su propio handler gestiona el back.
@@ -116,7 +117,7 @@ fun MyInvoicesComposeScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(colorResource(R.color.color_background))
+            .background(colors.background)
             .statusBarsPadding()
     ) {
         /* BOTON ATRAS */
@@ -129,7 +130,7 @@ fun MyInvoicesComposeScreen(
             Icon(
                 painter = painterResource(R.drawable.ic_arrow_back),
                 contentDescription = null,
-                tint = colorResource(R.color.iberdrola_dark_green),
+                tint = colors.iberdrolaDarkGreen,
                 modifier = Modifier.size(IconSize.dp24)
             )
             Text(
@@ -137,7 +138,7 @@ fun MyInvoicesComposeScreen(
                 modifier = Modifier.padding(start = Spacing.dp8),
                 textDecoration = TextDecoration.Underline,
                 fontFamily = InvoicesBold,
-                color = colorResource(R.color.iberdrola_dark_green),
+                color = colors.iberdrolaDarkGreen,
                 fontSize = TextSize.sp16            )
         }
 
@@ -147,7 +148,7 @@ fun MyInvoicesComposeScreen(
             modifier = Modifier.padding(start = Spacing.dp24, top = Spacing.dp24, end = Spacing.dp24),
             fontFamily = InvoicesBold,
             fontSize = TextSize.sp32,
-            color = colorResource(R.color.dark_grey_text)
+            color = colors.darkGreyText
         )
         //Dirección
         Text(
@@ -155,7 +156,7 @@ fun MyInvoicesComposeScreen(
             modifier = Modifier.padding(start = Spacing.dp24, top = Spacing.dp8, end = Spacing.dp24),
             fontFamily = InvoicesBold,
             fontSize = TextSize.sp18,
-            color = colorResource(R.color.dark_grey_text)
+            color = colors.darkGreyText
         )
 
         if (isGlobalEmpty) {
@@ -173,7 +174,7 @@ fun MyInvoicesComposeScreen(
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth()
                         .height(Stroke.dp1)
-                        .background(colorResource(R.color.tab_misfacturas))
+                        .background(colors.tabMisFacturas)
                 )
 
                 ScrollableTabRow(
@@ -187,7 +188,7 @@ fun MyInvoicesComposeScreen(
                             tabPositions = tabPositions,
                             pagerState = pagerState,
                             isTabClick = isTabClick,
-                            color = colorResource(R.color.iberdrola_green)
+                            color = colors.iberdrolaGreen
                         )
                     }
                 ) {
@@ -208,7 +209,7 @@ fun MyInvoicesComposeScreen(
                                     text = title,
                                     fontFamily = if (isSelected) InvoicesBold else InvoicesRegular,
                                     fontSize = TextSize.sp14,
-                                    color = if (isSelected) colorResource(R.color.color_text_high_emphasis) else Color.Gray
+                                    color = if (isSelected) colors.textHighEmphasis else Color.Gray
                                 )
                             }
                         )
@@ -233,7 +234,7 @@ fun MyInvoicesComposeScreen(
         ModalBottomSheet(
             onDismissRequest = onFeedbackDismiss,
             sheetState = sheetState,
-            containerColor = colorResource(R.color.color_surface),
+            containerColor = colors.surface,
             dragHandle = null,
         ) {
             when (feedbackSheetState) {

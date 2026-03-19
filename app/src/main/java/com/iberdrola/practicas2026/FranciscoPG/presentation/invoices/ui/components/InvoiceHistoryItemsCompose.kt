@@ -1,4 +1,4 @@
-﻿package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
+package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,13 +14,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -28,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
 import com.iberdrola.practicas2026.FranciscoPG.R
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IconSize
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
@@ -43,12 +42,13 @@ fun InvoiceHeaderItemComposable(
     year: String,
     modifier: Modifier = Modifier
 ) {
+    val colors = IberdrolaTheme.colors
     // Año de agrupación: "2024", "2023"...
     Text(
         text = year,
         modifier = modifier
             .fillMaxWidth()
-            .background(colorResource(R.color.color_background))
+            .background(colors.background)
             .padding(
                 horizontal = Spacing.dp32,
                 vertical = Spacing.dp10
@@ -56,7 +56,7 @@ fun InvoiceHeaderItemComposable(
         fontFamily = InvoiceFontBold,
         fontWeight = FontWeight.Bold,
         fontSize = TextSize.sp14,
-        color = colorResource(R.color.dark_grey_text)
+        color = colors.darkGreyText
     )
 }
 
@@ -70,10 +70,11 @@ fun InvoiceRowItemComposable(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
+    val colors = IberdrolaTheme.colors
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(colorResource(R.color.color_background))
+            .background(colors.background)
             .clickable(onClick = onClick)
     ) {
         Row(
@@ -94,7 +95,7 @@ fun InvoiceRowItemComposable(
                     fontFamily = InvoiceFontBold,
                     fontWeight = FontWeight.Bold,
                     fontSize = TextSize.sp14,
-                    color = colorResource(R.color.dark_grey_text)
+                    color = colors.darkGreyText
                 )
                 Spacer(modifier = Modifier.height(Spacing.dp8))
 
@@ -103,7 +104,7 @@ fun InvoiceRowItemComposable(
                     text = type,
                     fontFamily = InvoiceFontRegular,
                     fontSize = TextSize.sp12,
-                    color = colorResource(R.color.light_grey)
+                    color = colors.lightGrey
                 )
 
                 // Estado: "Pagada" / "Pendiente de Pago"
@@ -122,14 +123,14 @@ fun InvoiceRowItemComposable(
                     text = amount,
                     fontFamily = InvoiceFontRegular,
                     fontSize = TextSize.sp16,
-                    color = colorResource(R.color.light_grey)
+                    color = colors.lightGrey
                 )
                 Spacer(modifier = Modifier.width(Spacing.dp4))
                 // Flecha de navegación
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_right),
                     contentDescription = null,
-                    tint = colorResource(R.color.light_grey),
+                    tint = colors.lightGrey,
                     modifier = Modifier.size(IconSize.dp30)
                 )
             }
@@ -141,7 +142,7 @@ fun InvoiceRowItemComposable(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(Stroke.dp1)
-                .background(colorResource(R.color.divider))
+                .background(colors.divider)
         )
     }
 }
@@ -168,6 +169,7 @@ fun SkeletonInvoiceHeaderItemComposable(modifier: Modifier = Modifier) {
 
 @Composable
 fun SkeletonInvoiceRowItemComposable(modifier: Modifier = Modifier) {
+    val colors = IberdrolaTheme.colors
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -231,7 +233,7 @@ fun SkeletonInvoiceRowItemComposable(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(Stroke.dp1)
-                .background(colorResource(R.color.color_stroke_neutral))
+                .background(colors.strokeNeutral)
         )
     }
 }
@@ -255,14 +257,14 @@ private fun SkeletonPlaceholder(
 @DevicePreview
 @Composable
 private fun PreviewInvoiceHeaderItemComposable() {
-    MaterialTheme { InvoiceHeaderItemComposable(year = "2024") }
+    IberdrolaTheme { InvoiceHeaderItemComposable(year = "2024") }
 }
 
 // Fila de factura (pendiente de pago)
 @DevicePreview
 @Composable
 private fun PreviewInvoiceRowItemComposable() {
-    MaterialTheme {
+    IberdrolaTheme {
         InvoiceRowItemComposable(
             date = "8 de marzo",
             type = "Factura Luz",
@@ -277,7 +279,7 @@ private fun PreviewInvoiceRowItemComposable() {
 @DevicePreview
 @Composable
 private fun PreviewInvoiceRowItemPaidComposable() {
-    MaterialTheme {
+    IberdrolaTheme {
         InvoiceRowItemComposable(
             date = "8 de marzo",
             type = "Factura Luz",
@@ -292,21 +294,21 @@ private fun PreviewInvoiceRowItemPaidComposable() {
 @DevicePreview
 @Composable
 private fun PreviewSkeletonInvoiceHeaderItemComposable() {
-    MaterialTheme { SkeletonInvoiceHeaderItemComposable() }
+    IberdrolaTheme { SkeletonInvoiceHeaderItemComposable() }
 }
 
 // Skeleton de la fila de factura
 @DevicePreview
 @Composable
 private fun PreviewSkeletonInvoiceRowItemComposable() {
-    MaterialTheme { SkeletonInvoiceRowItemComposable() }
+    IberdrolaTheme { SkeletonInvoiceRowItemComposable() }
 }
 
 // Overlay: cabecera + fila con skeletons superpuestos
 @DevicePreview
 @Composable
 private fun PreviewOverlaySkeletonOnRow() {
-    MaterialTheme {
+    IberdrolaTheme {
         ShimmerHost {
             Column {
                 Box {

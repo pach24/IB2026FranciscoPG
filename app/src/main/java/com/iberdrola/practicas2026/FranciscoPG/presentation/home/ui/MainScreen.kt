@@ -32,7 +32,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
@@ -46,7 +45,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -58,6 +56,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.R
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IconSize
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
@@ -81,10 +80,11 @@ fun MainScreen(
     val scrollState = rememberScrollState()
     // Definimos cuánto queremos que el fondo verde sobresalga por debajo de la tarjeta
     val extraBackgroundHeight = IconSize.dp48
+    val colors = IberdrolaTheme.colors
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = colorResource(R.color.color_background),
+        containerColor = colors.background,
         contentWindowInsets = WindowInsets(Spacing.dp0),
         snackbarHost = {
             SnackbarHost(
@@ -148,7 +148,7 @@ fun MainScreen(
                 ) {
                     Text(
                         text = stringResource(R.string.main_activity_my_energy_title),
-                        color = colorResource(R.color.color_text_primary),
+                        color = colors.textPrimary,
                         fontFamily = IberFontBold,
                         fontWeight = FontWeight.Bold,
                         fontSize = TextSize.sp22,
@@ -186,7 +186,7 @@ fun MainScreen(
                         if (isMockEnabled) R.string.switch_mock_mode_retromock
                         else R.string.switch_mock_mode_retrofit
                     ),
-                    color = colorResource(R.color.color_text_primary),
+                    color = colors.textPrimary,
                     fontFamily = IberFontRegular
                 )
                 Spacer(modifier = Modifier.width(Spacing.dp8))
@@ -194,12 +194,12 @@ fun MainScreen(
                     checked = isMockEnabled,
                     onCheckedChange = onMockModeChanged,
                     colors = SwitchDefaults.colors(
-                        checkedThumbColor = colorResource(R.color.color_surface),
-                        checkedTrackColor = colorResource(R.color.iberdrola_green),
-                        checkedBorderColor = colorResource(R.color.iberdrola_green),
-                        uncheckedThumbColor = colorResource(R.color.light_grey),
-                        uncheckedTrackColor = colorResource(R.color.color_surface),
-                        uncheckedBorderColor = colorResource(R.color.light_grey)
+                        checkedThumbColor = colors.surface,
+                        checkedTrackColor = colors.iberdrolaGreen,
+                        checkedBorderColor = colors.iberdrolaGreen,
+                        uncheckedThumbColor = colors.lightGrey,
+                        uncheckedTrackColor = colors.surface,
+                        uncheckedBorderColor = colors.lightGrey
                     )
                 )
             }
@@ -209,6 +209,7 @@ fun MainScreen(
 
 @Composable
 private fun HeaderContent(userName: String) {
+    val colors = IberdrolaTheme.colors
     Column(modifier = Modifier.padding(horizontal = Spacing.dp24)) {
         Row(
             modifier = Modifier
@@ -228,7 +229,7 @@ private fun HeaderContent(userName: String) {
                 modifier = Modifier
                     .size(IconSize.dp48)
                     .background(
-                        color = colorResource(R.color.color_surface),
+                        color = colors.surface,
                         shape = CircleShape
                     ),
                 contentAlignment = Alignment.Center
@@ -236,7 +237,7 @@ private fun HeaderContent(userName: String) {
                 Icon(
                     painter = painterResource(R.drawable.ic_user_outline),
                     contentDescription = stringResource(R.string.main_activity_cd_profile),
-                    tint = colorResource(R.color.color_brand_primary),
+                    tint = colors.brandPrimary,
                     modifier = Modifier.size(IconSize.dp28)
                 )
             }
@@ -264,8 +265,9 @@ private fun HeaderContent(userName: String) {
 
 @Composable
 private fun PromoCard() {
+    val colors = IberdrolaTheme.colors
     Card(
-        colors = CardDefaults.cardColors(containerColor = colorResource(R.color.color_promo_background)),
+        colors = CardDefaults.cardColors(containerColor = colors.promoBackground),
         shape = RoundedCornerShape(Radius.dp16),
         modifier = Modifier
             .fillMaxWidth()
@@ -296,7 +298,7 @@ private fun PromoCard() {
             ) {
                 Text(
                     text = stringResource(R.string.main_activity_promo_title),
-                    color = colorResource(R.color.color_text_primary),
+                    color = colors.textPrimary,
                     fontFamily = IberFontBold,
                     fontWeight = FontWeight.Bold,
                     fontSize = TextSize.sp17,
@@ -307,7 +309,7 @@ private fun PromoCard() {
 
                 Text(
                     text = stringResource(R.string.main_activity_promo_desc),
-                    color = colorResource(R.color.color_text_primary),
+                    color = colors.textPrimary,
                     fontFamily = IberFontRegular,
                     fontSize = TextSize.sp15,
                     lineHeight = TextSize.sp20
@@ -324,15 +326,16 @@ fun ItemInvoiceCard(
     onClick: () -> Unit = {}
 ) {
     val cardShape = RoundedCornerShape(Radius.dp16)
+    val colors = IberdrolaTheme.colors
 
     Box(
         modifier = modifier
             .padding(end = Spacing.dp16)
             .clip(cardShape)
-            .background(color = colorResource(R.color.color_surface))
+            .background(color = colors.surface)
             .border(
                 width = Stroke.dp2,
-                color = colorResource(R.color.color_divider),
+                color = colors.divider,
                 shape = cardShape
             )
             .clickable(onClick = onClick)
@@ -342,7 +345,7 @@ fun ItemInvoiceCard(
             Icon(
                 painter = painterResource(R.drawable.file_chart_column),
                 contentDescription = null,
-                tint = colorResource(R.color.iberdrola_green),
+                tint = colors.iberdrolaGreen,
                 modifier = Modifier.size(IconSize.dp28)
             )
 
@@ -352,7 +355,7 @@ fun ItemInvoiceCard(
                     append("20,00")
                     withStyle(style = SpanStyle(fontSize = 19.sp)) { append("€") }
                 },
-                color = colorResource(R.color.dark_grey_text),
+                color = colors.darkGreyText,
                 fontFamily = IberFontBold,
                 fontWeight = FontWeight.Bold,
                 fontSize = TextSize.sp24,
@@ -361,7 +364,7 @@ fun ItemInvoiceCard(
 
             Text(
                 text = stringResource(R.string.main_my_invoices_title),
-                color = colorResource(R.color.dark_grey_text),
+                color = colors.darkGreyText,
                 fontFamily = IberFontRegular,
                 fontSize = TextSize.sp18,
                 minLines = 2,
@@ -376,15 +379,15 @@ fun ItemInvoiceCard(
 @Preview(name = "Main Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun MainScreenPreview() {
-    MaterialTheme {
+    IberdrolaTheme {
         MainScreen(
             userName = "FRANCISCO",
             isMockEnabled = true,
             onMockModeChanged = {},
             onInvoicesCardClick = {},
             snackbarHostState = SnackbarHostState(),
-            snackbarContainerColor = colorResource(R.color.snackbar),
-            snackbarContentColor = colorResource(R.color.black)
+            snackbarContainerColor = IberdrolaTheme.colors.snackbar,
+            snackbarContentColor = IberdrolaTheme.colors.black
         )
     }
 }

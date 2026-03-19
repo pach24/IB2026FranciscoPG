@@ -1,4 +1,4 @@
-﻿package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens
+package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens
 
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -22,7 +22,6 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
 import com.iberdrola.practicas2026.FranciscoPG.R
@@ -37,6 +36,7 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.componen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.SkeletonLatestInvoiceCardComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.SkeletonStickyInvoiceHeaderComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.StickyInvoiceHeaderComposable
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 
 @OptIn(
@@ -129,7 +129,7 @@ fun InvoiceListComposeScreen(
                     StickyInvoiceHeaderComposable(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(colorResource(R.color.color_background))
+                            .background(IberdrolaTheme.colors.background)
                             .padding(vertical = Spacing.dp8),
                         onFilterClick = onFilterClick
                     )
@@ -176,7 +176,7 @@ private val mockHistoryItems = listOf(
 @Preview(name = "Invoice List - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 private fun PreviewInvoiceListComposeScreen() {
-    MaterialTheme {
+    IberdrolaTheme {
         InvoiceListComposeScreen(
             isLoading = false,
             isRefreshing = false,
@@ -200,7 +200,7 @@ private fun PreviewInvoiceListComposeScreen() {
 @Preview(name = "Invoice List Skeleton - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 private fun PreviewInvoiceListComposeScreenLoading() {
-    MaterialTheme {
+    IberdrolaTheme {
         InvoiceListComposeScreen(
             isLoading = true,
             isRefreshing = false,
@@ -225,7 +225,7 @@ private fun PreviewInvoiceListComposeScreenLoading() {
 @Preview(name = "Overlay - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 private fun PreviewInvoiceListOverlay() {
-    MaterialTheme {
+    IberdrolaTheme {
         Box {
             // Pantalla con datos reales
             InvoiceListComposeScreen(
@@ -263,10 +263,3 @@ private fun PreviewInvoiceListOverlay() {
         }
     }
 }
-
-
-
-
-
-
-

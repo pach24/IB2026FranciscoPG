@@ -1,4 +1,4 @@
-﻿package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
+package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
@@ -6,14 +6,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import androidx.compose.material3.MaterialTheme
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
@@ -26,11 +25,12 @@ fun StatusPillComposable(
     isPaid: Boolean,
     modifier: Modifier = Modifier
 ) {
+    val colors = IberdrolaTheme.colors
     Text(
         text = text,
         modifier = modifier
             .background(
-                color = colorResource(if (isPaid) R.color.statuspaid else R.color.red_100),
+                color = if (isPaid) colors.statusPaid else colors.errorContainer,
                 shape = RoundedCornerShape(Radius.dp8)
             )
             .padding(
@@ -41,14 +41,14 @@ fun StatusPillComposable(
         fontWeight = FontWeight.Bold,
         fontSize = TextSize.sp10,
         lineHeight = (10f * 1.4f).sp,
-        color = colorResource(if (isPaid) R.color.iberdrola_dark_green else R.color.red_600)
+        color = if (isPaid) colors.iberdrolaDarkGreen else colors.errorText
     )
 }
 
 @DevicePreview
 @Composable
 private fun PreviewStatusPillPaid() {
-    MaterialTheme {
+    IberdrolaTheme {
         StatusPillComposable(
             text = "Pagada",
             isPaid = true
@@ -59,7 +59,7 @@ private fun PreviewStatusPillPaid() {
 @DevicePreview
 @Composable
 private fun PreviewStatusPillPending() {
-    MaterialTheme {
+    IberdrolaTheme {
         StatusPillComposable(
             text = "Pendiente de Pago",
             isPaid = false

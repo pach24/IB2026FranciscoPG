@@ -10,7 +10,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -54,12 +53,12 @@ class MainActivity : AppCompatActivity() {
                     else stringResource(R.string.main_mock_disabled)
 
                 val snackbarContainer =
-                    if (useMock) colorResource(R.color.snackbar)
-                    else colorResource(R.color.iberdrola_green)
+                    if (useMock) IberdrolaTheme.colors.snackbar
+                    else IberdrolaTheme.colors.iberdrolaGreen
 
                 val snackbarContent =
-                    if (useMock) colorResource(R.color.black)
-                    else colorResource(R.color.white)
+                    if (useMock) IberdrolaTheme.colors.black
+                    else IberdrolaTheme.colors.white
 
                 LaunchedEffect(mockModeChanged) {
                     mockModeChanged?.let {

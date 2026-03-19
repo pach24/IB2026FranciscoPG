@@ -12,13 +12,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
@@ -28,6 +26,7 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.Dp
 import com.iberdrola.practicas2026.FranciscoPG.R
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Stroke
@@ -41,10 +40,11 @@ fun StickyInvoiceHeaderComposable(
     modifier: Modifier = Modifier,
     onFilterClick: () -> Unit = {}
 ) {
+    val colors = IberdrolaTheme.colors
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(colorResource(R.color.color_background))
+            .background(colors.background)
             .padding(
                 top = Spacing.dp10,
                 bottom = Spacing.dp8
@@ -61,7 +61,7 @@ fun StickyInvoiceHeaderComposable(
             fontFamily = StickyHeaderBold,
             fontWeight = FontWeight.Bold,
             fontSize = TextSize.sp16,
-            color = colorResource(R.color.color_text_high_emphasis)
+            color = colors.textHighEmphasis
         )
 
         // Botón de filtro
@@ -71,18 +71,18 @@ fun StickyInvoiceHeaderComposable(
             shape = RoundedCornerShape(Radius.dp50),
             border = BorderStroke(
                 width = Stroke.dp2,
-                color = colorResource(R.color.iberdrola_dark_green)
+                color = colors.iberdrolaDarkGreen
             ),
             colors = ButtonDefaults.outlinedButtonColors(
-                containerColor = colorResource(R.color.color_surface),
-                contentColor = colorResource(R.color.iberdrola_dark_green)
+                containerColor = colors.surface,
+                contentColor = colors.iberdrolaDarkGreen
             )
         ) {
             // Icono de filtro
             Icon(
                 painter = painterResource(R.drawable.ic_filter),
                 contentDescription = null,
-                tint = colorResource(R.color.iberdrola_dark_green)
+                tint = colors.iberdrolaDarkGreen
             )
             // Texto del botón: "Filtrar"
             Text(
@@ -91,7 +91,7 @@ fun StickyInvoiceHeaderComposable(
                 fontFamily = StickyHeaderBold,
                 fontWeight = FontWeight.Bold,
                 fontSize = TextSize.sp14,
-                color = colorResource(R.color.iberdrola_dark_green)
+                color = colors.iberdrolaDarkGreen
             )
         }
     }
@@ -102,7 +102,7 @@ fun SkeletonStickyInvoiceHeaderComposable(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(colorResource(R.color.color_background))
+            .background(IberdrolaTheme.colors.background)
             .padding(
                 top = Spacing.dp10,
                 bottom = Spacing.dp8
@@ -150,7 +150,7 @@ private fun SkeletonHeaderPlaceholder(
 @DevicePreview
 @Composable
 private fun PreviewStickyInvoiceHeaderComposable() {
-    MaterialTheme {
+    IberdrolaTheme {
         StickyInvoiceHeaderComposable()
     }
 }
@@ -159,7 +159,7 @@ private fun PreviewStickyInvoiceHeaderComposable() {
 @DevicePreview
 @Composable
 private fun PreviewSkeletonStickyInvoiceHeaderComposable() {
-    MaterialTheme {
+    IberdrolaTheme {
         SkeletonStickyInvoiceHeaderComposable()
     }
 }
@@ -168,7 +168,7 @@ private fun PreviewSkeletonStickyInvoiceHeaderComposable() {
 @DevicePreview
 @Composable
 private fun PreviewStickyHeaderOverlayAlignment() {
-    MaterialTheme {
+    IberdrolaTheme {
         Box {
             // Histórico de facturas (real)
             StickyInvoiceHeaderComposable()
@@ -179,4 +179,3 @@ private fun PreviewStickyHeaderOverlayAlignment() {
         }
     }
 }
-

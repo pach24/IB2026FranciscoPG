@@ -14,13 +14,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
@@ -31,6 +29,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
 import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.R
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IconSize
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
@@ -56,10 +55,11 @@ fun FeedbackBottomSheetComposable(
         FaceItem(R.drawable.ic_face_happy),
         FaceItem(R.drawable.ic_face_very_happy)
     )
+    val colors = IberdrolaTheme.colors
 
     Surface(
         modifier = modifier.fillMaxWidth(),
-        color = colorResource(R.color.color_surface),
+        color = colors.surface,
         shape = RoundedCornerShape(
             topStart = Radius.dp24,
             topEnd = Radius.dp24
@@ -77,7 +77,7 @@ fun FeedbackBottomSheetComposable(
                     .width(Component.dragW)
                     .height(Component.dragH)
                     .background(
-                        color = colorResource(R.color.handler_color),
+                        color = colors.handlerColor,
                         shape = RoundedCornerShape(Radius.dp8)
                     )
             )
@@ -88,7 +88,7 @@ fun FeedbackBottomSheetComposable(
                 fontFamily = FeedbackFontBold,
                 fontWeight = FontWeight.Bold,
                 fontSize = TextSize.sp20,
-                color = colorResource(R.color.color_text_primary)
+                color = colors.textPrimary
             )
 
             Text(
@@ -100,7 +100,7 @@ fun FeedbackBottomSheetComposable(
                 fontFamily = FeedbackFontRegular,
                 fontSize = TextSize.sp16,
                 lineHeight = (16f + 4).sp,
-                color = colorResource(R.color.light_grey)
+                color = colors.lightGrey
             )
 
             Box(
@@ -108,7 +108,7 @@ fun FeedbackBottomSheetComposable(
                     .fillMaxWidth()
                     .padding(top = Spacing.dp24)
                     .height(Stroke.dp1)
-                    .background(colorResource(R.color.color_stroke_neutral))
+                    .background(colors.strokeNeutral)
             )
 
             Row(
@@ -148,7 +148,7 @@ fun FeedbackBottomSheetComposable(
                 fontFamily = FeedbackFontBold,
                 fontWeight = FontWeight.Bold,
                 fontSize = TextSize.sp16,
-                color = colorResource(R.color.iberdrola_dark_green)
+                color = colors.iberdrolaDarkGreen
             )
 
         }
@@ -158,8 +158,7 @@ fun FeedbackBottomSheetComposable(
 @DevicePreview
 @Composable
 private fun PreviewFeedbackBottomSheetComposable() {
-    MaterialTheme {
+    IberdrolaTheme {
         FeedbackBottomSheetComposable()
     }
 }
-

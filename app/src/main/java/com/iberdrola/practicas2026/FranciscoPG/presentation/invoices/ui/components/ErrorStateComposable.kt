@@ -12,13 +12,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
@@ -27,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
 import com.iberdrola.practicas2026.FranciscoPG.R
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IconSize
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
@@ -55,7 +54,7 @@ fun ErrorStateComposable(
         Icon(
             painter = painterResource(iconRes),
             contentDescription = null,
-            tint = colorResource(R.color.iberdrola_green),
+            tint = IberdrolaTheme.colors.iberdrolaGreen,
             modifier = Modifier.size(IconSize.dp90)
         )
 
@@ -66,7 +65,7 @@ fun ErrorStateComposable(
             fontFamily = ErrorStateBold,
             fontWeight = FontWeight.Bold,
             fontSize = TextSize.sp22,
-            color = colorResource(R.color.dark_grey_text),
+            color = IberdrolaTheme.colors.darkGreyText,
             textAlign = TextAlign.Center
         )
 
@@ -76,7 +75,7 @@ fun ErrorStateComposable(
             text = subtitle,
             fontFamily = ErrorStateRegular,
             fontSize = TextSize.sp16,
-            color = colorResource(R.color.color_text_subtitle),
+            color = IberdrolaTheme.colors.textSubtitle,
             textAlign = TextAlign.Center
         )
 
@@ -87,7 +86,7 @@ fun ErrorStateComposable(
             shape = RoundedCornerShape(Radius.dp24),
             border = BorderStroke(
                 width = Stroke.dp2,
-                color = colorResource(R.color.iberdrola_dark_green)
+                color = IberdrolaTheme.colors.iberdrolaDarkGreen
             )
         ) {
             Text(
@@ -95,7 +94,7 @@ fun ErrorStateComposable(
                 fontFamily = ErrorStateBold,
                 fontWeight = FontWeight.Bold,
                 fontSize = TextSize.sp14,
-                color = colorResource(R.color.iberdrola_dark_green)
+                color = IberdrolaTheme.colors.iberdrolaDarkGreen
             )
         }
     }
@@ -104,7 +103,7 @@ fun ErrorStateComposable(
 @DevicePreview
 @Composable
 private fun PreviewServerErrorStateComposable() {
-    MaterialTheme {
+    IberdrolaTheme {
         ErrorStateComposable(
             title = "Error del servidor",
             subtitle = "No hemos podido cargar tus facturas. Inténtalo de nuevo más tarde.",
@@ -117,7 +116,7 @@ private fun PreviewServerErrorStateComposable() {
 @DevicePreview
 @Composable
 private fun PreviewConnectionErrorStateComposable() {
-    MaterialTheme {
+    IberdrolaTheme {
         ErrorStateComposable(
             title = "Sin conexión",
             subtitle = "Comprueba tu conexión a internet e inténtalo de nuevo.",

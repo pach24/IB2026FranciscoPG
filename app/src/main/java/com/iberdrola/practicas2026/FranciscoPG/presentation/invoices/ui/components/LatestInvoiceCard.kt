@@ -1,4 +1,4 @@
-﻿package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
+package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,13 +16,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
@@ -31,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
 import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.R
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IconSize
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
@@ -52,17 +51,18 @@ fun LatestInvoiceCardComposable(
     iconRes: Int = R.drawable.ic_light,
     onClick: () -> Unit = {}
 ) {
+    val colors = IberdrolaTheme.colors
     Card(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
             .border(
                 width = Stroke.dp1,
-                color = colorResource(R.color.iberdrola_dark_green),
+                color = colors.iberdrolaDarkGreen,
                 shape = RoundedCornerShape(Radius.dp16)
             ),
         shape = RoundedCornerShape(Radius.dp16),
-        colors = CardDefaults.cardColors(containerColor = colorResource(R.color.color_surface)),
+        colors = CardDefaults.cardColors(containerColor = colors.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = Spacing.dp0)
     ) {
         Column(
@@ -83,7 +83,7 @@ fun LatestInvoiceCardComposable(
                         fontWeight = FontWeight.Bold,
                         fontSize = TextSize.sp14,
                         lineHeight = (14f * 1.4f).sp,
-                        color = colorResource(R.color.dark_grey_text)
+                        color = colors.darkGreyText
                     )
                     Spacer(modifier = Modifier.height(Spacing.dp4))
                     // Tipo de suministro: "Factura Luz"
@@ -92,7 +92,7 @@ fun LatestInvoiceCardComposable(
                         fontFamily = IberFontRegular,
                         fontSize = TextSize.sp12,
                         lineHeight = (12f * 1.4f).sp,
-                        color = colorResource(R.color.light_grey)
+                        color = colors.lightGrey
                     )
                 }
 
@@ -100,7 +100,7 @@ fun LatestInvoiceCardComposable(
                 Icon(
                     painter = painterResource(iconRes),
                     contentDescription = null,
-                    tint = colorResource(R.color.iberdrola_dark_green),
+                    tint = colors.iberdrolaDarkGreen,
                     modifier = Modifier
                         .size(IconSize.dp32)
                         .padding(end = Spacing.dp4)
@@ -116,7 +116,7 @@ fun LatestInvoiceCardComposable(
                 fontWeight = FontWeight.Bold,
                 fontSize = TextSize.sp24,
                 lineHeight = (24f * 1.3f).sp,
-                color = colorResource(R.color.dark_grey)
+                color = colors.darkGrey
             )
 
             Spacer(modifier = Modifier.height(Spacing.dp4))
@@ -127,7 +127,7 @@ fun LatestInvoiceCardComposable(
                 fontFamily = IberFontRegular,
                 fontSize = TextSize.sp12,
                 lineHeight = (12f * 1.4f).sp,
-                color = colorResource(R.color.light_grey)
+                color = colors.lightGrey
             )
 
             Spacer(modifier = Modifier.height(Spacing.dp10))
@@ -137,7 +137,7 @@ fun LatestInvoiceCardComposable(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(Stroke.dp1)
-                    .background(colorResource(R.color.divider))
+                    .background(colors.divider)
             )
 
             Spacer(modifier = Modifier.height(Spacing.dp14))
@@ -153,16 +153,17 @@ fun LatestInvoiceCardComposable(
 
 @Composable
 fun SkeletonLatestInvoiceCardComposable(modifier: Modifier = Modifier) {
+    val colors = IberdrolaTheme.colors
     Card(
         modifier = modifier
             .fillMaxWidth()
             .border(
                 width = Stroke.dp1,
-                color = colorResource(R.color.color_skeleton_background),
+                color = colors.skeletonBackground,
                 shape = RoundedCornerShape(Radius.dp16)
             ),
         shape = RoundedCornerShape(Radius.dp16),
-        colors = CardDefaults.cardColors(containerColor = colorResource(R.color.color_surface)),
+        colors = CardDefaults.cardColors(containerColor = colors.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = Spacing.dp0)
     ) {
         Column(
@@ -216,7 +217,7 @@ fun SkeletonLatestInvoiceCardComposable(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(Stroke.dp1)
-                    .background(colorResource(R.color.color_stroke_neutral))
+                    .background(colors.strokeNeutral)
             )
 
             Spacer(modifier = Modifier.height(Spacing.dp12))
@@ -248,7 +249,7 @@ private fun SkeletonBox(
 @DevicePreview
 @Composable
 private fun PreviewLatestInvoiceCardComposable() {
-    MaterialTheme {
+    IberdrolaTheme {
         LatestInvoiceCardComposable(
             amount = "20,00 \u20AC",
             dateRange = "01 feb. 2024 - 04 mar. 2024",
@@ -262,7 +263,7 @@ private fun PreviewLatestInvoiceCardComposable() {
 @DevicePreview
 @Composable
 private fun PreviewSkeletonLatestInvoiceCardComposable() {
-    MaterialTheme {
+    IberdrolaTheme {
         SkeletonLatestInvoiceCardComposable()
     }
 }
@@ -271,7 +272,7 @@ private fun PreviewSkeletonLatestInvoiceCardComposable() {
 @DevicePreview
 @Composable
 private fun PreviewOverlaySkeletonOnCard() {
-    MaterialTheme {
+    IberdrolaTheme {
         ShimmerHost {
             Box {
                 // Última factura (real)
@@ -289,4 +290,3 @@ private fun PreviewOverlaySkeletonOnCard() {
         }
     }
 }
-

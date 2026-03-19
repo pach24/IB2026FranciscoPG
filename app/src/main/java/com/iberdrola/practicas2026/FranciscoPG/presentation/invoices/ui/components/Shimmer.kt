@@ -19,9 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.Dp
-import com.iberdrola.practicas2026.FranciscoPG.R
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
 
 /**
@@ -55,7 +54,7 @@ fun ShimmerBox(
     modifier: Modifier = Modifier,
     shape: RoundedCornerShape = RoundedCornerShape(Radius.dp4)
 ) {
-    val baseColor = colorResource(R.color.color_skeleton_background)
+    val baseColor = IberdrolaTheme.colors.skeletonBackground
     val shimmerColors = listOf(
         baseColor.copy(alpha = 0.7f),
         baseColor.copy(alpha = 0.3f),
