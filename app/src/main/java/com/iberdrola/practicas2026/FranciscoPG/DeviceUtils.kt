@@ -20,7 +20,7 @@ object DeviceUtils {
                 Build.HARDWARE == "goldfish" ||
                 Build.HARDWARE == "ranchu")
 
-        Log.d("🌐 DeviceUtils", "isEmulator=$result | " +
+        Log.d("DeviceUtils", "isEmulator=$result | " +
                 "FINGERPRINT=${Build.FINGERPRINT} | " +
                 "MODEL=${Build.MODEL} | " +
                 "MANUFACTURER=${Build.MANUFACTURER} | " +

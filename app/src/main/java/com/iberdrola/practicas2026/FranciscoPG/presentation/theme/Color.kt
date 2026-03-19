@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 val IberGreen = Color(0xFF00A443)
 val IberSky = Color(0xFF0DA9FF)
-val IberDarkGreen = Color(0xFF2D5F51)
+val IberDarkGreen = Color(0xFF057069)
 val IberDarkGreenNight = Color(0xFF276553)
 val IberGreenDark = Color(0xFF4DA570)
 

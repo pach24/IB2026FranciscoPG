@@ -114,7 +114,7 @@ fun InvoicesRoute(
         isGlobalEmpty = isGlobalEmpty,
         preferredTabIndex = preferredTabIndex,
         onBackClick = {
-            Log.d("Feedback", "Back pulsado en facturas -> evaluando feedback")
+            Log.d("InvoicesRoute", "Back pressed, evaluating feedback")
             feedbackViewModel.onExitInvoices()
         },
         onFeedbackFaceClick = { feedbackViewModel.onFeedbackRated() },
@@ -156,8 +156,8 @@ fun InvoicesRoute(
                 if (electricityShowDialog) electricityViewModel.onDialogHandled()
                 if (gasShowDialog) gasViewModel.onDialogHandled()
             },
-            title = { Text(text = "Informacion") },
-            text = { Text(text = "Esta funcionalidad aun no esta disponible.") },
+            title = { Text(text = stringResource(R.string.dialog_info_title)) },
+            text = { Text(text = stringResource(R.string.dialog_feature_not_available)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -165,7 +165,7 @@ fun InvoicesRoute(
                         if (gasShowDialog) gasViewModel.onDialogHandled()
                     }
                 ) {
-                    Text(text = "Aceptar")
+                    Text(text = stringResource(R.string.dialog_accept))
                 }
             }
         )

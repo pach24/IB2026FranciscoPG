@@ -1,4 +1,3 @@
-// Archivo: AppModule.kt (Ubicación: di)
 package com.iberdrola.practicas2026.FranciscoPG.di
 
 import android.content.Context
@@ -58,7 +57,7 @@ object AppModule {
         } else {
             "http://localhost:3001/"
         }
-        Log.d("🌐 AppModule", "isEmulator=$emulator  →  BASE_URL=$url")
+        Log.d("AppModule", "isEmulator=$emulator, BASE_URL=$url")
         return url
     }
 
@@ -66,7 +65,7 @@ object AppModule {
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
         val logging = HttpLoggingInterceptor { message ->
-            Log.d("🌐 OkHttp", message)
+            Log.d("OkHttp", message)
         }.apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
@@ -76,13 +75,13 @@ object AppModule {
             // Interceptor extra para loguear la URL exacta antes de cada llamada
             .addInterceptor { chain ->
                 val request = chain.request()
-                Log.d("🌐 OkHttp", "→ ${request.method} ${request.url}")
+                Log.d("OkHttp", "${request.method} ${request.url}")
                 try {
                     val response = chain.proceed(request)
-                    Log.d("🌐 OkHttp", "← ${response.code} ${request.url}")
+                    Log.d("OkHttp", "Response ${response.code} ${request.url}")
                     response
                 } catch (e: Exception) {
-                    Log.e("🌐 OkHttp", "✗ ERROR conectando a ${request.url}: ${e.javaClass.simpleName}: ${e.message}")
+                    Log.e("OkHttp", "Error connecting to ${request.url}: ${e.javaClass.simpleName}: ${e.message}")
                     throw e
                 }
             }
@@ -95,7 +94,7 @@ object AppModule {
     @Singleton
     fun provideRetrofit(baseUrl: String, okHttpClient: OkHttpClient): Retrofit {
         val gson = GsonBuilder().setLenient().create()
-        Log.d("🌐 AppModule", "Creando Retrofit con baseUrl=$baseUrl")
+        Log.d("AppModule", "Creating Retrofit with baseUrl=$baseUrl")
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(okHttpClient)

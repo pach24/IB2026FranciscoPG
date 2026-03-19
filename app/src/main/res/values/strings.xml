@@ -59,5 +59,9 @@
     <string name="error_connection_subtitle">Comprueba tu conexión a internet e inténtalo de nuevo.</string>
     <string name="error_retry_button">Reintentar</string>
 
+    <!-- Dialog factura no disponible -->
+    <string name="dialog_info_title">Información</string>
+    <string name="dialog_feature_not_available">Esta funcionalidad aún no está disponible.</string>
+    <string name="dialog_accept">Aceptar</string>
 
 </resources>

@@ -25,7 +25,7 @@
     <!-- Duplicado: color_promo_background == light_green_bg -->
     <color name="color_promo_background">#d9f1e3</color>
     <color name="light_green_bg">#d9f1e3</color>
-    <color name="color_skeleton_background">#E0E0E0</color>
+    <color name="color_skeleton_background">#e5ece8</color>
 
     <!-- ========================================== -->
     <!-- TEXTO                                      -->

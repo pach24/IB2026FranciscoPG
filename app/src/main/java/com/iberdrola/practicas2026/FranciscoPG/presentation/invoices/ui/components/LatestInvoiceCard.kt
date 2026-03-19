@@ -158,7 +158,7 @@ fun SkeletonLatestInvoiceCardComposable(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .border(
                 width = Stroke.dp1,
-                color = colorResource(R.color.handler_color),
+                color = colorResource(R.color.color_skeleton_background),
                 shape = RoundedCornerShape(Radius.dp16)
             ),
         shape = RoundedCornerShape(Radius.dp16),

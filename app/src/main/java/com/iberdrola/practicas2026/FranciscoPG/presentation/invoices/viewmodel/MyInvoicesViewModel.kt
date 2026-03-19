@@ -68,9 +68,12 @@ class MyInvoicesViewModel @Inject constructor(
     val showDialogEvent: StateFlow<Boolean> = _showDialogEvent.asStateFlow()
 
     private var fetchGeneration = 0
+    private var hasLoaded = false
 
     fun fetchInvoices(supplyType: SupplyType, useMock: Boolean = true, forceRefresh: Boolean = false) {
-        Log.d("MyInvoicesVM", "fetchInvoices($supplyType, mock=$useMock, force=$forceRefresh)")
+        if (hasLoaded && !forceRefresh) return
+        Log.d(TAG, "fetchInvoices(supplyType=$supplyType, mock=$useMock, forceRefresh=$forceRefresh)")
+        hasLoaded = false
         val currentGeneration = ++fetchGeneration
         _uiState.value = InvoiceUiState.Loading
         _listUiState.value = InvoiceListUiState.Loading
@@ -81,18 +84,19 @@ class MyInvoicesViewModel @Inject constructor(
                 if (currentGeneration != fetchGeneration) return@launch
                 result.fold(
                     onSuccess = { invoices ->
-                        Log.d("MyInvoicesVM", "SUCCESS: ${invoices.size} facturas")
+                        Log.d(TAG, "Fetched ${invoices.size} invoices")
+                        hasLoaded = true
                         _uiState.value = InvoiceUiState.Success(invoices)
                         _listUiState.value = buildListUiState(invoices, supplyType)
                     },
                     onFailure = { error ->
-                        Log.e("MyInvoicesVM", "ERROR", error)
+                        Log.e(TAG, "Error fetching invoices", error)
                         handleError(error)
                     }
                 )
             } catch (e: Exception) {
                 if (currentGeneration != fetchGeneration) return@launch
-                Log.e("MyInvoicesVM", "EXCEPTION", e)
+                Log.e(TAG, "Unexpected exception fetching invoices", e)
                 handleError(e)
             }
         }
@@ -104,6 +108,10 @@ class MyInvoicesViewModel @Inject constructor(
 
     fun onDialogHandled() {
         _showDialogEvent.value = false
+    }
+
+    companion object {
+        private const val TAG = "MyInvoicesVM"
     }
 
     // ── Helpers privados ──────────────────────────────────────────────────────
