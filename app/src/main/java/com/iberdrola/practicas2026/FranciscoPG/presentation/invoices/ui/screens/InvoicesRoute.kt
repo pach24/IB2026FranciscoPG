@@ -33,18 +33,26 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.M
 import kotlinx.coroutines.launch
 
 /**
- * Determina el tab inicial preferido en función del estado de cada suministro.
- * Devuelve 1 (Gas) solo si ambos han cargado, Electricidad está vacía y Gas no.
+ * Determina el tab preferido en función del estado de cada suministro.
+ * Si el tab actual no tiene contenido (vacío o filtrado vacío) pero el otro sí,
+ * devuelve el otro tab. En cualquier otro caso, mantiene el tab actual.
  */
 fun resolvePreferredTabIndex(
     electricityState: InvoiceListUiState,
     gasState: InvoiceListUiState,
-    bothLoaded: Boolean
+    bothLoaded: Boolean,
+    currentTab: Int = 0
 ): Int {
-    val wantsAutoSwitch = bothLoaded
-            && electricityState is InvoiceListUiState.Empty
-            && gasState !is InvoiceListUiState.Empty
-    return if (wantsAutoSwitch) 1 else 0
+    if (!bothLoaded) return currentTab
+
+    fun hasNoContent(state: InvoiceListUiState) =
+        state is InvoiceListUiState.Empty || state is InvoiceListUiState.FilteredEmpty
+
+    return when {
+        currentTab == 0 && hasNoContent(electricityState) && !hasNoContent(gasState) -> 1
+        currentTab == 1 && hasNoContent(gasState) && !hasNoContent(electricityState) -> 0
+        else -> currentTab
+    }
 }
 
 @Composable
@@ -111,18 +119,21 @@ fun InvoicesRoute(
             && electricityState is InvoiceListUiState.Empty
             && gasState is InvoiceListUiState.Empty
 
-    // Auto-switch de tab (una sola vez al entrar):
-    var hasAutoSwitched by remember { mutableStateOf(false) }
+    // Auto-switch de tab: reacciona al cambio de estados (carga inicial + filtros)
+    var activeTab by remember { mutableIntStateOf(0) }
+    var preferredTabIndex by remember { mutableIntStateOf(0) }
     var scrollCompleted by remember { mutableStateOf(false) }
 
-    if (resolvePreferredTabIndex(electricityState, gasState, bothLoaded) == 1) {
-        hasAutoSwitched = true
-    }
-
-    val preferredTabIndex = if (hasAutoSwitched) 1 else 0
-
-    LaunchedEffect(preferredTabIndex) {
-        if (preferredTabIndex == 1) scrollCompleted = true
+    LaunchedEffect(electricityState, gasState) {
+        if (bothLoaded) {
+            val resolved = resolvePreferredTabIndex(
+                electricityState, gasState, bothLoaded, activeTab
+            )
+            if (resolved != activeTab) {
+                preferredTabIndex = resolved
+                scrollCompleted = true
+            }
+        }
     }
 
     val effectiveElectricityState = if (
@@ -135,9 +146,6 @@ fun InvoicesRoute(
         electricityViewModel.fetchInvoices(SupplyType.ELECTRICITY, useMock, forceRefresh = true)
         gasViewModel.fetchInvoices(SupplyType.GAS, useMock, forceRefresh = true)
     }
-
-    // Track active tab for filter
-    var activeTab by remember { mutableIntStateOf(0) }
 
     AnimatedContent(
         targetState = showFilter,
@@ -162,6 +170,7 @@ fun InvoicesRoute(
                 feedbackSheetState = sheetState,
                 isGlobalEmpty = isGlobalEmpty,
                 preferredTabIndex = preferredTabIndex,
+                onTabChanged = { activeTab = it },
                 onBackClick = {
                     Log.d("InvoicesRoute", "Back pressed, evaluating feedback")
                     feedbackViewModel.onExitInvoices()

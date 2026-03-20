@@ -66,6 +66,7 @@ fun MyInvoicesComposeScreen(
     feedbackSheetState: FeedbackSheetState = FeedbackSheetState.Hidden,
     isGlobalEmpty: Boolean = false,
     preferredTabIndex: Int = 0,
+    onTabChanged: (Int) -> Unit = {},
     onBackClick: () -> Unit = {},
     onFeedbackFaceClick: () -> Unit = {},
     onFeedbackLaterClick: () -> Unit = {},
@@ -107,11 +108,16 @@ fun MyInvoicesComposeScreen(
         }
     }
 
-    // Auto-seleccionar tab preferido (Luz vacía → Gas)
+    // Auto-seleccionar tab preferido (Luz vacía → Gas, o tras filtros)
     LaunchedEffect(preferredTabIndex) {
         if (pagerState.currentPage != preferredTabIndex) {
             pagerState.scrollToPage(preferredTabIndex)
         }
+    }
+
+    // Sincronizar tab activo con el padre
+    LaunchedEffect(pagerState.settledPage) {
+        onTabChanged(pagerState.settledPage)
     }
 
     Column(
