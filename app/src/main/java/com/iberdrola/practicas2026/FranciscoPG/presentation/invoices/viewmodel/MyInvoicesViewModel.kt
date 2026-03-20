@@ -5,55 +5,27 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iberdrola.practicas2026.FranciscoPG.core.error.ErrorClassifier
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFilters
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
+import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.FilterInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.mapper.InvoiceUiMapper
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListItem
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListUiState
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-// ── UI States ─────────────────────────────────────────────────────────────────
-
-sealed class InvoiceUiState {
-    object Loading : InvoiceUiState()
-    data class Success(val invoices: List<Invoice>) : InvoiceUiState()
-    data class Error(val message: String) : InvoiceUiState()
-}
-
-data class LatestInvoiceUiModel(
-    val amount: String,
-    val dateRange: String,
-    val supplyTypeLabel: String,
-    val status: String,
-    val isPaid: Boolean,
-    val iconRes: Int
-)
-
-sealed class InvoiceListUiState {
-    object Loading : InvoiceListUiState()
-
-    data class Success(
-        val latestInvoice: LatestInvoiceUiModel?,
-        val historyItems: List<InvoiceListItem>,
-        val invoiceCount: Int
-    ) : InvoiceListUiState()
-
-    object Empty : InvoiceListUiState()
-
-    data class ServerError(val message: String) : InvoiceListUiState()
-
-    data class ConnectionError(val message: String) : InvoiceListUiState()
-}
-
-// ── ViewModel ─────────────────────────────────────────────────────────────────
 
 @HiltViewModel
 class MyInvoicesViewModel @Inject constructor(
     private val getInvoicesUseCase: GetInvoicesUseCase,
+    private val filterInvoicesUseCase: FilterInvoicesUseCase,
     private val invoiceUiMapper: InvoiceUiMapper,
     private val errorClassifier: ErrorClassifier
 ) : ViewModel() {
@@ -61,22 +33,60 @@ class MyInvoicesViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<InvoiceUiState>(InvoiceUiState.Loading)
     val uiState: StateFlow<InvoiceUiState> = _uiState.asStateFlow()
 
-    private val _listUiState = MutableStateFlow<InvoiceListUiState>(InvoiceListUiState.Loading)
-    val listUiState: StateFlow<InvoiceListUiState> = _listUiState.asStateFlow()
-
     private val _showDialogEvent = MutableStateFlow(false)
     val showDialogEvent: StateFlow<Boolean> = _showDialogEvent.asStateFlow()
 
+    // Facturas originales sin filtrar (accesible para calcular estadísticas combinadas)
+    private val _allInvoices = MutableStateFlow<List<Invoice>>(emptyList())
+    val allInvoices: StateFlow<List<Invoice>> = _allInvoices.asStateFlow()
+
+    // Filtros aplicados — controlados externamente por el FilterViewModel compartido
+    private val _appliedFilters = MutableStateFlow(InvoiceFilters())
+
+    // Estado de carga / error separado
+    private val _loadingState = MutableStateFlow<InvoiceListUiState>(InvoiceListUiState.Loading)
+
     private var fetchGeneration = 0
     private var hasLoaded = false
+    private var currentSupplyType: SupplyType = SupplyType.ELECTRICITY
+
+    // ── Reactive filtered list: combine invoices + applied filters ─────────
+    val listUiState: StateFlow<InvoiceListUiState> = combine(
+        _allInvoices,
+        _appliedFilters,
+        _loadingState
+    ) { invoices, filters, loadingState ->
+        // Si estamos en loading o error, priorizar ese estado
+        if (loadingState is InvoiceListUiState.Loading ||
+            loadingState is InvoiceListUiState.ServerError ||
+            loadingState is InvoiceListUiState.ConnectionError
+        ) {
+            return@combine loadingState
+        }
+
+        if (invoices.isEmpty()) return@combine InvoiceListUiState.Empty
+
+        val hasActiveFilters = filters != InvoiceFilters()
+        val filtered = filterInvoicesUseCase(invoices, filters)
+        if (filtered.isEmpty()) return@combine InvoiceListUiState.FilteredEmpty
+        buildListUiState(filtered, currentSupplyType, hideLatestCard = hasActiveFilters)
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = InvoiceListUiState.Loading
+    )
 
     fun fetchInvoices(supplyType: SupplyType, useMock: Boolean = true, forceRefresh: Boolean = false) {
         if (hasLoaded && !forceRefresh) return
         Log.d(TAG, "fetchInvoices(supplyType=$supplyType, mock=$useMock, forceRefresh=$forceRefresh)")
-        hasLoaded = false
+        currentSupplyType = supplyType
         val currentGeneration = ++fetchGeneration
         _uiState.value = InvoiceUiState.Loading
-        _listUiState.value = InvoiceListUiState.Loading
+        // Solo mostrar shimmer en la primera carga; en refresh mantener datos previos
+        if (!hasLoaded) {
+            _loadingState.value = InvoiceListUiState.Loading
+        }
+        hasLoaded = false
 
         viewModelScope.launch {
             try {
@@ -87,7 +97,10 @@ class MyInvoicesViewModel @Inject constructor(
                         Log.d(TAG, "Fetched ${invoices.size} invoices")
                         hasLoaded = true
                         _uiState.value = InvoiceUiState.Success(invoices)
-                        _listUiState.value = buildListUiState(invoices, supplyType)
+                        // Emitir facturas → combine reacciona automáticamente
+                        _allInvoices.value = invoices
+                        // Marcar que la carga terminó OK
+                        _loadingState.value = InvoiceListUiState.Empty // placeholder, combine decide
                     },
                     onFailure = { error ->
                         Log.e(TAG, "Error fetching invoices", error)
@@ -100,6 +113,12 @@ class MyInvoicesViewModel @Inject constructor(
                 handleError(e)
             }
         }
+    }
+
+    // ── Filter sync (controlado por FilterViewModel via InvoicesRoute) ──────
+
+    fun setAppliedFilters(filters: InvoiceFilters) {
+        _appliedFilters.value = filters
     }
 
     fun onFeatureNotAvailable() {
@@ -119,18 +138,17 @@ class MyInvoicesViewModel @Inject constructor(
     private fun handleError(error: Throwable) {
         val msg = error.message ?: "Error desconocido"
         _uiState.value = InvoiceUiState.Error(msg)
-        _listUiState.value = errorClassifier.classify(error)
+        _loadingState.value = errorClassifier.classify(error)
     }
 
     private fun buildListUiState(
         invoices: List<Invoice>,
-        supplyType: SupplyType
+        supplyType: SupplyType,
+        hideLatestCard: Boolean = false
     ): InvoiceListUiState {
-        if (invoices.isEmpty()) return InvoiceListUiState.Empty
-
         val uiModel = invoiceUiMapper.map(invoices, supplyType)
         return InvoiceListUiState.Success(
-            latestInvoice = uiModel.latestInvoice,
+            latestInvoice = if (hideLatestCard) null else uiModel.latestInvoice,
             historyItems = uiModel.historyItems,
             invoiceCount = invoices.size
         )

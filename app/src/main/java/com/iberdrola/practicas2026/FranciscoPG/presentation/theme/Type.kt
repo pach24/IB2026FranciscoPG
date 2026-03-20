@@ -13,6 +13,9 @@ private val IberPangea = FontFamily(
     Font(R.font.iberpangea_bold, FontWeight.Bold)
 )
 
+val IberFontBold = FontFamily(Font(R.font.iberpangea_bold, FontWeight.Bold))
+val IberFontRegular = FontFamily(Font(R.font.iberpangea_regular, FontWeight.Normal))
+
 val IberTypography = Typography(
     bodyLarge = TextStyle(
         fontFamily = IberPangea,

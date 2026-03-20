@@ -23,11 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontRegular
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
 import androidx.compose.ui.unit.sp
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
@@ -37,9 +38,6 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Stroke
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Skeleton
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 
-private val IberFontRegular = FontFamily(Font(R.font.iberpangea_regular, FontWeight.Normal))
-private val IberFontBold = FontFamily(Font(R.font.iberpangea_bold, FontWeight.Bold))
-
 @Composable
 fun LatestInvoiceCardComposable(
     amount: String,
@@ -47,7 +45,7 @@ fun LatestInvoiceCardComposable(
     modifier: Modifier = Modifier,
     supplyType: String = "Factura Luz",
     status: String = "Pendiente de Pago",
-    isPaid: Boolean = false,
+    invoiceStatus: InvoiceStatus = InvoiceStatus.PENDING,
     iconRes: Int = R.drawable.ic_light,
     onClick: () -> Unit = {}
 ) {
@@ -145,7 +143,7 @@ fun LatestInvoiceCardComposable(
             // Estado: "Pagada" / "Pendiente de Pago"
             StatusPillComposable(
                 text = status,
-                isPaid = isPaid
+                status = invoiceStatus
             )
         }
     }
@@ -254,7 +252,7 @@ private fun PreviewLatestInvoiceCardComposable() {
             amount = "20,00 \u20AC",
             dateRange = "01 feb. 2024 - 04 mar. 2024",
             status = "Pagada",
-            isPaid = true
+            invoiceStatus = InvoiceStatus.PAID
         )
     }
 }
@@ -280,7 +278,7 @@ private fun PreviewOverlaySkeletonOnCard() {
                     amount = "20,00 €",
                     dateRange = "01 feb. 2024 - 04 mar. 2024",
                     status = "Pagada",
-                    isPaid = true
+                    invoiceStatus = InvoiceStatus.PAID
                 )
                 // Skeleton de la última factura (superpuesto)
                 SkeletonLatestInvoiceCardComposable(

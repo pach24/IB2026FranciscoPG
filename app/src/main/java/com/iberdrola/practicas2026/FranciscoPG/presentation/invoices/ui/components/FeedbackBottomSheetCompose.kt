@@ -21,9 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontRegular
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
@@ -36,9 +36,6 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Stroke
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Component
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
-
-private val FeedbackFontRegular = FontFamily(Font(R.font.iberpangea_regular, FontWeight.Normal))
-private val FeedbackFontBold = FontFamily(Font(R.font.iberpangea_bold, FontWeight.Bold))
 
 private data class FaceItem(@DrawableRes val icon: Int)
 
@@ -85,7 +82,7 @@ fun FeedbackBottomSheetComposable(
             Text(
                 text = stringResource(R.string.feedback_title),
                 modifier = Modifier.padding(top = Spacing.dp24),
-                fontFamily = FeedbackFontBold,
+                fontFamily = IberFontBold,
                 fontWeight = FontWeight.Bold,
                 fontSize = TextSize.sp20,
                 color = colors.textPrimary
@@ -97,7 +94,7 @@ fun FeedbackBottomSheetComposable(
                     .fillMaxWidth()
                     .padding(top = Spacing.dp16),
                 textAlign = TextAlign.Center,
-                fontFamily = FeedbackFontRegular,
+                fontFamily = IberFontRegular,
                 fontSize = TextSize.sp16,
                 lineHeight = (16f + 4).sp,
                 color = colors.lightGrey
@@ -145,7 +142,7 @@ fun FeedbackBottomSheetComposable(
                     .clickable(onClick = onLaterClick)
                     .padding(Spacing.dp8),
                 textDecoration = TextDecoration.Underline,
-                fontFamily = FeedbackFontBold,
+                fontFamily = IberFontBold,
                 fontWeight = FontWeight.Bold,
                 fontSize = TextSize.sp16,
                 color = colors.iberdrolaDarkGreen

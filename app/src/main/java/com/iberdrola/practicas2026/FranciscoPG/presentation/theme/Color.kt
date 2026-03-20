@@ -13,11 +13,12 @@ val White = Color(0xFFFFFFFF)
 // ══════════════════════════════════════════
 // MARCA IBERDROLA
 // ══════════════════════════════════════════
-val IberGreen = Color(0xFF00A443)
+val IberGreen = Color(0xFF006E31)
 val IberSky = Color(0xFF0DA9FF)
 val IberDarkGreen = Color(0xFF2D5F51)
 val IberDarkGreenNight = Color(0xFF276553)
 val IberGreenDark = Color(0xFF4DA570)
+val IberSunset = Color(0xFFFF9C1A)
 
 // ══════════════════════════════════════════
 // FONDOS Y SUPERFICIES
@@ -69,6 +70,10 @@ val ErrorLight = Color(0xFFB72727)
 val ErrorLightContainer = Color(0xFFF1BFBF)
 val ErrorDark = Color(0xFFE57373)
 val ErrorDarkContainer = Color(0xFF4A1919)
+val StatusDefaultLight = Color(0xFFE7E7E7)
+val StatusDefaultDark = Color(0xFF3A3A3A)
+val StatusDefaultTextLight = Color(0xFF6C6C6C)
+val StatusDefaultTextDark = Color(0xFF999999)
 
 // ══════════════════════════════════════════
 // COMPONENTES UI
@@ -78,6 +83,9 @@ val DarkHandlerColor = Color(0xFF4A5954)
 val LightTabMisFacturas = Color(0xFFC6D7D1)
 val DarkTabMisFacturas = Color(0xFF4A5954)
 val SnackbarYellow = Color(0xFFF2EC7C)
+val LightBadgeAmountFilter = Color(0xFFDBE9E1)
+val DarkBadgeAmountFilter = Color(0xFF253D33)
+
 
 // ══════════════════════════════════════════
 // PALETA SEMÁNTICA (light / dark aware)
@@ -108,6 +116,10 @@ data class IberdrolaColors(
     val snackbar: Color,
     val black: Color,
     val white: Color,
+    val badgeAmountFilter: Color,
+    val statusDefault: Color,
+    val statusDefaultText: Color,
+    val activeFilterBadgeColor: Color,
 )
 
 val LightIberdrolaColors = IberdrolaColors(
@@ -135,6 +147,10 @@ val LightIberdrolaColors = IberdrolaColors(
     snackbar = SnackbarYellow,
     black = Black,
     white = White,
+    badgeAmountFilter = LightBadgeAmountFilter,
+    statusDefault = StatusDefaultLight,
+    statusDefaultText = StatusDefaultTextLight,
+    activeFilterBadgeColor = IberSunset
 )
 
 val DarkIberdrolaColors = IberdrolaColors(
@@ -162,6 +178,10 @@ val DarkIberdrolaColors = IberdrolaColors(
     snackbar = SnackbarYellow,
     black = Black,
     white = White,
+    badgeAmountFilter = DarkBadgeAmountFilter,
+    statusDefault = StatusDefaultDark,
+    statusDefaultText = StatusDefaultTextDark,
+    activeFilterBadgeColor = IberSunset
 )
 
 val LocalIberdrolaColors = staticCompositionLocalOf { LightIberdrolaColors }

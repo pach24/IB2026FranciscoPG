@@ -51,6 +51,8 @@
     <string name="empty_state_tab_subtitle">Cuando se generen tus facturas de luz o gas\nlas verás aquí.</string>
     <string name="empty_state_global_title">Aún no tienes facturas</string>
     <string name="empty_state_global_subtitle">Cuando se generen tus facturas de luz o gas\nlas verás aquí.</string>
+    <string name="empty_state_filtered_title">Sin resultados</string>
+    <string name="empty_state_filtered_subtitle">Intenta con otros criterios de búsqueda</string>
 
     <!-- Error states -->
     <string name="error_server_title">Error del servidor</string>
@@ -63,5 +65,32 @@
     <string name="dialog_info_title">Información</string>
     <string name="dialog_feature_not_available">Esta funcionalidad aún no está disponible.</string>
     <string name="dialog_accept">Aceptar</string>
+
+    <!-- Filtros -->
+    <string name="filter_title">Filtrar</string>
+    <string name="filter_date_section_title">Por fecha</string>
+    <string name="filter_date_from_label">* Desde</string>
+    <string name="filter_date_to_label">* Hasta</string>
+    <string name="filter_date_placeholder">dd/mm/aaaa</string>
+    <string name="filter_date_from_required">Selecciona primero una fecha de inicio</string>
+    <string name="filter_price_section_title">Por un importe</string>
+    <string name="filter_price_range">%1$d € - %2$d €</string>
+    <string name="filter_price_limit">%1$d €</string>
+    <string name="filter_status_section_title">Por estado</string>
+    <string name="filter_button_apply">Aplicar filtros</string>
+    <string name="filter_button_clear">Borrar filtros</string>
+    <string name="filter_back">Atrás</string>
+
+    <!-- Filter status labels -->
+    <string name="filter_status_paid">Pagadas</string>
+    <string name="filter_status_pending">Pendientes de Pago</string>
+    <string name="filter_status_processing">En trámite de cobro</string>
+    <string name="filter_status_cancelled">Anuladas</string>
+    <string name="filter_status_fixed_fee">Cuota Fija</string>
+
+    <!-- Snackbar -->
+    <string name="snackbar_filters_applied">%1$d facturas coinciden con los filtros</string>
+    <string name="snackbar_filters_cleared">Filtros eliminados</string>
+    <string name="snackbar_undo">Deshacer</string>
 
 </resources>
