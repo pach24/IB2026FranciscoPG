@@ -52,7 +52,7 @@ class InvoiceUiMapperTest {
 
         assertNotNull(result.latestInvoice)
         assertEquals("%.2f €".format(123.45), result.latestInvoice!!.amount)
-        assertEquals("01/01/2024 - 31/01/2024", result.latestInvoice!!.dateRange)
+        assertEquals("01 ene. 2024 - 31 ene. 2024", result.latestInvoice!!.dateRange)
         assertEquals("Factura Luz", result.latestInvoice!!.supplyTypeLabel)
         assertEquals("Pagada", result.latestInvoice!!.status)
         assertTrue(result.latestInvoice!!.isPaid)
