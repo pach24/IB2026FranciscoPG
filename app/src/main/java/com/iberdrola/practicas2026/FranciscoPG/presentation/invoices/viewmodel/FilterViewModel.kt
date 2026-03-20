@@ -70,7 +70,7 @@ class FilterViewModel @Inject constructor() : ViewModel() {
         val oldFilters = currentUI.filters
         val oldStats = currentUI.statistics
 
-        // Ajustar slider al nuevo rango
+        // Ajustar slider (draft) al nuevo rango
         val finalMin = (oldFilters.minAmount ?: 0.0).coerceIn(0.0, maxAmount)
         val finalMax = if (oldFilters.maxAmount != null && oldFilters.maxAmount!! >= oldStats.maxAmount * 0.99) {
             maxAmount
@@ -81,6 +81,39 @@ class FilterViewModel @Inject constructor() : ViewModel() {
         _filterState.value = currentUI.copy(
             filters = oldFilters.copy(minAmount = finalMin, maxAmount = finalMax),
             statistics = newStats
+        )
+
+        // Ajustar filtros aplicados al nuevo rango de datos
+        expandAppliedFilters(oldStats, newStats, maxAmount, oldestDate, newestDate)
+    }
+
+    /**
+     * Expande los filtros aplicados cuando los datos cambian (ej: pull-to-refresh).
+     * Si el usuario tenía un límite al extremo del rango anterior (intención = "sin límite"),
+     * se expande al nuevo extremo. Si tenía un valor personalizado, se respeta.
+     */
+    private fun expandAppliedFilters(
+        oldStats: InvoiceFilterUIState.FilterStatistics,
+        newStats: InvoiceFilterUIState.FilterStatistics,
+        maxAmount: Double,
+        oldestDate: LocalDate?,
+        newestDate: LocalDate?
+    ) {
+        val applied = _appliedFilters.value
+        if (applied == InvoiceFilters()) return // sin filtros activos, nada que ajustar
+
+        val expandMax = applied.maxAmount != null && applied.maxAmount!! >= oldStats.maxAmount * 0.99
+        val expandStartDate = applied.startDate != null
+                && oldStats.oldestDateMillis > 0
+                && applied.startDate!!.toEpochMilli() <= oldStats.oldestDateMillis
+        val expandEndDate = applied.endDate != null
+                && oldStats.newestDateMillis > 0
+                && applied.endDate!!.toEpochMilli() >= oldStats.newestDateMillis
+
+        _appliedFilters.value = applied.copy(
+            maxAmount = if (expandMax) maxAmount else applied.maxAmount,
+            startDate = if (expandStartDate) oldestDate else applied.startDate,
+            endDate = if (expandEndDate) newestDate else applied.endDate
         )
     }
 
