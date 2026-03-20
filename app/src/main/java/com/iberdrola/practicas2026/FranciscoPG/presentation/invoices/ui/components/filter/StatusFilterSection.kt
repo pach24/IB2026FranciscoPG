@@ -51,7 +51,7 @@ fun StatusFilterSection(
     Column {
         Text(
             text = stringResource(R.string.filter_status_section_title),
-            fontSize = TextSize.sp14,
+            fontSize = TextSize.sp12,
             fontWeight = FontWeight.Bold,
             fontFamily = IberFontBold,
             color = colors.darkGreyText
@@ -59,7 +59,8 @@ fun StatusFilterSection(
         Spacer(modifier = Modifier.height(Spacing.dp24))
 
         Column(
-            verticalArrangement = Arrangement.spacedBy(Spacing.dp32)
+            verticalArrangement = Arrangement.spacedBy(Spacing.dp32),
+            modifier = Modifier.padding(start = Spacing.dp8)
         ) {
             statusOptions.forEach { status ->
                 val isChecked = selectedStatuses.contains(status)

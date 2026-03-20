@@ -21,6 +21,7 @@ object TextSize {
 
 /** Espaciado */
 object Spacing {
+
     val dp0 = 0.dp
     val dp1 = 1.dp
     val dp2 = 2.dp
@@ -37,6 +38,7 @@ object Spacing {
     val dp20 = 20.dp
     val dp21 = 21.dp
     val dp24 = 24.dp
+    val dp28 = 28.dp
     val dp32 = 32.dp
     val dp40 = 40.dp
     val dp48 = 48.dp

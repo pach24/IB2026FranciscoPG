@@ -232,12 +232,13 @@ fun InvoicesRoute(
             hostState = snackbarHostState,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = Spacing.dp16)
+                .padding(bottom = Spacing.dp64)
         ) { data ->
             Snackbar(
                 snackbarData = data,
-                containerColor = IberdrolaTheme.colors.iberdrolaDarkGreen,
-                actionColor = IberdrolaTheme.colors.iberdrolaGreen
+                containerColor = IberdrolaTheme.colors.snackbar,
+                contentColor = IberdrolaTheme.colors.black,
+                actionColor = IberdrolaTheme.colors.black
             )
         }
     }

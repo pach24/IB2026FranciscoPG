@@ -39,17 +39,17 @@ fun InvoiceTabContent(
     onRefresh: () -> Unit,
     activeFilterCount: Int = 0
 ) {
-    var lastSuccess by remember { mutableStateOf<InvoiceListUiState.Success?>(null) }
+    var lastContentState by remember { mutableStateOf<InvoiceListUiState?>(null) }
 
     LaunchedEffect(uiState) {
-        if (uiState is InvoiceListUiState.Success) {
-            lastSuccess = uiState
+        if (uiState is InvoiceListUiState.Success || uiState is InvoiceListUiState.FilteredEmpty) {
+            lastContentState = uiState
         }
     }
 
     when (uiState) {
         is InvoiceListUiState.Loading -> {
-            val cached = lastSuccess
+            val cached = lastContentState
             if (cached == null) {
                 InvoiceListComposeScreen(
                     isLoading = true,
@@ -62,19 +62,55 @@ fun InvoiceTabContent(
                     onHistoryItemClick = {},
                     onRefresh = onRefresh
                 )
-            } else {
-                InvoiceListComposeScreen(
-                    isLoading = false,
-                    isRefreshing = true,
-                    latestInvoice = cached.latestInvoice,
-                    historyItems = cached.historyItems,
-                    listState = listState,
-                    onLatestInvoiceClick = onFeatureNotAvailable,
-                    onFilterClick = onFilterClick,
-                    onHistoryItemClick = { onFeatureNotAvailable() },
-                    onRefresh = onRefresh,
-                    activeFilterCount = activeFilterCount
-                )
+            } else when (cached) {
+                is InvoiceListUiState.Success -> {
+                    InvoiceListComposeScreen(
+                        isLoading = false,
+                        isRefreshing = true,
+                        latestInvoice = cached.latestInvoice,
+                        historyItems = cached.historyItems,
+                        listState = listState,
+                        onLatestInvoiceClick = onFeatureNotAvailable,
+                        onFilterClick = onFilterClick,
+                        onHistoryItemClick = { onFeatureNotAvailable() },
+                        onRefresh = onRefresh,
+                        activeFilterCount = activeFilterCount
+                    )
+                }
+                is InvoiceListUiState.FilteredEmpty -> {
+                    val pullState = rememberPullToRefreshState()
+                    PullToRefreshBox(
+                        state = pullState,
+                        isRefreshing = true,
+                        onRefresh = onRefresh,
+                        modifier = Modifier.fillMaxSize(),
+                        indicator = {
+                            PullToRefreshDefaults.LoadingIndicator(
+                                state = pullState,
+                                isRefreshing = true,
+                                color = MaterialTheme.colorScheme.primary,
+                                containerColor = MaterialTheme.colorScheme.surface,
+                                modifier = Modifier.align(Alignment.TopCenter)
+                            )
+                        }
+                    ) {
+                        Column(modifier = Modifier.fillMaxSize()) {
+                            StickyInvoiceHeaderComposable(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(IberdrolaTheme.colors.background)
+                                    .padding(vertical = Spacing.dp8),
+                                activeFilterCount = activeFilterCount,
+                                onFilterClick = onFilterClick
+                            )
+                            EmptyStateComposable(
+                                title = stringResource(R.string.empty_state_filtered_title),
+                                subtitle = stringResource(R.string.empty_state_filtered_subtitle)
+                            )
+                        }
+                    }
+                }
+                else -> {}
             }
         }
 

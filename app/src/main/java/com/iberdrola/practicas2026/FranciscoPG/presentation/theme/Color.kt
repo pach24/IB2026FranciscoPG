@@ -18,6 +18,7 @@ val IberSky = Color(0xFF0DA9FF)
 val IberDarkGreen = Color(0xFF2D5F51)
 val IberDarkGreenNight = Color(0xFF276553)
 val IberGreenDark = Color(0xFF4DA570)
+val IberSunset = Color(0xFFFF9C1A)
 
 // ══════════════════════════════════════════
 // FONDOS Y SUPERFICIES
@@ -85,6 +86,7 @@ val SnackbarYellow = Color(0xFFF2EC7C)
 val LightBadgeAmountFilter = Color(0xFFDBE9E1)
 val DarkBadgeAmountFilter = Color(0xFF253D33)
 
+
 // ══════════════════════════════════════════
 // PALETA SEMÁNTICA (light / dark aware)
 // ══════════════════════════════════════════
@@ -117,6 +119,7 @@ data class IberdrolaColors(
     val badgeAmountFilter: Color,
     val statusDefault: Color,
     val statusDefaultText: Color,
+    val activeFilterBadgeColor: Color,
 )
 
 val LightIberdrolaColors = IberdrolaColors(
@@ -147,6 +150,7 @@ val LightIberdrolaColors = IberdrolaColors(
     badgeAmountFilter = LightBadgeAmountFilter,
     statusDefault = StatusDefaultLight,
     statusDefaultText = StatusDefaultTextLight,
+    activeFilterBadgeColor = IberSunset
 )
 
 val DarkIberdrolaColors = IberdrolaColors(
@@ -177,6 +181,7 @@ val DarkIberdrolaColors = IberdrolaColors(
     badgeAmountFilter = DarkBadgeAmountFilter,
     statusDefault = StatusDefaultDark,
     statusDefaultText = StatusDefaultTextDark,
+    activeFilterBadgeColor = IberSunset
 )
 
 val LocalIberdrolaColors = staticCompositionLocalOf { LightIberdrolaColors }

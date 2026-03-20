@@ -1,22 +1,26 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.filter
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import com.iberdrola.practicas2026.FranciscoPG.R
@@ -36,12 +40,12 @@ fun DateRangeSection(
     Column {
         Text(
             text = stringResource(R.string.filter_date_section_title),
-            fontSize = TextSize.sp14,
+            fontSize = TextSize.sp12,
             fontWeight = FontWeight.Bold,
             fontFamily = IberFontBold,
-            color = colors.darkGreyText
+            color = colors.darkGrey
         )
-        Spacer(modifier = Modifier.height(Spacing.dp16))
+        Spacer(modifier = Modifier.height(Spacing.dp20))
         Row(
             horizontalArrangement = Arrangement.spacedBy(Spacing.dp32),
             modifier = Modifier.fillMaxWidth()
@@ -62,7 +66,8 @@ fun DateRangeSection(
     }
 }
 
-// Campo de fecha individual con icono de calendario, read-only, abre DatePicker al pulsar
+// Campo de fecha individual con icono de calendario, read-only, abre DatePicker al pulsar.
+// Usa enabled=true + readOnly=true para que Material3 anime el label al tener valor.
 @Composable
 private fun DateField(
     label: String,
@@ -71,23 +76,34 @@ private fun DateField(
     onClick: () -> Unit
 ) {
     val colors = IberdrolaTheme.colors
-    Box(modifier = modifier.clickable { onClick() }) {
-        TextField(
-            value = value,
-            onValueChange = { },
-            readOnly = true,
-            enabled = false,
-            label = { Text(label, fontSize = TextSize.sp14) },
-            modifier = Modifier.fillMaxWidth(),
-            trailingIcon = {
-                Icon(painterResource(R.drawable.ic_calendar), null, tint = colors.lightGrey)
-            },
-            colors = TextFieldDefaults.colors(
-                disabledContainerColor = Color.Transparent,
-                disabledIndicatorColor = colors.darkGreyText,
-                disabledTextColor = colors.darkGreyText,
-                disabledLabelColor = colors.lightGrey
-            )
-        )
+    val interactionSource = remember { MutableInteractionSource() }
+
+    LaunchedEffect(interactionSource) {
+        interactionSource.interactions.collect { interaction ->
+            if (interaction is PressInteraction.Release) onClick()
+        }
     }
+
+    TextField(
+        value = value,
+        onValueChange = { },
+        readOnly = true,
+        label = { Text(label, fontSize = TextSize.sp12, modifier = Modifier.padding(top = Spacing.dp0)) },
+        modifier = modifier.fillMaxWidth(),
+        interactionSource = interactionSource,
+        textStyle = TextStyle(fontSize = TextSize.sp12),
+        trailingIcon = {
+            Icon(painterResource(R.drawable.ic_calendar), null, tint = colors.textSubtitle)
+        },
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = Color.Transparent,
+            focusedContainerColor = Color.Transparent,
+            unfocusedIndicatorColor = colors.strokeNeutral,
+            focusedIndicatorColor = colors.iberdrolaGreen,
+            unfocusedTextColor = colors.darkGreyText,
+            focusedTextColor = colors.darkGreyText,
+            unfocusedLabelColor = colors.textSubtitle,
+            focusedLabelColor = colors.textSubtitle
+        )
+    )
 }

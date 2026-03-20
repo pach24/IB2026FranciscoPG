@@ -34,27 +34,28 @@ fun FilterTopBar(onBack: () -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = Spacing.dp16)
+                .padding(horizontal = Spacing.dp20)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .padding(top = Spacing.dp24)
+                    .padding(top = Spacing.dp18)
                     .clickable { onBack() }
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_back),
                     contentDescription = null,
-                    tint = colors.iberdrolaDarkGreen,
+                    tint = colors.iberdrolaGreen,
                     modifier = Modifier.size(Spacing.dp24)
                 )
                 Text(
                     text = stringResource(R.string.filter_back),
-                    color = colors.iberdrolaDarkGreen,
-                    fontWeight = FontWeight.Bold,
+                    color = colors.iberdrolaGreen,
+                    fontWeight = FontWeight.SemiBold,
                     fontFamily = IberFontBold,
                     textDecoration = TextDecoration.Underline,
-                    fontSize = TextSize.sp16
+                    fontSize = TextSize.sp14,
+                    modifier = Modifier.padding(start = Spacing.dp6)
                 )
             }
         }

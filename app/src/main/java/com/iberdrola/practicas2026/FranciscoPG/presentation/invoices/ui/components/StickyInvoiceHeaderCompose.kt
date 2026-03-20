@@ -100,7 +100,7 @@ fun StickyInvoiceHeaderComposable(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .size(Spacing.dp20)
-                        .background(colors.iberdrolaGreen, CircleShape),
+                        .background(colors.activeFilterBadgeColor, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(

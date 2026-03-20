@@ -79,11 +79,14 @@ class MyInvoicesViewModel @Inject constructor(
     fun fetchInvoices(supplyType: SupplyType, useMock: Boolean = true, forceRefresh: Boolean = false) {
         if (hasLoaded && !forceRefresh) return
         Log.d(TAG, "fetchInvoices(supplyType=$supplyType, mock=$useMock, forceRefresh=$forceRefresh)")
-        hasLoaded = false
         currentSupplyType = supplyType
         val currentGeneration = ++fetchGeneration
         _uiState.value = InvoiceUiState.Loading
-        _loadingState.value = InvoiceListUiState.Loading
+        // Solo mostrar shimmer en la primera carga; en refresh mantener datos previos
+        if (!hasLoaded) {
+            _loadingState.value = InvoiceListUiState.Loading
+        }
+        hasLoaded = false
 
         viewModelScope.launch {
             try {

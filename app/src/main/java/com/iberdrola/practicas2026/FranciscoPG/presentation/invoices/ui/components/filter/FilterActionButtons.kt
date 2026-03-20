@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
+
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,31 +39,43 @@ fun FilterActionButtons(
             onClick = onApply,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp),
+                .height(64.dp).padding(horizontal = Spacing.dp24),
             shape = RoundedCornerShape(Radius.dp50),
+
             colors = ButtonDefaults.buttonColors(containerColor = colors.iberdrolaDarkGreen)
         ) {
             Text(
                 text = stringResource(R.string.filter_button_apply),
                 color = colors.white,
-                fontSize = TextSize.sp14,
+                fontSize = TextSize.sp12,
                 fontWeight = FontWeight.Bold,
                 fontFamily = IberFontBold
             )
         }
 
-        Spacer(modifier = Modifier.height(Spacing.dp32))
+        Spacer(modifier = Modifier.height(Spacing.dp16))
 
-        Text(
-            text = stringResource(R.string.filter_button_clear),
-            textDecoration = TextDecoration.Underline,
-            fontSize = TextSize.sp14,
-            color = colors.iberdrolaDarkGreen,
-            fontWeight = FontWeight.Bold,
-            fontFamily = IberFontBold,
+        Button(
+            onClick = onClear,
             modifier = Modifier
-                .clickable { onClear() }
-                .padding(bottom = Spacing.dp32)
-        )
+                .fillMaxWidth()
+                .height(64.dp)
+                .padding(horizontal = Spacing.dp24),
+            shape = RoundedCornerShape(Radius.dp50),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = androidx.compose.ui.graphics.Color.Transparent,
+                contentColor = colors.iberdrolaDarkGreen
+            ),
+            elevation = ButtonDefaults.buttonElevation(0.dp, 0.dp, 0.dp, 0.dp, 0.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.filter_button_clear),
+                textDecoration = TextDecoration.Underline,
+                fontSize = TextSize.sp12,
+                color = colors.iberdrolaDarkGreen,
+                fontWeight = FontWeight.Bold,
+                fontFamily = IberFontBold
+            )
+        }
     }
 }

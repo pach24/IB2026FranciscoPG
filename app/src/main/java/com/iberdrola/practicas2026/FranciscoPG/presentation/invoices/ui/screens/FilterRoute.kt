@@ -1,5 +1,8 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
@@ -20,27 +23,33 @@ fun FilterRoute(
 ) {
     val filterUIState by filterViewModel.filterState.collectAsStateWithLifecycle()
 
-    Scaffold(
-        containerColor = IberdrolaTheme.colors.background,
-        modifier = Modifier.statusBarsPadding(),
-        topBar = { FilterTopBar(onBack = onBack) }
-    ) { padding ->
-        FilterContent(
-            modifier = Modifier.padding(padding),
-            uiState = filterUIState,
-            onApplyFilters = { filters ->
-                filterViewModel.updateFilters(filters)
-                filterViewModel.applyFilters()
-                onFiltersApplied()
-                onBack()
-            },
-            onClearFilters = {
-                val previous = filterViewModel.appliedFilters.value
-                filterViewModel.clearFilters()
-                if (previous != InvoiceFilters()) {
-                    onFiltersCleared(previous)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(IberdrolaTheme.colors.background)
+            .statusBarsPadding()
+    ) {
+        Scaffold(
+            containerColor = IberdrolaTheme.colors.background,
+            topBar = { FilterTopBar(onBack = onBack) }
+        ) { padding ->
+            FilterContent(
+                modifier = Modifier.padding(padding),
+                uiState = filterUIState,
+                onApplyFilters = { filters ->
+                    filterViewModel.updateFilters(filters)
+                    filterViewModel.applyFilters()
+                    onFiltersApplied()
+                    onBack()
+                },
+                onClearFilters = {
+                    val previous = filterViewModel.appliedFilters.value
+                    filterViewModel.clearFilters()
+                    if (previous != InvoiceFilters()) {
+                        onFiltersCleared(previous)
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 }

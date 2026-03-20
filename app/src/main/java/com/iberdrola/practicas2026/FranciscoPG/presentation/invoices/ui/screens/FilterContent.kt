@@ -108,14 +108,14 @@ fun FilterContent(
         ) {
             Text(
                 text = stringResource(R.string.filter_title),
-                fontSize = TextSize.sp22,
+                fontSize = TextSize.sp20,
                 fontWeight = FontWeight.ExtraBold,
                 fontFamily = IberFontBold,
                 color = colors.darkGreyText,
                 modifier = Modifier.padding(top = Spacing.dp16)
             )
 
-            Spacer(modifier = Modifier.height(Spacing.dp32))
+            Spacer(modifier = Modifier.height(Spacing.dp24))
 
             DateRangeSection(
                 dateFrom = currentFilters.startDate?.format(DATE_FORMATTER) ?: "",
@@ -128,7 +128,7 @@ fun FilterContent(
 
             Text(
                 text = stringResource(R.string.filter_price_section_title),
-                fontSize = TextSize.sp14,
+                fontSize = TextSize.sp12,
                 fontWeight = FontWeight.Bold,
                 fontFamily = IberFontBold,
                 color = colors.darkGreyText
@@ -164,7 +164,7 @@ fun FilterContent(
                 }
             )
 
-            Spacer(modifier = Modifier.height(Spacing.dp48))
+            Spacer(modifier = Modifier.height(Spacing.dp32))
 
             FilterActionButtons(
                 onApply = { onApplyFilters(currentFilters) },

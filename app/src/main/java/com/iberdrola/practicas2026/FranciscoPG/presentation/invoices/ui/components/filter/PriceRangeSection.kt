@@ -136,13 +136,13 @@ fun PriceRangeSection(
                 text = stringResource(R.string.filter_price_limit, minLimit.toInt()),
                 color = colors.textSubtitle,
                 fontFamily = IberFontRegular,
-                fontSize = TextSize.sp14
+                fontSize = TextSize.sp12
             )
             Text(
                 text = stringResource(R.string.filter_price_limit, maxLimit.toInt()),
                 color = colors.textSubtitle,
                 fontFamily = IberFontRegular,
-                fontSize = TextSize.sp14
+                fontSize = TextSize.sp12
             )
         }
     }
