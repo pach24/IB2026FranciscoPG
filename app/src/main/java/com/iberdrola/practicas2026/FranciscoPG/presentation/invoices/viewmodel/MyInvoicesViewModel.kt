@@ -6,12 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.iberdrola.practicas2026.FranciscoPG.core.error.ErrorClassifier
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFilters
-import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.FilterInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.mapper.InvoiceUiMapper
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListItem
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListUiState
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,45 +21,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-// ── UI States ─────────────────────────────────────────────────────────────────
-
-sealed class InvoiceUiState {
-    object Loading : InvoiceUiState()
-    data class Success(val invoices: List<Invoice>) : InvoiceUiState()
-    data class Error(val message: String) : InvoiceUiState()
-}
-
-data class LatestInvoiceUiModel(
-    val amount: String,
-    val dateRange: String,
-    val supplyTypeLabel: String,
-    val statusText: String,
-    val status: InvoiceStatus,
-    val iconRes: Int
-)
-
-sealed class InvoiceListUiState {
-    object Loading : InvoiceListUiState()
-
-    data class Success(
-        val latestInvoice: LatestInvoiceUiModel?,
-        val historyItems: List<InvoiceListItem>,
-        val invoiceCount: Int
-    ) : InvoiceListUiState()
-
-    // Sin facturas en el backend para este suministro
-    object Empty : InvoiceListUiState()
-
-    // Hay facturas pero los filtros aplicados las excluyen todas
-    object FilteredEmpty : InvoiceListUiState()
-
-    data class ServerError(val message: String) : InvoiceListUiState()
-
-    data class ConnectionError(val message: String) : InvoiceListUiState()
-}
-
-// ── ViewModel ─────────────────────────────────────────────────────────────────
 
 @HiltViewModel
 class MyInvoicesViewModel @Inject constructor(
@@ -105,9 +66,10 @@ class MyInvoicesViewModel @Inject constructor(
 
         if (invoices.isEmpty()) return@combine InvoiceListUiState.Empty
 
+        val hasActiveFilters = filters != InvoiceFilters()
         val filtered = filterInvoicesUseCase(invoices, filters)
         if (filtered.isEmpty()) return@combine InvoiceListUiState.FilteredEmpty
-        buildListUiState(filtered, currentSupplyType)
+        buildListUiState(filtered, currentSupplyType, hideLatestCard = hasActiveFilters)
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
@@ -178,11 +140,12 @@ class MyInvoicesViewModel @Inject constructor(
 
     private fun buildListUiState(
         invoices: List<Invoice>,
-        supplyType: SupplyType
+        supplyType: SupplyType,
+        hideLatestCard: Boolean = false
     ): InvoiceListUiState {
         val uiModel = invoiceUiMapper.map(invoices, supplyType)
         return InvoiceListUiState.Success(
-            latestInvoice = uiModel.latestInvoice,
+            latestInvoice = if (hideLatestCard) null else uiModel.latestInvoice,
             historyItems = uiModel.historyItems,
             invoiceCount = invoices.size
         )

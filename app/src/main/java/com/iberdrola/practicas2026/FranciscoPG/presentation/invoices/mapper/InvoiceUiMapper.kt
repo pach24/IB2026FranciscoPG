@@ -4,8 +4,8 @@ import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListItem
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.InvoiceUiModel
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.LatestInvoiceUiModel
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceUiModel
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.LatestInvoiceUiModel
 import javax.inject.Inject
 
 class InvoiceUiMapper @Inject constructor() {

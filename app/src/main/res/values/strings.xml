@@ -81,4 +81,16 @@
     <string name="filter_button_clear">Borrar filtros</string>
     <string name="filter_back">Atrás</string>
 
+    <!-- Filter status labels -->
+    <string name="filter_status_paid">Pagadas</string>
+    <string name="filter_status_pending">Pendientes de Pago</string>
+    <string name="filter_status_processing">En trámite de cobro</string>
+    <string name="filter_status_cancelled">Anuladas</string>
+    <string name="filter_status_fixed_fee">Cuota Fija</string>
+
+    <!-- Snackbar -->
+    <string name="snackbar_filters_applied">%1$d facturas coinciden con los filtros</string>
+    <string name="snackbar_filters_cleared">Filtros eliminados</string>
+    <string name="snackbar_undo">Deshacer</string>
+
 </resources>

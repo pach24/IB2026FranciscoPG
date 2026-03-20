@@ -8,24 +8,18 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,14 +33,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontRegular
 import androidx.compose.ui.text.style.TextDecoration
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.EmptyStateComposable
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.FeedbackBottomSheetComposable
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.FeedbackSheet
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.FeedbackSheetState
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import kotlinx.coroutines.launch
@@ -55,10 +48,7 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IconSize
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Stroke
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 
-private val InvoicesBold = FontFamily(Font(R.font.iberpangea_bold, FontWeight.Bold))
-private val InvoicesRegular = FontFamily(Font(R.font.iberpangea_regular, FontWeight.Normal))
-
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MyInvoicesComposeScreen(
     address: String,
@@ -82,7 +72,6 @@ fun MyInvoicesComposeScreen(
     )
     val scope = rememberCoroutineScope()
 
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val colors = IberdrolaTheme.colors
 
     // Solo intercepta back cuando NO hay sheet visible;
@@ -143,7 +132,7 @@ fun MyInvoicesComposeScreen(
                 text = stringResource(R.string.my_invoices_back),
                 modifier = Modifier.padding(start = Spacing.dp8),
                 textDecoration = TextDecoration.Underline,
-                fontFamily = InvoicesBold,
+                fontFamily = IberFontBold,
                 color = colors.iberdrolaDarkGreen,
                 fontSize = TextSize.sp16            )
         }
@@ -152,7 +141,7 @@ fun MyInvoicesComposeScreen(
         Text(
             text = stringResource(R.string.my_invoices_title),
             modifier = Modifier.padding(start = Spacing.dp24, top = Spacing.dp24, end = Spacing.dp24),
-            fontFamily = InvoicesBold,
+            fontFamily = IberFontBold,
             fontSize = TextSize.sp32,
             color = colors.darkGreyText
         )
@@ -160,7 +149,7 @@ fun MyInvoicesComposeScreen(
         Text(
             text = address,
             modifier = Modifier.padding(start = Spacing.dp24, top = Spacing.dp8, end = Spacing.dp24),
-            fontFamily = InvoicesBold,
+            fontFamily = IberFontBold,
             fontSize = TextSize.sp18,
             color = colors.darkGreyText
         )
@@ -213,7 +202,7 @@ fun MyInvoicesComposeScreen(
                             text = {
                                 Text(
                                     text = title,
-                                    fontFamily = if (isSelected) InvoicesBold else InvoicesRegular,
+                                    fontFamily = if (isSelected) IberFontBold else IberFontRegular,
                                     fontSize = TextSize.sp14,
                                     color = if (isSelected) colors.textHighEmphasis else Color.Gray
                                 )
@@ -236,50 +225,10 @@ fun MyInvoicesComposeScreen(
         }
     }
 
-    if (feedbackSheetState != FeedbackSheetState.Hidden) {
-        ModalBottomSheet(
-            onDismissRequest = onFeedbackDismiss,
-            sheetState = sheetState,
-            containerColor = colors.surface,
-            dragHandle = null,
-        ) {
-            when (feedbackSheetState) {
-                is FeedbackSheetState.Asking -> {
-                    FeedbackBottomSheetComposable(
-                        modifier = Modifier.navigationBarsPadding(),
-                        onFaceClick = onFeedbackFaceClick,
-                        onLaterClick = onFeedbackLaterClick
-                    )
-                }
-                is FeedbackSheetState.ThankYou -> {
-                    ThankYouContent(modifier = Modifier.navigationBarsPadding())
-                }
-                else -> {}
-            }
-        }
-    }
-}
-
-@Composable
-private fun ThankYouContent(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(Spacing.dp32),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_face_very_happy),
-            contentDescription = null,
-            tint = Color.Unspecified,
-            modifier = Modifier.size(IconSize.dp48)
-        )
-        Spacer(modifier = Modifier.height(Spacing.dp16))
-        Text(
-            text = stringResource(R.string.feedback_thank_you),
-            style = MaterialTheme.typography.titleMedium,
-            textAlign = TextAlign.Center
-        )
-        Spacer(modifier = Modifier.height(Spacing.dp24))
-    }
+    FeedbackSheet(
+        feedbackSheetState = feedbackSheetState,
+        onFaceClick = onFeedbackFaceClick,
+        onLaterClick = onFeedbackLaterClick,
+        onDismiss = onFeedbackDismiss
+    )
 }

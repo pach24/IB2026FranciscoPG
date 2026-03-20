@@ -21,12 +21,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.EmptyStateComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.ErrorStateComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.StickyInvoiceHeaderComposable
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.InvoiceListUiState
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListUiState
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 
@@ -37,7 +36,8 @@ fun InvoiceTabContent(
     listState: LazyListState,
     onFeatureNotAvailable: () -> Unit,
     onFilterClick: () -> Unit,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    activeFilterCount: Int = 0
 ) {
     var lastSuccess by remember { mutableStateOf<InvoiceListUiState.Success?>(null) }
 
@@ -54,12 +54,7 @@ fun InvoiceTabContent(
                 InvoiceListComposeScreen(
                     isLoading = true,
                     isRefreshing = false,
-                    latestInvoiceAmount = "",
-                    latestInvoiceDateRange = "",
-                    latestInvoiceType = "",
-                    latestInvoiceStatusText = "",
-                    latestInvoiceStatus = InvoiceStatus.PENDING,
-                    latestInvoiceIconRes = R.drawable.ic_light,
+                    latestInvoice = null,
                     historyItems = emptyList(),
                     listState = listState,
                     onLatestInvoiceClick = {},
@@ -71,18 +66,14 @@ fun InvoiceTabContent(
                 InvoiceListComposeScreen(
                     isLoading = false,
                     isRefreshing = true,
-                    latestInvoiceAmount = cached.latestInvoice?.amount ?: "",
-                    latestInvoiceDateRange = cached.latestInvoice?.dateRange ?: "",
-                    latestInvoiceType = cached.latestInvoice?.supplyTypeLabel ?: "",
-                    latestInvoiceStatusText = cached.latestInvoice?.statusText ?: "",
-                    latestInvoiceStatus = cached.latestInvoice?.status ?: InvoiceStatus.PENDING,
-                    latestInvoiceIconRes = cached.latestInvoice?.iconRes ?: R.drawable.ic_light,
+                    latestInvoice = cached.latestInvoice,
                     historyItems = cached.historyItems,
                     listState = listState,
                     onLatestInvoiceClick = onFeatureNotAvailable,
                     onFilterClick = onFilterClick,
                     onHistoryItemClick = { onFeatureNotAvailable() },
-                    onRefresh = onRefresh
+                    onRefresh = onRefresh,
+                    activeFilterCount = activeFilterCount
                 )
             }
         }
@@ -135,6 +126,7 @@ fun InvoiceTabContent(
                             .fillMaxWidth()
                             .background(IberdrolaTheme.colors.background)
                             .padding(vertical = Spacing.dp8),
+                        activeFilterCount = activeFilterCount,
                         onFilterClick = onFilterClick
                     )
                     EmptyStateComposable(
@@ -201,18 +193,14 @@ fun InvoiceTabContent(
             InvoiceListComposeScreen(
                 isLoading = false,
                 isRefreshing = false,
-                latestInvoiceAmount = uiState.latestInvoice?.amount ?: "",
-                latestInvoiceDateRange = uiState.latestInvoice?.dateRange ?: "",
-                latestInvoiceType = uiState.latestInvoice?.supplyTypeLabel ?: "",
-                latestInvoiceStatusText = uiState.latestInvoice?.statusText ?: "",
-                latestInvoiceStatus = uiState.latestInvoice?.status ?: InvoiceStatus.PENDING,
-                latestInvoiceIconRes = uiState.latestInvoice?.iconRes ?: R.drawable.ic_light,
+                latestInvoice = uiState.latestInvoice,
                 historyItems = uiState.historyItems,
                 listState = listState,
                 onLatestInvoiceClick = onFeatureNotAvailable,
                 onFilterClick = onFilterClick,
                 onHistoryItemClick = { onFeatureNotAvailable() },
-                onRefresh = onRefresh
+                onRefresh = onRefresh,
+                activeFilterCount = activeFilterCount
             )
         }
     }

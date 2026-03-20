@@ -22,8 +22,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontRegular
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -33,9 +33,6 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
-
-private val PriceBold = FontFamily(Font(R.font.iberpangea_bold, FontWeight.Bold))
-private val PriceRegular = FontFamily(Font(R.font.iberpangea_regular, FontWeight.Normal))
 
 // Sección de rango de importe con badge central, slider de doble thumb y etiquetas de límites
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,7 +61,7 @@ fun PriceRangeSection(
                     minPrice.toInt(),
                     maxPrice.toInt()
                 ),
-                fontFamily = PriceBold,
+                fontFamily = IberFontBold,
                 fontWeight = FontWeight.Bold,
                 fontSize = TextSize.sp12,
                 style = TextStyle(
@@ -138,13 +135,13 @@ fun PriceRangeSection(
             Text(
                 text = stringResource(R.string.filter_price_limit, minLimit.toInt()),
                 color = colors.textSubtitle,
-                fontFamily = PriceRegular,
+                fontFamily = IberFontRegular,
                 fontSize = TextSize.sp14
             )
             Text(
                 text = stringResource(R.string.filter_price_limit, maxLimit.toInt()),
                 color = colors.textSubtitle,
-                fontFamily = PriceRegular,
+                fontFamily = IberFontRegular,
                 fontSize = TextSize.sp14
             )
         }

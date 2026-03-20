@@ -20,9 +20,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontRegular
 import androidx.compose.ui.unit.Dp
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
@@ -34,9 +34,6 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Stroke
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Skeleton
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
-
-private val InvoiceFontRegular = FontFamily(Font(R.font.iberpangea_regular, FontWeight.Normal))
-private val InvoiceFontBold = FontFamily(Font(R.font.iberpangea_bold, FontWeight.Bold))
 
 @Composable
 fun InvoiceHeaderItemComposable(
@@ -54,7 +51,7 @@ fun InvoiceHeaderItemComposable(
                 horizontal = Spacing.dp32,
                 vertical = Spacing.dp10
             ),
-        fontFamily = InvoiceFontBold,
+        fontFamily = IberFontBold,
         fontWeight = FontWeight.Bold,
         fontSize = TextSize.sp14,
         color = colors.darkGreyText
@@ -93,7 +90,7 @@ fun InvoiceRowItemComposable(
                 // Fecha de la factura: "8 de marzo"
                 Text(
                     text = date,
-                    fontFamily = InvoiceFontBold,
+                    fontFamily = IberFontBold,
                     fontWeight = FontWeight.Bold,
                     fontSize = TextSize.sp14,
                     color = colors.darkGreyText
@@ -103,7 +100,7 @@ fun InvoiceRowItemComposable(
                 // Tipo de factura: "Factura Luz", "Factura Gas"
                 Text(
                     text = type,
-                    fontFamily = InvoiceFontRegular,
+                    fontFamily = IberFontRegular,
                     fontSize = TextSize.sp12,
                     color = colors.lightGrey
                 )
@@ -122,7 +119,7 @@ fun InvoiceRowItemComposable(
                 // Importe: "20,00 €"
                 Text(
                     text = amount,
-                    fontFamily = InvoiceFontRegular,
+                    fontFamily = IberFontRegular,
                     fontSize = TextSize.sp16,
                     color = colors.lightGrey
                 )

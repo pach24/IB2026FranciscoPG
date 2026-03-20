@@ -6,30 +6,40 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.iberdrola.practicas2026.FranciscoPG.R
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFilters
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
-import com.iberdrola.practicas2026.FranciscoPG.domain.model.maxAmount
-import com.iberdrola.practicas2026.FranciscoPG.domain.model.newestDate
-import com.iberdrola.practicas2026.FranciscoPG.domain.model.oldestDate
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListUiState
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.FeedbackViewModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.FilterViewModel
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.InvoiceListUiState
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.InvoicesCoordinatorViewModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.MyInvoicesViewModel
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import kotlinx.coroutines.launch
 
 /**
@@ -66,39 +76,47 @@ fun InvoicesRoute(
         hiltViewModel(key = "gas_invoices_vm")
     val filterViewModel: FilterViewModel = hiltViewModel()
     val feedbackViewModel: FeedbackViewModel = hiltViewModel()
+    val coordinator: InvoicesCoordinatorViewModel = hiltViewModel()
 
     val electricityState by electricityViewModel.listUiState.collectAsStateWithLifecycle()
     val gasState by gasViewModel.listUiState.collectAsStateWithLifecycle()
     val electricityShowDialog by electricityViewModel.showDialogEvent.collectAsStateWithLifecycle()
     val gasShowDialog by gasViewModel.showDialogEvent.collectAsStateWithLifecycle()
     val sheetState by feedbackViewModel.sheetState.collectAsStateWithLifecycle()
-
-    // Sincronizar filtros aplicados del FilterViewModel
     val appliedFilters by filterViewModel.appliedFilters.collectAsStateWithLifecycle()
-    LaunchedEffect(appliedFilters) {
-        electricityViewModel.setAppliedFilters(appliedFilters)
-        gasViewModel.setAppliedFilters(appliedFilters)
-    }
+    val activeFilterCount = appliedFilters.activeCount
 
-    // Sincronizar estadísticas combinadas de ambos tabs
+    // Feed states into coordinator
+    LaunchedEffect(electricityState) { coordinator.setElectricityState(electricityState) }
+    LaunchedEffect(gasState) { coordinator.setGasState(gasState) }
+
     val electricityInvoices by electricityViewModel.allInvoices.collectAsStateWithLifecycle()
     val gasInvoices by gasViewModel.allInvoices.collectAsStateWithLifecycle()
-    LaunchedEffect(electricityInvoices, gasInvoices) {
-        val allInvoices = electricityInvoices + gasInvoices
-        if (allInvoices.isNotEmpty()) {
-            filterViewModel.updateStatistics(
-                maxAmount = allInvoices.maxAmount(),
-                oldestDate = allInvoices.oldestDate(),
-                newestDate = allInvoices.newestDate()
-            )
-        }
+    LaunchedEffect(electricityInvoices) { coordinator.setElectricityInvoices(electricityInvoices) }
+    LaunchedEffect(gasInvoices) { coordinator.setGasInvoices(gasInvoices) }
+
+    // Start coordinator syncs once
+    LaunchedEffect(Unit) {
+        coordinator.startFilterSync(filterViewModel, electricityViewModel, gasViewModel)
+        coordinator.startStatisticsSync(filterViewModel)
+        coordinator.startAutoSwitch()
     }
 
+    // Collect coordinator derived states
+    val bothLoaded by coordinator.bothLoaded.collectAsStateWithLifecycle()
+    val isGlobalEmpty by coordinator.isGlobalEmpty.collectAsStateWithLifecycle()
+    val preferredTabIndex by coordinator.preferredTabIndex.collectAsStateWithLifecycle()
+    val scrollCompleted by coordinator.scrollCompleted.collectAsStateWithLifecycle()
+
     val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
     val electricityListState = rememberLazyListState()
     val gasListState = rememberLazyListState()
 
-    // Filter screen state: null = list, non-null = show filter
+    // Snackbar messages (resolved outside coroutine)
+    val filtersClearedMsg = stringResource(R.string.snackbar_filters_cleared)
+    val undoLabel = stringResource(R.string.snackbar_undo)
+
     var showFilter by remember { mutableStateOf(false) }
 
     // Recargar facturas al entrar o al cambiar de modo (mock/retrofit)
@@ -108,32 +126,6 @@ fun InvoicesRoute(
         previousMock = useMock
         electricityViewModel.fetchInvoices(SupplyType.ELECTRICITY, useMock, forceRefresh = modeChanged)
         gasViewModel.fetchInvoices(SupplyType.GAS, useMock, forceRefresh = modeChanged)
-    }
-
-    // Determinar si ambos tabs han terminado de cargar
-    val bothLoaded = electricityState !is InvoiceListUiState.Loading
-            && gasState !is InvoiceListUiState.Loading
-
-    // Empty state global: ambos tabs terminaron y ninguno tiene facturas
-    val isGlobalEmpty = bothLoaded
-            && electricityState is InvoiceListUiState.Empty
-            && gasState is InvoiceListUiState.Empty
-
-    // Auto-switch de tab: reacciona al cambio de estados (carga inicial + filtros)
-    var activeTab by remember { mutableIntStateOf(0) }
-    var preferredTabIndex by remember { mutableIntStateOf(0) }
-    var scrollCompleted by remember { mutableStateOf(false) }
-
-    LaunchedEffect(electricityState, gasState) {
-        if (bothLoaded) {
-            val resolved = resolvePreferredTabIndex(
-                electricityState, gasState, bothLoaded, activeTab
-            )
-            if (resolved != activeTab) {
-                preferredTabIndex = resolved
-                scrollCompleted = true
-            }
-        }
     }
 
     val effectiveElectricityState = if (
@@ -147,30 +139,58 @@ fun InvoicesRoute(
         gasViewModel.fetchInvoices(SupplyType.GAS, useMock, forceRefresh = true)
     }
 
-    AnimatedContent(
-        targetState = showFilter,
-        transitionSpec = {
-            if (targetState) {
-                slideInHorizontally { it } togetherWith slideOutHorizontally { -it }
+    Box(modifier = Modifier.fillMaxSize()) {
+        AnimatedContent(
+            targetState = showFilter,
+            transitionSpec = {
+                if (targetState) {
+                    slideInHorizontally { it } togetherWith slideOutHorizontally { -it }
+                } else {
+                    slideInHorizontally { -it } togetherWith slideOutHorizontally { it }
+                }
+            },
+            label = "filter_transition"
+        ) { isFilterVisible ->
+            if (isFilterVisible) {
+                BackHandler { showFilter = false }
+                FilterRoute(
+                    onBack = { showFilter = false },
+                    filterViewModel = filterViewModel,
+                    onFiltersApplied = {
+                        scope.launch {
+                            snackbarHostState.currentSnackbarData?.dismiss()
+                            // Small delay to let the list state update after filters apply
+                            kotlinx.coroutines.delay(300)
+                            val elecCount = (electricityViewModel.listUiState.value as? InvoiceListUiState.Success)?.invoiceCount ?: 0
+                            val gasCount = (gasViewModel.listUiState.value as? InvoiceListUiState.Success)?.invoiceCount ?: 0
+                            val total = elecCount + gasCount
+                            snackbarHostState.showSnackbar(
+                                message = "$total facturas coinciden con los filtros",
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                    },
+                    onFiltersCleared = { previousFilters ->
+                        scope.launch {
+                            snackbarHostState.currentSnackbarData?.dismiss()
+                            val result = snackbarHostState.showSnackbar(
+                                message = filtersClearedMsg,
+                                actionLabel = undoLabel,
+                                duration = SnackbarDuration.Short
+                            )
+                            if (result == SnackbarResult.ActionPerformed) {
+                                filterViewModel.restoreFilters(previousFilters)
+                            }
+                        }
+                    }
+                )
             } else {
-                slideInHorizontally { -it } togetherWith slideOutHorizontally { it }
-            }
-        },
-        label = "filter_transition"
-    ) { isFilterVisible ->
-        if (isFilterVisible) {
-            BackHandler { showFilter = false }
-            FilterRoute(
-                onBack = { showFilter = false },
-                filterViewModel = filterViewModel
-            )
-        } else {
             MyInvoicesComposeScreen(
                 address = stringResource(R.string.my_invoices_mock_address),
                 feedbackSheetState = sheetState,
                 isGlobalEmpty = isGlobalEmpty,
                 preferredTabIndex = preferredTabIndex,
-                onTabChanged = { activeTab = it },
+                onTabChanged = { coordinator.onTabChanged(it) },
                 onBackClick = {
                     Log.d("InvoicesRoute", "Back pressed, evaluating feedback")
                     feedbackViewModel.onExitInvoices()
@@ -190,7 +210,8 @@ fun InvoicesRoute(
                         listState = electricityListState,
                         onFeatureNotAvailable = electricityViewModel::onFeatureNotAvailable,
                         onFilterClick = { showFilter = true },
-                        onRefresh = refreshBoth
+                        onRefresh = refreshBoth,
+                        activeFilterCount = activeFilterCount
                     )
                 },
                 gasTabContent = {
@@ -199,9 +220,24 @@ fun InvoicesRoute(
                         listState = gasListState,
                         onFeatureNotAvailable = gasViewModel::onFeatureNotAvailable,
                         onFilterClick = { showFilter = true },
-                        onRefresh = refreshBoth
+                        onRefresh = refreshBoth,
+                        activeFilterCount = activeFilterCount
                     )
                 }
+            )
+            }
+        }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = Spacing.dp16)
+        ) { data ->
+            Snackbar(
+                snackbarData = data,
+                containerColor = IberdrolaTheme.colors.iberdrolaDarkGreen,
+                actionColor = IberdrolaTheme.colors.iberdrolaGreen
             )
         }
     }

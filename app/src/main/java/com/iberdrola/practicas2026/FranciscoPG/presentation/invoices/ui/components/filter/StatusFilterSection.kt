@@ -30,17 +30,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontRegular
 import androidx.compose.ui.unit.dp
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
-
-private val StatusBold = FontFamily(Font(R.font.iberpangea_bold, FontWeight.Bold))
-private val StatusRegular = FontFamily(Font(R.font.iberpangea_regular, FontWeight.Normal))
 
 // Sección de filtrado por estado con checkboxes redondeados para cada opción
 @Composable
@@ -56,7 +53,7 @@ fun StatusFilterSection(
             text = stringResource(R.string.filter_status_section_title),
             fontSize = TextSize.sp14,
             fontWeight = FontWeight.Bold,
-            fontFamily = StatusBold,
+            fontFamily = IberFontBold,
             color = colors.darkGreyText
         )
         Spacer(modifier = Modifier.height(Spacing.dp24))
@@ -86,7 +83,7 @@ fun StatusFilterSection(
                     Text(
                         text = status,
                         modifier = Modifier.padding(start = Spacing.dp16),
-                        fontFamily = StatusRegular,
+                        fontFamily = IberFontRegular,
                         fontSize = TextSize.sp14,
                         color = colors.darkGreyText
                     )

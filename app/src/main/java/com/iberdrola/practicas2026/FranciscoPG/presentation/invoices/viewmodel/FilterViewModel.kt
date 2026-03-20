@@ -36,6 +36,11 @@ class FilterViewModel @Inject constructor() : ViewModel() {
         _appliedFilters.value = _filterState.value.filters
     }
 
+    fun restoreFilters(filters: InvoiceFilters) {
+        _filterState.value = _filterState.value.copy(filters = filters)
+        _appliedFilters.value = filters
+    }
+
     fun clearFilters() {
         val maxAmount = _filterState.value.statistics.maxAmount
         val cleanFilters = InvoiceFilters(

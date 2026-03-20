@@ -1,8 +1,8 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens
 
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.InvoiceListUiState
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.LatestInvoiceUiModel
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListUiState
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.LatestInvoiceUiModel
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

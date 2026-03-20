@@ -17,15 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
-
-private val SectionBold = FontFamily(Font(R.font.iberpangea_bold, FontWeight.Bold))
 
 // Sección de rango de fechas con campos "Desde" y "Hasta" que abren un DatePicker
 @Composable
@@ -41,7 +38,7 @@ fun DateRangeSection(
             text = stringResource(R.string.filter_date_section_title),
             fontSize = TextSize.sp14,
             fontWeight = FontWeight.Bold,
-            fontFamily = SectionBold,
+            fontFamily = IberFontBold,
             color = colors.darkGreyText
         )
         Spacer(modifier = Modifier.height(Spacing.dp16))

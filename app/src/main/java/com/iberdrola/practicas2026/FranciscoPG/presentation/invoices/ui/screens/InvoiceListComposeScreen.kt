@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListItem
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.LatestInvoiceUiModel
 import androidx.compose.foundation.layout.Box
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.InvoiceHeaderItemComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.InvoiceRowItemComposable
@@ -49,18 +50,14 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 fun InvoiceListComposeScreen(
     isLoading: Boolean,
     isRefreshing: Boolean,
-    latestInvoiceAmount: String,
-    latestInvoiceDateRange: String,
-    latestInvoiceType: String,
-    latestInvoiceStatusText: String,
-    latestInvoiceStatus: InvoiceStatus,
-    latestInvoiceIconRes: Int,
+    latestInvoice: LatestInvoiceUiModel?,
     historyItems: List<InvoiceListItem>,
     onLatestInvoiceClick: () -> Unit,
     onFilterClick: () -> Unit,
     onHistoryItemClick: (InvoiceListItem.InvoiceItem) -> Unit,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
+    activeFilterCount: Int = 0,
     listState: LazyListState = rememberLazyListState()
 ) {
     val pullToRefreshState = rememberPullToRefreshState()
@@ -113,16 +110,18 @@ fun InvoiceListComposeScreen(
                 // Última factura (card)
                 item {
                     Spacer(modifier = Modifier.height(Spacing.dp18))
-                    LatestInvoiceCardComposable(
-                        amount = latestInvoiceAmount,
-                        dateRange = latestInvoiceDateRange,
-                        supplyType = latestInvoiceType,
-                        status = latestInvoiceStatusText,
-                        invoiceStatus = latestInvoiceStatus,
-                        iconRes = latestInvoiceIconRes,
-                        onClick = onLatestInvoiceClick,
-                        modifier = Modifier.padding(horizontal = Spacing.dp24)
-                    )
+                    if (latestInvoice != null) {
+                        LatestInvoiceCardComposable(
+                            amount = latestInvoice.amount,
+                            dateRange = latestInvoice.dateRange,
+                            supplyType = latestInvoice.supplyTypeLabel,
+                            status = latestInvoice.statusText,
+                            invoiceStatus = latestInvoice.status,
+                            iconRes = latestInvoice.iconRes,
+                            onClick = onLatestInvoiceClick,
+                            modifier = Modifier.padding(horizontal = Spacing.dp24)
+                        )
+                    }
                 }
 
                 // Sticky header (histórico de facturas + botón filtro)
@@ -132,6 +131,7 @@ fun InvoiceListComposeScreen(
                             .fillMaxWidth()
                             .background(IberdrolaTheme.colors.background)
                             .padding(vertical = Spacing.dp8),
+                        activeFilterCount = activeFilterCount,
                         onFilterClick = onFilterClick
                     )
                 }
@@ -181,12 +181,14 @@ private fun PreviewInvoiceListComposeScreen() {
         InvoiceListComposeScreen(
             isLoading = false,
             isRefreshing = false,
-            latestInvoiceAmount = "20,00 €",
-            latestInvoiceDateRange = "01 feb. 2024 - 04 mar. 2024",
-            latestInvoiceType = "Factura Luz",
-            latestInvoiceStatusText = "Pendiente de Pago",
-            latestInvoiceStatus = InvoiceStatus.PENDING,
-            latestInvoiceIconRes = R.drawable.ic_light,
+            latestInvoice = LatestInvoiceUiModel(
+                amount = "20,00 €",
+                dateRange = "01 feb. 2024 - 04 mar. 2024",
+                supplyTypeLabel = "Factura Luz",
+                statusText = "Pendiente de Pago",
+                status = InvoiceStatus.PENDING,
+                iconRes = R.drawable.ic_light
+            ),
             historyItems = mockHistoryItems,
             onLatestInvoiceClick = {},
             onFilterClick = {},
@@ -205,12 +207,7 @@ private fun PreviewInvoiceListComposeScreenLoading() {
         InvoiceListComposeScreen(
             isLoading = true,
             isRefreshing = false,
-            latestInvoiceAmount = "",
-            latestInvoiceDateRange = "",
-            latestInvoiceType = "",
-            latestInvoiceStatusText = "",
-            latestInvoiceStatus = InvoiceStatus.PENDING,
-            latestInvoiceIconRes = R.drawable.ic_light,
+            latestInvoice = null,
             historyItems = emptyList(),
             onLatestInvoiceClick = {},
             onFilterClick = {},
@@ -232,12 +229,14 @@ private fun PreviewInvoiceListOverlay() {
             InvoiceListComposeScreen(
                 isLoading = false,
                 isRefreshing = false,
-                latestInvoiceAmount = "20,00 €",
-                latestInvoiceDateRange = "01 feb. 2024 - 04 mar. 2024",
-                latestInvoiceType = "Factura Luz",
-                latestInvoiceStatusText = "Pendiente de Pago",
-                latestInvoiceStatus = InvoiceStatus.PENDING,
-                latestInvoiceIconRes = R.drawable.ic_light,
+                latestInvoice = LatestInvoiceUiModel(
+                    amount = "20,00 €",
+                    dateRange = "01 feb. 2024 - 04 mar. 2024",
+                    supplyTypeLabel = "Factura Luz",
+                    statusText = "Pendiente de Pago",
+                    status = InvoiceStatus.PENDING,
+                    iconRes = R.drawable.ic_light
+                ),
                 historyItems = mockHistoryItems,
                 onLatestInvoiceClick = {},
                 onFilterClick = {},
@@ -248,12 +247,7 @@ private fun PreviewInvoiceListOverlay() {
             InvoiceListComposeScreen(
                 isLoading = true,
                 isRefreshing = false,
-                latestInvoiceAmount = "",
-                latestInvoiceDateRange = "",
-                latestInvoiceType = "",
-                latestInvoiceStatusText = "",
-                latestInvoiceStatus = InvoiceStatus.PENDING,
-                latestInvoiceIconRes = R.drawable.ic_light,
+                latestInvoice = null,
                 historyItems = emptyList(),
                 onLatestInvoiceClick = {},
                 onFilterClick = {},

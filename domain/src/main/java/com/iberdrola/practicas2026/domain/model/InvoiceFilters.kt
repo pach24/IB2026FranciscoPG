@@ -22,6 +22,16 @@ data class InvoiceFilters(
      *
      * @return Copia corregida de los filtros
      */
+    val activeCount: Int
+        get() {
+            var count = 0
+            if (startDate != null || endDate != null) count++
+            if (minAmount != null && minAmount!! > 0.0) count++
+            if (maxAmount != null) count++
+            if (filteredStatuses.isNotEmpty()) count++
+            return count
+        }
+
     fun normalize(): InvoiceFilters {
         var normalized = this
 

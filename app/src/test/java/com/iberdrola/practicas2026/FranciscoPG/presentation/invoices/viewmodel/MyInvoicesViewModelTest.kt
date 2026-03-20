@@ -8,6 +8,10 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.FilterInvoicesUseC
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.mapper.InvoiceUiMapper
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListItem
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListUiState
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceUiModel
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceUiState
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.LatestInvoiceUiModel
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk

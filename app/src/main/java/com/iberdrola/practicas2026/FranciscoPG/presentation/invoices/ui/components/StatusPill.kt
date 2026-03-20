@@ -6,9 +6,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
@@ -18,8 +17,6 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
-
-private val StatusFontBold = FontFamily(Font(R.font.iberpangea_bold, FontWeight.Bold))
 
 @Composable
 fun StatusPillComposable(
@@ -39,7 +36,7 @@ fun StatusPillComposable(
                 horizontal = Spacing.dp12,
                 vertical = Spacing.dp4
             ),
-        fontFamily = StatusFontBold,
+        fontFamily = IberFontBold,
         fontWeight = FontWeight.Bold,
         fontSize = TextSize.sp10,
         lineHeight = (10f * 1.4f).sp,
