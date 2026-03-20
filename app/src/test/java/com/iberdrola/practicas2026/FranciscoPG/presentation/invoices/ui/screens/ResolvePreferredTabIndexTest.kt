@@ -1,7 +1,8 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens
 
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.InvoiceListUiState
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.LatestInvoiceUiModel
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListUiState
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.LatestInvoiceUiModel
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -12,8 +13,8 @@ class ResolvePreferredTabIndexTest {
             amount = "50.00 €",
             dateRange = "01/01/2024 - 31/01/2024",
             supplyTypeLabel = "Factura",
-            status = "Pagada",
-            isPaid = true,
+            statusText = "Pagada",
+            status = InvoiceStatus.PAID,
             iconRes = 0
         ),
         historyItems = emptyList(),
@@ -115,6 +116,68 @@ class ResolvePreferredTabIndexTest {
             electricityState = InvoiceListUiState.ServerError("error"),
             gasState = successState,
             bothLoaded = true
+        )
+        assertEquals(0, result)
+    }
+
+    // ── FilteredEmpty tests ──────────────────────────────────────────────────
+
+    // Electricidad filtrada vacía y Gas con datos, currentTab=0 → tab 1 (Gas)
+    @Test
+    fun `electricity filtered empty and gas with data switches to gas`() {
+        val result = resolvePreferredTabIndex(
+            electricityState = InvoiceListUiState.FilteredEmpty,
+            gasState = successState,
+            bothLoaded = true,
+            currentTab = 0
+        )
+        assertEquals(1, result)
+    }
+
+    // Gas filtrado vacío y Electricidad con datos, currentTab=1 → tab 0 (Electricidad)
+    @Test
+    fun `gas filtered empty and electricity with data switches to electricity`() {
+        val result = resolvePreferredTabIndex(
+            electricityState = successState,
+            gasState = InvoiceListUiState.FilteredEmpty,
+            bothLoaded = true,
+            currentTab = 1
+        )
+        assertEquals(0, result)
+    }
+
+    // Ambas filtradas vacías → mantiene tab actual
+    @Test
+    fun `both filtered empty stays on current tab`() {
+        val result = resolvePreferredTabIndex(
+            electricityState = InvoiceListUiState.FilteredEmpty,
+            gasState = InvoiceListUiState.FilteredEmpty,
+            bothLoaded = true,
+            currentTab = 1
+        )
+        assertEquals(1, result)
+    }
+
+    // Ambas con datos, currentTab=1 → mantiene Gas
+    @Test
+    fun `both with data stays on current tab`() {
+        val result = resolvePreferredTabIndex(
+            electricityState = successState,
+            gasState = successState,
+            bothLoaded = true,
+            currentTab = 1
+        )
+        assertEquals(1, result)
+    }
+
+    // Electricidad Empty + Gas FilteredEmpty, currentTab=0 → mantiene tab (ambas sin contenido)
+    @Test
+    fun `electricity empty and gas filtered empty stays on current tab`() {
+        val result = resolvePreferredTabIndex(
+            electricityState = InvoiceListUiState.Empty,
+            gasState = InvoiceListUiState.FilteredEmpty,
+            bothLoaded = true,
+            currentTab = 0
         )
         assertEquals(0, result)
     }

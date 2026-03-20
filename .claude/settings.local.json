@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find C:Users6003367AndroidStudioProjectsIB2026FranciscoPG/app/src/main/java -name *.kt)",
+      "Bash(find C:Users6003367AndroidStudioProjectsIB2026FranciscoPG -name *.kt -type f)",
+      "Bash(grep -rn \"LUZ\\\\|luz\\\\|Luz\\\\|ic_light\" C:Users6003367AndroidStudioProjectsIB2026FranciscoPG/app/src/main --include=*.kt --include=*.xml)",
+      "Bash(xargs wc:*)",
+      "Bash(./gradlew assembleDebug)",
+      "Bash(./gradlew :app:compileDebugKotlin)",
+      "Bash(find /c/Users/6003367/AndroidStudioProjects/IB2026FranciscoPG -type f -path */src/test/*)",
+      "Bash(./gradlew :domain:test --no-daemon)",
+      "Bash(./gradlew :data:test --no-daemon)",
+      "Bash(./gradlew :app:testDebugUnitTest --no-daemon)",
+      "Bash(./gradlew :domain:test :data:test :app:testDebugUnitTest --no-daemon)",
+      "Bash(./gradlew :app:testDebugUnitTest --tests \"com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens.ResolvePreferredTabIndexTest\")",
+      "Bash(./gradlew :app:testDebugUnitTest)",
+      "Bash(grep -r \"Luz\\\\|Gas\\\\|Pagada\\\\|Pendiente\\\\|FRANCISCO\" /c/Users/6003367/AndroidStudioProjects/IB2026FranciscoPG/app/src/main --include=*.kt)",
+      "Bash(xargs grep:*)",
+      "Bash(xargs ls:*)",
+      "Bash(./gradlew :domain:test --tests \"com.iberdrola.practicas2026.FranciscoPG.domain.usecase.FilterInvoicesUseCaseTest\" --tests \"com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFiltersTest\" --tests \"com.iberdrola.practicas2026.FranciscoPG.domain.model.DateValidatorTest\")",
+      "Bash(./gradlew :domain:compileKotlin :app:compileDebugKotlin)",
+      "Bash(./gradlew :domain:test :app:testDebugUnitTest)",
+      "Bash(./gradlew :app:testDebugUnitTest --tests \"com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.MyInvoicesViewModelTest\")"
+    ]
+  }
+}

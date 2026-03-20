@@ -20,11 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontRegular
 import androidx.compose.ui.unit.Dp
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
@@ -33,9 +34,6 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Stroke
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Skeleton
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
-
-private val InvoiceFontRegular = FontFamily(Font(R.font.iberpangea_regular, FontWeight.Normal))
-private val InvoiceFontBold = FontFamily(Font(R.font.iberpangea_bold, FontWeight.Bold))
 
 @Composable
 fun InvoiceHeaderItemComposable(
@@ -53,7 +51,7 @@ fun InvoiceHeaderItemComposable(
                 horizontal = Spacing.dp32,
                 vertical = Spacing.dp10
             ),
-        fontFamily = InvoiceFontBold,
+        fontFamily = IberFontBold,
         fontWeight = FontWeight.Bold,
         fontSize = TextSize.sp14,
         color = colors.darkGreyText
@@ -66,7 +64,7 @@ fun InvoiceRowItemComposable(
     type: String,
     status: String,
     amount: String,
-    isPaid: Boolean = false,
+    invoiceStatus: InvoiceStatus = InvoiceStatus.PENDING,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
@@ -92,7 +90,7 @@ fun InvoiceRowItemComposable(
                 // Fecha de la factura: "8 de marzo"
                 Text(
                     text = date,
-                    fontFamily = InvoiceFontBold,
+                    fontFamily = IberFontBold,
                     fontWeight = FontWeight.Bold,
                     fontSize = TextSize.sp14,
                     color = colors.darkGreyText
@@ -102,7 +100,7 @@ fun InvoiceRowItemComposable(
                 // Tipo de factura: "Factura Luz", "Factura Gas"
                 Text(
                     text = type,
-                    fontFamily = InvoiceFontRegular,
+                    fontFamily = IberFontRegular,
                     fontSize = TextSize.sp12,
                     color = colors.lightGrey
                 )
@@ -110,7 +108,7 @@ fun InvoiceRowItemComposable(
                 // Estado: "Pagada" / "Pendiente de Pago"
                 StatusPillComposable(
                     text = status,
-                    isPaid = isPaid,
+                    status = invoiceStatus,
                     modifier = Modifier.padding(top = Spacing.dp8)
                 )
             }
@@ -121,7 +119,7 @@ fun InvoiceRowItemComposable(
                 // Importe: "20,00 €"
                 Text(
                     text = amount,
-                    fontFamily = InvoiceFontRegular,
+                    fontFamily = IberFontRegular,
                     fontSize = TextSize.sp16,
                     color = colors.lightGrey
                 )
@@ -270,7 +268,7 @@ private fun PreviewInvoiceRowItemComposable() {
             type = "Factura Luz",
             status = "Pendiente de Pago",
             amount = "20,00 €",
-            isPaid = false
+            invoiceStatus = InvoiceStatus.PENDING
         )
     }
 }
@@ -285,7 +283,7 @@ private fun PreviewInvoiceRowItemPaidComposable() {
             type = "Factura Luz",
             status = "Pagada",
             amount = "20,00 €",
-            isPaid = true
+            invoiceStatus = InvoiceStatus.PAID
         )
     }
 }
@@ -326,7 +324,7 @@ private fun PreviewOverlaySkeletonOnRow() {
                         type = "Factura Luz",
                         status = "Pendiente de Pago",
                         amount = "20,00 €",
-                        isPaid = false
+                        invoiceStatus = InvoiceStatus.PENDING
                     )
                     // Skeleton de la fila (superpuesto)
                     SkeletonInvoiceRowItemComposable(

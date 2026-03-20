@@ -4,8 +4,8 @@ import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListItem
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.InvoiceUiModel
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.LatestInvoiceUiModel
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceUiModel
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.LatestInvoiceUiModel
 import javax.inject.Inject
 
 class InvoiceUiMapper @Inject constructor() {
@@ -17,10 +17,10 @@ class InvoiceUiMapper @Inject constructor() {
         val latestInvoice = invoices.firstOrNull()?.let { invoice ->
             LatestInvoiceUiModel(
                 amount = formatAmount(invoice.amount),
-                dateRange = "${invoice.periodStart} - ${invoice.periodEnd}",
+                dateRange = "${formatPeriodDate(invoice.periodStart)} - ${formatPeriodDate(invoice.periodEnd)}",
                 supplyTypeLabel = typeLabel,
-                status = invoice.status.apiValue,
-                isPaid = invoice.status.isPaid,
+                statusText = invoice.status.apiValue,
+                status = invoice.status,
                 iconRes = iconRes
             )
         }
@@ -54,7 +54,7 @@ class InvoiceUiMapper @Inject constructor() {
                         type = typeLabel,
                         amount = formatAmount(invoice.amount),
                         statusText = invoice.status.apiValue,
-                        isPaid = invoice.status.isPaid
+                        status = invoice.status
                     )
                 )
             }
@@ -70,6 +70,18 @@ class InvoiceUiMapper @Inject constructor() {
         if (month !in 1..12) return chargeDate
 
         return "$day de ${MONTHS[month]}"
+    }
+
+    private fun formatPeriodDate(date: String): String {
+        val parts = date.split("/")
+        if (parts.size != 3) return date
+
+        val day = parts[0].padStart(2, '0')
+        val month = parts[1].toIntOrNull() ?: return date
+        if (month !in 1..12) return date
+        val year = parts[2]
+
+        return "$day ${MONTHS_SHORT[month]} $year"
     }
 
     private fun formatAmount(amount: Double): String = "%.2f €".format(amount)
@@ -88,6 +100,10 @@ class InvoiceUiMapper @Inject constructor() {
         private val MONTHS = arrayOf(
             "", "enero", "febrero", "marzo", "abril", "mayo", "junio",
             "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+        )
+        private val MONTHS_SHORT = arrayOf(
+            "", "ene.", "feb.", "mar.", "abr.", "may.", "jun.",
+            "jul.", "ago.", "sep.", "oct.", "nov.", "dic."
         )
     }
 }

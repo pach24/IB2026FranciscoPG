@@ -1,5 +1,5 @@
 {
-  "numFacturas": 12,
+  "numFacturas": 16,
   "facturas": [
     {
       "id": "1",
@@ -107,6 +107,42 @@
       "fechaCobro": "30/11/2021",
       "fechaInicio": "30/10/2021",
       "fechaFin": "30/11/2021",
+      "tipoSuministro": "GAS"
+    },
+    {
+      "id": "13",
+      "descEstado": "Anulada",
+      "importeOrdenacion": 55.75,
+      "fechaCobro": "15/06/2023",
+      "fechaInicio": "15/05/2023",
+      "fechaFin": "15/06/2023",
+      "tipoSuministro": "LUZ"
+    },
+    {
+      "id": "14",
+      "descEstado": "Anulada",
+      "importeOrdenacion": 28.30,
+      "fechaCobro": "10/04/2022",
+      "fechaInicio": "10/03/2022",
+      "fechaFin": "10/04/2022",
+      "tipoSuministro": "GAS"
+    },
+    {
+      "id": "15",
+      "descEstado": "En trámite de cobro",
+      "importeOrdenacion": 73.40,
+      "fechaCobro": "08/03/2024",
+      "fechaInicio": "08/02/2024",
+      "fechaFin": "08/03/2024",
+      "tipoSuministro": "LUZ"
+    },
+    {
+      "id": "16",
+      "descEstado": "Cuota fija",
+      "importeOrdenacion": 35.00,
+      "fechaCobro": "01/01/2024",
+      "fechaInicio": "01/12/2023",
+      "fechaFin": "01/01/2024",
       "tipoSuministro": "GAS"
     }
   ]
