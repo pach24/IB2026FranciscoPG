@@ -51,6 +51,8 @@
     <string name="empty_state_tab_subtitle">Cuando se generen tus facturas de luz o gas\nlas verás aquí.</string>
     <string name="empty_state_global_title">Aún no tienes facturas</string>
     <string name="empty_state_global_subtitle">Cuando se generen tus facturas de luz o gas\nlas verás aquí.</string>
+    <string name="empty_state_filtered_title">Sin resultados</string>
+    <string name="empty_state_filtered_subtitle">Intenta con otros criterios de búsqueda</string>
 
     <!-- Error states -->
     <string name="error_server_title">Error del servidor</string>

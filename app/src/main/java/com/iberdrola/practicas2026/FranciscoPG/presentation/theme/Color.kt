@@ -69,6 +69,10 @@ val ErrorLight = Color(0xFFB72727)
 val ErrorLightContainer = Color(0xFFF1BFBF)
 val ErrorDark = Color(0xFFE57373)
 val ErrorDarkContainer = Color(0xFF4A1919)
+val StatusDefaultLight = Color(0xFFE7E7E7)
+val StatusDefaultDark = Color(0xFF3A3A3A)
+val StatusDefaultTextLight = Color(0xFF6C6C6C)
+val StatusDefaultTextDark = Color(0xFF999999)
 
 // ══════════════════════════════════════════
 // COMPONENTES UI
@@ -111,7 +115,8 @@ data class IberdrolaColors(
     val black: Color,
     val white: Color,
     val badgeAmountFilter: Color,
-
+    val statusDefault: Color,
+    val statusDefaultText: Color,
 )
 
 val LightIberdrolaColors = IberdrolaColors(
@@ -140,6 +145,8 @@ val LightIberdrolaColors = IberdrolaColors(
     black = Black,
     white = White,
     badgeAmountFilter = LightBadgeAmountFilter,
+    statusDefault = StatusDefaultLight,
+    statusDefaultText = StatusDefaultTextLight,
 )
 
 val DarkIberdrolaColors = IberdrolaColors(
@@ -168,6 +175,8 @@ val DarkIberdrolaColors = IberdrolaColors(
     black = Black,
     white = White,
     badgeAmountFilter = DarkBadgeAmountFilter,
+    statusDefault = StatusDefaultDark,
+    statusDefaultText = StatusDefaultTextDark,
 )
 
 val LocalIberdrolaColors = staticCompositionLocalOf { LightIberdrolaColors }

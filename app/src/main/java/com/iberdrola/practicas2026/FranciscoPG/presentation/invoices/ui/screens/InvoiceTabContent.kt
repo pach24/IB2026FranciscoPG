@@ -1,6 +1,10 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -17,10 +21,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.EmptyStateComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.ErrorStateComposable
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.StickyInvoiceHeaderComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.InvoiceListUiState
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -49,8 +57,8 @@ fun InvoiceTabContent(
                     latestInvoiceAmount = "",
                     latestInvoiceDateRange = "",
                     latestInvoiceType = "",
-                    latestInvoiceStatus = "",
-                    latestInvoiceIsPaid = false,
+                    latestInvoiceStatusText = "",
+                    latestInvoiceStatus = InvoiceStatus.PENDING,
                     latestInvoiceIconRes = R.drawable.ic_light,
                     historyItems = emptyList(),
                     listState = listState,
@@ -66,8 +74,8 @@ fun InvoiceTabContent(
                     latestInvoiceAmount = cached.latestInvoice?.amount ?: "",
                     latestInvoiceDateRange = cached.latestInvoice?.dateRange ?: "",
                     latestInvoiceType = cached.latestInvoice?.supplyTypeLabel ?: "",
-                    latestInvoiceStatus = cached.latestInvoice?.status ?: "",
-                    latestInvoiceIsPaid = cached.latestInvoice?.isPaid ?: false,
+                    latestInvoiceStatusText = cached.latestInvoice?.statusText ?: "",
+                    latestInvoiceStatus = cached.latestInvoice?.status ?: InvoiceStatus.PENDING,
                     latestInvoiceIconRes = cached.latestInvoice?.iconRes ?: R.drawable.ic_light,
                     historyItems = cached.historyItems,
                     listState = listState,
@@ -100,6 +108,40 @@ fun InvoiceTabContent(
                     title = stringResource(R.string.empty_state_tab_title),
                     subtitle = stringResource(R.string.empty_state_tab_subtitle)
                 )
+            }
+        }
+
+        // Hay facturas pero los filtros las excluyen todas: sticky header + filtro + empty state
+        is InvoiceListUiState.FilteredEmpty -> {
+            val pullState = rememberPullToRefreshState()
+            PullToRefreshBox(
+                state = pullState,
+                isRefreshing = false,
+                onRefresh = onRefresh,
+                modifier = Modifier.fillMaxSize(),
+                indicator = {
+                    PullToRefreshDefaults.LoadingIndicator(
+                        state = pullState,
+                        isRefreshing = false,
+                        color = MaterialTheme.colorScheme.primary,
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        modifier = Modifier.align(Alignment.TopCenter)
+                    )
+                }
+            ) {
+                Column(modifier = Modifier.fillMaxSize()) {
+                    StickyInvoiceHeaderComposable(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(IberdrolaTheme.colors.background)
+                            .padding(vertical = Spacing.dp8),
+                        onFilterClick = onFilterClick
+                    )
+                    EmptyStateComposable(
+                        title = stringResource(R.string.empty_state_filtered_title),
+                        subtitle = stringResource(R.string.empty_state_filtered_subtitle)
+                    )
+                }
             }
         }
 
@@ -162,8 +204,8 @@ fun InvoiceTabContent(
                 latestInvoiceAmount = uiState.latestInvoice?.amount ?: "",
                 latestInvoiceDateRange = uiState.latestInvoice?.dateRange ?: "",
                 latestInvoiceType = uiState.latestInvoice?.supplyTypeLabel ?: "",
-                latestInvoiceStatus = uiState.latestInvoice?.status ?: "",
-                latestInvoiceIsPaid = uiState.latestInvoice?.isPaid ?: false,
+                latestInvoiceStatusText = uiState.latestInvoice?.statusText ?: "",
+                latestInvoiceStatus = uiState.latestInvoice?.status ?: InvoiceStatus.PENDING,
                 latestInvoiceIconRes = uiState.latestInvoice?.iconRes ?: R.drawable.ic_light,
                 historyItems = uiState.historyItems,
                 listState = listState,

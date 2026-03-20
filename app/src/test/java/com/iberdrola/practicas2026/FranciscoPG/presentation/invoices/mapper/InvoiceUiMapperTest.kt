@@ -54,8 +54,8 @@ class InvoiceUiMapperTest {
         assertEquals("%.2f €".format(123.45), result.latestInvoice!!.amount)
         assertEquals("01/01/2024 - 31/01/2024", result.latestInvoice!!.dateRange)
         assertEquals("Factura Luz", result.latestInvoice!!.supplyTypeLabel)
-        assertEquals("Pagada", result.latestInvoice!!.status)
-        assertTrue(result.latestInvoice!!.isPaid)
+        assertEquals("Pagada", result.latestInvoice!!.statusText)
+        assertEquals(InvoiceStatus.PAID, result.latestInvoice!!.status)
     }
 
     // Verifica que el label cambia a "Gas" cuando el tipo de suministro es GAS
@@ -124,7 +124,7 @@ class InvoiceUiMapperTest {
 
         val item = result.historyItems.filterIsInstance<InvoiceListItem.InvoiceItem>().first()
         assertEquals("Pendiente de pago", item.statusText)
-        assertEquals(false, item.isPaid)
+        assertEquals(InvoiceStatus.PENDING, item.status)
     }
 
     // Verifica que una fecha con formato invalido se devuelve tal cual sin crashear

@@ -48,12 +48,12 @@ class MyInvoicesViewModelTest {
     private val sampleUiModel = InvoiceUiModel(
         latestInvoice = LatestInvoiceUiModel(
             amount = "50.00 €", dateRange = "01/01/2024 - 31/01/2024",
-            supplyTypeLabel = "Factura Luz", status = "Pagada", isPaid = true, iconRes = 0
+            supplyTypeLabel = "Factura Luz", statusText = "Pagada", status = InvoiceStatus.PAID, iconRes = 0
         ),
         historyItems = listOf(
             InvoiceListItem.HeaderYear("2024"),
-            InvoiceListItem.InvoiceItem("1", "15 de enero", "Factura Luz", "50.00 €", "Pagada", true),
-            InvoiceListItem.InvoiceItem("2", "20 de marzo", "Factura Luz", "100.00 €", "Pendiente de pago", false)
+            InvoiceListItem.InvoiceItem("1", "15 de enero", "Factura Luz", "50.00 €", "Pagada", InvoiceStatus.PAID),
+            InvoiceListItem.InvoiceItem("2", "20 de marzo", "Factura Luz", "100.00 €", "Pendiente de pago", InvoiceStatus.PENDING)
         )
     )
 

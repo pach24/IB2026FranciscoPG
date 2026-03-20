@@ -43,12 +43,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFilters
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.filter.DateRangeSection
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.filter.FilterActionButtons
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.filter.InvoiceFilterUIState
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.filter.PriceRangeSection
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.filter.StatusFilterSection
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.MyInvoicesViewModel
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.FilterViewModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
@@ -106,9 +107,19 @@ fun FilterContent(
     modifier: Modifier = Modifier,
     uiState: InvoiceFilterUIState,
     onApplyFilters: (InvoiceFilters) -> Unit,
-    onClearFilters: () -> Unit,
-    statusOptions: List<String> = listOf("Pagadas", "Pendientes de Pago", "En trámite de cobro", "Anuladas", "Cuota Fija")
+    onClearFilters: () -> Unit
 ) {
+    // Mapa de estado → etiqueta UI
+    // filteredStatuses almacena apiValue ("Pagada"), la UI muestra la etiqueta ("Pagadas")
+    val statusEntries = remember {
+        listOf(
+            InvoiceStatus.PAID to "Pagadas",
+            InvoiceStatus.PENDING to "Pendientes de Pago",
+            InvoiceStatus.PROCESSING to "En trámite de cobro",
+            InvoiceStatus.CANCELLED to "Anuladas",
+            InvoiceStatus.FIXED_FEE to "Cuota Fija"
+        )
+    }
     val colors = IberdrolaTheme.colors
 
     // Estado local del filtro (draft) — solo se envía al ViewModel al pulsar "Aplicar"
@@ -209,13 +220,17 @@ fun FilterContent(
 
             Spacer(modifier = Modifier.height(Spacing.dp32))
 
-            // Sección estado
+            // Sección estado — almacena apiValue en filteredStatuses, muestra etiqueta UI
             StatusFilterSection(
-                statusOptions = statusOptions,
-                selectedStatuses = currentFilters.filteredStatuses,
-                onStatusToggle = { status ->
+                statusOptions = statusEntries.map { it.second },
+                selectedStatuses = statusEntries
+                    .filter { it.first.apiValue in currentFilters.filteredStatuses }
+                    .map { it.second }
+                    .toSet(),
+                onStatusToggle = { label ->
+                    val apiValue = statusEntries.first { it.second == label }.first.apiValue
                     val newStates = currentFilters.filteredStatuses.toMutableSet()
-                    if (status in newStates) newStates.remove(status) else newStates.add(status)
+                    if (apiValue in newStates) newStates.remove(apiValue) else newStates.add(apiValue)
                     currentFilters = currentFilters.copy(filteredStatuses = newStates)
                 }
             )
@@ -337,14 +352,13 @@ private fun LocalDate.toEpochMilli(): Long =
 // ROUTE
 // ══════════════════════════════════════════
 
-// Ruta principal que conecta el ViewModel con la pantalla de filtros
+// Ruta principal que conecta el FilterViewModel compartido con la pantalla de filtros
 @Composable
 fun FilterRoute(
-    tab: Int,
     onBack: () -> Unit,
-    viewModel: MyInvoicesViewModel
+    filterViewModel: FilterViewModel
 ) {
-    val filterUIState by viewModel.filterState.collectAsStateWithLifecycle()
+    val filterUIState by filterViewModel.filterState.collectAsStateWithLifecycle()
 
     Scaffold(
         containerColor = IberdrolaTheme.colors.background,
@@ -355,13 +369,12 @@ fun FilterRoute(
             modifier = Modifier.padding(padding),
             uiState = filterUIState,
             onApplyFilters = { filters ->
-                viewModel.updateFilters(filters)
-                viewModel.applyFilters()
+                filterViewModel.updateFilters(filters)
+                filterViewModel.applyFilters()
                 onBack()
             },
             onClearFilters = {
-                viewModel.clearFilters()
-                onBack()
+                filterViewModel.clearFilters()
             }
         )
     }
@@ -384,7 +397,7 @@ private fun FilterScreenEmptyPreview() {
                 modifier = Modifier.padding(padding),
                 uiState = InvoiceFilterUIState(
                     filters = InvoiceFilters(
-                        filteredStatuses = setOf("Pagadas")
+                        filteredStatuses = setOf("Pagada")
                     ),
                     statistics = InvoiceFilterUIState.FilterStatistics(maxAmount = 500.0)
                 ),
@@ -412,7 +425,7 @@ private fun FilterScreenFilledPreview() {
                         endDate = LocalDate.of(2026, 1, 31),
                         minAmount = 20.0,
                         maxAmount = 150.0,
-                        filteredStatuses = setOf("Pagadas")
+                        filteredStatuses = setOf("Pagada")
                     ),
                     statistics = InvoiceFilterUIState.FilterStatistics(maxAmount = 200.0)
                 ),

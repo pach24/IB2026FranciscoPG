@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
 import androidx.compose.ui.unit.sp
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
@@ -47,7 +48,7 @@ fun LatestInvoiceCardComposable(
     modifier: Modifier = Modifier,
     supplyType: String = "Factura Luz",
     status: String = "Pendiente de Pago",
-    isPaid: Boolean = false,
+    invoiceStatus: InvoiceStatus = InvoiceStatus.PENDING,
     iconRes: Int = R.drawable.ic_light,
     onClick: () -> Unit = {}
 ) {
@@ -145,7 +146,7 @@ fun LatestInvoiceCardComposable(
             // Estado: "Pagada" / "Pendiente de Pago"
             StatusPillComposable(
                 text = status,
-                isPaid = isPaid
+                status = invoiceStatus
             )
         }
     }
@@ -254,7 +255,7 @@ private fun PreviewLatestInvoiceCardComposable() {
             amount = "20,00 \u20AC",
             dateRange = "01 feb. 2024 - 04 mar. 2024",
             status = "Pagada",
-            isPaid = true
+            invoiceStatus = InvoiceStatus.PAID
         )
     }
 }
@@ -280,7 +281,7 @@ private fun PreviewOverlaySkeletonOnCard() {
                     amount = "20,00 €",
                     dateRange = "01 feb. 2024 - 04 mar. 2024",
                     status = "Pagada",
-                    isPaid = true
+                    invoiceStatus = InvoiceStatus.PAID
                 )
                 // Skeleton de la última factura (superpuesto)
                 SkeletonLatestInvoiceCardComposable(

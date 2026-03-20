@@ -19,8 +19,8 @@ class InvoiceUiMapper @Inject constructor() {
                 amount = formatAmount(invoice.amount),
                 dateRange = "${invoice.periodStart} - ${invoice.periodEnd}",
                 supplyTypeLabel = typeLabel,
-                status = invoice.status.apiValue,
-                isPaid = invoice.status.isPaid,
+                statusText = invoice.status.apiValue,
+                status = invoice.status,
                 iconRes = iconRes
             )
         }
@@ -54,7 +54,7 @@ class InvoiceUiMapper @Inject constructor() {
                         type = typeLabel,
                         amount = formatAmount(invoice.amount),
                         statusText = invoice.status.apiValue,
-                        isPaid = invoice.status.isPaid
+                        status = invoice.status
                     )
                 )
             }

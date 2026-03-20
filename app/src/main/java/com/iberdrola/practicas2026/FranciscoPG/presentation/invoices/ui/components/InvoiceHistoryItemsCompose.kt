@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
@@ -66,7 +67,7 @@ fun InvoiceRowItemComposable(
     type: String,
     status: String,
     amount: String,
-    isPaid: Boolean = false,
+    invoiceStatus: InvoiceStatus = InvoiceStatus.PENDING,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
@@ -110,7 +111,7 @@ fun InvoiceRowItemComposable(
                 // Estado: "Pagada" / "Pendiente de Pago"
                 StatusPillComposable(
                     text = status,
-                    isPaid = isPaid,
+                    status = invoiceStatus,
                     modifier = Modifier.padding(top = Spacing.dp8)
                 )
             }
@@ -270,7 +271,7 @@ private fun PreviewInvoiceRowItemComposable() {
             type = "Factura Luz",
             status = "Pendiente de Pago",
             amount = "20,00 €",
-            isPaid = false
+            invoiceStatus = InvoiceStatus.PENDING
         )
     }
 }
@@ -285,7 +286,7 @@ private fun PreviewInvoiceRowItemPaidComposable() {
             type = "Factura Luz",
             status = "Pagada",
             amount = "20,00 €",
-            isPaid = true
+            invoiceStatus = InvoiceStatus.PAID
         )
     }
 }
@@ -326,7 +327,7 @@ private fun PreviewOverlaySkeletonOnRow() {
                         type = "Factura Luz",
                         status = "Pendiente de Pago",
                         amount = "20,00 €",
-                        isPaid = false
+                        invoiceStatus = InvoiceStatus.PENDING
                     )
                     // Skeleton de la fila (superpuesto)
                     SkeletonInvoiceRowItemComposable(

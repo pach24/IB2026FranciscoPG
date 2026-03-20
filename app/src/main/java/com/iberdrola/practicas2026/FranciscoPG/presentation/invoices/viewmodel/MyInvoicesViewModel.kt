@@ -6,15 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.iberdrola.practicas2026.FranciscoPG.core.error.ErrorClassifier
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFilters
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
-import com.iberdrola.practicas2026.FranciscoPG.domain.model.maxAmount
-import com.iberdrola.practicas2026.FranciscoPG.domain.model.newestDate
-import com.iberdrola.practicas2026.FranciscoPG.domain.model.oldestDate
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.FilterInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.mapper.InvoiceUiMapper
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListItem
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.filter.InvoiceFilterUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,8 +20,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.ZoneOffset
 import javax.inject.Inject
 
 // ── UI States ─────────────────────────────────────────────────────────────────
@@ -39,8 +34,8 @@ data class LatestInvoiceUiModel(
     val amount: String,
     val dateRange: String,
     val supplyTypeLabel: String,
-    val status: String,
-    val isPaid: Boolean,
+    val statusText: String,
+    val status: InvoiceStatus,
     val iconRes: Int
 )
 
@@ -53,7 +48,11 @@ sealed class InvoiceListUiState {
         val invoiceCount: Int
     ) : InvoiceListUiState()
 
+    // Sin facturas en el backend para este suministro
     object Empty : InvoiceListUiState()
+
+    // Hay facturas pero los filtros aplicados las excluyen todas
+    object FilteredEmpty : InvoiceListUiState()
 
     data class ServerError(val message: String) : InvoiceListUiState()
 
@@ -76,14 +75,11 @@ class MyInvoicesViewModel @Inject constructor(
     private val _showDialogEvent = MutableStateFlow(false)
     val showDialogEvent: StateFlow<Boolean> = _showDialogEvent.asStateFlow()
 
-    // Facturas originales sin filtrar
+    // Facturas originales sin filtrar (accesible para calcular estadísticas combinadas)
     private val _allInvoices = MutableStateFlow<List<Invoice>>(emptyList())
+    val allInvoices: StateFlow<List<Invoice>> = _allInvoices.asStateFlow()
 
-    // Filtros que el usuario está modificando en la UI (draft)
-    private val _filterState = MutableStateFlow(InvoiceFilterUIState())
-    val filterState: StateFlow<InvoiceFilterUIState> = _filterState.asStateFlow()
-
-    // Filtros confirmados que realmente se aplican a la lista
+    // Filtros aplicados — controlados externamente por el FilterViewModel compartido
     private val _appliedFilters = MutableStateFlow(InvoiceFilters())
 
     // Estado de carga / error separado
@@ -110,6 +106,7 @@ class MyInvoicesViewModel @Inject constructor(
         if (invoices.isEmpty()) return@combine InvoiceListUiState.Empty
 
         val filtered = filterInvoicesUseCase(invoices, filters)
+        if (filtered.isEmpty()) return@combine InvoiceListUiState.FilteredEmpty
         buildListUiState(filtered, currentSupplyType)
     }.stateIn(
         scope = viewModelScope,
@@ -135,8 +132,6 @@ class MyInvoicesViewModel @Inject constructor(
                         Log.d(TAG, "Fetched ${invoices.size} invoices")
                         hasLoaded = true
                         _uiState.value = InvoiceUiState.Success(invoices)
-                        // Actualizar estadísticas de filtro con los datos reales
-                        updateFilterBounds(invoices)
                         // Emitir facturas → combine reacciona automáticamente
                         _allInvoices.value = invoices
                         // Marcar que la carga terminó OK
@@ -155,27 +150,10 @@ class MyInvoicesViewModel @Inject constructor(
         }
     }
 
-    // ── Filter actions ────────────────────────────────────────────────────────
+    // ── Filter sync (controlado por FilterViewModel via InvoicesRoute) ──────
 
-    fun updateFilters(filters: InvoiceFilters) {
-        _filterState.value = _filterState.value.copy(filters = filters.normalize())
-    }
-
-    fun applyFilters() {
-        _appliedFilters.value = _filterState.value.filters
-    }
-
-    fun clearFilters() {
-        val maxAmount = _filterState.value.statistics.maxAmount
-        val cleanFilters = InvoiceFilters(
-            minAmount = 0.0,
-            maxAmount = maxAmount,
-            startDate = null,
-            endDate = null,
-            filteredStatuses = emptySet()
-        )
-        _filterState.value = _filterState.value.copy(filters = cleanFilters)
-        _appliedFilters.value = InvoiceFilters()
+    fun setAppliedFilters(filters: InvoiceFilters) {
+        _appliedFilters.value = filters
     }
 
     fun onFeatureNotAvailable() {
@@ -192,38 +170,6 @@ class MyInvoicesViewModel @Inject constructor(
 
     // ── Helpers privados ──────────────────────────────────────────────────────
 
-    private fun updateFilterBounds(invoices: List<Invoice>) {
-        val newMaxAmount = invoices.maxAmount()
-        val oldestDate = invoices.oldestDate()
-        val newestDate = invoices.newestDate()
-
-        val newStats = InvoiceFilterUIState.FilterStatistics(
-            maxAmount = newMaxAmount,
-            oldestDateMillis = oldestDate.toEpochMilli(),
-            newestDateMillis = newestDate.toEpochMilli()
-        )
-
-        val currentUI = _filterState.value
-        val oldFilters = currentUI.filters
-        val oldStats = currentUI.statistics
-
-        // Ajustar slider al nuevo rango
-        val finalMin = (oldFilters.minAmount ?: 0.0).coerceIn(0.0, newMaxAmount)
-        val finalMax = if (oldFilters.maxAmount != null && oldFilters.maxAmount!! >= oldStats.maxAmount * 0.99) {
-            newMaxAmount
-        } else {
-            (oldFilters.maxAmount ?: newMaxAmount).coerceIn(finalMin, newMaxAmount)
-        }
-
-        _filterState.value = currentUI.copy(
-            filters = oldFilters.copy(minAmount = finalMin, maxAmount = finalMax),
-            statistics = newStats
-        )
-    }
-
-    private fun LocalDate?.toEpochMilli(): Long =
-        this?.atStartOfDay(ZoneOffset.UTC)?.toInstant()?.toEpochMilli() ?: 0L
-
     private fun handleError(error: Throwable) {
         val msg = error.message ?: "Error desconocido"
         _uiState.value = InvoiceUiState.Error(msg)
@@ -234,8 +180,6 @@ class MyInvoicesViewModel @Inject constructor(
         invoices: List<Invoice>,
         supplyType: SupplyType
     ): InvoiceListUiState {
-        if (invoices.isEmpty()) return InvoiceListUiState.Empty
-
         val uiModel = invoiceUiMapper.map(invoices, supplyType)
         return InvoiceListUiState.Success(
             latestInvoice = uiModel.latestInvoice,

@@ -1,5 +1,6 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens
 
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.InvoiceListUiState
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.LatestInvoiceUiModel
 import org.junit.Assert.assertEquals
@@ -12,8 +13,8 @@ class ResolvePreferredTabIndexTest {
             amount = "50.00 €",
             dateRange = "01/01/2024 - 31/01/2024",
             supplyTypeLabel = "Factura",
-            status = "Pagada",
-            isPaid = true,
+            statusText = "Pagada",
+            status = InvoiceStatus.PAID,
             iconRes = 0
         ),
         historyItems = emptyList(),

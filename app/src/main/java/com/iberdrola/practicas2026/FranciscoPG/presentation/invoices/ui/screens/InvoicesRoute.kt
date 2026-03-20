@@ -23,7 +23,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.maxAmount
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.newestDate
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.oldestDate
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.FeedbackViewModel
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.FilterViewModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.InvoiceListUiState
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.MyInvoicesViewModel
 import kotlinx.coroutines.launch
@@ -52,6 +56,7 @@ fun InvoicesRoute(
         hiltViewModel(key = "electricity_invoices_vm")
     val gasViewModel: MyInvoicesViewModel =
         hiltViewModel(key = "gas_invoices_vm")
+    val filterViewModel: FilterViewModel = hiltViewModel()
     val feedbackViewModel: FeedbackViewModel = hiltViewModel()
 
     val electricityState by electricityViewModel.listUiState.collectAsStateWithLifecycle()
@@ -60,12 +65,33 @@ fun InvoicesRoute(
     val gasShowDialog by gasViewModel.showDialogEvent.collectAsStateWithLifecycle()
     val sheetState by feedbackViewModel.sheetState.collectAsStateWithLifecycle()
 
+    // Sincronizar filtros aplicados del FilterViewModel
+    val appliedFilters by filterViewModel.appliedFilters.collectAsStateWithLifecycle()
+    LaunchedEffect(appliedFilters) {
+        electricityViewModel.setAppliedFilters(appliedFilters)
+        gasViewModel.setAppliedFilters(appliedFilters)
+    }
+
+    // Sincronizar estadísticas combinadas de ambos tabs
+    val electricityInvoices by electricityViewModel.allInvoices.collectAsStateWithLifecycle()
+    val gasInvoices by gasViewModel.allInvoices.collectAsStateWithLifecycle()
+    LaunchedEffect(electricityInvoices, gasInvoices) {
+        val allInvoices = electricityInvoices + gasInvoices
+        if (allInvoices.isNotEmpty()) {
+            filterViewModel.updateStatistics(
+                maxAmount = allInvoices.maxAmount(),
+                oldestDate = allInvoices.oldestDate(),
+                newestDate = allInvoices.newestDate()
+            )
+        }
+    }
+
     val scope = rememberCoroutineScope()
     val electricityListState = rememberLazyListState()
     val gasListState = rememberLazyListState()
 
-    // Filter screen state: null = list, 0 = electricity filter, 1 = gas filter
-    var showFilterForTab by remember { mutableStateOf<Int?>(null) }
+    // Filter screen state: null = list, non-null = show filter
+    var showFilter by remember { mutableStateOf(false) }
 
     // Recargar facturas al entrar o al cambiar de modo (mock/retrofit)
     var previousMock by remember { mutableStateOf(useMock) }
@@ -114,23 +140,21 @@ fun InvoicesRoute(
     var activeTab by remember { mutableIntStateOf(0) }
 
     AnimatedContent(
-        targetState = showFilterForTab,
+        targetState = showFilter,
         transitionSpec = {
-            if (targetState != null) {
+            if (targetState) {
                 slideInHorizontally { it } togetherWith slideOutHorizontally { -it }
             } else {
                 slideInHorizontally { -it } togetherWith slideOutHorizontally { it }
             }
         },
         label = "filter_transition"
-    ) { filterTab ->
-        if (filterTab != null) {
-            val activeVm = if (filterTab == 0) electricityViewModel else gasViewModel
-            BackHandler { showFilterForTab = null }
+    ) { isFilterVisible ->
+        if (isFilterVisible) {
+            BackHandler { showFilter = false }
             FilterRoute(
-                tab = filterTab,
-                onBack = { showFilterForTab = null },
-                viewModel = activeVm
+                onBack = { showFilter = false },
+                filterViewModel = filterViewModel
             )
         } else {
             MyInvoicesComposeScreen(
@@ -156,7 +180,7 @@ fun InvoicesRoute(
                         uiState = effectiveElectricityState,
                         listState = electricityListState,
                         onFeatureNotAvailable = electricityViewModel::onFeatureNotAvailable,
-                        onFilterClick = { showFilterForTab = 0 },
+                        onFilterClick = { showFilter = true },
                         onRefresh = refreshBoth
                     )
                 },
@@ -165,7 +189,7 @@ fun InvoicesRoute(
                         uiState = gasState,
                         listState = gasListState,
                         onFeatureNotAvailable = gasViewModel::onFeatureNotAvailable,
-                        onFilterClick = { showFilterForTab = 1 },
+                        onFilterClick = { showFilter = true },
                         onRefresh = refreshBoth
                     )
                 }

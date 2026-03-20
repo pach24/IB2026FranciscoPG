@@ -11,6 +11,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.R
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.InvoiceStatusColors
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.preview.DevicePreview
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
@@ -22,15 +24,15 @@ private val StatusFontBold = FontFamily(Font(R.font.iberpangea_bold, FontWeight.
 @Composable
 fun StatusPillComposable(
     text: String,
-    isPaid: Boolean,
+    status: InvoiceStatus,
     modifier: Modifier = Modifier
 ) {
-    val colors = IberdrolaTheme.colors
+    val statusColors = InvoiceStatusColors.forStatus(status)
     Text(
         text = text,
         modifier = modifier
             .background(
-                color = if (isPaid) colors.statusPaid else colors.errorContainer,
+                color = statusColors.background,
                 shape = RoundedCornerShape(Radius.dp8)
             )
             .padding(
@@ -41,7 +43,7 @@ fun StatusPillComposable(
         fontWeight = FontWeight.Bold,
         fontSize = TextSize.sp10,
         lineHeight = (10f * 1.4f).sp,
-        color = if (isPaid) colors.iberdrolaDarkGreen else colors.errorText
+        color = statusColors.text
     )
 }
 
@@ -51,7 +53,7 @@ private fun PreviewStatusPillPaid() {
     IberdrolaTheme {
         StatusPillComposable(
             text = "Pagada",
-            isPaid = true
+            status = InvoiceStatus.PAID
         )
     }
 }
@@ -62,7 +64,7 @@ private fun PreviewStatusPillPending() {
     IberdrolaTheme {
         StatusPillComposable(
             text = "Pendiente de Pago",
-            isPaid = false
+            status = InvoiceStatus.PENDING
         )
     }
 }
