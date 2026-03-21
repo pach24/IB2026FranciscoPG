@@ -5,6 +5,8 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 import java.time.LocalDate
 
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
+
 class InvoiceFiltersTest {
 
     // ── normalize ─────────────────────────────────────────────────────────────
@@ -169,7 +171,7 @@ class InvoiceFiltersTest {
 
     @Test
     fun `activeCount counts statuses when not empty`() {
-        val filters = InvoiceFilters(filteredStatuses = setOf("Pagada"))
+        val filters = InvoiceFilters(filteredStatuses = setOf(InvoiceStatus.PAID))
 
         assertEquals(1, filters.activeCount)
     }
@@ -181,7 +183,7 @@ class InvoiceFiltersTest {
             endDate = LocalDate.of(2025, 12, 31),
             minAmount = 10.0,
             maxAmount = 500.0,
-            filteredStatuses = setOf("Pagada", "Pendiente de pago")
+            filteredStatuses = setOf(InvoiceStatus.PAID, InvoiceStatus.PENDING)
         )
 
         assertEquals(4, filters.activeCount)

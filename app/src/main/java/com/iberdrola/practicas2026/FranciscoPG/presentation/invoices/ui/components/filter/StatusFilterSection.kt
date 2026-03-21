@@ -31,6 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontRegular
 import androidx.compose.ui.unit.dp
@@ -42,9 +43,9 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 // Sección de filtrado por estado con checkboxes redondeados para cada opción
 @Composable
 fun StatusFilterSection(
-    statusOptions: List<String>,
-    selectedStatuses: Set<String>,
-    onStatusToggle: (String) -> Unit
+    statusOptions: List<Pair<InvoiceStatus, String>>,
+    selectedStatuses: Set<InvoiceStatus>,
+    onStatusToggle: (InvoiceStatus) -> Unit
 ) {
     val colors = IberdrolaTheme.colors
 
@@ -62,7 +63,7 @@ fun StatusFilterSection(
             verticalArrangement = Arrangement.spacedBy(Spacing.dp32),
             modifier = Modifier.padding(start = Spacing.dp8)
         ) {
-            statusOptions.forEach { status ->
+            statusOptions.forEach { (status, label) ->
                 val isChecked = selectedStatuses.contains(status)
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -82,7 +83,7 @@ fun StatusFilterSection(
                         checkmarkColor = colors.white
                     )
                     Text(
-                        text = status,
+                        text = label,
                         modifier = Modifier.padding(start = Spacing.dp16),
                         fontFamily = IberFontRegular,
                         fontSize = TextSize.sp14,

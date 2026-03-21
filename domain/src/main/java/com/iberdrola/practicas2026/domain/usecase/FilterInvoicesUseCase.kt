@@ -2,6 +2,7 @@ package com.iberdrola.practicas2026.FranciscoPG.domain.usecase
 
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFilters
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.toLocalDateOrNull
 import java.time.LocalDate
 import javax.inject.Inject
@@ -34,9 +35,9 @@ class FilterInvoicesUseCase @Inject constructor() {
     /**
      * Verifica si la factura cumple con el filtro de estado.
      */
-    private fun matchesStatus(invoice: Invoice, allowedStatuses: Set<String>): Boolean {
+    private fun matchesStatus(invoice: Invoice, allowedStatuses: Set<InvoiceStatus>): Boolean {
         if (allowedStatuses.isEmpty()) return true
-        return invoice.status.apiValue in allowedStatuses
+        return invoice.status in allowedStatuses
     }
 
     /**
