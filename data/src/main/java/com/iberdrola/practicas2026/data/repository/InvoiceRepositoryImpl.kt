@@ -10,6 +10,7 @@ import com.iberdrola.practicas2026.data.local.toDomain
 import com.iberdrola.practicas2026.data.local.toEntity
 import com.iberdrola.practicas2026.data.model.toDomain
 import com.iberdrola.practicas2026.data.network.InvoiceApiService
+import com.iberdrola.practicas2026.data.network.safeAwait
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 import javax.inject.Named
@@ -27,7 +28,7 @@ class InvoiceRepositoryImpl @Inject constructor(
             if (configRepository.isMockEnabled()) {
                 // Mock: solo devolver datos del JSON, sin tocar Room
                 delay((1000..3000).random().toLong())
-                val response = mockApiService.getInvoices(apiValue)
+                val response = mockApiService.getInvoicesCall(apiValue).safeAwait()
                 val invoices = response.facturas
                     .filter { it.tipoSuministro.equals(apiValue, ignoreCase = true) }
                     .map { it.toDomain() }
