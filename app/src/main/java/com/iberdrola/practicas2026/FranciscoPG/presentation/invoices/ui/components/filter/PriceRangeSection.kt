@@ -1,5 +1,7 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.filter
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +18,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -33,6 +40,7 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
+import kotlinx.coroutines.launch
 
 // Sección de rango de importe con badge central, slider de doble thumb y etiquetas de límites
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,6 +54,20 @@ fun PriceRangeSection(
 ) {
     val colors = IberdrolaTheme.colors
 
+    val animMin = remember { Animatable(minPrice) }
+    val animMax = remember { Animatable(maxPrice) }
+    var isDragging by remember { mutableStateOf(false) }
+
+    LaunchedEffect(minPrice, maxPrice) {
+        if (isDragging) {
+            animMin.snapTo(minPrice)
+            animMax.snapTo(maxPrice)
+        } else {
+            launch { animMin.animateTo(minPrice, tween(150)) }
+            launch { animMax.animateTo(maxPrice, tween(150)) }
+        }
+    }
+
     Column(modifier = Modifier.fillMaxWidth()) {
         // Badge con el rango actual
         Box(
@@ -58,8 +80,8 @@ fun PriceRangeSection(
             Text(
                 text = stringResource(
                     R.string.filter_price_range,
-                    minPrice.toInt(),
-                    maxPrice.toInt()
+                    animMin.value.toInt(),
+                    animMax.value.toInt()
                 ),
                 fontFamily = IberFontBold,
                 fontWeight = FontWeight.Bold,
@@ -71,12 +93,14 @@ fun PriceRangeSection(
         }
 
         RangeSlider(
-            value = minPrice..maxPrice,
+            value = animMin.value..animMax.value,
             onValueChange = { range ->
+                isDragging = true
                 val startValue = if (range.start < minLimit + 0.1f) minLimit else range.start
                 val endValue = if (range.endInclusive > maxLimit - 0.1f) maxLimit else range.endInclusive
                 onRangeChange(startValue, endValue)
             },
+            onValueChangeFinished = { isDragging = false },
             valueRange = minLimit..maxLimit,
             steps = 0,
             modifier = Modifier.fillMaxWidth(),
