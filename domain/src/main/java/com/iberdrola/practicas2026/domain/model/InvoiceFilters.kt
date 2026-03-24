@@ -11,7 +11,7 @@ data class InvoiceFilters(
     val maxAmount: Double? = null,
     val startDate: LocalDate? = null,
     val endDate: LocalDate? = null,
-    val filteredStatuses: Set<String> = emptySet()
+    val filteredStatuses: Set<InvoiceStatus> = emptySet()
 ) {
     /**
      * Normaliza los filtros aplicando reglas de negocio.

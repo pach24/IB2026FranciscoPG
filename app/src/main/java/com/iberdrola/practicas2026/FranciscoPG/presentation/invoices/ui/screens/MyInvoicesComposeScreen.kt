@@ -36,8 +36,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontRegular
-import androidx.compose.ui.text.style.TextDecoration
 import com.iberdrola.practicas2026.FranciscoPG.R
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.BackButton
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.EmptyStateComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.FeedbackSheet
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.FeedbackSheetState
@@ -116,26 +116,13 @@ fun MyInvoicesComposeScreen(
             .statusBarsPadding()
     ) {
         /* BOTON ATRAS */
-        Row(
-            modifier = Modifier
-                .padding(start = Spacing.dp16, top = Spacing.dp16)
-                .clickable { onBackClick() },
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_arrow_back),
-                contentDescription = null,
-                tint = colors.iberdrolaDarkGreen,
-                modifier = Modifier.size(IconSize.dp24)
-            )
-            Text(
-                text = stringResource(R.string.my_invoices_back),
-                modifier = Modifier.padding(start = Spacing.dp8),
-                textDecoration = TextDecoration.Underline,
-                fontFamily = IberFontBold,
-                color = colors.iberdrolaDarkGreen,
-                fontSize = TextSize.sp16            )
-        }
+        BackButton(
+            text = stringResource(R.string.my_invoices_back),
+            onClick = onBackClick,
+            color = colors.iberdrolaDarkGreen,
+            fontSize = TextSize.sp16,
+            modifier = Modifier.padding(start = Spacing.dp16, top = Spacing.dp16)
+        )
 
         /* Mis facturas */
         Text(

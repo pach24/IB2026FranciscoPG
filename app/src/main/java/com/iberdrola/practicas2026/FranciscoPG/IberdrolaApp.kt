@@ -9,6 +9,5 @@ class IberdrolaApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        
     }
 }

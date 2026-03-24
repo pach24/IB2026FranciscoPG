@@ -54,11 +54,11 @@ class MainActivity : AppCompatActivity() {
 
                 val snackbarContainer =
                     if (useMock) IberdrolaTheme.colors.snackbar
-                    else IberdrolaTheme.colors.iberdrolaGreen
+                    else IberdrolaTheme.colors.snackbarGreen
 
                 val snackbarContent =
                     if (useMock) IberdrolaTheme.colors.black
-                    else IberdrolaTheme.colors.white
+                    else IberdrolaTheme.colors.black
 
                 LaunchedEffect(mockModeChanged) {
                     mockModeChanged?.let {

@@ -29,7 +29,7 @@ class FilterInvoicesUseCaseTest {
     @Test
     fun `when filter by status returns only matching invoices`() {
         val filters = InvoiceFilters(
-            filteredStatuses = setOf("Pagada")
+            filteredStatuses = setOf(InvoiceStatus.PAID)
         )
 
         val result = useCase(invoices = baseList, filters = filters)
@@ -63,7 +63,7 @@ class FilterInvoicesUseCaseTest {
     @Test
     fun `when empty list returns empty list`() {
         val emptyList = emptyList<Invoice>()
-        val filters = InvoiceFilters(filteredStatuses = setOf("Pagada"))
+        val filters = InvoiceFilters(filteredStatuses = setOf(InvoiceStatus.PAID))
 
         val result = useCase(invoices = emptyList, filters = filters)
 
@@ -86,7 +86,7 @@ class FilterInvoicesUseCaseTest {
     @Test
     fun `when multiple filters returns invoices meeting all criteria`() {
         val filters = InvoiceFilters(
-            filteredStatuses = setOf("Pagada"),
+            filteredStatuses = setOf(InvoiceStatus.PAID),
             startDate = LocalDate.of(2025, 1, 1),
             endDate = LocalDate.of(2025, 1, 31),
             minAmount = 50.0,
@@ -106,7 +106,7 @@ class FilterInvoicesUseCaseTest {
     @Test
     fun `when filter by multiple statuses returns matching invoices`() {
         val filters = InvoiceFilters(
-            filteredStatuses = setOf("Pagada", "Pendiente de pago")
+            filteredStatuses = setOf(InvoiceStatus.PAID, InvoiceStatus.PENDING)
         )
 
         val result = useCase(invoices = baseList, filters = filters)
@@ -282,8 +282,8 @@ class FilterInvoicesUseCaseTest {
     // ── Casos límite: estados ─────────────────────────────────────────────────
 
     @Test
-    fun `when filter has non existent status returns empty`() {
-        val filters = InvoiceFilters(filteredStatuses = setOf("EstadoInventado"))
+    fun `when filter status matches no invoice returns empty`() {
+        val filters = InvoiceFilters(filteredStatuses = setOf(InvoiceStatus.CANCELLED))
 
         val result = useCase(invoices = baseList, filters = filters)
 

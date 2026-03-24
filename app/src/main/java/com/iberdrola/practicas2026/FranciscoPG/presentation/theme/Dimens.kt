@@ -7,6 +7,7 @@ import androidx.compose.ui.unit.sp
 object TextSize {
     val sp10 = 10.sp
     val sp12 = 12.sp
+    val sp13 = 13.sp
     val sp14 = 14.sp
     val sp15 = 15.sp
     val sp16 = 16.sp

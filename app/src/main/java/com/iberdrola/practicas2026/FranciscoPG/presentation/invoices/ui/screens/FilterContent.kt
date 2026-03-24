@@ -46,7 +46,7 @@ fun FilterContent(
     modifier: Modifier = Modifier,
     uiState: InvoiceFilterUIState,
     onApplyFilters: (InvoiceFilters) -> Unit,
-    onClearFilters: () -> Unit
+    onClearFilters: (previousDraft: InvoiceFilters) -> Unit
 ) {
     val statusEntries = listOf(
         InvoiceStatus.PAID to stringResource(R.string.filter_status_paid),
@@ -121,7 +121,9 @@ fun FilterContent(
                 dateFrom = currentFilters.startDate?.format(DATE_FORMATTER) ?: "",
                 dateTo = currentFilters.endDate?.format(DATE_FORMATTER) ?: "",
                 onFromClick = { showStartDatePicker = true },
-                onToClick = { showEndDatePicker = true }
+                onToClick = { showEndDatePicker = true },
+                onFromClear = { currentFilters = currentFilters.copy(startDate = null) },
+                onToClear = { currentFilters = currentFilters.copy(endDate = null) }
             )
 
             Spacer(modifier = Modifier.height(Spacing.dp32))
@@ -151,15 +153,11 @@ fun FilterContent(
             Spacer(modifier = Modifier.height(Spacing.dp32))
 
             StatusFilterSection(
-                statusOptions = statusEntries.map { it.second },
-                selectedStatuses = statusEntries
-                    .filter { it.first.apiValue in currentFilters.filteredStatuses }
-                    .map { it.second }
-                    .toSet(),
-                onStatusToggle = { label ->
-                    val apiValue = statusEntries.first { it.second == label }.first.apiValue
+                statusOptions = statusEntries,
+                selectedStatuses = currentFilters.filteredStatuses,
+                onStatusToggle = { status ->
                     val newStates = currentFilters.filteredStatuses.toMutableSet()
-                    if (apiValue in newStates) newStates.remove(apiValue) else newStates.add(apiValue)
+                    if (status in newStates) newStates.remove(status) else newStates.add(status)
                     currentFilters = currentFilters.copy(filteredStatuses = newStates)
                 }
             )
@@ -169,6 +167,7 @@ fun FilterContent(
             FilterActionButtons(
                 onApply = { onApplyFilters(currentFilters) },
                 onClear = {
+                    val previousDraft = currentFilters
                     currentFilters = InvoiceFilters(
                         minAmount = 0.0,
                         maxAmount = actualMaxAmount,
@@ -176,7 +175,7 @@ fun FilterContent(
                         endDate = null,
                         filteredStatuses = emptySet()
                     )
-                    onClearFilters()
+                    onClearFilters(previousDraft)
                 }
             )
         }
@@ -196,12 +195,12 @@ private fun FilterScreenEmptyPreview() {
                 modifier = Modifier.padding(padding),
                 uiState = InvoiceFilterUIState(
                     filters = InvoiceFilters(
-                        filteredStatuses = setOf("Pagada")
+                        filteredStatuses = setOf(InvoiceStatus.PAID)
                     ),
                     statistics = InvoiceFilterUIState.FilterStatistics(maxAmount = 500.0)
                 ),
                 onApplyFilters = {},
-                onClearFilters = {}
+                onClearFilters = { _ -> }
             )
         }
     }
@@ -224,12 +223,12 @@ private fun FilterScreenFilledPreview() {
                         endDate = LocalDate.of(2026, 1, 31),
                         minAmount = 20.0,
                         maxAmount = 150.0,
-                        filteredStatuses = setOf("Pagada")
+                        filteredStatuses = setOf(InvoiceStatus.PAID)
                     ),
                     statistics = InvoiceFilterUIState.FilterStatistics(maxAmount = 200.0)
                 ),
                 onApplyFilters = {},
-                onClearFilters = {}
+                onClearFilters = { _ -> }
             )
         }
     }

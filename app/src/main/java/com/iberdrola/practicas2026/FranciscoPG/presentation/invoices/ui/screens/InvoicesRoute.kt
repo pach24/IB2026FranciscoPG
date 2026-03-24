@@ -19,6 +19,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -110,6 +111,12 @@ fun InvoicesRoute(
 
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+
+    // Descartar snackbar al salir de la pantalla
+    DisposableEffect(Unit) {
+        onDispose { snackbarHostState.currentSnackbarData?.dismiss() }
+    }
+
     val electricityListState = rememberLazyListState()
     val gasListState = rememberLazyListState()
 
@@ -118,6 +125,11 @@ fun InvoicesRoute(
     val undoLabel = stringResource(R.string.snackbar_undo)
 
     var showFilter by remember { mutableStateOf(false) }
+
+    // Descartar snackbar al cambiar entre pantalla de facturas y filtros
+    LaunchedEffect(showFilter) {
+        snackbarHostState.currentSnackbarData?.dismiss()
+    }
 
     // Recargar facturas al entrar o al cambiar de modo (mock/retrofit)
     var previousMock by remember { mutableStateOf(useMock) }
@@ -164,22 +176,28 @@ fun InvoicesRoute(
                             val elecCount = (electricityViewModel.listUiState.value as? InvoiceListUiState.Success)?.invoiceCount ?: 0
                             val gasCount = (gasViewModel.listUiState.value as? InvoiceListUiState.Success)?.invoiceCount ?: 0
                             val total = elecCount + gasCount
-                            snackbarHostState.showSnackbar(
-                                message = "$total facturas coinciden con los filtros",
-                                duration = SnackbarDuration.Short
-                            )
+                            kotlinx.coroutines.withTimeoutOrNull(2000) {
+                                snackbarHostState.showSnackbar(
+                                    message = "$total facturas coinciden con los filtros",
+                                    duration = SnackbarDuration.Indefinite
+                                )
+                            }
+                            snackbarHostState.currentSnackbarData?.dismiss()
                         }
                     },
-                    onFiltersCleared = { previousFilters ->
+                    onFiltersCleared = { previousDraft, previousApplied ->
                         scope.launch {
                             snackbarHostState.currentSnackbarData?.dismiss()
-                            val result = snackbarHostState.showSnackbar(
-                                message = filtersClearedMsg,
-                                actionLabel = undoLabel,
-                                duration = SnackbarDuration.Short
-                            )
+                            val result = kotlinx.coroutines.withTimeoutOrNull(2000) {
+                                snackbarHostState.showSnackbar(
+                                    message = filtersClearedMsg,
+                                    actionLabel = undoLabel,
+                                    duration = SnackbarDuration.Indefinite
+                                )
+                            }
+                            snackbarHostState.currentSnackbarData?.dismiss()
                             if (result == SnackbarResult.ActionPerformed) {
-                                filterViewModel.restoreFilters(previousFilters)
+                                filterViewModel.restoreFilters(previousDraft, previousApplied)
                             }
                         }
                     }
