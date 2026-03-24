@@ -179,13 +179,7 @@ fun FilterContent(
                 onApply = { onApplyFilters(currentFilters) },
                 onClear = {
                     val previousDraft = currentFilters
-                    currentFilters = InvoiceFilters(
-                        minAmount = 0.0,
-                        maxAmount = actualMaxAmount,
-                        startDate = null,
-                        endDate = null,
-                        filteredStatuses = emptySet()
-                    )
+                    currentFilters = InvoiceFilters()
                     onClearFilters(previousDraft)
                 }
             )

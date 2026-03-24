@@ -84,6 +84,7 @@ fun InvoicesRoute(
     val sheetState by feedbackViewModel.sheetState.collectAsStateWithLifecycle()
     val appliedFilters by filterViewModel.appliedFilters.collectAsStateWithLifecycle()
     val activeFilterCount = appliedFilters.activeCount
+    val isFiltered by filterViewModel.isFilterModeActive.collectAsStateWithLifecycle()
 
     // Feed states into coordinator
     LaunchedEffect(electricityState) { coordinator.setElectricityState(electricityState) }
@@ -242,7 +243,8 @@ fun InvoicesRoute(
                         onFeatureNotAvailable = electricityViewModel::onFeatureNotAvailable,
                         onFilterClick = { showFilter = true },
                         onRefresh = refreshBoth,
-                        activeFilterCount = activeFilterCount
+                        activeFilterCount = activeFilterCount,
+                        isFiltered = isFiltered
                     )
                 },
                 gasTabContent = {
@@ -252,7 +254,8 @@ fun InvoicesRoute(
                         onFeatureNotAvailable = gasViewModel::onFeatureNotAvailable,
                         onFilterClick = { showFilter = true },
                         onRefresh = refreshBoth,
-                        activeFilterCount = activeFilterCount
+                        activeFilterCount = activeFilterCount,
+                        isFiltered = isFiltered
                     )
                 }
             )

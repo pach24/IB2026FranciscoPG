@@ -82,6 +82,11 @@ class InvoicesCoordinatorViewModel @Inject constructor() : ViewModel() {
                 invoiceViewModels.forEach { it.setAppliedFilters(filters) }
             }
         }
+        viewModelScope.launch {
+            filterViewModel.isFilterModeActive.collect { active ->
+                invoiceViewModels.forEach { it.setFilterModeActive(active) }
+            }
+        }
     }
 
     // ── Statistics sync: combine invoices from both tabs ─────────────────────

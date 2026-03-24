@@ -40,6 +40,7 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 fun StickyInvoiceHeaderComposable(
     modifier: Modifier = Modifier,
     activeFilterCount: Int = 0,
+    isFiltered: Boolean = false,
     onFilterClick: () -> Unit = {}
 ) {
     val colors = IberdrolaTheme.colors
@@ -73,17 +74,17 @@ fun StickyInvoiceHeaderComposable(
                 shape = RoundedCornerShape(Radius.dp50),
                 border = BorderStroke(
                     width = Stroke.dp2,
-                    color = if (activeFilterCount > 0) colors.iberdrolaGreen else colors.iberdrolaDarkGreen
+                    color = if (isFiltered) colors.iberdrolaGreen else colors.iberdrolaDarkGreen
                 ),
                 colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = if (activeFilterCount > 0) colors.iberdrolaGreen else colors.surface,
-                    contentColor = if (activeFilterCount > 0) Color.White else colors.iberdrolaDarkGreen
+                    containerColor = if (isFiltered) colors.iberdrolaGreen else colors.surface,
+                    contentColor = if (isFiltered) Color.White else colors.iberdrolaDarkGreen
                 )
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_filter),
                     contentDescription = null,
-                    tint = if (activeFilterCount > 0) Color.White else colors.iberdrolaDarkGreen
+                    tint = if (isFiltered) Color.White else colors.iberdrolaDarkGreen
                 )
                 Text(
                     text = stringResource(R.string.action_filter),
@@ -91,7 +92,7 @@ fun StickyInvoiceHeaderComposable(
                     fontFamily = IberFontBold,
                     fontWeight = FontWeight.Bold,
                     fontSize = TextSize.sp14,
-                    color = if (activeFilterCount > 0) Color.White else colors.iberdrolaDarkGreen
+                    color = if (isFiltered) Color.White else colors.iberdrolaDarkGreen
                 )
             }
 

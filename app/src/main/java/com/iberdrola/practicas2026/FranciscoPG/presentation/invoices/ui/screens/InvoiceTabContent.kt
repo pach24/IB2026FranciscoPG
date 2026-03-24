@@ -37,7 +37,8 @@ fun InvoiceTabContent(
     onFeatureNotAvailable: () -> Unit,
     onFilterClick: () -> Unit,
     onRefresh: () -> Unit,
-    activeFilterCount: Int = 0
+    activeFilterCount: Int = 0,
+    isFiltered: Boolean = false
 ) {
     var lastContentState by remember { mutableStateOf<InvoiceListUiState?>(null) }
 
@@ -67,14 +68,15 @@ fun InvoiceTabContent(
                     InvoiceListComposeScreen(
                         isLoading = false,
                         isRefreshing = true,
-                        latestInvoice = cached.latestInvoice,
+                        latestInvoice = if (cached.isFiltered) null else cached.latestInvoice,
                         historyItems = cached.historyItems,
                         listState = listState,
                         onLatestInvoiceClick = onFeatureNotAvailable,
                         onFilterClick = onFilterClick,
                         onHistoryItemClick = { onFeatureNotAvailable() },
                         onRefresh = onRefresh,
-                        activeFilterCount = activeFilterCount
+                        activeFilterCount = activeFilterCount,
+                        isFiltered = isFiltered
                     )
                 }
                 is InvoiceListUiState.FilteredEmpty -> {
@@ -101,6 +103,7 @@ fun InvoiceTabContent(
                                     .background(IberdrolaTheme.colors.background)
                                     .padding(vertical = Spacing.dp8),
                                 activeFilterCount = activeFilterCount,
+                                isFiltered = isFiltered,
                                 onFilterClick = onFilterClick
                             )
                             EmptyStateComposable(
@@ -163,6 +166,7 @@ fun InvoiceTabContent(
                             .background(IberdrolaTheme.colors.background)
                             .padding(vertical = Spacing.dp8),
                         activeFilterCount = activeFilterCount,
+                        isFiltered = isFiltered,
                         onFilterClick = onFilterClick
                     )
                     EmptyStateComposable(
@@ -229,14 +233,15 @@ fun InvoiceTabContent(
             InvoiceListComposeScreen(
                 isLoading = false,
                 isRefreshing = false,
-                latestInvoice = uiState.latestInvoice,
+                latestInvoice = if (uiState.isFiltered) null else uiState.latestInvoice,
                 historyItems = uiState.historyItems,
                 listState = listState,
                 onLatestInvoiceClick = onFeatureNotAvailable,
                 onFilterClick = onFilterClick,
                 onHistoryItemClick = { onFeatureNotAvailable() },
                 onRefresh = onRefresh,
-                activeFilterCount = activeFilterCount
+                activeFilterCount = activeFilterCount,
+                isFiltered = isFiltered
             )
         }
     }

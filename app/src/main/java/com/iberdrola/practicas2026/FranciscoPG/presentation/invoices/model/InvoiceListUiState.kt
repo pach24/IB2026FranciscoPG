@@ -6,6 +6,7 @@ sealed class InvoiceListUiState {
     data class Success(
         val latestInvoice: LatestInvoiceUiModel?,
         val historyItems: List<InvoiceListItem>,
+        val isFiltered: Boolean = false,
         val invoiceCount: Int
     ) : InvoiceListUiState()
 

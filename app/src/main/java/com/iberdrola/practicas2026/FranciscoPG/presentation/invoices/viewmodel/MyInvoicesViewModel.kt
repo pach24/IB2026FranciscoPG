@@ -43,6 +43,9 @@ class MyInvoicesViewModel @Inject constructor(
     // Filtros aplicados — controlados externamente por el FilterViewModel compartido
     private val _appliedFilters = MutableStateFlow(InvoiceFilters())
 
+    // Indica si el usuario ha pulsado "Aplicar" (independiente del valor de los filtros)
+    private val _isFilterModeActive = MutableStateFlow(false)
+
     // Estado de carga / error separado
     private val _loadingState = MutableStateFlow<InvoiceListUiState>(InvoiceListUiState.Loading)
 
@@ -54,8 +57,9 @@ class MyInvoicesViewModel @Inject constructor(
     val listUiState: StateFlow<InvoiceListUiState> = combine(
         _allInvoices,
         _appliedFilters,
-        _loadingState
-    ) { invoices, filters, loadingState ->
+        _loadingState,
+        _isFilterModeActive
+    ) { invoices, filters, loadingState, filterModeActive ->
         // Si estamos en loading o error, priorizar ese estado
         if (loadingState is InvoiceListUiState.Loading ||
             loadingState is InvoiceListUiState.ServerError ||
@@ -66,10 +70,9 @@ class MyInvoicesViewModel @Inject constructor(
 
         if (invoices.isEmpty()) return@combine InvoiceListUiState.Empty
 
-        val hasActiveFilters = filters != InvoiceFilters()
         val filtered = filterInvoicesUseCase(invoices, filters)
         if (filtered.isEmpty()) return@combine InvoiceListUiState.FilteredEmpty
-        buildListUiState(filtered, currentSupplyType, hideLatestCard = hasActiveFilters)
+        buildListUiState(filtered, currentSupplyType, isFiltered = filterModeActive)
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
@@ -121,6 +124,10 @@ class MyInvoicesViewModel @Inject constructor(
         _appliedFilters.value = filters
     }
 
+    fun setFilterModeActive(active: Boolean) {
+        _isFilterModeActive.value = active
+    }
+
     fun onFeatureNotAvailable() {
         _showDialogEvent.value = true
     }
@@ -144,12 +151,13 @@ class MyInvoicesViewModel @Inject constructor(
     private fun buildListUiState(
         invoices: List<Invoice>,
         supplyType: SupplyType,
-        hideLatestCard: Boolean = false
+        isFiltered: Boolean = false
     ): InvoiceListUiState {
         val uiModel = invoiceUiMapper.map(invoices, supplyType)
         return InvoiceListUiState.Success(
-            latestInvoice = if (hideLatestCard) null else uiModel.latestInvoice,
+            latestInvoice = uiModel.latestInvoice,
             historyItems = uiModel.historyItems,
+            isFiltered = isFiltered,
             invoiceCount = invoices.size
         )
     }

@@ -26,6 +26,10 @@ class FilterViewModel @Inject constructor() : ViewModel() {
     private val _appliedFilters = MutableStateFlow(InvoiceFilters())
     val appliedFilters: StateFlow<InvoiceFilters> = _appliedFilters.asStateFlow()
 
+    // True desde que el usuario pulsa "Aplicar", false tras "Borrar filtros"
+    private val _isFilterModeActive = MutableStateFlow(false)
+    val isFilterModeActive: StateFlow<Boolean> = _isFilterModeActive.asStateFlow()
+
     // ── Acciones de filtro ───────────────────────────────────────────────────
 
     fun updateFilters(filters: InvoiceFilters) {
@@ -34,24 +38,19 @@ class FilterViewModel @Inject constructor() : ViewModel() {
 
     fun applyFilters() {
         _appliedFilters.value = _filterState.value.filters
+        _isFilterModeActive.value = true
     }
 
     fun restoreFilters(draft: InvoiceFilters, applied: InvoiceFilters) {
         _filterState.value = _filterState.value.copy(filters = draft)
         _appliedFilters.value = applied
+        _isFilterModeActive.value = applied != InvoiceFilters()
     }
 
     fun clearFilters() {
-        val maxAmount = _filterState.value.statistics.maxAmount
-        val cleanFilters = InvoiceFilters(
-            minAmount = 0.0,
-            maxAmount = maxAmount,
-            startDate = null,
-            endDate = null,
-            filteredStatuses = emptySet()
-        )
-        _filterState.value = _filterState.value.copy(filters = cleanFilters)
+        _filterState.value = _filterState.value.copy(filters = InvoiceFilters())
         _appliedFilters.value = InvoiceFilters()
+        _isFilterModeActive.value = false
     }
 
     // ── Estadísticas ─────────────────────────────────────────────────────────
@@ -75,13 +74,12 @@ class FilterViewModel @Inject constructor() : ViewModel() {
         val oldFilters = currentUI.filters
         val oldStats = currentUI.statistics
 
-        // Ajustar slider (draft) al nuevo rango
-        val finalMin = (oldFilters.minAmount ?: 0.0).coerceIn(0.0, maxAmount)
-        val finalMax = if (oldFilters.maxAmount != null && oldFilters.maxAmount!! >= oldStats.maxAmount * 0.99) {
-            maxAmount
-        } else {
-            (oldFilters.maxAmount ?: maxAmount).coerceIn(finalMin, maxAmount)
-        }
+        // Ajustar slider (draft) al nuevo rango solo si el usuario lo había tocado
+        val finalMin = oldFilters.minAmount?.coerceIn(0.0, maxAmount)
+        val finalMax = if (oldFilters.maxAmount != null) {
+            if (oldFilters.maxAmount!! >= oldStats.maxAmount * 0.99) maxAmount
+            else oldFilters.maxAmount!!.coerceIn(finalMin ?: 0.0, maxAmount)
+        } else null
 
         _filterState.value = currentUI.copy(
             filters = oldFilters.copy(minAmount = finalMin, maxAmount = finalMax),

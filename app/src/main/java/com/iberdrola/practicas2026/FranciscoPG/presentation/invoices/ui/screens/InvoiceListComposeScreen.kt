@@ -58,6 +58,7 @@ fun InvoiceListComposeScreen(
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
     activeFilterCount: Int = 0,
+    isFiltered: Boolean = false,
     listState: LazyListState = rememberLazyListState()
 ) {
     val pullToRefreshState = rememberPullToRefreshState()
@@ -132,6 +133,7 @@ fun InvoiceListComposeScreen(
                             .background(IberdrolaTheme.colors.background)
                             .padding(vertical = Spacing.dp8),
                         activeFilterCount = activeFilterCount,
+                        isFiltered = isFiltered,
                         onFilterClick = onFilterClick
                     )
                 }
