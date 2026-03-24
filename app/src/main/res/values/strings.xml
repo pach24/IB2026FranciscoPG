@@ -88,6 +88,7 @@
 
     <!-- Snackbar -->
     <string name="snackbar_filters_applied">%1$d facturas coinciden con los filtros</string>
+    <string name="snackbar_filters_no_results">No hay facturas que coincidan con tu búsqueda</string>
     <string name="snackbar_filters_cleared">Filtros eliminados</string>
     <string name="snackbar_undo">Deshacer</string>
 

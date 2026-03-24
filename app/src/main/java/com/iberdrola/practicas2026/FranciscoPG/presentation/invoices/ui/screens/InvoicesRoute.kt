@@ -180,9 +180,18 @@ fun InvoicesRoute(
                             val elecCount = (electricityViewModel.listUiState.value as? InvoiceListUiState.Success)?.invoiceCount ?: 0
                             val gasCount = (gasViewModel.listUiState.value as? InvoiceListUiState.Success)?.invoiceCount ?: 0
                             val total = elecCount + gasCount
+                            var message =""
+                            if (total == 0) {
+                                message = "No hay facturas que coincidan con tu búsqueda"
+                            } else {
+                                message = "$total facturas coinciden con los filtros"
+                            }
                             kotlinx.coroutines.withTimeoutOrNull(2000) {
                                 snackbarHostState.showSnackbar(
-                                    message = "$total facturas coinciden con los filtros",
+
+
+
+                                    message = message,
                                     duration = SnackbarDuration.Indefinite
                                 )
                             }
@@ -264,7 +273,7 @@ fun InvoicesRoute(
             )
         }
 
-        // Dentro del Box en InvoicesRoute
+
         UnavailableBanner(
             visible = showBanner,
             onDismiss = dismissBanner,
