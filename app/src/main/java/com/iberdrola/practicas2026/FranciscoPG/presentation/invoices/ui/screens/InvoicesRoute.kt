@@ -188,18 +188,18 @@ fun InvoicesRoute(
                     onFiltersCleared = { previousDraft, previousApplied ->
                         scope.launch {
                             snackbarHostState.currentSnackbarData?.dismiss()
-                            val result = kotlinx.coroutines.withTimeoutOrNull(2000) {
-                                snackbarHostState.showSnackbar(
-                                    message = filtersClearedMsg,
-                                    actionLabel = undoLabel,
-                                    duration = SnackbarDuration.Indefinite
-                                )
-                            }
-                            snackbarHostState.currentSnackbarData?.dismiss()
+                            val result = snackbarHostState.showSnackbar(
+                                message = filtersClearedMsg,
+                                actionLabel = undoLabel,
+                                duration = SnackbarDuration.Indefinite
+                            )
                             if (result == SnackbarResult.ActionPerformed) {
                                 filterViewModel.restoreFilters(previousDraft, previousApplied)
                             }
                         }
+                    },
+                    onFilterInteraction = {
+                        snackbarHostState.currentSnackbarData?.dismiss()
                     }
                 )
             } else {

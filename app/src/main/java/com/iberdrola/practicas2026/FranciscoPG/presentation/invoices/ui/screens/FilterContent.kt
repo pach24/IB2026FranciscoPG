@@ -46,7 +46,8 @@ fun FilterContent(
     modifier: Modifier = Modifier,
     uiState: InvoiceFilterUIState,
     onApplyFilters: (InvoiceFilters) -> Unit,
-    onClearFilters: (previousDraft: InvoiceFilters) -> Unit
+    onClearFilters: (previousDraft: InvoiceFilters) -> Unit,
+    onFilterInteraction: () -> Unit = {}
 ) {
     val statusEntries = listOf(
         InvoiceStatus.PAID to stringResource(R.string.filter_status_paid),
@@ -75,6 +76,7 @@ fun FilterContent(
             onDateSelected = { date ->
                 currentFilters = currentFilters.copy(startDate = date)
                 showStartDatePicker = false
+                onFilterInteraction()
             },
             onDismiss = { showStartDatePicker = false }
         )
@@ -89,6 +91,7 @@ fun FilterContent(
             onDateSelected = { date ->
                 currentFilters = currentFilters.copy(endDate = date)
                 showEndDatePicker = false
+                onFilterInteraction()
             },
             onDismiss = { showEndDatePicker = false }
         )
@@ -122,8 +125,14 @@ fun FilterContent(
                 dateTo = currentFilters.endDate?.format(DATE_FORMATTER) ?: "",
                 onFromClick = { showStartDatePicker = true },
                 onToClick = { showEndDatePicker = true },
-                onFromClear = { currentFilters = currentFilters.copy(startDate = null) },
-                onToClear = { currentFilters = currentFilters.copy(endDate = null) }
+                onFromClear = {
+                    currentFilters = currentFilters.copy(startDate = null)
+                    onFilterInteraction()
+                },
+                onToClear = {
+                    currentFilters = currentFilters.copy(endDate = null)
+                    onFilterInteraction()
+                }
             )
 
             Spacer(modifier = Modifier.height(Spacing.dp32))
@@ -147,6 +156,7 @@ fun FilterContent(
                         minAmount = min.toDouble(),
                         maxAmount = max.toDouble()
                     )
+                    onFilterInteraction()
                 }
             )
 
@@ -159,6 +169,7 @@ fun FilterContent(
                     val newStates = currentFilters.filteredStatuses.toMutableSet()
                     if (status in newStates) newStates.remove(status) else newStates.add(status)
                     currentFilters = currentFilters.copy(filteredStatuses = newStates)
+                    onFilterInteraction()
                 }
             )
 

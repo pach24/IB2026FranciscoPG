@@ -19,7 +19,8 @@ fun FilterRoute(
     onBack: () -> Unit,
     filterViewModel: FilterViewModel,
     onFiltersApplied: () -> Unit = {},
-    onFiltersCleared: (previousDraft: InvoiceFilters, previousApplied: InvoiceFilters) -> Unit = { _, _ -> }
+    onFiltersCleared: (previousDraft: InvoiceFilters, previousApplied: InvoiceFilters) -> Unit = { _, _ -> },
+    onFilterInteraction: () -> Unit = {}
 ) {
     val filterUIState by filterViewModel.filterState.collectAsStateWithLifecycle()
 
@@ -46,7 +47,8 @@ fun FilterRoute(
                     val previousApplied = filterViewModel.appliedFilters.value
                     filterViewModel.clearFilters()
                     onFiltersCleared(previousDraft, previousApplied)
-                }
+                },
+                onFilterInteraction = onFilterInteraction
             )
         }
     }
