@@ -13,6 +13,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -81,7 +83,13 @@ class MainActivity : AppCompatActivity() {
                     startDestination = AppRoutes.HOME
                 ) {
 
-                    composable(AppRoutes.HOME) {
+                    composable(
+                        AppRoutes.HOME,
+                        enterTransition = { slideInHorizontally { -it } },
+                        exitTransition = { slideOutHorizontally { -it } },
+                        popEnterTransition = { slideInHorizontally { -it } },
+                        popExitTransition = { slideOutHorizontally { it } }
+                    ) {
                         MainScreen(
                             userName = userName,
                             isMockEnabled = useMock,
@@ -101,7 +109,13 @@ class MainActivity : AppCompatActivity() {
                         )
                     }
 
-                    composable(AppRoutes.MY_INVOICES) {
+                    composable(
+                        AppRoutes.MY_INVOICES,
+                        enterTransition = { slideInHorizontally { it } },
+                        exitTransition = { slideOutHorizontally { it } },
+                        popEnterTransition = { slideInHorizontally { -it } },
+                        popExitTransition = { slideOutHorizontally { it } }
+                    ) {
                         InvoicesRoute(
                             useMock = useMock,
                             onNavigateBack = { navController.popBackStack() }
