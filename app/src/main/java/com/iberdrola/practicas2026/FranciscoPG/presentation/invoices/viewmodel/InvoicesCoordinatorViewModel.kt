@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFilters
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.maxAmount
+import kotlin.math.ceil
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.newestDate
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.oldestDate
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListUiState
@@ -91,7 +92,7 @@ class InvoicesCoordinatorViewModel @Inject constructor() : ViewModel() {
                 .collect { allInvoices ->
                     if (allInvoices.isNotEmpty()) {
                         filterViewModel.updateStatistics(
-                            maxAmount = allInvoices.maxAmount(),
+                            maxAmount = ceil(allInvoices.maxAmount()),
                             oldestDate = allInvoices.oldestDate(),
                             newestDate = allInvoices.newestDate()
                         )

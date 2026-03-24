@@ -84,7 +84,8 @@ class InvoiceUiMapper @Inject constructor() {
         return "$day ${MONTHS_SHORT[month]} $year"
     }
 
-    private fun formatAmount(amount: Double): String = "%.2f €".format(amount)
+    private fun formatAmount(amount: Double): String =
+        String.format(java.util.Locale("es", "ES"), "%.2f €", amount)
 
     private fun supplyTypeLabel(supplyType: SupplyType): String = when (supplyType) {
         SupplyType.ELECTRICITY -> "Luz"
