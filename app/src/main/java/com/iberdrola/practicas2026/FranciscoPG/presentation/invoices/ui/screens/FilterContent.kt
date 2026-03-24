@@ -46,7 +46,7 @@ fun FilterContent(
     modifier: Modifier = Modifier,
     uiState: InvoiceFilterUIState,
     onApplyFilters: (InvoiceFilters) -> Unit,
-    onClearFilters: () -> Unit
+    onClearFilters: (previousDraft: InvoiceFilters) -> Unit
 ) {
     val statusEntries = listOf(
         InvoiceStatus.PAID to stringResource(R.string.filter_status_paid),
@@ -165,6 +165,7 @@ fun FilterContent(
             FilterActionButtons(
                 onApply = { onApplyFilters(currentFilters) },
                 onClear = {
+                    val previousDraft = currentFilters
                     currentFilters = InvoiceFilters(
                         minAmount = 0.0,
                         maxAmount = actualMaxAmount,
@@ -172,7 +173,7 @@ fun FilterContent(
                         endDate = null,
                         filteredStatuses = emptySet()
                     )
-                    onClearFilters()
+                    onClearFilters(previousDraft)
                 }
             )
         }
@@ -197,7 +198,7 @@ private fun FilterScreenEmptyPreview() {
                     statistics = InvoiceFilterUIState.FilterStatistics(maxAmount = 500.0)
                 ),
                 onApplyFilters = {},
-                onClearFilters = {}
+                onClearFilters = { _ -> }
             )
         }
     }
@@ -225,7 +226,7 @@ private fun FilterScreenFilledPreview() {
                     statistics = InvoiceFilterUIState.FilterStatistics(maxAmount = 200.0)
                 ),
                 onApplyFilters = {},
-                onClearFilters = {}
+                onClearFilters = { _ -> }
             )
         }
     }

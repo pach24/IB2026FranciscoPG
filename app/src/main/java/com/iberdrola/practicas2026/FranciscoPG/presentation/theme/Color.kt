@@ -82,7 +82,9 @@ val LightHandlerColor = Color(0xFFC3D5CF)
 val DarkHandlerColor = Color(0xFF4A5954)
 val LightTabMisFacturas = Color(0xFFC6D7D1)
 val DarkTabMisFacturas = Color(0xFF4A5954)
-val SnackbarYellow = Color(0xFFF2EC7C)
+val SnackbarYellow = Color(0xFFFFE7A9)
+val IconSnackbar = Color(0xFF8A4C00)
+val SnackbarGreen =Color(0xFF89CB8C)
 val LightBadgeAmountFilter = Color(0xFFDBE9E1)
 val DarkBadgeAmountFilter = Color(0xFF253D33)
 
@@ -114,6 +116,7 @@ data class IberdrolaColors(
     val handlerColor: Color,
     val tabMisFacturas: Color,
     val snackbar: Color,
+    val snackbarGreen: Color,
     val black: Color,
     val white: Color,
     val badgeAmountFilter: Color,
@@ -145,6 +148,7 @@ val LightIberdrolaColors = IberdrolaColors(
     handlerColor = LightHandlerColor,
     tabMisFacturas = LightTabMisFacturas,
     snackbar = SnackbarYellow,
+    snackbarGreen = SnackbarGreen,
     black = Black,
     white = White,
     badgeAmountFilter = LightBadgeAmountFilter,
@@ -176,6 +180,7 @@ val DarkIberdrolaColors = IberdrolaColors(
     handlerColor = DarkHandlerColor,
     tabMisFacturas = DarkTabMisFacturas,
     snackbar = SnackbarYellow,
+    snackbarGreen = SnackbarGreen,
     black = Black,
     white = White,
     badgeAmountFilter = DarkBadgeAmountFilter,
