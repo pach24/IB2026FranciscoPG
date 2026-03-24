@@ -121,7 +121,9 @@ fun FilterContent(
                 dateFrom = currentFilters.startDate?.format(DATE_FORMATTER) ?: "",
                 dateTo = currentFilters.endDate?.format(DATE_FORMATTER) ?: "",
                 onFromClick = { showStartDatePicker = true },
-                onToClick = { showEndDatePicker = true }
+                onToClick = { showEndDatePicker = true },
+                onFromClear = { currentFilters = currentFilters.copy(startDate = null) },
+                onToClear = { currentFilters = currentFilters.copy(endDate = null) }
             )
 
             Spacer(modifier = Modifier.height(Spacing.dp32))

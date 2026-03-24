@@ -1,6 +1,7 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.filter
 
 import android.content.res.Configuration
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -42,7 +44,9 @@ fun DateRangeSection(
     dateFrom: String,
     dateTo: String,
     onFromClick: () -> Unit,
-    onToClick: () -> Unit
+    onToClick: () -> Unit,
+    onFromClear: () -> Unit = {},
+    onToClear: () -> Unit = {}
 ) {
     val colors = IberdrolaTheme.colors
     Column {
@@ -62,13 +66,15 @@ fun DateRangeSection(
                 label = stringResource(R.string.filter_date_from_label),
                 value = dateFrom,
                 modifier = Modifier.weight(1f),
-                onClick = onFromClick
+                onClick = onFromClick,
+                onClear = onFromClear
             )
             DateField(
                 label = stringResource(R.string.filter_date_to_label),
                 value = dateTo,
                 modifier = Modifier.weight(1f),
-                onClick = onToClick
+                onClick = onToClick,
+                onClear = onToClear
             )
         }
     }
@@ -82,7 +88,8 @@ private fun DateField(
     label: String,
     value: String,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onClear: () -> Unit
 ) {
     val colors = IberdrolaTheme.colors
     val hasValue = value.isNotEmpty()
@@ -137,11 +144,28 @@ private fun DateField(
                     )
                 }
             }
-            Icon(
-                painter = painterResource(R.drawable.ic_calendar),
-                contentDescription = null,
-                tint = colors.textSubtitle
-            )
+            Crossfade(
+                targetState = hasValue,
+                animationSpec = tween(300),
+                label = "iconCrossfade"
+            ) { showClear ->
+                Icon(
+                    painter = painterResource(
+                        if (showClear) R.drawable.ic_close else R.drawable.ic_calendar
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(Spacing.dp24)
+                        .then(
+                            if (showClear) Modifier.clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = onClear
+                            ) else Modifier
+                        ),
+                    tint = colors.textSubtitle
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(Spacing.dp10))
