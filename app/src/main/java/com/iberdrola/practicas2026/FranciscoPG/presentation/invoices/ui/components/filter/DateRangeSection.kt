@@ -1,29 +1,37 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.filter
 
 import android.content.res.Configuration
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
+import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.R
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
@@ -66,7 +74,9 @@ fun DateRangeSection(
     }
 }
 
-// Campo de fecha individual con icono de calendario, read-only, abre DatePicker al pulsar.
+// Campo de fecha individual con floating label animado.
+// El label morphea entre placeholder (sp12) y floating label (sp10).
+// El valor de la fecha aparece/desaparece con fade, centrado.
 @Composable
 private fun DateField(
     label: String,
@@ -77,6 +87,17 @@ private fun DateField(
     val colors = IberdrolaTheme.colors
     val hasValue = value.isNotEmpty()
 
+    val labelSize by animateFloatAsState(
+        targetValue = if (hasValue) 10f else 12f,
+        animationSpec = tween(300),
+        label = "labelSize"
+    )
+    val dividerColor by animateColorAsState(
+        targetValue = if (hasValue) colors.iberdrolaGreen else colors.strokeNeutral,
+        animationSpec = tween(300),
+        label = "dividerColor"
+    )
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -86,27 +107,36 @@ private fun DateField(
                 onClick = onClick
             )
     ) {
-        if (hasValue) {
+        // Floating label: altura fija para que no empuje el divider
+        Box(modifier = Modifier.height(Spacing.dp18)) {
             Text(
                 text = label,
-                fontSize = TextSize.sp10,
+                fontSize = labelSize.sp,
                 color = colors.textSubtitle
             )
-            Spacer(modifier = Modifier.height(2.dp))
         }
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(Spacing.dp32),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = if (hasValue) value else label,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = Spacing.dp8),
-                fontSize = TextSize.sp12,
-                color = if (hasValue) colors.darkGreyText else colors.textSubtitle
-            )
+            Box(modifier = Modifier.weight(1f)) {
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = hasValue,
+                    enter = fadeIn(tween(300)),
+                    exit = fadeOut(tween(200))
+                ) {
+                    Text(
+                        text = value,
+                        modifier = Modifier.fillMaxWidth(),
+                        fontSize = TextSize.sp15,
+                        color = colors.darkGreyText,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
             Icon(
                 painter = painterResource(R.drawable.ic_calendar),
                 contentDescription = null,
@@ -117,7 +147,7 @@ private fun DateField(
         Spacer(modifier = Modifier.height(Spacing.dp10))
 
         HorizontalDivider(
-            color = if (hasValue) colors.iberdrolaGreen else colors.strokeNeutral,
+            color = dividerColor,
             thickness = 1.dp
         )
     }
