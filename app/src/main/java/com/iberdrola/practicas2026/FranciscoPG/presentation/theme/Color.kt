@@ -123,6 +123,7 @@ data class IberdrolaColors(
     val statusDefault: Color,
     val statusDefaultText: Color,
     val activeFilterBadgeColor: Color,
+    val snackbarIcon: Color,
 )
 
 val LightIberdrolaColors = IberdrolaColors(
@@ -154,7 +155,8 @@ val LightIberdrolaColors = IberdrolaColors(
     badgeAmountFilter = LightBadgeAmountFilter,
     statusDefault = StatusDefaultLight,
     statusDefaultText = StatusDefaultTextLight,
-    activeFilterBadgeColor = IberSunset
+    activeFilterBadgeColor = IberSunset,
+    snackbarIcon = IconSnackbar
 )
 
 val DarkIberdrolaColors = IberdrolaColors(
@@ -186,7 +188,8 @@ val DarkIberdrolaColors = IberdrolaColors(
     badgeAmountFilter = DarkBadgeAmountFilter,
     statusDefault = StatusDefaultDark,
     statusDefaultText = StatusDefaultTextDark,
-    activeFilterBadgeColor = IberSunset
+    activeFilterBadgeColor = IberSunset,
+    snackbarIcon = IconSnackbar
 )
 
 val LocalIberdrolaColors = staticCompositionLocalOf { LightIberdrolaColors }

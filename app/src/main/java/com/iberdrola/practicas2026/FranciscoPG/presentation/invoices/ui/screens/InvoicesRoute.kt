@@ -8,16 +8,14 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -32,9 +30,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.iberdrola.practicas2026.FranciscoPG.R
-import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFilters
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListUiState
+import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.components.UnavailableBanner
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.FeedbackViewModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.FilterViewModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.viewmodel.InvoicesCoordinatorViewModel
@@ -151,6 +149,12 @@ fun InvoicesRoute(
         gasViewModel.fetchInvoices(SupplyType.GAS, useMock, forceRefresh = true)
     }
 
+    val showBanner = electricityShowDialog || gasShowDialog
+    val dismissBanner = {
+        if (electricityShowDialog) electricityViewModel.onDialogHandled()
+        if (gasShowDialog) gasViewModel.onDialogHandled()
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         AnimatedContent(
             targetState = showFilter,
@@ -259,32 +263,21 @@ fun InvoicesRoute(
                 actionColor = IberdrolaTheme.colors.black
             )
         }
+
+        // Dentro del Box en InvoicesRoute
+        UnavailableBanner(
+            visible = showBanner,
+            onDismiss = dismissBanner,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .navigationBarsPadding() // Respeta la barra de gestos/botones del sistema
+                .padding(bottom = Spacing.dp32) // Margen extra sobre la barra del sistema para que "flote"
+        )
     }
 
     LaunchedEffect(Unit) {
         feedbackViewModel.navigateBack.collect {
             onNavigateBack()
         }
-    }
-
-    if (electricityShowDialog || gasShowDialog) {
-        AlertDialog(
-            onDismissRequest = {
-                if (electricityShowDialog) electricityViewModel.onDialogHandled()
-                if (gasShowDialog) gasViewModel.onDialogHandled()
-            },
-            title = { Text(text = stringResource(R.string.dialog_info_title)) },
-            text = { Text(text = stringResource(R.string.dialog_feature_not_available)) },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        if (electricityShowDialog) electricityViewModel.onDialogHandled()
-                        if (gasShowDialog) gasViewModel.onDialogHandled()
-                    }
-                ) {
-                    Text(text = stringResource(R.string.dialog_accept))
-                }
-            }
-        )
     }
 }
