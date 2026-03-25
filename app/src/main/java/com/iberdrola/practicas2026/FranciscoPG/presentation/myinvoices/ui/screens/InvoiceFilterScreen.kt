@@ -14,6 +14,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,7 +50,8 @@ fun FilterContent(
     uiState: InvoiceFilterUIState,
     onApplyFilters: (InvoiceFilters) -> Unit,
     onClearFilters: (previousDraft: InvoiceFilters) -> Unit,
-    onFilterInteraction: () -> Unit = {}
+    onFilterInteraction: () -> Unit = {},
+    onDraftChanged: (InvoiceFilters) -> Unit = {}
 ) {
     val statusEntries = listOf(
         InvoiceStatus.PAID to stringResource(R.string.filter_status_paid),
@@ -62,11 +64,16 @@ fun FilterContent(
 
     var currentFilters by remember(uiState.filters) { mutableStateOf(uiState.filters) }
 
+    LaunchedEffect(currentFilters) {
+        onDraftChanged(currentFilters)
+    }
+
     var showStartDatePicker by remember { mutableStateOf(false) }
     var showEndDatePicker by remember { mutableStateOf(false) }
 
-    val actualMaxAmount = uiState.statistics.maxAmount.coerceAtLeast(1.0)
-    val safeMin = (currentFilters.minAmount ?: 0.0).coerceIn(0.0, actualMaxAmount)
+    val actualMinAmount = uiState.statistics.minAmount
+    val actualMaxAmount = uiState.statistics.maxAmount.coerceAtLeast(actualMinAmount + 1.0)
+    val safeMin = (currentFilters.minAmount ?: actualMinAmount).coerceIn(actualMinAmount, actualMaxAmount)
     val safeMax = (currentFilters.maxAmount ?: actualMaxAmount).coerceIn(safeMin, actualMaxAmount)
 
     if (showStartDatePicker) {
@@ -151,7 +158,7 @@ fun FilterContent(
             PriceRangeSection(
                 minPrice = safeMin.toFloat(),
                 maxPrice = safeMax.toFloat(),
-                minLimit = 0f,
+                minLimit = actualMinAmount.toFloat(),
                 maxLimit = actualMaxAmount.toFloat(),
                 onRangeChange = { min, max ->
                     currentFilters = currentFilters.copy(

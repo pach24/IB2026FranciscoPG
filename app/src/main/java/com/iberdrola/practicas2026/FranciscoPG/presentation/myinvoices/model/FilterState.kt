@@ -7,6 +7,7 @@ data class InvoiceFilterUIState(
     val statistics: FilterStatistics = FilterStatistics()
 ) {
     data class FilterStatistics(
+        val minAmount: Double = 0.0,
         val maxAmount: Double = 0.0,
         val oldestDateMillis: Long = 0L,
         val newestDateMillis: Long = 0L

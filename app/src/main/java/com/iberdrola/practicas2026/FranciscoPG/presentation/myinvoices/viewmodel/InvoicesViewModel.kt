@@ -8,6 +8,7 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFilters
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.maxAmount
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.minAmount
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.newestDate
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.oldestDate
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.FilterInvoicesUseCase
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.ceil
+import kotlin.math.floor
 
 @HiltViewModel
 class InvoicesViewModel @Inject constructor(
@@ -159,6 +161,7 @@ class InvoicesViewModel @Inject constructor(
                 .collect { allInvoices ->
                     if (allInvoices.isNotEmpty()) {
                         filterViewModel.updateStatistics(
+                            minAmount = floor(allInvoices.minAmount()),
                             maxAmount = ceil(allInvoices.maxAmount()),
                             oldestDate = allInvoices.oldestDate(),
                             newestDate = allInvoices.newestDate()
