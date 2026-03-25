@@ -22,14 +22,13 @@ El diferenciador clave es la **flexibilidad de datos**: mediante inyeccion de de
 
 ---
 
-## Galeria visual
+## Galería visual
 
-| **Home y Toggle** | **Lista de facturas** | **Modo oscuro** | **Carga (Skeleton)** |
-|:---:|:---:|:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/4cb9ae6e-f1ad-49a6-819b-8f3505f8040d" width="200" height="444"> | <img src="https://github.com/user-attachments/assets/55b3ef88-dfef-4814-8a6e-8817fe082685" width="200" height="444"> | <img src="https://github.com/user-attachments/assets/aea05f67-f74e-4cf5-a991-c6ebb5231d7f" width="200" height="444"> | <img src="https://github.com/user-attachments/assets/f42a0bcb-c080-4991-9b0c-bcbe56320f33" width="200" height="444"> |
-| *Dashboard con switch RetroMock/Retrofit.* | *Agrupadas por tipo (Luz/Gas) y estado.* | *Vista en modo oscuro.* | *Carga fluida con placeholders Shimmer.* |
+| Home y Toggle | Lista de facturas | Carga (Skeleton) | Bottom Sheet |
+|:-------------:|:-----------------:|:----------------:|:-----------:|
+| <img src="https://github.com/user-attachments/assets/7d5016e4-bb5d-49a1-bf66-2efb6a4ef19d" width="200"/> | <img src="https://github.com/user-attachments/assets/700552ba-a6e1-4fb5-acd8-2bb5809a8daf" width="200"/> | <img src="https://github.com/user-attachments/assets/72041eaa-bfa3-497b-ac73-c1ddcd86d82a" width="200"/> | <img src="https://github.com/user-attachments/assets/f05b74c3-7565-4396-af56-73417e326141" width="200"/> |
 
----
+
 
 ## Funcionalidades principales
 
