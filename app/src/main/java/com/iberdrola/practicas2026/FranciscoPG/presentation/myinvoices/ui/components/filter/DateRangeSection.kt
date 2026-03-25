@@ -18,7 +18,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -42,7 +44,6 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 
-// Sección de rango de fechas con campos "Desde" y "Hasta" que abren un DatePicker
 @Composable
 fun DateRangeSection(
     dateFrom: String,
@@ -98,7 +99,6 @@ private fun DateField(
     val colors = IberdrolaTheme.colors
     val hasValue = value.isNotEmpty()
 
-    // Recordar el último valor no vacío para mostrarlo durante la animación de salida
     var displayValue by remember { mutableStateOf(value) }
     if (value.isNotEmpty()) displayValue = value
 
@@ -127,8 +127,13 @@ private fun DateField(
                 onClick = onClick
             )
     ) {
-        // Floating label: altura fija para que no empuje el divider
-        Box(modifier = Modifier.height(Spacing.dp18)) {
+        // Label: Usamos wrapContentHeight y un padding controlado para evitar que se corte
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(top = 8.dp)
+        ) {
             Text(
                 text = label,
                 fontSize = labelSize.sp,
@@ -142,7 +147,11 @@ private fun DateField(
                 .height(Spacing.dp32),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(modifier = Modifier.weight(1f)) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(top = 4.dp) // Baja el texto de la fecha un poco hacia la barra
+            ) {
                 androidx.compose.animation.AnimatedVisibility(
                     visible = hasValue,
                     enter = fadeIn(tween(300)) + slideInVertically(tween(300)) { -it },
@@ -181,7 +190,8 @@ private fun DateField(
             }
         }
 
-        Spacer(modifier = Modifier.height(Spacing.dp10))
+        // Espacio pequeño para que el texto casi toque la barra
+        Spacer(modifier = Modifier.height(2.dp))
 
         HorizontalDivider(
             color = dividerColor,
@@ -190,43 +200,34 @@ private fun DateField(
     }
 }
 
+// --- Previews ---
+
 @Preview(name = "Vacío - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Vacío - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun DateRangeSectionEmptyPreview() {
     IberdrolaTheme {
-        DateRangeSection(
-            dateFrom = "",
-            dateTo = "",
-            onFromClick = {},
-            onToClick = {}
-        )
+        Box(modifier = Modifier.padding(16.dp)) {
+            DateRangeSection(
+                dateFrom = "",
+                dateTo = "",
+                onFromClick = {},
+                onToClick = {}
+            )
+        }
     }
 }
 
 @Preview(name = "Con fechas - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Con fechas - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun DateRangeSectionFilledPreview() {
     IberdrolaTheme {
-        DateRangeSection(
-            dateFrom = "01/01/2025",
-            dateTo = "31/12/2025",
-            onFromClick = {},
-            onToClick = {}
-        )
-    }
-}
-
-@Preview(name = "Parcial - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Composable
-private fun DateRangeSectionPartialPreview() {
-    IberdrolaTheme {
-        DateRangeSection(
-            dateFrom = "01/06/2025",
-            dateTo = "",
-            onFromClick = {},
-            onToClick = {}
-        )
+        Box(modifier = Modifier.padding(16.dp)) {
+            DateRangeSection(
+                dateFrom = "01/01/2026",
+                dateTo = "15/02/2026",
+                onFromClick = {},
+                onToClick = {}
+            )
+        }
     }
 }
