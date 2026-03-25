@@ -43,7 +43,9 @@ object Spacing {
     val dp32 = 32.dp
     val dp40 = 40.dp
     val dp48 = 48.dp
+
     val dp64 = 64.dp
+
 }
 
 /** Tamaños de iconos */
@@ -77,6 +79,8 @@ object Component {
     val promoMinH = 144.dp
     val promoImgW = 140.dp
     val dragW = 60.dp
+
+    val compHeigh100 = 80.dp
     val dragH = 6.dp
     val backBtnW = 80.dp
     val backBtnH = 30.dp

@@ -25,12 +25,32 @@ data class InvoiceFilters(
     val activeCount: Int
         get() {
             var count = 0
-            if (startDate != null || endDate != null) count++
-            if (minAmount != null && minAmount!! > 0.0) count++
-            if (maxAmount != null) count++
-            if (filteredStatuses.isNotEmpty()) count++
+
+            // 1. Categoría Fechas
+            if (startDate != null || endDate != null) {
+                count++
+            }
+
+            // 2. Categoría Estados
+            if (filteredStatuses.isNotEmpty()) {
+                count++
+            }
+
+            // 3. Categoría Importe (Slider)
+            // Suma 1 solo si el mínimo es mayor a 0 o si el máximo ha sido modificado (no es nulo)
+            if ((minAmount != null && minAmount > 0.0) || maxAmount != null) {
+                count++
+            }
+
             return count
         }
+
+    val hasAnyFilterApplied: Boolean
+        get() = minAmount != null ||
+                maxAmount != null ||
+                startDate != null ||
+                endDate != null ||
+                filteredStatuses.isNotEmpty()
 
     fun normalize(): InvoiceFilters {
         var normalized = this

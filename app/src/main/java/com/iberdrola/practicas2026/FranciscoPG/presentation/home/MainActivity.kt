@@ -13,6 +13,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -20,7 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.MainScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.viewmodel.MainViewModel
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens.InvoicesRoute
+import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.screens.InvoicesRoute
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -81,7 +83,13 @@ class MainActivity : AppCompatActivity() {
                     startDestination = AppRoutes.HOME
                 ) {
 
-                    composable(AppRoutes.HOME) {
+                    composable(
+                        AppRoutes.HOME,
+                        enterTransition = { slideInHorizontally { -it } },
+                        exitTransition = { slideOutHorizontally { -it } },
+                        popEnterTransition = { slideInHorizontally { -it } },
+                        popExitTransition = { slideOutHorizontally { it } }
+                    ) {
                         MainScreen(
                             userName = userName,
                             isMockEnabled = useMock,
@@ -101,7 +109,13 @@ class MainActivity : AppCompatActivity() {
                         )
                     }
 
-                    composable(AppRoutes.MY_INVOICES) {
+                    composable(
+                        AppRoutes.MY_INVOICES,
+                        enterTransition = { slideInHorizontally { it } },
+                        exitTransition = { slideOutHorizontally { it } },
+                        popEnterTransition = { slideInHorizontally { -it } },
+                        popExitTransition = { slideOutHorizontally { it } }
+                    ) {
                         InvoicesRoute(
                             useMock = useMock,
                             onNavigateBack = { navController.popBackStack() }

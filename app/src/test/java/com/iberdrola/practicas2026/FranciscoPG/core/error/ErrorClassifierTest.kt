@@ -1,6 +1,6 @@
 package com.iberdrola.practicas2026.FranciscoPG.core.error
 
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.model.InvoiceListUiState
+import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.InvoiceListUiState
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
