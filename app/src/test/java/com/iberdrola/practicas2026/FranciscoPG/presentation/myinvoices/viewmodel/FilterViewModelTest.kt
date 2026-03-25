@@ -31,6 +31,7 @@ class FilterViewModelTest {
     @Test
     fun `initial statistics are zero`() {
         val stats = viewModel.filterState.value.statistics
+        assertEquals(0.0, stats.minAmount, 0.0)
         assertEquals(0.0, stats.maxAmount, 0.0)
         assertEquals(0L, stats.oldestDateMillis)
         assertEquals(0L, stats.newestDateMillis)
@@ -143,12 +144,14 @@ class FilterViewModelTest {
         val newest = LocalDate.of(2026, 3, 1)
 
         viewModel.updateStatistics(
+            minAmount = 5.0,
             maxAmount = 350.0,
             oldestDate = oldest,
             newestDate = newest
         )
 
         val stats = viewModel.filterState.value.statistics
+        assertEquals(5.0, stats.minAmount, 0.0)
         assertEquals(350.0, stats.maxAmount, 0.0)
         assertTrue(stats.oldestDateMillis > 0)
         assertTrue(stats.newestDateMillis > 0)
@@ -157,9 +160,10 @@ class FilterViewModelTest {
 
     @Test
     fun `updateStatistics with null dates sets millis to zero`() {
-        viewModel.updateStatistics(maxAmount = 100.0, oldestDate = null, newestDate = null)
+        viewModel.updateStatistics(minAmount = 0.0, maxAmount = 100.0, oldestDate = null, newestDate = null)
 
         val stats = viewModel.filterState.value.statistics
+        assertEquals(0.0, stats.minAmount, 0.0)
         assertEquals(100.0, stats.maxAmount, 0.0)
         assertEquals(0L, stats.oldestDateMillis)
         assertEquals(0L, stats.newestDateMillis)
@@ -167,11 +171,11 @@ class FilterViewModelTest {
 
     @Test
     fun `updateStatistics adjusts draft slider to new range`() {
-        viewModel.updateStatistics(maxAmount = 200.0, oldestDate = null, newestDate = null)
+        viewModel.updateStatistics(minAmount = 0.0, maxAmount = 200.0, oldestDate = null, newestDate = null)
         viewModel.updateFilters(InvoiceFilters(minAmount = 50.0, maxAmount = 200.0))
 
         // New data arrives with higher max
-        viewModel.updateStatistics(maxAmount = 500.0, oldestDate = null, newestDate = null)
+        viewModel.updateStatistics(minAmount = 0.0, maxAmount = 500.0, oldestDate = null, newestDate = null)
 
         val filters = viewModel.filterState.value.filters
         assertEquals(50.0, filters.minAmount!!, 0.0)
@@ -181,27 +185,53 @@ class FilterViewModelTest {
 
     @Test
     fun `updateStatistics keeps custom max when not at ceiling`() {
-        viewModel.updateStatistics(maxAmount = 200.0, oldestDate = null, newestDate = null)
+        viewModel.updateStatistics(minAmount = 0.0, maxAmount = 200.0, oldestDate = null, newestDate = null)
         viewModel.updateFilters(InvoiceFilters(minAmount = 10.0, maxAmount = 100.0))
 
         // New data arrives with higher max
-        viewModel.updateStatistics(maxAmount = 500.0, oldestDate = null, newestDate = null)
+        viewModel.updateStatistics(minAmount = 0.0, maxAmount = 500.0, oldestDate = null, newestDate = null)
 
         val filters = viewModel.filterState.value.filters
         // User had a custom max of 100 (not at ceiling) -> stays at 100
         assertEquals(100.0, filters.maxAmount!!, 0.0)
     }
 
+    @Test
+    fun `updateStatistics expands draft minAmount when at floor`() {
+        viewModel.updateStatistics(minAmount = 10.0, maxAmount = 200.0, oldestDate = null, newestDate = null)
+        viewModel.updateFilters(InvoiceFilters(minAmount = 10.0, maxAmount = 150.0))
+
+        // New data arrives with lower min
+        viewModel.updateStatistics(minAmount = 3.0, maxAmount = 200.0, oldestDate = null, newestDate = null)
+
+        val filters = viewModel.filterState.value.filters
+        // minAmount was at old floor (10) -> expands to new floor (3)
+        assertEquals(3.0, filters.minAmount!!, 0.0)
+    }
+
+    @Test
+    fun `updateStatistics keeps custom min when not at floor`() {
+        viewModel.updateStatistics(minAmount = 5.0, maxAmount = 200.0, oldestDate = null, newestDate = null)
+        viewModel.updateFilters(InvoiceFilters(minAmount = 30.0, maxAmount = 150.0))
+
+        // New data arrives with lower min
+        viewModel.updateStatistics(minAmount = 2.0, maxAmount = 200.0, oldestDate = null, newestDate = null)
+
+        val filters = viewModel.filterState.value.filters
+        // User had custom min of 30 (not at floor 5) -> stays at 30
+        assertEquals(30.0, filters.minAmount!!, 0.0)
+    }
+
     // ── updateStatistics: expansion de filtros aplicados ──────────────────────
 
     @Test
     fun `updateStatistics expands applied maxAmount when at ceiling`() {
-        viewModel.updateStatistics(maxAmount = 200.0, oldestDate = null, newestDate = null)
+        viewModel.updateStatistics(minAmount = 0.0, maxAmount = 200.0, oldestDate = null, newestDate = null)
         viewModel.updateFilters(InvoiceFilters(minAmount = 0.0, maxAmount = 200.0))
         viewModel.applyFilters()
 
         // Refresh brings new invoices with higher amounts
-        viewModel.updateStatistics(maxAmount = 400.0, oldestDate = null, newestDate = null)
+        viewModel.updateStatistics(minAmount = 0.0, maxAmount = 400.0, oldestDate = null, newestDate = null)
 
         // Applied max was at ceiling -> should expand
         assertEquals(400.0, viewModel.appliedFilters.value.maxAmount!!, 0.0)
@@ -209,28 +239,53 @@ class FilterViewModelTest {
 
     @Test
     fun `updateStatistics does not expand applied maxAmount when custom`() {
-        viewModel.updateStatistics(maxAmount = 200.0, oldestDate = null, newestDate = null)
+        viewModel.updateStatistics(minAmount = 0.0, maxAmount = 200.0, oldestDate = null, newestDate = null)
         viewModel.updateFilters(InvoiceFilters(minAmount = 0.0, maxAmount = 100.0))
         viewModel.applyFilters()
 
-        viewModel.updateStatistics(maxAmount = 400.0, oldestDate = null, newestDate = null)
+        viewModel.updateStatistics(minAmount = 0.0, maxAmount = 400.0, oldestDate = null, newestDate = null)
 
         // Applied max was custom (100, not at ceiling 200) -> stays
         assertEquals(100.0, viewModel.appliedFilters.value.maxAmount!!, 0.0)
     }
 
     @Test
+    fun `updateStatistics expands applied minAmount when at floor`() {
+        viewModel.updateStatistics(minAmount = 10.0, maxAmount = 200.0, oldestDate = null, newestDate = null)
+        viewModel.updateFilters(InvoiceFilters(minAmount = 10.0, maxAmount = 200.0))
+        viewModel.applyFilters()
+
+        // Refresh brings invoice with lower amount
+        viewModel.updateStatistics(minAmount = 3.0, maxAmount = 200.0, oldestDate = null, newestDate = null)
+
+        // Applied min was at floor -> should expand
+        assertEquals(3.0, viewModel.appliedFilters.value.minAmount!!, 0.0)
+    }
+
+    @Test
+    fun `updateStatistics does not expand applied minAmount when custom`() {
+        viewModel.updateStatistics(minAmount = 5.0, maxAmount = 200.0, oldestDate = null, newestDate = null)
+        viewModel.updateFilters(InvoiceFilters(minAmount = 30.0, maxAmount = 200.0))
+        viewModel.applyFilters()
+
+        viewModel.updateStatistics(minAmount = 2.0, maxAmount = 200.0, oldestDate = null, newestDate = null)
+
+        // Applied min was custom (30, not at floor 5) -> stays
+        assertEquals(30.0, viewModel.appliedFilters.value.minAmount!!, 0.0)
+    }
+
+    @Test
     fun `updateStatistics expands applied dates when at boundaries`() {
         val oldOldest = LocalDate.of(2024, 1, 1)
         val oldNewest = LocalDate.of(2025, 12, 31)
-        viewModel.updateStatistics(maxAmount = 100.0, oldestDate = oldOldest, newestDate = oldNewest)
+        viewModel.updateStatistics(minAmount = 0.0, maxAmount = 100.0, oldestDate = oldOldest, newestDate = oldNewest)
         viewModel.updateFilters(InvoiceFilters(startDate = oldOldest, endDate = oldNewest))
         viewModel.applyFilters()
 
         // New data extends the range
         val newOldest = LocalDate.of(2023, 6, 1)
         val newNewest = LocalDate.of(2026, 3, 1)
-        viewModel.updateStatistics(maxAmount = 100.0, oldestDate = newOldest, newestDate = newNewest)
+        viewModel.updateStatistics(minAmount = 0.0, maxAmount = 100.0, oldestDate = newOldest, newestDate = newNewest)
 
         // Dates were at boundaries -> should expand to new range
         assertEquals(newOldest, viewModel.appliedFilters.value.startDate)
@@ -241,7 +296,7 @@ class FilterViewModelTest {
     fun `updateStatistics does not expand applied dates when custom`() {
         val oldOldest = LocalDate.of(2024, 1, 1)
         val oldNewest = LocalDate.of(2025, 12, 31)
-        viewModel.updateStatistics(maxAmount = 100.0, oldestDate = oldOldest, newestDate = oldNewest)
+        viewModel.updateStatistics(minAmount = 0.0, maxAmount = 100.0, oldestDate = oldOldest, newestDate = oldNewest)
 
         val customStart = LocalDate.of(2024, 6, 1)
         val customEnd = LocalDate.of(2025, 6, 1)
@@ -250,7 +305,7 @@ class FilterViewModelTest {
 
         val newOldest = LocalDate.of(2023, 1, 1)
         val newNewest = LocalDate.of(2026, 6, 1)
-        viewModel.updateStatistics(maxAmount = 100.0, oldestDate = newOldest, newestDate = newNewest)
+        viewModel.updateStatistics(minAmount = 0.0, maxAmount = 100.0, oldestDate = newOldest, newestDate = newNewest)
 
         // Dates were custom (not at boundaries) -> stay
         assertEquals(customStart, viewModel.appliedFilters.value.startDate)
@@ -259,7 +314,7 @@ class FilterViewModelTest {
 
     @Test
     fun `updateStatistics does not touch applied when no filters active`() {
-        viewModel.updateStatistics(maxAmount = 200.0, oldestDate = null, newestDate = null)
+        viewModel.updateStatistics(minAmount = 0.0, maxAmount = 200.0, oldestDate = null, newestDate = null)
 
         // No filters applied -> applied should remain empty
         assertEquals(InvoiceFilters(), viewModel.appliedFilters.value)

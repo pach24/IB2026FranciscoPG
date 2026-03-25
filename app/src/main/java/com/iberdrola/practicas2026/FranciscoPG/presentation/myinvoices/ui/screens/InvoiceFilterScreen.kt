@@ -65,8 +65,9 @@ fun FilterContent(
     var showStartDatePicker by remember { mutableStateOf(false) }
     var showEndDatePicker by remember { mutableStateOf(false) }
 
-    val actualMaxAmount = uiState.statistics.maxAmount.coerceAtLeast(1.0)
-    val safeMin = (currentFilters.minAmount ?: 0.0).coerceIn(0.0, actualMaxAmount)
+    val actualMinAmount = uiState.statistics.minAmount
+    val actualMaxAmount = uiState.statistics.maxAmount.coerceAtLeast(actualMinAmount + 1.0)
+    val safeMin = (currentFilters.minAmount ?: actualMinAmount).coerceIn(actualMinAmount, actualMaxAmount)
     val safeMax = (currentFilters.maxAmount ?: actualMaxAmount).coerceIn(safeMin, actualMaxAmount)
 
     if (showStartDatePicker) {
@@ -151,7 +152,7 @@ fun FilterContent(
             PriceRangeSection(
                 minPrice = safeMin.toFloat(),
                 maxPrice = safeMax.toFloat(),
-                minLimit = 0f,
+                minLimit = actualMinAmount.toFloat(),
                 maxLimit = actualMaxAmount.toFloat(),
                 onRangeChange = { min, max ->
                     currentFilters = currentFilters.copy(
