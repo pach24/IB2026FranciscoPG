@@ -1,0 +1,151 @@
+{
+  "uuid": "c4c29cf0-45e0-4a6a-9ad0-21d64bdaa7e3",
+  "lastMigration": 33,
+  "name": "InvoicesMockoonEnvironment",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 3001,
+  "hostname": "",
+  "folders": [],
+  "routes": [
+    {
+      "uuid": "a652c605-ac40-4237-83e4-f00db3ffb25a",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "invoices.json",
+      "responses": [
+        {
+          "uuid": "1bba9305-48b1-463e-a071-2fbd79702377",
+          "body": "{\r\n  \"numFacturas\": 10,\r\n  \"facturas\": [\r\n    {\r\n      \"id\": \"201\",\r\n      \"descEstado\": \"Pendiente de pago\",\r\n      \"importeOrdenacion\": 121.50,\r\n      \"fechaCobro\": \"12/03/2026\",\r\n      \"fechaInicio\": \"12/02/2026\",\r\n      \"fechaFin\": \"12/03/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"102\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 42.15,\r\n      \"fechaCobro\": \"10/03/2026\",\r\n      \"fechaInicio\": \"10/02/2026\",\r\n      \"fechaFin\": \"10/03/2026\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    },\r\n    {\r\n      \"id\": \"203\",\r\n      \"descEstado\": \"Anulada\",\r\n      \"importeOrdenacion\": 15.75,\r\n      \"fechaCobro\": \"15/06/2025\",\r\n      \"fechaInicio\": \"15/05/2025\",\r\n      \"fechaFin\": \"15/06/2025\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"104\",\r\n      \"descEstado\": \"En trámite de cobro\",\r\n      \"importeOrdenacion\": 38.90,\r\n      \"fechaCobro\": \"25/03/2026\",\r\n      \"fechaInicio\": \"25/02/2026\",\r\n      \"fechaFin\": \"25/03/2026\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    },\r\n    {\r\n      \"id\": \"205\",\r\n      \"descEstado\": \"Cuota fija\",\r\n      \"importeOrdenacion\": 45.00,\r\n      \"fechaCobro\": \"01/04/2026\",\r\n      \"fechaInicio\": \"01/03/2026\",\r\n      \"fechaFin\": \"01/04/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"202\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 95.40,\r\n      \"fechaCobro\": \"10/02/2026\",\r\n      \"fechaInicio\": \"10/01/2026\",\r\n      \"fechaFin\": \"10/02/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"101\",\r\n      \"descEstado\": \"Pendiente de pago\",\r\n      \"importeOrdenacion\": 55.20,\r\n      \"fechaCobro\": \"15/04/2026\",\r\n      \"fechaInicio\": \"15/03/2026\",\r\n      \"fechaFin\": \"15/04/2026\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    },\r\n    {\r\n      \"id\": \"103\",\r\n      \"descEstado\": \"Anulada\",\r\n      \"importeOrdenacion\": 12.30,\r\n      \"fechaCobro\": \"15/01/2026\",\r\n      \"fechaInicio\": \"15/12/2025\",\r\n      \"fechaFin\": \"15/01/2026\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    },\r\n    {\r\n      \"id\": \"204\",\r\n      \"descEstado\": \"En trámite de cobro\",\r\n      \"importeOrdenacion\": 88.20,\r\n      \"fechaCobro\": \"20/03/2026\",\r\n      \"fechaInicio\": \"20/02/2026\",\r\n      \"fechaFin\": \"20/03/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"105\",\r\n      \"descEstado\": \"Cuota fija\",\r\n      \"importeOrdenacion\": 25.00,\r\n      \"fechaCobro\": \"01/04/2026\",\r\n      \"fechaInicio\": \"01/03/2026\",\r\n      \"fechaFin\": \"01/04/2026\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    }\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Facturas  de ambos tipos de suministro LUZ / GAS",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "5e99b272-b735-4db6-9cd6-377a6274492d",
+          "body": "{\r\n  \"numFacturas\": 5,\r\n  \"facturas\": [\r\n    {\r\n      \"id\": \"101\",\r\n      \"descEstado\": \"Pendiente de pago\",\r\n      \"importeOrdenacion\": 55.20,\r\n      \"fechaCobro\": \"15/04/2026\",\r\n      \"fechaInicio\": \"15/03/2026\",\r\n      \"fechaFin\": \"15/04/2026\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    },\r\n    {\r\n      \"id\": \"102\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 42.15,\r\n      \"fechaCobro\": \"10/03/2026\",\r\n      \"fechaInicio\": \"10/02/2026\",\r\n      \"fechaFin\": \"10/03/2026\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    },\r\n    {\r\n      \"id\": \"103\",\r\n      \"descEstado\": \"Anulada\",\r\n      \"importeOrdenacion\": 12.30,\r\n      \"fechaCobro\": \"15/01/2026\",\r\n      \"fechaInicio\": \"15/12/2025\",\r\n      \"fechaFin\": \"15/01/2026\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    },\r\n    {\r\n      \"id\": \"104\",\r\n      \"descEstado\": \"En trámite de cobro\",\r\n      \"importeOrdenacion\": 38.90,\r\n      \"fechaCobro\": \"25/03/2026\",\r\n      \"fechaInicio\": \"25/02/2026\",\r\n      \"fechaFin\": \"25/03/2026\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    },\r\n    {\r\n      \"id\": \"105\",\r\n      \"descEstado\": \"Cuota fija\",\r\n      \"importeOrdenacion\": 25.00,\r\n      \"fechaCobro\": \"01/04/2026\",\r\n      \"fechaInicio\": \"01/03/2026\",\r\n      \"fechaFin\": \"01/04/2026\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    }\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Facturas  exclusivamente para el suministro de GAS",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "8fba3c6d-18ce-4e0b-a69e-096ffefc6841",
+          "body": "{\r\n  \"numFacturas\": 5,\r\n  \"facturas\": [\r\n    {\r\n      \"id\": \"201\",\r\n      \"descEstado\": \"Pendiente de pago\",\r\n      \"importeOrdenacion\": 121.50,\r\n      \"fechaCobro\": \"12/03/2026\",\r\n      \"fechaInicio\": \"12/02/2026\",\r\n      \"fechaFin\": \"12/03/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"202\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 95.40,\r\n      \"fechaCobro\": \"10/02/2026\",\r\n      \"fechaInicio\": \"10/01/2026\",\r\n      \"fechaFin\": \"10/02/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"203\",\r\n      \"descEstado\": \"Anulada\",\r\n      \"importeOrdenacion\": 15.75,\r\n      \"fechaCobro\": \"15/06/2025\",\r\n      \"fechaInicio\": \"15/05/2025\",\r\n      \"fechaFin\": \"15/06/2025\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"204\",\r\n      \"descEstado\": \"En trámite de cobro\",\r\n      \"importeOrdenacion\": 88.20,\r\n      \"fechaCobro\": \"20/03/2026\",\r\n      \"fechaInicio\": \"20/02/2026\",\r\n      \"fechaFin\": \"20/03/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"205\",\r\n      \"descEstado\": \"Cuota fija\",\r\n      \"importeOrdenacion\": 45.00,\r\n      \"fechaCobro\": \"01/04/2026\",\r\n      \"fechaInicio\": \"01/03/2026\",\r\n      \"fechaFin\": \"01/04/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    }\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Facturas  exclusivamente para el suministro de LUZ",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "47947e19-6244-4272-bcfa-cdaf36d896ad",
+          "body": "{\r\n  \"numFacturas\": 6,\r\n  \"facturas\": [\r\n    {\r\n      \"id\": \"1\",\r\n      \"descEstado\": \"Pendiente de pago\",\r\n      \"importeOrdenacion\": 65.40,\r\n      \"fechaCobro\": \"15/03/2026\",\r\n      \"fechaInicio\": \"15/02/2026\",\r\n      \"fechaFin\": \"15/03/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"2\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 42.15,\r\n      \"fechaCobro\": \"10/03/2026\",\r\n      \"fechaInicio\": \"10/02/2026\",\r\n      \"fechaFin\": \"10/03/2026\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    },\r\n    {\r\n      \"id\": \"3\",\r\n      \"descEstado\": \"En trámite de cobro\",\r\n      \"importeOrdenacion\": 78.30,\r\n      \"fechaCobro\": \"20/03/2026\",\r\n      \"fechaInicio\": \"18/02/2026\",\r\n      \"fechaFin\": \"18/03/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"4\",\r\n      \"descEstado\": \"Anulada\",\r\n      \"importeOrdenacion\": 95.50,\r\n      \"fechaCobro\": \"05/02/2026\",\r\n      \"fechaInicio\": \"05/01/2026\",\r\n      \"fechaFin\": \"05/02/2026\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    },\r\n    {\r\n      \"id\": \"5\",\r\n      \"descEstado\": \"Cuota fija\",\r\n      \"importeOrdenacion\": 50.00,\r\n      \"fechaCobro\": \"01/04/2026\",\r\n      \"fechaInicio\": \"01/03/2026\",\r\n      \"fechaFin\": \"01/04/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"6\",\r\n      \"descEstado\": \"En trámite de cobro\",\r\n      \"importeOrdenacion\": 45.20,\r\n      \"fechaCobro\": \"25/03/2026\",\r\n      \"fechaInicio\": \"22/02/2026\",\r\n      \"fechaFin\": \"22/03/2026\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    },\r\n    {\r\n      \"id\": \"7\",\r\n      \"descEstado\": \"Anulada\",\r\n      \"importeOrdenacion\": 925.50,\r\n      \"fechaCobro\": \"05/02/2026\",\r\n      \"fechaInicio\": \"05/01/2026\",\r\n      \"fechaFin\": \"05/02/2026\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    },\r\n    {\r\n      \"id\": \"8\",\r\n      \"descEstado\": \"Anulada\",\r\n      \"importeOrdenacion\": 23.50,\r\n      \"fechaCobro\": \"05/02/2026\",\r\n      \"fechaInicio\": \"05/01/2026\",\r\n      \"fechaFin\": \"05/02/2026\",\r\n      \"tipoSuministro\": \"GAS\"\r\n    }\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    }
+  ],
+  "rootChildren": [
+    {
+      "type": "route",
+      "uuid": "a652c605-ac40-4237-83e4-f00db3ffb25a"
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    },
+    {
+      "key": "Access-Control-Allow-Origin",
+      "value": "*"
+    },
+    {
+      "key": "Access-Control-Allow-Methods",
+      "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+    },
+    {
+      "key": "Access-Control-Allow-Headers",
+      "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "data": [],
+  "callbacks": []
+}

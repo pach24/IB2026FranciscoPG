@@ -60,11 +60,13 @@ class FilterViewModel @Inject constructor() : ViewModel() {
      * Se llama desde InvoicesRoute cuando las facturas de cualquier tab cambian.
      */
     fun updateStatistics(
+        minAmount: Double,
         maxAmount: Double,
         oldestDate: LocalDate?,
         newestDate: LocalDate?
     ) {
         val newStats = InvoiceFilterUIState.FilterStatistics(
+            minAmount = minAmount,
             maxAmount = maxAmount,
             oldestDateMillis = oldestDate.toEpochMilli(),
             newestDateMillis = newestDate.toEpochMilli()
@@ -75,10 +77,13 @@ class FilterViewModel @Inject constructor() : ViewModel() {
         val oldStats = currentUI.statistics
 
         // Ajustar slider (draft) al nuevo rango solo si el usuario lo había tocado
-        val finalMin = oldFilters.minAmount?.coerceIn(0.0, maxAmount)
+        val finalMin = if (oldFilters.minAmount != null) {
+            if (oldFilters.minAmount!! <= oldStats.minAmount * 1.01) minAmount
+            else oldFilters.minAmount!!.coerceIn(minAmount, maxAmount)
+        } else null
         val finalMax = if (oldFilters.maxAmount != null) {
             if (oldFilters.maxAmount!! >= oldStats.maxAmount * 0.99) maxAmount
-            else oldFilters.maxAmount!!.coerceIn(finalMin ?: 0.0, maxAmount)
+            else oldFilters.maxAmount!!.coerceIn(finalMin ?: minAmount, maxAmount)
         } else null
 
         _filterState.value = currentUI.copy(
@@ -87,7 +92,7 @@ class FilterViewModel @Inject constructor() : ViewModel() {
         )
 
         // Ajustar filtros aplicados al nuevo rango de datos
-        expandAppliedFilters(oldStats, newStats, maxAmount, oldestDate, newestDate)
+        expandAppliedFilters(oldStats, newStats, minAmount, maxAmount, oldestDate, newestDate)
     }
 
     /**
@@ -98,6 +103,7 @@ class FilterViewModel @Inject constructor() : ViewModel() {
     private fun expandAppliedFilters(
         oldStats: InvoiceFilterUIState.FilterStatistics,
         newStats: InvoiceFilterUIState.FilterStatistics,
+        minAmount: Double,
         maxAmount: Double,
         oldestDate: LocalDate?,
         newestDate: LocalDate?
@@ -105,6 +111,7 @@ class FilterViewModel @Inject constructor() : ViewModel() {
         val applied = _appliedFilters.value
         if (applied == InvoiceFilters()) return // sin filtros activos, nada que ajustar
 
+        val expandMin = applied.minAmount != null && applied.minAmount!! <= oldStats.minAmount * 1.01
         val expandMax = applied.maxAmount != null && applied.maxAmount!! >= oldStats.maxAmount * 0.99
         val expandStartDate = applied.startDate != null
                 && oldStats.oldestDateMillis > 0
@@ -114,6 +121,7 @@ class FilterViewModel @Inject constructor() : ViewModel() {
                 && applied.endDate!!.toEpochMilli() >= oldStats.newestDateMillis
 
         _appliedFilters.value = applied.copy(
+            minAmount = if (expandMin) minAmount else applied.minAmount,
             maxAmount = if (expandMax) maxAmount else applied.maxAmount,
             startDate = if (expandStartDate) oldestDate else applied.startDate,
             endDate = if (expandEndDate) newestDate else applied.endDate
