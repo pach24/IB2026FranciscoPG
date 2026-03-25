@@ -48,7 +48,8 @@ fun FilterRoute(
                     filterViewModel.clearFilters()
                     onFiltersCleared(previousDraft, previousApplied)
                 },
-                onFilterInteraction = onFilterInteraction
+                onFilterInteraction = onFilterInteraction,
+                onDraftChanged = { filterViewModel.updateFilters(it) }
             )
         }
     }

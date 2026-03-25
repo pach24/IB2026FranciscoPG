@@ -14,6 +14,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,7 +50,8 @@ fun FilterContent(
     uiState: InvoiceFilterUIState,
     onApplyFilters: (InvoiceFilters) -> Unit,
     onClearFilters: (previousDraft: InvoiceFilters) -> Unit,
-    onFilterInteraction: () -> Unit = {}
+    onFilterInteraction: () -> Unit = {},
+    onDraftChanged: (InvoiceFilters) -> Unit = {}
 ) {
     val statusEntries = listOf(
         InvoiceStatus.PAID to stringResource(R.string.filter_status_paid),
@@ -61,6 +63,10 @@ fun FilterContent(
     val colors = IberdrolaTheme.colors
 
     var currentFilters by remember(uiState.filters) { mutableStateOf(uiState.filters) }
+
+    LaunchedEffect(currentFilters) {
+        onDraftChanged(currentFilters)
+    }
 
     var showStartDatePicker by remember { mutableStateOf(false) }
     var showEndDatePicker by remember { mutableStateOf(false) }

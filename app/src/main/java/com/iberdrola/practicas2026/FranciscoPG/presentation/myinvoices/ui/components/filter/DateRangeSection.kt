@@ -86,8 +86,6 @@ fun DateRangeSection(
 }
 
 // Campo de fecha individual con floating label animado.
-// El label morphea entre placeholder (sp12) y floating label (sp10).
-// El valor de la fecha aparece/desaparece con fade, centrado.
 @Composable
 private fun DateField(
     label: String,
@@ -108,7 +106,7 @@ private fun DateField(
         label = "labelSize"
     )
     val dividerColor by animateColorAsState(
-        targetValue = if (hasValue) colors.iberdrolaGreen else colors.strokeNeutral,
+        targetValue = if (hasValue) colors.iberdrolaGreen else colors.darkGrey,
         animationSpec = tween(300),
         label = "dividerColor"
     )
@@ -127,7 +125,7 @@ private fun DateField(
                 onClick = onClick
             )
     ) {
-        // Label: Usamos wrapContentHeight y un padding controlado para evitar que se corte
+        //Label
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -150,7 +148,7 @@ private fun DateField(
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(top = 4.dp) // Baja el texto de la fecha un poco hacia la barra
+                    .padding(top = 4.dp)
             ) {
                 androidx.compose.animation.AnimatedVisibility(
                     visible = hasValue,
