@@ -22,7 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.MainScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.viewmodel.MainViewModel
-import com.iberdrola.practicas2026.FranciscoPG.presentation.invoices.ui.screens.InvoicesRoute
+import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.screens.InvoicesRoute
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import dagger.hilt.android.AndroidEntryPoint
 
