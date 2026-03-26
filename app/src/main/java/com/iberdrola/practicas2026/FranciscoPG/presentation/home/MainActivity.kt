@@ -22,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.MainScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.viewmodel.MainViewModel
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.ElectronicInvoiceScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.screens.InvoicesRoute
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,6 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 private object AppRoutes {
     const val HOME = "home"
     const val MY_INVOICES = "my_invoices"
+    const val ELECTRONIC_INVOICE = "electronic_invoice"
 }
 
 @AndroidEntryPoint
@@ -103,6 +105,15 @@ class MainActivity : AppCompatActivity() {
                                     }
                                 }
                             },
+                            onElectronicInvoiceClick = {
+                                navController.navigate(AppRoutes.ELECTRONIC_INVOICE) {
+                                    launchSingleTop = true
+                                    restoreState = true
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                }
+                            },
                             snackbarHostState = snackbarHostState,
                             snackbarContainerColor = snackbarContainer,
                             snackbarContentColor = snackbarContent
@@ -118,6 +129,18 @@ class MainActivity : AppCompatActivity() {
                     ) {
                         InvoicesRoute(
                             useMock = useMock,
+                            onNavigateBack = { navController.popBackStack() }
+                        )
+                    }
+
+                    composable(
+                        AppRoutes.ELECTRONIC_INVOICE,
+                        enterTransition = { slideInHorizontally { it } },
+                        exitTransition = { slideOutHorizontally { it } },
+                        popEnterTransition = { slideInHorizontally { -it } },
+                        popExitTransition = { slideOutHorizontally { it } }
+                    ) {
+                        ElectronicInvoiceScreen(
                             onNavigateBack = { navController.popBackStack() }
                         )
                     }

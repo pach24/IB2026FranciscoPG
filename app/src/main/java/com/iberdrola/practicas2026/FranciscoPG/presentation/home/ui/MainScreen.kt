@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -70,6 +71,7 @@ fun MainScreen(
     isMockEnabled: Boolean,
     onMockModeChanged: (Boolean) -> Unit,
     onInvoicesCardClick: () -> Unit,
+    onElectronicInvoiceClick: () -> Unit,
     snackbarHostState: SnackbarHostState,
     snackbarContainerColor: Color,
     snackbarContentColor: Color
@@ -164,6 +166,30 @@ fun MainScreen(
                             )
                     ) {
                         ItemInvoiceCard(onClick = onInvoicesCardClick)
+                    }
+
+                    // Sección "Mis Accesos"
+                    Text(
+                        text = stringResource(R.string.mis_accesos),
+                        color = colors.textPrimary,
+                        fontFamily = IberFontBold,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = TextSize.sp22,
+                        modifier = Modifier.padding(
+                            top = Spacing.dp16,
+                            start = Spacing.dp24
+                        )
+                    )
+
+                    Row(
+                        modifier = Modifier
+                            .horizontalScroll(rememberScrollState())
+                            .padding(
+                                horizontal = Spacing.dp24,
+                                vertical = Spacing.dp16
+                            )
+                    ) {
+                        ItemElectronicInvoiceCard(onClick = onElectronicInvoiceClick)
                     }
 
                     // Compensación del offset para que el scroll termine correctamente
@@ -372,6 +398,58 @@ fun ItemInvoiceCard(
     }
 }
 
+@Composable
+fun ItemElectronicInvoiceCard(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
+    val cardShape = RoundedCornerShape(Radius.dp16)
+    val colors = IberdrolaTheme.colors
+
+    Box(
+        modifier = modifier
+            .padding(end = Spacing.dp16)
+            .clip(cardShape)
+            .background(color = colors.surface)
+            .border(
+                width = Stroke.dp2,
+                color = colors.divider,
+                shape = cardShape
+            )
+            .clickable(onClick = onClick)
+            .padding(horizontal = Spacing.dp24, vertical = Spacing.dp18)
+    ) {
+        Column {
+            Icon(
+                painter = painterResource(R.drawable.file_chart_column),
+                contentDescription = null,
+                tint = colors.iberdrolaGreen,
+                modifier = Modifier.size(IconSize.dp28)
+            )
+
+            // Spacer invisible que ocupa el mismo espacio que el precio en ItemInvoiceCard
+            Spacer(modifier = Modifier.height(Spacing.dp16))
+            Text(
+                text = "",
+                fontFamily = IberFontBold,
+                fontWeight = FontWeight.Bold,
+                fontSize = TextSize.sp24,
+                modifier = Modifier.padding(end = Spacing.dp8)
+            )
+
+            Text(
+                text = stringResource(R.string.main_electronic_invoice_title),
+                color = colors.darkGreyText,
+                fontFamily = IberFontRegular,
+                fontSize = TextSize.sp18,
+                minLines = 2,
+                maxLines = 2,
+                modifier = Modifier.padding(top = Spacing.dp8)
+            )
+        }
+    }
+}
+
 @Preview(name = "Main Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Preview(name = "Main Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
@@ -382,6 +460,7 @@ private fun MainScreenPreview() {
             isMockEnabled = true,
             onMockModeChanged = {},
             onInvoicesCardClick = {},
+            onElectronicInvoiceClick = {},
             snackbarHostState = SnackbarHostState(),
             snackbarContainerColor = IberdrolaTheme.colors.snackbar,
             snackbarContentColor = IberdrolaTheme.colors.black
