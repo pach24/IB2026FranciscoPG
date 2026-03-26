@@ -28,7 +28,8 @@ fun FilterTopBar(onBack: () -> Unit) {
             BackButton(
                 text = stringResource(R.string.filter_back),
                 onClick = onBack,
-                modifier = Modifier.padding(top = Spacing.dp18)
+                modifier = Modifier.padding(top = Spacing.dp18),
+                color = colors.iberdrolaDarkGreen
             )
         }
     }
