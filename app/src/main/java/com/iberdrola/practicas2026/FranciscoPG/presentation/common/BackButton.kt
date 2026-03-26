@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components
+package com.iberdrola.practicas2026.FranciscoPG.presentation.common
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable

@@ -11,7 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFilters
-import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.FilterTopBar
+import com.iberdrola.practicas2026.FranciscoPG.presentation.common.BackTopBar
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel.FilterViewModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 
@@ -33,7 +33,7 @@ fun FilterRoute(
     ) {
         Scaffold(
             containerColor = IberdrolaTheme.colors.background,
-            topBar = { FilterTopBar(onBack = onBack) }
+            topBar = { BackTopBar(onBack = onBack) }
         ) { padding ->
             FilterContent(
                 modifier = Modifier.padding(padding),

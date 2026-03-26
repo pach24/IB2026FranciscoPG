@@ -65,6 +65,7 @@ val DarkStrokeNeutral = Color(0xFF444444)
 // ESTADO / SEMÁNTICO
 // ══════════════════════════════════════════
 val StatusPaidLight = Color(0xFFB1DEC8)
+
 val StatusPaidDark = Color(0xFF173B2A)
 val ErrorLight = Color(0xFFB72727)
 val ErrorLightContainer = Color(0xFFF1BFBF)
@@ -88,6 +89,8 @@ val SnackbarGreen =Color(0xFF89CB8C)
 val LightBadgeAmountFilter = Color(0xFFDBE9E1)
 val DarkBadgeAmountFilter = Color(0xFF253D33)
 
+val StatusActiveLight = Color(0xFFB1DEC8)
+val StatusActiveDark = Color(0xFF173B2A)
 
 // ══════════════════════════════════════════
 // PALETA SEMÁNTICA (light / dark aware)
@@ -124,6 +127,7 @@ data class IberdrolaColors(
     val statusDefaultText: Color,
     val activeFilterBadgeColor: Color,
     val snackbarIcon: Color,
+    val statusActive: Color
 )
 
 val LightIberdrolaColors = IberdrolaColors(
@@ -156,7 +160,8 @@ val LightIberdrolaColors = IberdrolaColors(
     statusDefault = StatusDefaultLight,
     statusDefaultText = StatusDefaultTextLight,
     activeFilterBadgeColor = IberSunset,
-    snackbarIcon = IconSnackbar
+    snackbarIcon = IconSnackbar,
+    statusActive = StatusActiveLight
 )
 
 val DarkIberdrolaColors = IberdrolaColors(
@@ -189,7 +194,8 @@ val DarkIberdrolaColors = IberdrolaColors(
     statusDefault = StatusDefaultDark,
     statusDefaultText = StatusDefaultTextDark,
     activeFilterBadgeColor = IberSunset,
-    snackbarIcon = IconSnackbar
+    snackbarIcon = IconSnackbar,
+    statusActive = StatusActiveDark
 )
 
 val LocalIberdrolaColors = staticCompositionLocalOf { LightIberdrolaColors }

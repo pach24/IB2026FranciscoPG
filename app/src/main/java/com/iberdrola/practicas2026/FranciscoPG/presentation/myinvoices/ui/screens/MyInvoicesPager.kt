@@ -31,7 +31,7 @@ import androidx.compose.ui.res.stringResource
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontRegular
 import com.iberdrola.practicas2026.FranciscoPG.R
-import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.BackButton
+import com.iberdrola.practicas2026.FranciscoPG.presentation.common.BackButton
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.list.EmptyStateComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.feedback.FeedbackSheet
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel.FeedbackSheetState

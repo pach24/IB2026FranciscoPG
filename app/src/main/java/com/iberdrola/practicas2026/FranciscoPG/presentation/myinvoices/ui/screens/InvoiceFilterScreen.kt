@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFilters
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
-import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.FilterTopBar
+import com.iberdrola.practicas2026.FranciscoPG.presentation.common.BackTopBar
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.filter.DateRangeSection
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.filter.FilterActionButtons
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.InvoiceFilterUIState
@@ -203,7 +203,7 @@ private fun FilterScreenEmptyPreview() {
     IberdrolaTheme {
         Scaffold(
             containerColor = IberdrolaTheme.colors.background,
-            topBar = { FilterTopBar(onBack = {}) }
+            topBar = { BackTopBar(onBack = {}) }
         ) { padding ->
             FilterContent(
                 modifier = Modifier.padding(padding),
@@ -227,7 +227,7 @@ private fun FilterScreenFilledPreview() {
     IberdrolaTheme {
         Scaffold(
             containerColor = IberdrolaTheme.colors.background,
-            topBar = { FilterTopBar(onBack = {}) }
+            topBar = { BackTopBar(onBack = {}) }
         ) { padding ->
             FilterContent(
                 modifier = Modifier.padding(padding),

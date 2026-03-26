@@ -5,7 +5,7 @@
     android:viewportHeight="669">
 
     <group
-        android:translateX="95"
+        android:translateX="80"
         >
 
         <path

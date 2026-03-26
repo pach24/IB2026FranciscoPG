@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components
+package com.iberdrola.practicas2026.FranciscoPG.presentation.common
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
@@ -14,7 +14,7 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 
 @Composable
-fun FilterTopBar(onBack: () -> Unit) {
+fun BackTopBar(onBack: () -> Unit) {
     val colors = IberdrolaTheme.colors
     Surface(
         color = colors.background,
@@ -38,8 +38,8 @@ fun FilterTopBar(onBack: () -> Unit) {
 @Preview(name = "TopBar - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Preview(name = "TopBar - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun FilterTopBarPreview() {
+private fun BackTopBarPreview() {
     IberdrolaTheme {
-        FilterTopBar(onBack = {})
+        BackTopBar(onBack = {})
     }
 }
