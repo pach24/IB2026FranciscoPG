@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -44,6 +45,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.RoundedCheckbox
+import com.iberdrola.practicas2026.FranciscoPG.presentation.common.StepProgressBar
+import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.UnavailableBanner
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontRegular
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
@@ -59,7 +62,9 @@ fun ActivateElectronicInvoiceScreen(
     val colors = IberdrolaTheme.colors
     var email by remember { mutableStateOf("") }
     var legalAccepted by remember { mutableStateOf(false) }
+    var showBanner by remember { mutableStateOf(false) }
 
+    Box(modifier = Modifier.fillMaxSize()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -102,23 +107,11 @@ fun ActivateElectronicInvoiceScreen(
 
             Spacer(modifier = Modifier.height(Spacing.dp12))
 
-            // Barra de progreso (Mitad verde, mitad gris/claro)
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = Spacing.dp24)
-            ) {
-                HorizontalDivider(
-                    modifier = Modifier.weight(0.5f),
-                    color = colors.iberdrolaGreen,
-                    thickness = 4.dp
-                )
-                HorizontalDivider(
-                    modifier = Modifier.weight(0.5f),
-                    color = colors.divider, // o colors.lightGrey dependiendo de tu paleta
-                    thickness = 4.dp
-                )
-            }
+            StepProgressBar(
+                currentStep = 2,
+                totalSteps = 4,
+                modifier = Modifier.padding(horizontal = Spacing.dp12)
+            )
 
             Spacer(modifier = Modifier.height(Spacing.dp24))
 
@@ -211,19 +204,22 @@ fun ActivateElectronicInvoiceScreen(
                 DataProtectionItem(
                     boldPrefix = "Responsable:",
                     text = " Iberdrola Clientes S.A.U.",
-                    linkText = stringResource(R.string.activate_einvoice_more_info)
+                    linkText = stringResource(R.string.activate_einvoice_more_info),
+                    onLinkClick = { showBanner = true }
                 )
                 Spacer(modifier = Modifier.height(Spacing.dp8))
                 DataProtectionItem(
                     boldPrefix = "Finalidad:",
                     text = " Gestión de la factura electrónica.",
-                    linkText = stringResource(R.string.activate_einvoice_more_info)
+                    linkText = stringResource(R.string.activate_einvoice_more_info),
+                    onLinkClick = { showBanner = true }
                 )
                 Spacer(modifier = Modifier.height(Spacing.dp8))
                 DataProtectionItem(
                     boldPrefix = "Derechos:",
                     text = " Acceso, rectificación, supresión, limitación del tratamiento, portabilidad de datos u oposición, incluida la oposición a decisiones individuales automatizadas.",
-                    linkText = stringResource(R.string.activate_einvoice_more_info)
+                    linkText = stringResource(R.string.activate_einvoice_more_info),
+                    onLinkClick = { showBanner = true }
                 )
             }
 
@@ -239,34 +235,40 @@ fun ActivateElectronicInvoiceScreen(
             ) {
                 RoundedCheckbox(
                     checked = legalAccepted,
-                    checkedColor = colors.iberdrolaGreen,
-                    uncheckedBorderColor = colors.iberdrolaGreen,
+                    checkedColor = colors.iberdrolaDarkGreen,
+                    uncheckedBorderColor = colors.iberdrolaDarkGreen,
                     checkmarkColor = colors.white,
                     modifier = Modifier.padding(top = 2.dp)
                 )
                 Spacer(modifier = Modifier.width(Spacing.dp12))
-                Text(
-                    text = buildAnnotatedString {
-                        append("He leído y acepto la ")
-                        withStyle(SpanStyle(
-                        )) {
-                            append("Política de privacidad")
-                        }
-                        append(", acepto las ")
-                        withStyle(SpanStyle(
-                            color = colors.iberdrolaDarkGreen,
-                            textDecoration = TextDecoration.Underline,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = TextSize.sp17
-                        )) {
-                            append("Condiciones Generales")
-                        }
-                        append(" y Particulares de la oferta y la suscripción a Factura Electrónica.")
-                    },
-                    color = colors.darkGreyText,
-                    fontFamily = IberFontRegular,
-                    fontSize = TextSize.sp16,
-                    lineHeight = TextSize.sp22
+
+                val legalAnnotated = buildAnnotatedString {
+                    append("He leído y acepto la Política de privacidad, acepto las ")
+                    pushStringAnnotation(tag = "LINK", annotation = "conditions")
+                    withStyle(SpanStyle(
+                        color = colors.iberdrolaDarkGreen,
+                        textDecoration = TextDecoration.Underline,
+                        fontWeight = FontWeight.Bold
+                    )) {
+                        append("Condiciones Generales")
+                    }
+                    pop()
+                    append(" y Particulares de la oferta y la suscripción a Factura Electrónica.")
+                }
+
+                ClickableText(
+                    text = legalAnnotated,
+                    modifier = Modifier.padding(top = Spacing.dp10),
+                    style = TextStyle(
+                        color = colors.darkGreyText,
+                        fontFamily = IberFontRegular,
+                        fontSize = TextSize.sp16,
+                        lineHeight = TextSize.sp22
+                    ),
+                    onClick = { offset ->
+                        legalAnnotated.getStringAnnotations("LINK", offset, offset)
+                            .firstOrNull()?.let { showBanner = true }
+                    }
                 )
             }
 
@@ -292,7 +294,7 @@ fun ActivateElectronicInvoiceScreen(
                     .height(Spacing.dp48)
                     .clip(CircleShape) // Botón tipo píldora
                     .border(
-                        width = Stroke.dp1,
+                        width = Stroke.dp2,
                         color = colors.iberdrolaDarkGreen,
                         shape = CircleShape
                     )
@@ -335,37 +337,58 @@ fun ActivateElectronicInvoiceScreen(
             }
         }
     }
+
+        UnavailableBanner(
+            visible = showBanner,
+            onDismiss = { showBanner = false },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .navigationBarsPadding()
+                .padding(bottom = Spacing.dp32)
+        )
+    }
 }
 
 @Composable
 private fun DataProtectionItem(
     boldPrefix: String,
     text: String,
-    linkText: String
+    linkText: String,
+    onLinkClick: () -> Unit
 ) {
     val colors = IberdrolaTheme.colors
-    Text(
-        text = buildAnnotatedString {
-            withStyle(SpanStyle(fontWeight = FontWeight.Medium, color = colors.darkGreyText)) {
-                append(boldPrefix)
-            }
-            withStyle(SpanStyle(color = colors.darkGreyText)) {
-                append(text)
-                append(" ")
-            }
-            withStyle(
-                SpanStyle(
-                    color = colors.iberdrolaDarkGreen,
-                    fontWeight = FontWeight.ExtraBold,
-                    textDecoration = TextDecoration.Underline
-                )
-            ) {
-                append(linkText)
-            }
-        },
-        fontFamily = IberFontRegular,
-        fontSize = TextSize.sp15,
-        lineHeight = TextSize.sp22
+    val annotated = buildAnnotatedString {
+        withStyle(SpanStyle(fontWeight = FontWeight.Medium, color = colors.darkGreyText)) {
+            append(boldPrefix)
+        }
+        withStyle(SpanStyle(color = colors.darkGreyText)) {
+            append(text)
+            append(" ")
+        }
+        pushStringAnnotation(tag = "LINK", annotation = "info")
+        withStyle(
+            SpanStyle(
+                color = colors.iberdrolaDarkGreen,
+                fontWeight = FontWeight.ExtraBold,
+                textDecoration = TextDecoration.Underline
+            )
+        ) {
+            append(linkText)
+        }
+        pop()
+    }
+
+    ClickableText(
+        text = annotated,
+        style = TextStyle(
+            fontFamily = IberFontRegular,
+            fontSize = TextSize.sp15,
+            lineHeight = TextSize.sp22
+        ),
+        onClick = { offset ->
+            annotated.getStringAnnotations("LINK", offset, offset)
+                .firstOrNull()?.let { onLinkClick() }
+        }
     )
 }
 
