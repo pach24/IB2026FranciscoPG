@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -30,6 +30,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.iberdrola.practicas2026.FranciscoPG.R
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.Contract
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.ContractStatus
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.BackButton
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.UnavailableBanner
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
@@ -42,6 +45,8 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 
 @Composable
 fun ElectronicInvoiceScreen(
+    contracts: List<Contract>,
+    onContractClick: (Contract) -> Unit,
     onNavigateBack: () -> Unit
 ) {
     val colors = IberdrolaTheme.colors
@@ -75,26 +80,19 @@ fun ElectronicInvoiceScreen(
                 )
             )
 
-            ContractRow(
-                iconRes = R.drawable.ic_light,
-                title = stringResource(R.string.electronic_invoice_light_contract),
-                statusText = stringResource(R.string.electronic_invoice_status_active),
-                isActive = true,
-                onClick = { showBanner = true }
-            )
+            contracts.forEachIndexed { index, contract ->
+                ContractRow(
+                    contract = contract,
+                    onClick = { onContractClick(contract) }
+                )
 
-            HorizontalDivider(
-                modifier = Modifier.padding(horizontal = Spacing.dp24),
-                color = colors.divider
-            )
-
-            ContractRow(
-                iconRes = R.drawable.ic_gas,
-                title = stringResource(R.string.electronic_invoice_gas_contract),
-                statusText = stringResource(R.string.electronic_invoice_status_inactive),
-                isActive = false,
-                onClick = { showBanner = true }
-            )
+                if (index < contracts.lastIndex) {
+                    HorizontalDivider(
+                        modifier = Modifier.padding(horizontal = Spacing.dp24),
+                        color = colors.divider
+                    )
+                }
+            }
 
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = Spacing.dp24),
@@ -114,13 +112,27 @@ fun ElectronicInvoiceScreen(
 
 @Composable
 private fun ContractRow(
-    iconRes: Int,
-    title: String,
-    statusText: String,
-    isActive: Boolean,
+    contract: Contract,
     onClick: () -> Unit
 ) {
     val colors = IberdrolaTheme.colors
+    val isActive = contract.status == ContractStatus.ACTIVE
+
+    val iconRes = when (contract.supplyType) {
+        SupplyType.ELECTRICITY -> R.drawable.ic_light
+        SupplyType.GAS -> R.drawable.ic_gas
+    }
+
+    val title = when (contract.supplyType) {
+        SupplyType.ELECTRICITY -> stringResource(R.string.electronic_invoice_light_contract)
+        SupplyType.GAS -> stringResource(R.string.electronic_invoice_gas_contract)
+    }
+
+    val statusText = if (isActive) {
+        stringResource(R.string.electronic_invoice_status_active)
+    } else {
+        stringResource(R.string.electronic_invoice_status_inactive)
+    }
 
     Row(
         modifier = Modifier
@@ -183,6 +195,13 @@ private fun ContractRow(
 @Composable
 private fun ElectronicInvoiceScreenPreview() {
     IberdrolaTheme {
-        ElectronicInvoiceScreen(onNavigateBack = {})
+        ElectronicInvoiceScreen(
+            contracts = listOf(
+                Contract(SupplyType.ELECTRICITY, ContractStatus.ACTIVE, "usuario@email.com"),
+                Contract(SupplyType.GAS, ContractStatus.INACTIVE, null)
+            ),
+            onContractClick = {},
+            onNavigateBack = {}
+        )
     }
 }

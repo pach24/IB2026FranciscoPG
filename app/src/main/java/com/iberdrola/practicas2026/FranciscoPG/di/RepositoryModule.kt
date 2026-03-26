@@ -2,9 +2,11 @@ package com.iberdrola.practicas2026.FranciscoPG.di
 
 import android.content.Context
 import com.iberdrola.practicas2026.FranciscoPG.data.repository.ConfigurationRepositoryImpl
+import com.iberdrola.practicas2026.FranciscoPG.data.repository.ContractRepositoryImpl
 import com.iberdrola.practicas2026.FranciscoPG.data.repository.FeedbackRepositoryImpl
 import com.iberdrola.practicas2026.FranciscoPG.data.repository.InvoiceRepositoryImpl
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.ConfigurationRepository
+import com.iberdrola.practicas2026.FranciscoPG.domain.repository.ContractRepository
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.FeedbackRepository
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.InvoiceRepository
 import com.iberdrola.practicas2026.data.local.InvoiceDao
@@ -27,6 +29,12 @@ abstract class RepositoryModule {
     abstract fun bindConfigurationRepository(
         impl: ConfigurationRepositoryImpl
     ): ConfigurationRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindContractRepository(
+        impl: ContractRepositoryImpl
+    ): ContractRepository
 
     companion object {
 

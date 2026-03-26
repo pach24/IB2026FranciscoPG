@@ -15,6 +15,7 @@ object TextSize {
     val sp18 = 18.sp
     val sp20 = 20.sp
     val sp22 = 22.sp
+    val sp23 = 23.sp
     val sp24 = 24.sp
     val sp28 = 28.sp
     val sp32 = 32.sp

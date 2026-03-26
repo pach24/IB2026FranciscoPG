@@ -22,7 +22,8 @@ import androidx.navigation.compose.rememberNavController
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.MainScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.viewmodel.MainViewModel
-import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.ElectronicInvoiceScreen
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.ActivateElectronicInvoiceScreen
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.ElectronicInvoiceRoute
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.screens.InvoicesRoute
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +32,7 @@ private object AppRoutes {
     const val HOME = "home"
     const val MY_INVOICES = "my_invoices"
     const val ELECTRONIC_INVOICE = "electronic_invoice"
+    const val ACTIVATE_ELECTRONIC_INVOICE = "activate_electronic_invoice"
 }
 
 @AndroidEntryPoint
@@ -140,7 +142,27 @@ class MainActivity : AppCompatActivity() {
                         popEnterTransition = { slideInHorizontally { -it } },
                         popExitTransition = { slideOutHorizontally { it } }
                     ) {
-                        ElectronicInvoiceScreen(
+                        ElectronicInvoiceRoute(
+                            onNavigateBack = { navController.popBackStack() },
+                            onNavigateToActivate = {
+                                navController.navigate(AppRoutes.ACTIVATE_ELECTRONIC_INVOICE) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            onNavigateToModify = {
+                                // TODO: navegar a pantalla de modificar email
+                            }
+                        )
+                    }
+
+                    composable(
+                        AppRoutes.ACTIVATE_ELECTRONIC_INVOICE,
+                        enterTransition = { slideInHorizontally { it } },
+                        exitTransition = { slideOutHorizontally { it } },
+                        popEnterTransition = { slideInHorizontally { -it } },
+                        popExitTransition = { slideOutHorizontally { it } }
+                    ) {
+                        ActivateElectronicInvoiceScreen(
                             onNavigateBack = { navController.popBackStack() }
                         )
                     }
