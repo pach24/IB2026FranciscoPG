@@ -44,6 +44,14 @@
     <string name="activate_einvoice_email_error">Introduce un email válido</string>
     <string name="activate_einvoice_btn_back">Anterior</string>
     <string name="activate_einvoice_btn_next">Siguiente</string>
+
+    <!-- Verificación código -->
+    <string name="confirm_einvoice_title">Introduce tu código de verificación</string>
+    <string name="confirm_einvoice_subtitle">Para verificar tu identidad, hemos enviado un código al teléfono *****l46. Por favor, introdúcelo a continuación:</string>
+    <string name="confirm_einvoice_code_label">* Código de verificación</string>
+    <string name="confirm_einvoice_not_received">¿No has recibido el código?</string>
+    <string name="confirm_einvoice_resend_hint">Si no lo encuentras, podemos volver a enviar el SMS.</string>
+    <string name="confirm_einvoice_resend_link">Volver a enviar</string>
     <string name="my_invoices_back"><u>Atrás</u></string>
     <string name="nav_consumo">Consumo</string>
     <string name="nav_gestiones">Gestiones</string>
@@ -112,5 +120,6 @@
     <string name="snackbar_filters_no_results">No hay facturas que coincidan con tu búsqueda</string>
     <string name="snackbar_filters_cleared">Filtros eliminados</string>
     <string name="snackbar_undo">Deshacer</string>
+    <string name="email_censored">a*****a@a.com</string>
 
 </resources>

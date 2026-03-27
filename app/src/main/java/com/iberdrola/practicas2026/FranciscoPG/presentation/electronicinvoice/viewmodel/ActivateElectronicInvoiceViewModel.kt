@@ -22,6 +22,17 @@ class ActivateElectronicInvoiceViewModel @Inject constructor(
     private val _isEmailValid = MutableStateFlow(false)
     val isEmailValid: StateFlow<Boolean> = _isEmailValid.asStateFlow()
 
+    private val _verificationCode = MutableStateFlow("")
+    val verificationCode: StateFlow<String> = _verificationCode.asStateFlow()
+
+    fun onVerificationCodeChanged(value: String) {
+        _verificationCode.value = value
+    }
+
+    fun onResendCode() {
+        // TODO: lógica de reenvío de código
+    }
+
     fun onEmailChanged(value: String) {
         _email.value = value
         _isEmailValid.value = validateEmailUseCase(value)

@@ -104,7 +104,12 @@ val buttonTextActiveLight = Color(0xFFFFFFFF)
 val buttonTextDisabledDark = Color(0xFF3A3A3A)
 val buttonTextActiveDark = Color(0xFFFFFFFF)
 
-val errorTextForm = Color(0xFFE57373)
+val errorTextForm = Color(0xFFFF2C2C)
+
+val InfoBannerBgLight = Color(0xFFDDF5FF)
+val InfoBannerBgDark = Color(0x8D183241)
+val InfoBannerIconLight = Color(0xFF626262)
+val InfoBannerIconDark = Color(0xFF97BFCC)
 
 // ══════════════════════════════════════════
 // PALETA SEMÁNTICA (light / dark aware)
@@ -147,6 +152,8 @@ data class IberdrolaColors(
     val buttonTextDisabled : Color,
     val buttonTextActive : Color,
     val errorTextForm: Color,
+    val infoBannerBackground: Color,
+    val infoBannerIcon: Color,
 )
 
 val LightIberdrolaColors = IberdrolaColors(
@@ -185,7 +192,9 @@ val LightIberdrolaColors = IberdrolaColors(
     buttonDisabled = buttonDisabledLight,
     buttonTextActive = buttonTextActiveLight,
     buttonTextDisabled = buttonTextDisabledLight,
-    errorTextForm = errorTextForm
+    errorTextForm = errorTextForm,
+    infoBannerBackground = InfoBannerBgLight,
+    infoBannerIcon = InfoBannerIconLight,
 )
 
 val DarkIberdrolaColors = IberdrolaColors(
@@ -224,7 +233,9 @@ val DarkIberdrolaColors = IberdrolaColors(
     buttonDisabled = buttonDisabledDark,
     buttonTextActive = buttonTextActiveDark,
     buttonTextDisabled = buttonTextDisabledDark,
-    errorTextForm = errorTextForm
+    errorTextForm = errorTextForm,
+    infoBannerBackground = InfoBannerBgDark,
+    infoBannerIcon = InfoBannerIconDark
 )
 
 val LocalIberdrolaColors = staticCompositionLocalOf { LightIberdrolaColors }

@@ -2,10 +2,8 @@ package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.u
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,15 +13,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,11 +26,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -48,96 +40,50 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.RoundedCheckbox
-import com.iberdrola.practicas2026.FranciscoPG.presentation.common.StepProgressBar
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.UnavailableBanner
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontRegular
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
-import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IconSize
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Stroke
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 
 @Composable
-fun ActivateElectronicInvoiceScreen(
+fun ActivateElectronicInvoiceContent(
     email: String,
     legalAccepted: Boolean,
     isEmailValid: Boolean,
-    isNextEnabled: Boolean,
     onEmailChanged: (String) -> Unit,
     onLegalAcceptedChanged: (Boolean) -> Unit,
-    onNavigateBack: () -> Unit
+    modifier: Modifier = Modifier
 ) {
     val colors = IberdrolaTheme.colors
     val focusManager = LocalFocusManager.current
     var showBanner by remember { mutableStateOf(false) }
     var emailHasBlurred by remember { mutableStateOf(false) }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colors.background)
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null
-            ) { focusManager.clearFocus() }
-            .padding(top = Spacing.dp24)
-    ) {
-        // X cerrar alineada a la derecha
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = Spacing.dp24, vertical = Spacing.dp18),
-            contentAlignment = Alignment.CenterEnd
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_close),
-                contentDescription = null,
-                tint = colors.iberdrolaGreen, // Ajusta si el diseño usa otro color para el icono
-                modifier = Modifier
-                    .size(IconSize.dp28)
-                    .clickable { focusManager.clearFocus(); onNavigateBack() }
-            )
-        }
-
-        // Contenido scrollable
+    Box(modifier = modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
-                .weight(1f)
+                .fillMaxSize()
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) { focusManager.clearFocus() }
                 .verticalScroll(rememberScrollState())
         ) {
-
-            // Título
-            Text(
-                text = stringResource(R.string.activate_einvoice_title),
-                color = colors.textPrimary,
-                fontFamily = IberFontBold,
-                fontWeight = FontWeight.Bold,
-                fontSize = TextSize.sp23,
-                modifier = Modifier.padding(horizontal = Spacing.dp24)
-            )
-
-            Spacer(modifier = Modifier.height(Spacing.dp12))
-
-            StepProgressBar(
-                currentStep = 2,
-                totalSteps = 4,
-                modifier = Modifier.padding(horizontal = Spacing.dp12)
-            )
-
             Spacer(modifier = Modifier.height(Spacing.dp24))
 
-            // Info de Email actual (en la maqueta está en dos líneas, la segunda en negrita)
+            // Info de Email actual
             Column(modifier = Modifier.padding(horizontal = Spacing.dp24)) {
                 Text(
-                    text = stringResource(R.string.activate_einvoice_linked_email), // "Email vinculado a tu cuenta:"
+                    text = stringResource(R.string.activate_einvoice_linked_email),
                     color = colors.darkGreyText,
                     fontFamily = IberFontRegular,
                     fontSize = TextSize.sp14
                 )
                 Text(
-                    text = "a*****a@a.com",
+                    text = stringResource(R.string.email_censored),
                     color = colors.textPrimary,
                     fontFamily = IberFontBold,
                     fontWeight = FontWeight.Bold,
@@ -313,69 +259,6 @@ fun ActivateElectronicInvoiceScreen(
             Spacer(modifier = Modifier.height(Spacing.dp32))
         }
 
-        // Separador superior de botones
-        HorizontalDivider(color = colors.divider, thickness = 1.dp)
-
-        // Botones fijos abajo
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(colors.background)
-                .navigationBarsPadding()
-                .padding(horizontal = Spacing.dp24, vertical = Spacing.dp16),
-            horizontalArrangement = Arrangement.spacedBy(Spacing.dp12)
-        ) {
-            // Botón Anterior
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(Spacing.dp48)
-                    .clip(CircleShape) // Botón tipo píldora
-                    .border(
-                        width = Stroke.dp2,
-                        color = colors.iberdrolaDarkGreen,
-                        shape = CircleShape
-                    )
-                    .clickable { focusManager.clearFocus(); onNavigateBack() },
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.activate_einvoice_btn_back),
-                    color = colors.iberdrolaDarkGreen,
-                    fontFamily = IberFontBold,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = TextSize.sp14
-                )
-            }
-
-            // Botón Siguiente
-            val isEnabled = isNextEnabled
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(Spacing.dp48)
-                    .clip(CircleShape) // Botón tipo píldora
-                    .background(
-                        if (isEnabled) colors.buttonActive
-                        else colors.buttonDisabled
-                    )
-                    .then(
-                        if (isEnabled) Modifier.clickable { /* Acción siguiente */ }
-                        else Modifier
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.activate_einvoice_btn_next),
-                    color = if (isEnabled) colors.buttonTextActive else colors.buttonTextDisabled,
-                    fontFamily = IberFontBold,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = TextSize.sp14
-                )
-            }
-        }
-    }
-
         UnavailableBanner(
             visible = showBanner,
             onDismiss = { showBanner = false },
@@ -430,19 +313,17 @@ private fun DataProtectionItem(
     )
 }
 
-@Preview(name = "Activate - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Activate - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Activate Content - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Activate Content - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun ActivateElectronicInvoiceScreenPreview() {
+private fun ActivateElectronicInvoiceContentPreview() {
     IberdrolaTheme {
-        ActivateElectronicInvoiceScreen(
+        ActivateElectronicInvoiceContent(
             email = "",
             legalAccepted = false,
             isEmailValid = true,
-            isNextEnabled = false,
             onEmailChanged = {},
-            onLegalAcceptedChanged = {},
-            onNavigateBack = {}
+            onLegalAcceptedChanged = {}
         )
     }
 }
