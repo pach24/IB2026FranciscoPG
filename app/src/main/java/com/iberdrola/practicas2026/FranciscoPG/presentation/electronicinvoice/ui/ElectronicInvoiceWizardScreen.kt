@@ -6,12 +6,10 @@
     import androidx.compose.animation.fadeOut
     import androidx.compose.foundation.ExperimentalFoundationApi
     import androidx.compose.foundation.background
-    import androidx.compose.foundation.clickable
     import androidx.compose.foundation.layout.Box
     import androidx.compose.foundation.layout.Column
     import androidx.compose.foundation.layout.Spacer
     import androidx.compose.foundation.layout.fillMaxSize
-    import androidx.compose.foundation.layout.fillMaxWidth
     import androidx.compose.foundation.layout.height
     import androidx.compose.foundation.layout.padding
     import androidx.compose.foundation.pager.HorizontalPager
@@ -19,7 +17,6 @@
     import androidx.compose.material3.Text
     import androidx.compose.runtime.Composable
     import androidx.compose.runtime.rememberCoroutineScope
-    import androidx.compose.ui.Alignment
     import androidx.compose.ui.Modifier
     import androidx.compose.ui.res.stringResource
     import androidx.compose.ui.text.font.FontWeight
@@ -28,7 +25,8 @@
     import com.iberdrola.practicas2026.FranciscoPG.presentation.common.CloseTopBar
     import com.iberdrola.practicas2026.FranciscoPG.presentation.common.StepBottomButtonBar
     import com.iberdrola.practicas2026.FranciscoPG.presentation.common.StepProgressBar
-    import com.iberdrola.practicas2026.FranciscoPG.presentation.common.UnavailableBanner
+    import com.iberdrola.practicas2026.FranciscoPG.presentation.common.SuccessBannerSMS
+    import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.components.LoadingOverlay
     import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
     import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
     import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
@@ -124,7 +122,7 @@
                     }
                 }
 
-                UnavailableBanner(
+                SuccessBannerSMS(
                     visible = showBanner && currentPage == 1,
                     onDismiss = onBannerDismissed
                 )
@@ -157,22 +155,7 @@
 
             // 3. CAPA SEMITRANSPARENTE CON SPINNER
             if (isLoading) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.5f))
-                        // El clickable vacío intercepta los toques para que no pulse nada por debajo
-                        .clickable(
-                            interactionSource = null,
-                            indication = null,
-                            onClick = {}
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    androidx.compose.material3.CircularProgressIndicator(
-                        color = colors.iberdrolaGreen
-                    )
-                }
+                LoadingOverlay()
             }
         }
     }

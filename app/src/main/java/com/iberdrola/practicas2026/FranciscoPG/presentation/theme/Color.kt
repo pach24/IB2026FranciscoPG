@@ -112,6 +112,18 @@ val InfoBannerIconLight = Color(0xFF626262)
 val InfoBannerIconDark = Color(0xFF97BFCC)
 
 // ══════════════════════════════════════════
+// LOADING
+// ══════════════════════════════════════════
+val LoadingRailLight = Color(0xFF8C938F)
+val LoadingRailDark  = Color(0xFF2E4A47)
+
+// ══════════════════════════════════════════
+// SUCCESS BANNER
+// ══════════════════════════════════════════
+val SuccessBannerBgLight = Color(0xFFB1DEC8)
+val SuccessBannerBgDark  = Color(0xFF459355)
+
+// ══════════════════════════════════════════
 // PALETA SEMÁNTICA (light / dark aware)
 // ══════════════════════════════════════════
 @Immutable
@@ -154,6 +166,8 @@ data class IberdrolaColors(
     val errorTextForm: Color,
     val infoBannerBackground: Color,
     val infoBannerIcon: Color,
+    val loadingSpinnerRail: Color,
+    val successBannerBackground: Color,
 )
 
 val LightIberdrolaColors = IberdrolaColors(
@@ -195,6 +209,8 @@ val LightIberdrolaColors = IberdrolaColors(
     errorTextForm = errorTextForm,
     infoBannerBackground = InfoBannerBgLight,
     infoBannerIcon = InfoBannerIconLight,
+    loadingSpinnerRail = LoadingRailLight,
+    successBannerBackground = SuccessBannerBgLight,
 )
 
 val DarkIberdrolaColors = IberdrolaColors(
@@ -235,7 +251,9 @@ val DarkIberdrolaColors = IberdrolaColors(
     buttonTextDisabled = buttonTextDisabledDark,
     errorTextForm = errorTextForm,
     infoBannerBackground = InfoBannerBgDark,
-    infoBannerIcon = InfoBannerIconDark
+    infoBannerIcon = InfoBannerIconDark,
+    loadingSpinnerRail = LoadingRailDark,
+    successBannerBackground = SuccessBannerBgDark,
 )
 
 val LocalIberdrolaColors = staticCompositionLocalOf { LightIberdrolaColors }

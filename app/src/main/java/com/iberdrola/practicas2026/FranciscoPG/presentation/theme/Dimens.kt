@@ -39,6 +39,7 @@ object Spacing {
     val dp18 = 18.dp
     val dp20 = 20.dp
     val dp21 = 21.dp
+    val dp22 = 22.dp
     val dp24 = 24.dp
     val dp28 = 28.dp
     val dp32 = 32.dp
@@ -83,7 +84,8 @@ object Component {
     val promoImgW = 140.dp
     val dragW = 60.dp
 
-    val compHeigh100 = 80.dp
+    val compHeigh60 = 60.dp
+    val compHeigh80 = 80.dp
     val dragH = 6.dp
     val backBtnW = 80.dp
     val backBtnH = 30.dp
