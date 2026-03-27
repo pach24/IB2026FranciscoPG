@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -57,18 +60,28 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 
 @Composable
 fun ActivateElectronicInvoiceScreen(
+    email: String,
+    legalAccepted: Boolean,
+    isEmailValid: Boolean,
+    isNextEnabled: Boolean,
+    onEmailChanged: (String) -> Unit,
+    onLegalAcceptedChanged: (Boolean) -> Unit,
     onNavigateBack: () -> Unit
 ) {
     val colors = IberdrolaTheme.colors
-    var email by remember { mutableStateOf("") }
-    var legalAccepted by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
     var showBanner by remember { mutableStateOf(false) }
+    var emailHasBlurred by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(colors.background)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) { focusManager.clearFocus() }
             .padding(top = Spacing.dp24)
     ) {
         // X cerrar alineada a la derecha
@@ -84,7 +97,7 @@ fun ActivateElectronicInvoiceScreen(
                 tint = colors.iberdrolaGreen, // Ajusta si el diseño usa otro color para el icono
                 modifier = Modifier
                     .size(IconSize.dp28)
-                    .clickable(onClick = onNavigateBack)
+                    .clickable { focusManager.clearFocus(); onNavigateBack() }
             )
         }
 
@@ -154,7 +167,7 @@ fun ActivateElectronicInvoiceScreen(
             ) {
                 BasicTextField(
                     value = email,
-                    onValueChange = { email = it },
+                    onValueChange = onEmailChanged,
                     singleLine = true,
                     textStyle = TextStyle(
                         fontFamily = IberFontRegular,
@@ -162,8 +175,23 @@ fun ActivateElectronicInvoiceScreen(
                         color = colors.textPrimary
                     ),
                     cursorBrush = SolidColor(colors.iberdrolaDarkGreen),
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusChanged { focusState ->
+                            if (focusState.isFocused) {
+                                emailHasBlurred = false
+                            } else if (email.isNotEmpty()) {
+                                emailHasBlurred = true
+                            }
+                        },
                     decorationBox = { innerTextField ->
+                        val showError = emailHasBlurred && email.isNotEmpty() && !isEmailValid
+                        val underlineColor = when {
+                            showError -> colors.errorTextForm
+                            isEmailValid && email.isNotEmpty() -> colors.iberdrolaGreen
+                            else -> colors.lightGrey.copy(alpha = 0.5f)
+                        }
+
                         Column {
                             Box(modifier = Modifier.padding(bottom = Spacing.dp8, top = Spacing.dp20)) {
                                 if (email.isEmpty()) {
@@ -180,8 +208,17 @@ fun ActivateElectronicInvoiceScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(Stroke.dp2)
-                                    .background(colors.lightGrey.copy(alpha = 0.5f))
+                                    .background(underlineColor)
                             )
+                            if (showError) {
+                                Text(
+                                    text = stringResource(R.string.activate_einvoice_email_error),
+                                    color = colors.errorTextForm,
+                                    fontFamily = IberFontRegular,
+                                    fontSize = TextSize.sp12,
+                                    modifier = Modifier.padding(top = Spacing.dp4)
+                                )
+                            }
                         }
                     }
                 )
@@ -205,21 +242,21 @@ fun ActivateElectronicInvoiceScreen(
                     boldPrefix = "Responsable:",
                     text = " Iberdrola Clientes S.A.U.",
                     linkText = stringResource(R.string.activate_einvoice_more_info),
-                    onLinkClick = { showBanner = true }
+                    onLinkClick = { focusManager.clearFocus(); showBanner = true }
                 )
                 Spacer(modifier = Modifier.height(Spacing.dp8))
                 DataProtectionItem(
                     boldPrefix = "Finalidad:",
                     text = " Gestión de la factura electrónica.",
                     linkText = stringResource(R.string.activate_einvoice_more_info),
-                    onLinkClick = { showBanner = true }
+                    onLinkClick = { focusManager.clearFocus(); showBanner = true }
                 )
                 Spacer(modifier = Modifier.height(Spacing.dp8))
                 DataProtectionItem(
                     boldPrefix = "Derechos:",
                     text = " Acceso, rectificación, supresión, limitación del tratamiento, portabilidad de datos u oposición, incluida la oposición a decisiones individuales automatizadas.",
                     linkText = stringResource(R.string.activate_einvoice_more_info),
-                    onLinkClick = { showBanner = true }
+                    onLinkClick = { focusManager.clearFocus(); showBanner = true }
                 )
             }
 
@@ -229,7 +266,7 @@ fun ActivateElectronicInvoiceScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { legalAccepted = !legalAccepted }
+                    .clickable { focusManager.clearFocus(); onLegalAcceptedChanged(!legalAccepted) }
                     .padding(horizontal = Spacing.dp24),
                 verticalAlignment = Alignment.Top
             ) {
@@ -266,6 +303,7 @@ fun ActivateElectronicInvoiceScreen(
                         lineHeight = TextSize.sp22
                     ),
                     onClick = { offset ->
+                        focusManager.clearFocus()
                         legalAnnotated.getStringAnnotations("LINK", offset, offset)
                             .firstOrNull()?.let { showBanner = true }
                     }
@@ -298,7 +336,7 @@ fun ActivateElectronicInvoiceScreen(
                         color = colors.iberdrolaDarkGreen,
                         shape = CircleShape
                     )
-                    .clickable(onClick = onNavigateBack),
+                    .clickable { focusManager.clearFocus(); onNavigateBack() },
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -311,15 +349,15 @@ fun ActivateElectronicInvoiceScreen(
             }
 
             // Botón Siguiente
-            val isEnabled = email.isNotBlank() && legalAccepted
+            val isEnabled = isNextEnabled
             Box(
                 modifier = Modifier
                     .weight(1f)
                     .height(Spacing.dp48)
                     .clip(CircleShape) // Botón tipo píldora
                     .background(
-                        if (isEnabled) colors.iberdrolaDarkGreen
-                        else colors.divider // Ajusta este color al tono gris claro/verdoso de tu paleta
+                        if (isEnabled) colors.buttonActive
+                        else colors.buttonDisabled
                     )
                     .then(
                         if (isEnabled) Modifier.clickable { /* Acción siguiente */ }
@@ -329,7 +367,7 @@ fun ActivateElectronicInvoiceScreen(
             ) {
                 Text(
                     text = stringResource(R.string.activate_einvoice_btn_next),
-                    color = if (isEnabled) colors.surface else colors.lightGrey,
+                    color = if (isEnabled) colors.buttonTextActive else colors.buttonTextDisabled,
                     fontFamily = IberFontBold,
                     fontWeight = FontWeight.Bold,
                     fontSize = TextSize.sp14
@@ -397,6 +435,14 @@ private fun DataProtectionItem(
 @Composable
 private fun ActivateElectronicInvoiceScreenPreview() {
     IberdrolaTheme {
-        ActivateElectronicInvoiceScreen(onNavigateBack = {})
+        ActivateElectronicInvoiceScreen(
+            email = "",
+            legalAccepted = false,
+            isEmailValid = true,
+            isNextEnabled = false,
+            onEmailChanged = {},
+            onLegalAcceptedChanged = {},
+            onNavigateBack = {}
+        )
     }
 }

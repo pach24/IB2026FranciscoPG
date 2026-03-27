@@ -41,6 +41,7 @@
     <string name="activate_einvoice_data_rights">Derechos: Acceso, rectificación, supresión, limitación del tratamiento, portabilidad de datos u oposición, incluida la oposición a decisiones individuales automatizadas.</string>
     <string name="activate_einvoice_more_info">Más info</string>
     <string name="activate_einvoice_legal_text">He leído y acepto la Política de privacidad, acepto las Condiciones Generales y Particulares de la oferta y la suscripción a Factura Electrónica.</string>
+    <string name="activate_einvoice_email_error">Introduce un email válido</string>
     <string name="activate_einvoice_btn_back">Anterior</string>
     <string name="activate_einvoice_btn_next">Siguiente</string>
     <string name="my_invoices_back"><u>Atrás</u></string>

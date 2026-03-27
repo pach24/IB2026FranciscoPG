@@ -92,6 +92,20 @@ val DarkBadgeAmountFilter = Color(0xFF253D33)
 val StatusActiveLight = Color(0xFFB1DEC8)
 val StatusActiveDark = Color(0xFF173B2A)
 
+val buttonDisabledLight = Color(0xFFECF3EF)
+val buttonActiveLight = Color(0xFF253D33)
+
+val buttonDisabledDark = Color(0xFF1C1C1C)
+val buttonActiveDark = Color(0xFF253D33)
+
+val buttonTextDisabledLight = Color(0xFFA6BEB6)
+val buttonTextActiveLight = Color(0xFFFFFFFF)
+
+val buttonTextDisabledDark = Color(0xFF3A3A3A)
+val buttonTextActiveDark = Color(0xFFFFFFFF)
+
+val errorTextForm = Color(0xFFE57373)
+
 // ══════════════════════════════════════════
 // PALETA SEMÁNTICA (light / dark aware)
 // ══════════════════════════════════════════
@@ -127,7 +141,12 @@ data class IberdrolaColors(
     val statusDefaultText: Color,
     val activeFilterBadgeColor: Color,
     val snackbarIcon: Color,
-    val statusActive: Color
+    val statusActive: Color,
+    val buttonDisabled: Color,
+    val buttonActive : Color,
+    val buttonTextDisabled : Color,
+    val buttonTextActive : Color,
+    val errorTextForm: Color,
 )
 
 val LightIberdrolaColors = IberdrolaColors(
@@ -161,7 +180,12 @@ val LightIberdrolaColors = IberdrolaColors(
     statusDefaultText = StatusDefaultTextLight,
     activeFilterBadgeColor = IberSunset,
     snackbarIcon = IconSnackbar,
-    statusActive = StatusActiveLight
+    statusActive = StatusActiveLight,
+    buttonActive = buttonActiveLight,
+    buttonDisabled = buttonDisabledLight,
+    buttonTextActive = buttonTextActiveLight,
+    buttonTextDisabled = buttonTextDisabledLight,
+    errorTextForm = errorTextForm
 )
 
 val DarkIberdrolaColors = IberdrolaColors(
@@ -195,7 +219,12 @@ val DarkIberdrolaColors = IberdrolaColors(
     statusDefaultText = StatusDefaultTextDark,
     activeFilterBadgeColor = IberSunset,
     snackbarIcon = IconSnackbar,
-    statusActive = StatusActiveDark
+    statusActive = StatusActiveDark,
+    buttonActive = buttonActiveDark,
+    buttonDisabled = buttonDisabledDark,
+    buttonTextActive = buttonTextActiveDark,
+    buttonTextDisabled = buttonTextDisabledDark,
+    errorTextForm = errorTextForm
 )
 
 val LocalIberdrolaColors = staticCompositionLocalOf { LightIberdrolaColors }

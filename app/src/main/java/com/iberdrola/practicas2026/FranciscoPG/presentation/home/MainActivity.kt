@@ -22,7 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.iberdrola.practicas2026.FranciscoPG.R
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.MainScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.viewmodel.MainViewModel
-import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.ActivateElectronicInvoiceScreen
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.ActivateElectronicInvoiceRoute
 import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.ElectronicInvoiceRoute
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.screens.InvoicesRoute
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
@@ -162,7 +162,7 @@ class MainActivity : AppCompatActivity() {
                         popEnterTransition = { slideInHorizontally { -it } },
                         popExitTransition = { slideOutHorizontally { it } }
                     ) {
-                        ActivateElectronicInvoiceScreen(
+                        ActivateElectronicInvoiceRoute(
                             onNavigateBack = { navController.popBackStack() }
                         )
                     }
