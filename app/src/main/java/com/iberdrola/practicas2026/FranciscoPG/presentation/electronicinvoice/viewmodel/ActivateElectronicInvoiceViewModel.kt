@@ -1,11 +1,14 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ValidateEmailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,12 +28,28 @@ class ActivateElectronicInvoiceViewModel @Inject constructor(
     private val _verificationCode = MutableStateFlow("")
     val verificationCode: StateFlow<String> = _verificationCode.asStateFlow()
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    private val _showBanner = MutableStateFlow(false)
+    val showBanner: StateFlow<Boolean> = _showBanner.asStateFlow()
+
     fun onVerificationCodeChanged(value: String) {
         _verificationCode.value = value
     }
 
     fun onResendCode() {
-        // TODO: lógica de reenvío de código
+        viewModelScope.launch {
+            _isLoading.value = true
+            _showBanner.value = false
+            delay(5000)
+            _isLoading.value = false
+            _showBanner.value = true
+        }
+    }
+
+    fun onBannerDismissed() {
+        _showBanner.value = false
     }
 
     fun onEmailChanged(value: String) {

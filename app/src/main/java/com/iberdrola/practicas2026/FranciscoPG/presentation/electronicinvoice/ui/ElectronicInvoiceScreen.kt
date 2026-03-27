@@ -34,7 +34,7 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.model.Contract
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.ContractStatus
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.BackButton
-import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.UnavailableBanner
+import com.iberdrola.practicas2026.FranciscoPG.presentation.common.UnavailableBanner
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontRegular
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme

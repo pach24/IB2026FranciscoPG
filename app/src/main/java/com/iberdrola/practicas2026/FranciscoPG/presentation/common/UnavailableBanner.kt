@@ -1,5 +1,6 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components
+package com.iberdrola.practicas2026.FranciscoPG.presentation.common
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -7,12 +8,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import android.content.res.Configuration
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -49,7 +49,6 @@ fun UnavailableBanner(
         modifier = modifier
     ) {
         Row(
-            // Quitamos el verticalAlignment global para controlar cada hijo
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(min = compHeigh100)
@@ -62,7 +61,7 @@ fun UnavailableBanner(
                 tint = IberdrolaTheme.colors.snackbarIcon,
                 modifier = Modifier
                     .size(Spacing.dp24)
-                    .align(Alignment.Top) //
+                    .align(Alignment.Top)
                     .padding(top = Spacing.dp2)
             )
 
@@ -74,7 +73,7 @@ fun UnavailableBanner(
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = Spacing.dp16)
-                    .align(Alignment.CenterVertically) // Mantenemos el texto centrado
+                    .align(Alignment.CenterVertically)
             )
 
             Icon(
@@ -84,7 +83,7 @@ fun UnavailableBanner(
                 modifier = Modifier
                     .size(Spacing.dp28)
                     .clickable { onDismiss() }
-                    .align(Alignment.Top) // El icono de cerrar también suele ir arriba en banners altos
+                    .align(Alignment.Top)
             )
         }
     }
