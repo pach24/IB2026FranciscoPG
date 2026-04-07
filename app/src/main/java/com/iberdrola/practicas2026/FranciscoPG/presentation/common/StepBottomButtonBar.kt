@@ -1,6 +1,11 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.common
 
 import android.content.res.Configuration
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -16,9 +21,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,6 +45,22 @@ fun StepBottomButtonBar(
     modifier: Modifier = Modifier
 ) {
     val colors = IberdrolaTheme.colors
+
+    val buttonBgColor by animateColorAsState(
+        targetValue = if (isNextEnabled) colors.buttonActive else colors.buttonDisabled,
+        animationSpec = tween(durationMillis = 300, easing = FastOutSlowInEasing),
+        label = "buttonBg"
+    )
+    val buttonTextColor by animateColorAsState(
+        targetValue = if (isNextEnabled) colors.buttonTextActive else colors.buttonTextDisabled,
+        animationSpec = tween(durationMillis = 300, easing = FastOutSlowInEasing),
+        label = "buttonText"
+    )
+    val buttonScale by animateFloatAsState(
+        targetValue = if (isNextEnabled) 1f else 0.97f,
+        animationSpec = spring(dampingRatio = 0.5f, stiffness = 400f),
+        label = "buttonScale"
+    )
 
     Column(modifier = modifier) {
         HorizontalDivider(color = colors.divider, thickness = 1.dp)
@@ -82,11 +105,9 @@ fun StepBottomButtonBar(
                 modifier = Modifier
                     .weight(1f)
                     .height(Spacing.dp48)
+                    .graphicsLayer { scaleX = buttonScale; scaleY = buttonScale }
                     .clip(CircleShape)
-                    .background(
-                        if (isNextEnabled) colors.buttonActive
-                        else colors.buttonDisabled
-                    )
+                    .background(buttonBgColor)
                     .then(
                         if (isNextEnabled) Modifier.clickable { onNext() }
                         else Modifier
@@ -95,7 +116,7 @@ fun StepBottomButtonBar(
             ) {
                 Text(
                     text = stringResource(R.string.activate_einvoice_btn_next),
-                    color = if (isNextEnabled) colors.buttonTextActive else colors.buttonTextDisabled,
+                    color = buttonTextColor,
                     fontFamily = IberFontBold,
                     fontWeight = FontWeight.Bold,
                     fontSize = TextSize.sp14
