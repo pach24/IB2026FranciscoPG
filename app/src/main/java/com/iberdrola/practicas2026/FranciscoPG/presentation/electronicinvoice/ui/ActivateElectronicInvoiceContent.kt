@@ -20,6 +20,9 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -61,6 +65,15 @@ fun ActivateElectronicInvoiceContent(
     val focusManager = LocalFocusManager.current
     var showBanner by remember { mutableStateOf(false) }
     var emailHasBlurred by remember { mutableStateOf(false) }
+    val showError = emailHasBlurred && email.isNotEmpty() && !isEmailValid
+    val shakeOffset = remember { Animatable(0f) }
+    LaunchedEffect(showError) {
+        if (showError) {
+            for (target in listOf(12f, -12f, 8f, -8f, 4f, 0f)) {
+                shakeOffset.animateTo(target, animationSpec = tween(durationMillis = 50))
+            }
+        }
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(
@@ -110,6 +123,7 @@ fun ActivateElectronicInvoiceContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = Spacing.dp24)
+                    .graphicsLayer { translationX = shakeOffset.value }
             ) {
                 BasicTextField(
                     value = email,
@@ -131,7 +145,6 @@ fun ActivateElectronicInvoiceContent(
                             }
                         },
                     decorationBox = { innerTextField ->
-                        val showError = emailHasBlurred && email.isNotEmpty() && !isEmailValid
                         val underlineColor = when {
                             showError -> colors.errorTextForm
                             isEmailValid && email.isNotEmpty() -> colors.iberdrolaGreen
@@ -278,6 +291,7 @@ private fun DataProtectionItem(
     onLinkClick: () -> Unit
 ) {
     val colors = IberdrolaTheme.colors
+    val focusManager = LocalFocusManager.current
     val annotated = buildAnnotatedString {
         withStyle(SpanStyle(fontWeight = FontWeight.Medium, color = colors.darkGreyText)) {
             append(boldPrefix)
@@ -307,6 +321,7 @@ private fun DataProtectionItem(
             lineHeight = TextSize.sp22
         ),
         onClick = { offset ->
+            focusManager.clearFocus()
             annotated.getStringAnnotations("LINK", offset, offset)
                 .firstOrNull()?.let { onLinkClick() }
         }

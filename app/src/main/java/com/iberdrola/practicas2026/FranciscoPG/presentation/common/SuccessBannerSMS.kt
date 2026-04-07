@@ -30,7 +30,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SuccessBannerSMS(
-    visible: Boolean,
+visible: Boolean,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     durationMillis: Long = 4000L
