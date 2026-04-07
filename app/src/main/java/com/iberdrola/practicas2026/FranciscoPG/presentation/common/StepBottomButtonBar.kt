@@ -47,7 +47,11 @@ fun StepBottomButtonBar(
                 .fillMaxWidth()
                 .background(colors.background)
                 .navigationBarsPadding()
-                .padding(horizontal = Spacing.dp24, vertical = Spacing.dp16),
+                .padding(
+                    start = Spacing.dp24,
+                    end = Spacing.dp24,
+                    top = Spacing.dp16,
+                    bottom = Spacing.dp16 + Spacing.dp48 ),
             horizontalArrangement = Arrangement.spacedBy(Spacing.dp12)
         ) {
             // Botón Anterior
