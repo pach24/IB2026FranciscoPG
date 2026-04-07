@@ -1,6 +1,7 @@
     package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui
 
     import android.content.res.Configuration
+    import androidx.activity.compose.BackHandler
     import androidx.compose.animation.AnimatedVisibility
     import androidx.compose.animation.fadeIn
     import androidx.compose.animation.fadeOut
@@ -16,13 +17,18 @@
     import androidx.compose.foundation.pager.rememberPagerState
     import androidx.compose.material3.Text
     import androidx.compose.runtime.Composable
+    import androidx.compose.runtime.getValue
+    import androidx.compose.runtime.mutableStateOf
+    import androidx.compose.runtime.remember
     import androidx.compose.runtime.rememberCoroutineScope
+    import androidx.compose.runtime.setValue
     import androidx.compose.ui.Modifier
     import androidx.compose.ui.res.stringResource
     import androidx.compose.ui.text.font.FontWeight
     import androidx.compose.ui.tooling.preview.Preview
     import com.iberdrola.practicas2026.FranciscoPG.R
     import com.iberdrola.practicas2026.FranciscoPG.presentation.common.CloseTopBar
+    import com.iberdrola.practicas2026.FranciscoPG.presentation.common.ConfirmDialog
     import com.iberdrola.practicas2026.FranciscoPG.presentation.common.StepBottomButtonBar
     import com.iberdrola.practicas2026.FranciscoPG.presentation.common.StepProgressBar
     import com.iberdrola.practicas2026.FranciscoPG.presentation.common.SuccessBannerSMS
@@ -59,6 +65,30 @@
 
         val currentPage = pagerState.currentPage
         val showScaffold = currentPage < 2
+        val hasData = email.isNotEmpty() || legalAccepted
+        var showExitDialog by remember { mutableStateOf(false) }
+
+        BackHandler {
+            when {
+                currentPage > 0 -> {
+                    onBannerDismissed()
+                    scope.launch { pagerState.animateScrollToPage(currentPage - 1) }
+                }
+                hasData -> showExitDialog = true
+                else -> onNavigateBack()
+            }
+        }
+
+        if (showExitDialog) {
+            ConfirmDialog(
+                title = stringResource(R.string.exit_wizard_dialog_title),
+                message = stringResource(R.string.exit_wizard_dialog_message),
+                confirmText = stringResource(R.string.exit_wizard_dialog_confirm),
+                dismissText = stringResource(R.string.exit_wizard_dialog_cancel),
+                onConfirm = { showExitDialog = false; onNavigateBack() },
+                onDismiss = { showExitDialog = false }
+            )
+        }
 
         // 1. ENVOLVEMOS TODO EN UN BOX PARA PODER SUPERPONER EL SPINNER
         Box(modifier = Modifier.fillMaxSize()) {
@@ -76,7 +106,7 @@
                     exit = fadeOut()
                 ) {
                     Column {
-                        CloseTopBar(onClose = onNavigateBack)
+                        CloseTopBar(onClose = { if (hasData) showExitDialog = true else onNavigateBack() })
 
                         Text(
                             text = stringResource(R.string.activate_einvoice_title),
@@ -136,7 +166,7 @@
                     StepBottomButtonBar(
                         onBack = {
                             if (currentPage == 0) {
-                                onNavigateBack()
+                                if (hasData) showExitDialog = true else onNavigateBack()
                             } else {
                                 onBannerDismissed()
                                 scope.launch { pagerState.animateScrollToPage(currentPage - 1) }

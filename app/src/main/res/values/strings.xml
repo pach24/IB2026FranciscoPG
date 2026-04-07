@@ -44,6 +44,10 @@
     <string name="activate_einvoice_email_error">Introduce un email válido</string>
     <string name="activate_einvoice_btn_back">Anterior</string>
     <string name="activate_einvoice_btn_next">Siguiente</string>
+    <string name="exit_wizard_dialog_title">¿Salir del proceso?</string>
+    <string name="exit_wizard_dialog_message">Si sales ahora, perderás los datos introducidos.</string>
+    <string name="exit_wizard_dialog_confirm">Salir</string>
+    <string name="exit_wizard_dialog_cancel">Cancelar</string>
 
     <!-- Verificación código -->
     <string name="confirm_einvoice_title">Introduce tu código de verificación</string>
