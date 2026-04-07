@@ -138,6 +138,7 @@
                             if (currentPage == 0) {
                                 onNavigateBack()
                             } else {
+                                onBannerDismissed()
                                 scope.launch { pagerState.animateScrollToPage(currentPage - 1) }
                             }
                         },
