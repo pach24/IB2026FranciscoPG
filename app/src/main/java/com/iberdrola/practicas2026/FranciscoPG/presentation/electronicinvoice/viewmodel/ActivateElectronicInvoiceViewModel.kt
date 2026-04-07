@@ -2,6 +2,7 @@ package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.v
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.iberdrola.practicas2026.domain.usecase.CensorEmailUseCase
 import com.iberdrola.practicas2026.domain.usecase.ResendCodeUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ValidateEmailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,11 +16,15 @@ import javax.inject.Inject
 @HiltViewModel
 class ActivateElectronicInvoiceViewModel @Inject constructor(
     private val validateEmailUseCase: ValidateEmailUseCase,
-    private val resendCodeUseCase: ResendCodeUseCase
+    private val resendCodeUseCase: ResendCodeUseCase,
+    private val censorEmailUseCase: CensorEmailUseCase
 ) : ViewModel() {
 
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email.asStateFlow()
+
+    private val _censoredEmail = MutableStateFlow("")
+    val censoredEmail: StateFlow<String> = _censoredEmail.asStateFlow()
 
     private val _legalAccepted = MutableStateFlow(false)
     val legalAccepted: StateFlow<Boolean> = _legalAccepted.asStateFlow()
@@ -63,6 +68,7 @@ class ActivateElectronicInvoiceViewModel @Inject constructor(
     fun onEmailChanged(value: String) {
         _email.value = value
         _isEmailValid.value = validateEmailUseCase(value)
+        _censoredEmail.value = censorEmailUseCase(value)
     }
 
     fun onLegalAcceptedChanged(value: Boolean) {

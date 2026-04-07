@@ -18,9 +18,11 @@ fun ActivateElectronicInvoiceRoute(
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val showBanner by viewModel.showBanner.collectAsStateWithLifecycle()
     val resendAttemptsLeft by viewModel.resendAttemptsLeft.collectAsStateWithLifecycle()
+    val censoredEmail by viewModel.censoredEmail.collectAsStateWithLifecycle()
 
     ElectronicInvoiceWizardScreen(
         email = email,
+        censoredEmail = censoredEmail,
         legalAccepted = legalAccepted,
         isEmailValid = isEmailValid,
         verificationCode = verificationCode,

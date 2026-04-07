@@ -97,6 +97,11 @@
     <string name="error_connection_subtitle">Comprueba tu conexión a internet e inténtalo de nuevo.</string>
     <string name="error_retry_button">Reintentar</string>
 
+    <!-- Pantalla éxito factura electrónica -->
+    <string name="success_einvoice_title">¡Has activado correctamente tu factura electrónica!</string>
+    <string name="success_einvoice_subtitle">Pronto recibirás un correo electrónico de verificación para recibir tus facturas en la dirección %s</string>
+    <string name="success_einvoice_accept">Aceptar</string>
+
     <!-- Banners -->
     <string name="banner_service_unavailable">Este servicio no esta disponible. Por favor, inténtalo de nuevo más tarde.</string>
     <string name="banner_resend_sms_success">Hemos vuelto a enviar un SMS con tu código de verificación.</string>
