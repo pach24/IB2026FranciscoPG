@@ -51,11 +51,14 @@
 
     <!-- Verificación código -->
     <string name="confirm_einvoice_title">Introduce tu código de verificación</string>
-    <string name="confirm_einvoice_subtitle">Para verificar tu identidad, hemos enviado un código al teléfono *****l46. Por favor, introdúcelo a continuación:</string>
+    <string name="confirm_einvoice_subtitle">Para verificar tu identidad, hemos enviado un código al teléfono *****146. Por favor, introdúcelo a continuación:</string>
     <string name="confirm_einvoice_code_label">* Código de verificación</string>
     <string name="confirm_einvoice_not_received">¿No has recibido el código?</string>
     <string name="confirm_einvoice_resend_hint">Si no lo encuentras, podemos volver a enviar el SMS.</string>
     <string name="confirm_einvoice_resend_link">Volver a enviar</string>
+    <string name="confirm_einvoice_resend_attempts">Recuerda que hoy te quedan %d intentos.</string>
+    <string name="confirm_einvoice_no_attempts_title">Has agotado los intentos</string>
+    <string name="confirm_einvoice_no_attempts_message">Inténtalo de nuevo más tarde o contacta con soporte.</string>
     <string name="my_invoices_back"><u>Atrás</u></string>
     <string name="nav_consumo">Consumo</string>
     <string name="nav_gestiones">Gestiones</string>

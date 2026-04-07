@@ -2,6 +2,7 @@ package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.v
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.iberdrola.practicas2026.domain.usecase.ResendCodeUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ValidateEmailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ActivateElectronicInvoiceViewModel @Inject constructor(
-    private val validateEmailUseCase: ValidateEmailUseCase
+    private val validateEmailUseCase: ValidateEmailUseCase,
+    private val resendCodeUseCase: ResendCodeUseCase
 ) : ViewModel() {
 
     private val _email = MutableStateFlow("")
@@ -34,14 +36,20 @@ class ActivateElectronicInvoiceViewModel @Inject constructor(
     private val _showBanner = MutableStateFlow(false)
     val showBanner: StateFlow<Boolean> = _showBanner.asStateFlow()
 
+    private val _resendAttemptsLeft = MutableStateFlow(resendCodeUseCase.attemptsLeft)
+    val resendAttemptsLeft: StateFlow<Int> = _resendAttemptsLeft.asStateFlow()
+
     fun onVerificationCodeChanged(value: String) {
         _verificationCode.value = value
     }
 
     fun onResendCode() {
+        if (!resendCodeUseCase.canResend) return
         viewModelScope.launch {
             _isLoading.value = true
             _showBanner.value = false
+            resendCodeUseCase.resend()
+            _resendAttemptsLeft.value = resendCodeUseCase.attemptsLeft
             delay(5000)
             _isLoading.value = false
             _showBanner.value = true

@@ -52,6 +52,7 @@ fun ConfirmElectronicInvoiceContent(
     verificationCode: String,
     onVerificationCodeChanged: (String) -> Unit,
     onResendCode: () -> Unit,
+    resendAttemptsLeft: Int,
     modifier: Modifier = Modifier
 ) {
     val colors = IberdrolaTheme.colors
@@ -131,62 +132,94 @@ fun ConfirmElectronicInvoiceContent(
 
         Spacer(modifier = Modifier.height(Spacing.dp32))
 
-        // Banner informativo
+        // Banner informativo / agotado
+        val hasAttempts = resendAttemptsLeft > 0
+        val bannerShape = RoundedCornerShape(
+            topStart = Spacing.dp0,
+            topEnd = Radius.dp16,
+            bottomEnd = Radius.dp16,
+            bottomStart = Radius.dp16
+        )
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = Spacing.dp20)
                 .background(
-                    color = colors.infoBannerBackground,
-                    shape = RoundedCornerShape(
-                        topStart = Spacing.dp0,
-                        topEnd = Radius.dp16,
-                        bottomEnd = Radius.dp16,
-                        bottomStart = Radius.dp16
-                    )
+                    color = if (hasAttempts) colors.infoBannerBackground else colors.snackbar,
+                    shape = bannerShape
                 )
                 .padding(Spacing.dp20),
             verticalAlignment = Alignment.Top
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_info),
+                painter = painterResource(
+                    if (hasAttempts) R.drawable.ic_info else R.drawable.ic_warning
+                ),
                 contentDescription = null,
-                tint = colors.infoBannerIcon,
+                tint = if (hasAttempts) colors.infoBannerIcon else colors.snackbarIcon,
                 modifier = Modifier.size(IconSize.dp24)
             )
 
             Spacer(modifier = Modifier.width(Spacing.dp12))
 
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = stringResource(R.string.confirm_einvoice_not_received),
-                    color = colors.textPrimary,
-                    fontFamily = IberFontBold,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = TextSize.sp12
-                )
+                if (hasAttempts) {
+                    Text(
+                        text = stringResource(R.string.confirm_einvoice_not_received),
+                        color = colors.textPrimary,
+                        fontFamily = IberFontBold,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = TextSize.sp12
+                    )
 
-                Spacer(modifier = Modifier.height(Spacing.dp4))
+                    Spacer(modifier = Modifier.height(Spacing.dp4))
 
-                Text(
-                    text = stringResource(R.string.confirm_einvoice_resend_hint),
-                    color = colors.darkGreyText,
-                    fontFamily = IberFontRegular,
-                    fontSize = TextSize.sp12,
-                    lineHeight = TextSize.sp22
-                )
+                    val hintText = if (resendAttemptsLeft < 3) {
+                        stringResource(R.string.confirm_einvoice_resend_hint) +
+                            "\n" + stringResource(R.string.confirm_einvoice_resend_attempts, resendAttemptsLeft)
+                    } else {
+                        stringResource(R.string.confirm_einvoice_resend_hint)
+                    }
 
-                Spacer(modifier = Modifier.height(Spacing.dp6))
+                    Text(
+                        text = hintText,
+                        color = colors.darkGreyText,
+                        fontFamily = IberFontRegular,
+                        fontSize = TextSize.sp12,
+                        lineHeight = TextSize.sp22
+                    )
 
-                Text(
-                    text = stringResource(R.string.confirm_einvoice_resend_link),
-                    color = colors.textPrimary,
-                    fontFamily = IberFontBold,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = TextSize.sp12,
-                    textDecoration = TextDecoration.Underline,
-                    modifier = Modifier.clickable { onResendCode() }
-                )
+                    Spacer(modifier = Modifier.height(Spacing.dp6))
+
+                    Text(
+                        text = stringResource(R.string.confirm_einvoice_resend_link),
+                        color = colors.textPrimary,
+                        fontFamily = IberFontBold,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = TextSize.sp12,
+                        textDecoration = TextDecoration.Underline,
+                        modifier = Modifier.clickable { onResendCode() }
+                    )
+                } else {
+                    Text(
+                        text = stringResource(R.string.confirm_einvoice_no_attempts_title),
+                        color = colors.textPrimary,
+                        fontFamily = IberFontBold,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = TextSize.sp12
+                    )
+
+                    Spacer(modifier = Modifier.height(Spacing.dp4))
+
+                    Text(
+                        text = stringResource(R.string.confirm_einvoice_no_attempts_message),
+                        color = colors.darkGreyText,
+                        fontFamily = IberFontRegular,
+                        fontSize = TextSize.sp12,
+                        lineHeight = TextSize.sp22
+                    )
+                }
             }
         }
     }
@@ -218,7 +251,8 @@ private fun ConfirmElectronicInvoiceContentPreview() {
         ConfirmElectronicInvoiceContent(
             verificationCode = "",
             onVerificationCodeChanged = {},
-            onResendCode = {}
+            onResendCode = {},
+            resendAttemptsLeft = 3
         )
     }
 }

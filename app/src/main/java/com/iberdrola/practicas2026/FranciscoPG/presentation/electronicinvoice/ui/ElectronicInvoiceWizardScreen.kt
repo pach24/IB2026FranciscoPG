@@ -49,6 +49,7 @@
         verificationCode: String,
         isLoading: Boolean,
         showBanner: Boolean,
+        resendAttemptsLeft: Int,
         onEmailChanged: (String) -> Unit,
         onLegalAcceptedChanged: (Boolean) -> Unit,
         onVerificationCodeChanged: (String) -> Unit,
@@ -144,7 +145,8 @@
                         1 -> ConfirmElectronicInvoiceContent(
                             verificationCode = verificationCode,
                             onVerificationCodeChanged = onVerificationCodeChanged,
-                            onResendCode = onResendCode
+                            onResendCode = onResendCode,
+                            resendAttemptsLeft = resendAttemptsLeft
                         )
                         2 -> {
                             // TODO: Pantalla custom step 4
@@ -203,6 +205,7 @@
                 verificationCode = "",
                 isLoading = false,
                 showBanner = false,
+                resendAttemptsLeft = 3,
                 onEmailChanged = {},
                 onLegalAcceptedChanged = {},
                 onVerificationCodeChanged = {},
