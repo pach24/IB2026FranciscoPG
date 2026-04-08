@@ -9,7 +9,9 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -24,6 +26,8 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.MainScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.viewmodel.MainViewModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.ActivateElectronicInvoiceRoute
 import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.ElectronicInvoiceRoute
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.ModifyEmailScreen
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.ModifyEmailWizardRoute
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.screens.InvoicesRoute
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,6 +37,8 @@ private object AppRoutes {
     const val MY_INVOICES = "my_invoices"
     const val ELECTRONIC_INVOICE = "electronic_invoice"
     const val ACTIVATE_ELECTRONIC_INVOICE = "activate_electronic_invoice"
+    const val MODIFY_EMAIL = "modify_email"
+    const val MODIFY_EMAIL_WIZARD = "modify_email_wizard"
 }
 
 @AndroidEntryPoint
@@ -150,7 +156,9 @@ class MainActivity : AppCompatActivity() {
                                 }
                             },
                             onNavigateToModify = {
-                                // TODO: navegar a pantalla de modificar email
+                                navController.navigate(AppRoutes.MODIFY_EMAIL) {
+                                    launchSingleTop = true
+                                }
                             }
                         )
                     }
@@ -164,6 +172,50 @@ class MainActivity : AppCompatActivity() {
                     ) {
                         ActivateElectronicInvoiceRoute(
                             onNavigateBack = { navController.popBackStack() }
+                        )
+                    }
+
+                    composable(
+                        AppRoutes.MODIFY_EMAIL,
+                        enterTransition = { slideInHorizontally { it } },
+                        exitTransition = { slideOutHorizontally { it } },
+                        popEnterTransition = { slideInHorizontally { -it } },
+                        popExitTransition = { slideOutHorizontally { it } }
+                    ) { entry ->
+                        val defaultEmail = getString(R.string.modify_email_current_email)
+                        var currentEmail by remember { mutableStateOf(defaultEmail) }
+                        val savedEmail = entry.savedStateHandle.get<String>("modified_email")
+                        if (savedEmail != null) {
+                            currentEmail = savedEmail
+                            entry.savedStateHandle.remove<String>("modified_email")
+                        }
+
+                        ModifyEmailScreen(
+                            currentEmail = currentEmail,
+                            onModifyClick = {
+                                navController.navigate(AppRoutes.MODIFY_EMAIL_WIZARD) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            onNavigateBack = { navController.popBackStack() }
+                        )
+                    }
+
+                    composable(
+                        AppRoutes.MODIFY_EMAIL_WIZARD,
+                        enterTransition = { slideInHorizontally { it } },
+                        exitTransition = { slideOutHorizontally { it } },
+                        popEnterTransition = { slideInHorizontally { -it } },
+                        popExitTransition = { slideOutHorizontally { it } }
+                    ) {
+                        ModifyEmailWizardRoute(
+                            onNavigateBack = { navController.popBackStack() },
+                            onComplete = { newEmail ->
+                                navController.previousBackStackEntry
+                                    ?.savedStateHandle
+                                    ?.set("modified_email", newEmail)
+                                navController.popBackStack()
+                            }
                         )
                     }
                 }

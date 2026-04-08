@@ -1,0 +1,77 @@
+package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.viewmodel
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.iberdrola.practicas2026.domain.usecase.CensorEmailUseCase
+import com.iberdrola.practicas2026.domain.usecase.ResendCodeUseCase
+import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ValidateEmailUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class ModifyEmailViewModel @Inject constructor(
+    private val validateEmailUseCase: ValidateEmailUseCase,
+    private val resendCodeUseCase: ResendCodeUseCase,
+    private val censorEmailUseCase: CensorEmailUseCase
+) : ViewModel() {
+
+    private val _currentCensoredEmail = MutableStateFlow(censorEmailUseCase(DEFAULT_EMAIL))
+    val currentCensoredEmail: StateFlow<String> = _currentCensoredEmail.asStateFlow()
+
+    private val _email = MutableStateFlow("")
+    val email: StateFlow<String> = _email.asStateFlow()
+
+    private val _censoredEmail = MutableStateFlow("")
+    val censoredEmail: StateFlow<String> = _censoredEmail.asStateFlow()
+
+    private val _isEmailValid = MutableStateFlow(false)
+    val isEmailValid: StateFlow<Boolean> = _isEmailValid.asStateFlow()
+
+    private val _verificationCode = MutableStateFlow("")
+    val verificationCode: StateFlow<String> = _verificationCode.asStateFlow()
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    private val _showBanner = MutableStateFlow(false)
+    val showBanner: StateFlow<Boolean> = _showBanner.asStateFlow()
+
+    private val _resendAttemptsLeft = MutableStateFlow(resendCodeUseCase.attemptsLeft)
+    val resendAttemptsLeft: StateFlow<Int> = _resendAttemptsLeft.asStateFlow()
+
+    fun onEmailChanged(value: String) {
+        _email.value = value
+        _isEmailValid.value = validateEmailUseCase(value)
+        _censoredEmail.value = censorEmailUseCase(value)
+    }
+
+    fun onVerificationCodeChanged(value: String) {
+        _verificationCode.value = value
+    }
+
+    fun onResendCode() {
+        if (!resendCodeUseCase.canResend) return
+        viewModelScope.launch {
+            _isLoading.value = true
+            _showBanner.value = false
+            resendCodeUseCase.resend()
+            _resendAttemptsLeft.value = resendCodeUseCase.attemptsLeft
+            delay(5000)
+            _isLoading.value = false
+            _showBanner.value = true
+        }
+    }
+
+    fun onBannerDismissed() {
+        _showBanner.value = false
+    }
+
+    companion object {
+        private const val DEFAULT_EMAIL = "pepe2@gmail.com"
+    }
+}

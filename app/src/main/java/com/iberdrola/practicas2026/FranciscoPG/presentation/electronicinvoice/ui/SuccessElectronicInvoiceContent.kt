@@ -67,6 +67,7 @@ fun SuccessElectronicInvoiceContent(
     onAccept: () -> Unit,
     onClose: () -> Unit,
     modifier: Modifier = Modifier,
+    title: String = stringResource(R.string.success_einvoice_title),
     // TODO: eliminar antes de merge
     onDebugBack: (() -> Unit)? = null
 ) {
@@ -178,7 +179,7 @@ fun SuccessElectronicInvoiceContent(
             Spacer(modifier = Modifier.height(Spacing.dp40))
 
             Text(
-                text = stringResource(R.string.success_einvoice_title),
+                text = title,
                 color = Color.White,
                 fontFamily = IberFontBold,
                 fontWeight = FontWeight.Bold,
