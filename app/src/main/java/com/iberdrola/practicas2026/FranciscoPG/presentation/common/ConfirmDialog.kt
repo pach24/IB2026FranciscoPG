@@ -2,17 +2,17 @@ package com.iberdrola.practicas2026.FranciscoPG.presentation.common
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -66,53 +66,48 @@ fun ConfirmDialog(
                 )
             }
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(Stroke.dp1)
-                    .background(colors.divider)
-            )
+            Spacer(modifier = Modifier.height(Spacing.dp8))
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(IntrinsicSize.Min)
+                    .padding(horizontal = Spacing.dp24)
+                    .padding(bottom = Spacing.dp24),
+                horizontalArrangement = Arrangement.spacedBy(Spacing.dp12)
             ) {
                 Box(
                     modifier = Modifier
                         .weight(1f)
-                        .clickable { onDismiss() }
-                        .padding(vertical = Spacing.dp16),
+                        .height(Spacing.dp48)
+                        .clip(CircleShape)
+                        .border(Stroke.dp2, colors.iberdrolaDarkGreen, CircleShape)
+                        .clickable { onDismiss() },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = dismissText,
-                        fontFamily = IberFontRegular,
-                        fontSize = TextSize.sp15,
-                        color = colors.darkGreyText
+                        fontFamily = IberFontBold,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = TextSize.sp14,
+                        color = colors.iberdrolaDarkGreen
                     )
                 }
 
                 Box(
                     modifier = Modifier
-                        .width(Stroke.dp1)
-                        .fillMaxHeight()
-                        .background(colors.divider)
-                )
-
-                Box(
-                    modifier = Modifier
                         .weight(1f)
-                        .clickable { onConfirm() }
-                        .padding(vertical = Spacing.dp16),
+                        .height(Spacing.dp48)
+                        .clip(CircleShape)
+                        .background(colors.buttonActive)
+                        .clickable { onConfirm() },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = confirmText,
                         fontFamily = IberFontBold,
                         fontWeight = FontWeight.Bold,
-                        fontSize = TextSize.sp15,
-                        color = colors.errorTextForm
+                        fontSize = TextSize.sp14,
+                        color = colors.buttonTextActive
                     )
                 }
             }

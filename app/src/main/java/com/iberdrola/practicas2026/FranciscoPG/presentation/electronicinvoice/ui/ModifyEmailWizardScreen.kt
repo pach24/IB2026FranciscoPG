@@ -190,7 +190,6 @@ fun ModifyEmailWizardScreen(
                 onAccept = { onComplete(email) },
                 onClose = { onComplete(email) },
                 title = stringResource(R.string.success_modify_email_title),
-                onDebugBack = { showSuccess = false }
             )
         }
     }

@@ -68,8 +68,6 @@ fun SuccessElectronicInvoiceContent(
     onClose: () -> Unit,
     modifier: Modifier = Modifier,
     title: String = stringResource(R.string.success_einvoice_title),
-    // TODO: eliminar antes de merge
-    onDebugBack: (() -> Unit)? = null
 ) {
     // Pintar system bars de verde y restaurar al salir
     val view = LocalView.current

@@ -191,8 +191,6 @@ fun ElectronicInvoiceWizardScreen(
                 email = censoredEmail,
                 onAccept = onNavigateBack,
                 onClose = onNavigateBack,
-                // TODO: eliminar antes de merge
-                onDebugBack = { showSuccess = false }
             )
         }
     }

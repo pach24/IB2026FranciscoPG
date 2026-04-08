@@ -99,8 +99,9 @@ fun ConfirmElectronicInvoiceContent(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = Spacing.dp24)
+                .padding(horizontal = Spacing.dp12)
                 .clickable { showOtpSheet = true }
+                .padding(horizontal = Spacing.dp12, vertical = Spacing.dp12)
         ) {
             Box(modifier = Modifier.padding(bottom = Spacing.dp8)) {
                 if (verificationCode.isEmpty()) {
