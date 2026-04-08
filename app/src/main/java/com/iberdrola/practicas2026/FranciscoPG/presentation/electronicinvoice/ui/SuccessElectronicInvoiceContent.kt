@@ -151,10 +151,10 @@ fun SuccessElectronicInvoiceContent(
             // Thumb up con destellos posicionados libremente
             Box(contentAlignment = Alignment.Center) {
                 Image(
-                    painter = painterResource(R.drawable.ic_thumb_up),
+                    painter = painterResource(R.drawable.ic_thumb),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(160.dp)
+                        .size(280.dp)
                         .graphicsLayer {
                             scaleX = imageScale.value
                             scaleY = imageScale.value
@@ -162,10 +162,10 @@ fun SuccessElectronicInvoiceContent(
                     contentScale = ContentScale.Fit
                 )
                 Image(
-                    painter = painterResource(R.drawable.ic_thumb_sparkles),
+                    painter = painterResource(R.drawable.ic_sparkles),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(72.dp)
+                        .size(80.dp)
                         .offset(x = SPARKLES_OFFSET_X, y = SPARKLES_OFFSET_Y)
                         .graphicsLayer {
                             scaleX = sparkleScale.value
