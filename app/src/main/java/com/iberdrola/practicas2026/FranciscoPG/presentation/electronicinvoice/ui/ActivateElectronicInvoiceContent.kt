@@ -225,13 +225,13 @@ fun ActivateElectronicInvoiceContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { focusManager.clearFocus(); onLegalAcceptedChanged(!legalAccepted) }
-                    .padding(horizontal = Spacing.dp24),
+                    .padding(horizontal = Spacing.dp24, vertical = Spacing.dp12),
                 verticalAlignment = Alignment.Top
             ) {
                 RoundedCheckbox(
                     checked = legalAccepted,
-                    checkedColor = colors.iberdrolaDarkGreen,
-                    uncheckedBorderColor = colors.iberdrolaDarkGreen,
+                    checkedColor = colors.iberdrolaGreen,
+                    uncheckedBorderColor = colors.iberdrolaGreen,
                     checkmarkColor = colors.white,
                     modifier = Modifier.padding(top = 2.dp)
                 )
