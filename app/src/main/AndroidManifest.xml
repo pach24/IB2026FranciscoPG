@@ -17,7 +17,7 @@
 
         <!-- 2. La Activity de inicio debe ser MainActivity -->
         <activity
-            android:name=".presentation.home.MainActivity"
+            android:name="com.iberdrola.practicas2026.FranciscoPG.presentation.home.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
