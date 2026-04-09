@@ -4,7 +4,7 @@ import android.util.Log
 import co.infinum.retromock.Retromock
 import com.google.gson.GsonBuilder
 import com.iberdrola.practicas2026.FranciscoPG.DeviceUtils.isEmulator
-import com.iberdrola.practicas2026.data.network.InvoiceApiService
+import com.iberdrola.practicas2026.FranciscoPG.data.network.InvoiceApiService
 import android.content.Context
 import dagger.Module
 import dagger.Provides

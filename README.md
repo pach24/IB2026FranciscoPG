@@ -22,11 +22,55 @@ El diferenciador clave es la **flexibilidad de datos**: mediante inyeccion de de
 
 ---
 
+# 🆕 What’s New – Entrega 2
+
+Esta entrega introduce mejoras clave centradas en **filtrado avanzado, experiencia de usuario y gestión de estados**.
+
+### 🔎 Sistema de filtrado completo
+
+- Implementación de **pantalla de filtros funcional** accesible desde el botón de filtrado.
+- Permite filtrar facturas por:
+  - **Fecha**
+  - **Importe** 
+  - **Estado**
+- Aplicación de filtros en tiempo real mostrando únicamente los resultados que cumplen las condiciones.
+- Persistencia temporal de filtros aplicada dentro del flujo de UI.
+
+### 🧾 Nuevos estados de factura
+
+- Actualización de los JSON (Mockoon + local) para incluir **todos los estados posibles** de factura.
+- Mejora del modelado en dominio para soportar estos estados.
+- Representación visual diferenciada en UI.
+
+### 🗑️ Eliminación con opción de deshacer
+
+- Implementación de **borrado de facturas** con opción de *undo*.
+- Mejora de la interacción mediante feedback inmediato al usuario.
+
+### 📭 Empty State inteligente
+
+- Nuevo estado visual cuando no hay facturas en un tab.
+- **Auto-navegación al tab con datos disponibles** si el actual está vacío.
+- Mejora significativa de la UX en escenarios sin datos.
+
+---
+
 ## Galería visual
 
 | Home y Toggle | Lista de facturas | Carga (Skeleton) | Bottom Sheet |
 |:-------------:|:-----------------:|:----------------:|:-----------:|
 | <img src="https://github.com/user-attachments/assets/7d5016e4-bb5d-49a1-bf66-2efb6a4ef19d" width="200"/> | <img src="https://github.com/user-attachments/assets/700552ba-a6e1-4fb5-acd8-2bb5809a8daf" width="200"/> | <img src="https://github.com/user-attachments/assets/72041eaa-bfa3-497b-ac73-c1ddcd86d82a" width="200"/> | <img src="https://github.com/user-attachments/assets/f05b74c3-7565-4396-af56-73417e326141" width="200"/> |
+
+### <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/main/Symbols/Dizzy.webp" alt="Dizzy" width="25" height="25" /> Novedades – Entrega 2
+
+> Nuevas funcionalidades centradas en filtrado, estados y experiencia de usuario
+
+
+| Pantalla de filtros | Modo oscuro| Lista filtrada | EmptyState |
+|:-------------:|:-----------------:|:----------------:|:-----------:|
+| <img src="https://github.com/user-attachments/assets/a770b86b-d78f-4845-a63c-93a66256d930" width="200"/> | <img src="https://github.com/user-attachments/assets/c7f86169-52ab-4709-bedb-be88341b14e6"  width="200"/> | <img src="https://github.com/user-attachments/assets/bfd64d74-c1ea-4128-ae86-ed3500dc9df0" width="200"/> | <img src="https://github.com/user-attachments/assets/9fbe45e5-9ff1-4934-8ed7-3ec06227219d" width="200"/> |
+
+
 
 
 
