@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.data.local
+package com.iberdrola.practicas2026.FranciscoPG.data.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.data.repository
+package com.iberdrola.practicas2026.FranciscoPG.repository
 
 import com.iberdrola.practicas2026.FranciscoPG.data.repository.ConfigurationRepositoryImpl
 import kotlinx.coroutines.test.runTest

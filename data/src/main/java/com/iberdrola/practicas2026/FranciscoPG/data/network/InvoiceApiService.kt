@@ -1,8 +1,8 @@
-package com.iberdrola.practicas2026.data.network
+package com.iberdrola.practicas2026.FranciscoPG.data.network
 
 import co.infinum.retromock.meta.Mock
 import co.infinum.retromock.meta.MockResponse
-import com.iberdrola.practicas2026.data.model.InvoiceListResponseDto
+import com.iberdrola.practicas2026.FranciscoPG.data.model.InvoiceListResponseDto
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

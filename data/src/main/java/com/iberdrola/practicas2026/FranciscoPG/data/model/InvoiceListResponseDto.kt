@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.data.model
+package com.iberdrola.practicas2026.FranciscoPG.data.model
 
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus

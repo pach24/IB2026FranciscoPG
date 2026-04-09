@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.domain.usecase
+package com.iberdrola.practicas2026.FranciscoPG.domain.usecase
 
 import javax.inject.Inject
 

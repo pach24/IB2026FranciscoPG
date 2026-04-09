@@ -2,8 +2,8 @@ package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.v
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.iberdrola.practicas2026.domain.usecase.CensorEmailUseCase
-import com.iberdrola.practicas2026.domain.usecase.ResendCodeUseCase
+import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.CensorEmailUseCase
+import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ResendCodeUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ValidateEmailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay

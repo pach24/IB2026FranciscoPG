@@ -3,7 +3,7 @@
     <string name="action_filter">Filtrar</string>
     <string name="address_placeholder_invoices">C/ PALMA - ARTA KM 49, 5 , 4°A -PINTO - MADRID</string>
     <string name="amount_placeholder">20,00€</string>
-    <string name="app_name">Iberdrola Clientes</string>
+    <string name="app_name">IB2026 FranciscoPG</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
     <string name="card_title_latest_invoice">Última factura</string>
     <string name="consumo_actual">"Consumo\nactual"</string>

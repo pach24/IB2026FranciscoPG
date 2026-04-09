@@ -1,5 +1,7 @@
-package com.iberdrola.practicas2026.data.model
+package com.iberdrola.practicas2026.FranciscoPG.model
 
+import com.iberdrola.practicas2026.FranciscoPG.data.model.InvoiceDto
+import com.iberdrola.practicas2026.FranciscoPG.data.model.toDomain
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import org.junit.Assert.assertEquals

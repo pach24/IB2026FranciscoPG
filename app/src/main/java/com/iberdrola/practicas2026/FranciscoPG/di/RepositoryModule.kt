@@ -9,8 +9,8 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.repository.ConfigurationRe
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.ContractRepository
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.FeedbackRepository
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.InvoiceRepository
-import com.iberdrola.practicas2026.data.local.InvoiceDao
-import com.iberdrola.practicas2026.data.network.InvoiceApiService
+import com.iberdrola.practicas2026.FranciscoPG.data.local.InvoiceDao
+import com.iberdrola.practicas2026.FranciscoPG.data.network.InvoiceApiService
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

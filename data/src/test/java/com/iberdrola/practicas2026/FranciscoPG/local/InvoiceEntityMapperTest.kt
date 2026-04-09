@@ -1,5 +1,8 @@
-package com.iberdrola.practicas2026.data.local
+package com.iberdrola.practicas2026.FranciscoPG.local
 
+import com.iberdrola.practicas2026.FranciscoPG.data.local.InvoiceEntity
+import com.iberdrola.practicas2026.FranciscoPG.data.local.toDomain
+import com.iberdrola.practicas2026.FranciscoPG.data.local.toEntity
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType

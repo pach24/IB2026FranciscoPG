@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.data.network
+package com.iberdrola.practicas2026.FranciscoPG.data.network
 
 import kotlinx.coroutines.suspendCancellableCoroutine
 import retrofit2.Call

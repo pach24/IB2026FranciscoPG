@@ -126,7 +126,7 @@ fun ModifyEmailScreen(
             // Email actual
             Text(
                 text = currentEmail,
-                color = colors.darkGreyText,
+                color = colors.lightGrey,
                 fontFamily = IberFontRegular,
                 fontSize = TextSize.sp14,
                 modifier = Modifier.padding(
@@ -155,7 +155,7 @@ fun ModifyEmailScreen(
                 Icon(
                     painter = painterResource(R.drawable.ic_info),
                     contentDescription = null,
-                    tint = colors.infoBannerIcon,
+                    tint = colors.lightGrey,
                     modifier = Modifier.size(IconSize.dp24)
                 )
 
@@ -163,7 +163,7 @@ fun ModifyEmailScreen(
 
                 Text(
                     text = stringResource(R.string.modify_email_info_banner),
-                    color = colors.darkGreyText,
+                    color = colors.lightGrey,
                     fontFamily = IberFontRegular,
                     fontSize = TextSize.sp12,
                     lineHeight = TextSize.sp22,

@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.iberdrola.practicas2026.data"
+    namespace = "com.iberdrola.practicas2026.FranciscoPG"
     compileSdk {
         version = release(36)
     }
