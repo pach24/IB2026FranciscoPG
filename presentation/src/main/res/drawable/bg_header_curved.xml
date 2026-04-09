@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="400dp"
+    android:height="380dp"
+    android:viewportWidth="400"
+    android:viewportHeight="380">
+
+    <path
+        android:fillColor="@color/iberdrola_green"
+        android:pathData="
+            M 0,0
+            L 400,0
+            L 400,380
+            C 400,380 400,350 370,350
+            L 30,350
+            C 0,350 0,320 0,320
+            L 0,0
+            Z" />
+</vector>
