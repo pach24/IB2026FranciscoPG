@@ -2,7 +2,9 @@ package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.u
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
 import android.content.res.Configuration
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
+import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +25,10 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -31,6 +37,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.BackButton
+import com.iberdrola.practicas2026.FranciscoPG.presentation.common.InfoDialog
+import com.iberdrola.practicas2026.FranciscoPG.presentation.common.UnavailableBanner
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontRegular
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
@@ -46,6 +54,22 @@ fun ModifyEmailScreen(
     onNavigateBack: () -> Unit
 ) {
     val colors = IberdrolaTheme.colors
+    var showInfoDialog by remember { mutableStateOf(false) }
+    var showUnavailableBanner by remember { mutableStateOf(false) }
+
+    if (showInfoDialog) {
+        InfoDialog(
+            title = stringResource(R.string.info_dialog_title),
+            message = stringResource(R.string.info_dialog_message),
+            linkText = stringResource(R.string.info_dialog_link),
+            closeText = stringResource(R.string.info_dialog_close),
+            onLinkClick = {
+                showInfoDialog = false
+                showUnavailableBanner = true
+            },
+            onDismiss = { showInfoDialog = false }
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -124,23 +148,25 @@ fun ModifyEmailScreen(
             Spacer(modifier = Modifier.height(Spacing.dp12))
 
             // Email actual
-            Text(
-                text = currentEmail,
-                color = colors.lightGrey,
-                fontFamily = IberFontRegular,
-                fontSize = TextSize.sp14,
-                modifier = Modifier.padding(
-                    start = Spacing.dp24,
-                    end = Spacing.dp24,
-                    top = Spacing.dp4
+            Column(
+                modifier = Modifier
+                    .padding(
+                        start = Spacing.dp24,
+                        end = Spacing.dp24,
+                        top = Spacing.dp4
+                    )
+                    .clickable { onModifyClick() }
+                    .padding(horizontal = Spacing.dp8, vertical = Spacing.dp4)
+            ) {
+                Text(
+                    text = currentEmail,
+                    color = colors.lightGrey,
+                    fontFamily = IberFontRegular,
+                    fontSize = TextSize.sp14,
                 )
-
-            )
-            Spacer(modifier = Modifier.height(Spacing.dp10))
-            HorizontalDivider(
-                modifier = Modifier.padding(horizontal = Spacing.dp24),
-                color = colors.divider
-            )
+                Spacer(modifier = Modifier.height(Spacing.dp10))
+                HorizontalDivider(color = colors.divider)
+            }
 
             Spacer(modifier = Modifier.height(Spacing.dp24))
 
@@ -149,6 +175,7 @@ fun ModifyEmailScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clickable { showInfoDialog = true }
                     .padding(horizontal = Spacing.dp24),
                 verticalAlignment = Alignment.Top
             ) {
@@ -172,6 +199,10 @@ fun ModifyEmailScreen(
             }
         }
 
+        UnavailableBanner(
+            visible = showUnavailableBanner,
+            onDismiss = { showUnavailableBanner = false }
+        )
 
         HorizontalDivider(
             Modifier.height(Spacing.dp4),

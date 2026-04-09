@@ -87,6 +87,12 @@
     <string name="modify_email_input_error">Introduce un email válido</string>
     <string name="success_modify_email_title">¡Has modificado correctamente tu email!</string>
 
+    <!-- Dialog info factura electrónica -->
+    <string name="info_dialog_title">Información sobre la factura electrónica</string>
+    <string name="info_dialog_message">La factura electrónica es un requisito obligatorio de tu plan contratado. Por este motivo, no es posible desactivarla.\n\nSi necesitas más información, consulta los detalles de tu plan.</string>
+    <string name="info_dialog_link">Más información sobre tu plan</string>
+    <string name="info_dialog_close">Cerrar</string>
+
     <!-- Pantalla éxito factura electrónica -->
     <string name="success_einvoice_title">¡Has activado correctamente tu factura electrónica!</string>
     <string name="success_einvoice_subtitle">Pronto recibirás un correo electrónico de verificación para recibir tus facturas en la dirección %s</string>

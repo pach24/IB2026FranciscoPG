@@ -3,7 +3,10 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.ripple
+import androidx.compose.runtime.remember
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -36,7 +39,10 @@ fun CloseTopBar(
             tint = colors.iberdrolaGreen,
             modifier = Modifier
                 .size(IconSize.dp28)
-                .clickable { onClose() }
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = ripple(bounded = false, radius = IconSize.dp20)
+                ) { onClose() }
         )
     }
 }
