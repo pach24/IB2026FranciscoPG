@@ -47,6 +47,7 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
+    implementation(project(":presentation"))
 
     // Core & UI
     implementation(libs.androidx.core.ktx)
