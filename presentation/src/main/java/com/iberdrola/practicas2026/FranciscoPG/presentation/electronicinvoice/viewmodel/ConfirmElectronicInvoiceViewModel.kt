@@ -26,8 +26,8 @@ class ConfirmElectronicInvoiceViewModel @Inject constructor() : ViewModel() {
             _isLoading.value = true
             _showBanner.value = false
 
-            // 2. Simulamos la espera de 5 segundos
-            delay(5000)
+            // 2. Simulamos la espera
+            delay(2000)
 
             // 3. Ocultamos la pantalla de carga y mostramos el banner
             _isLoading.value = false

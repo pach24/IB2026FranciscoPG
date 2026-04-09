@@ -55,7 +55,7 @@ class ActivateElectronicInvoiceViewModel @Inject constructor(
             _showBanner.value = false
             resendCodeUseCase.resend()
             _resendAttemptsLeft.value = resendCodeUseCase.attemptsLeft
-            delay(5000)
+            delay(2000)
             _isLoading.value = false
             _showBanner.value = true
         }

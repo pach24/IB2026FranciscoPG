@@ -120,7 +120,7 @@ fun ElectronicInvoiceWizardScreen(
             StepProgressBar(
                 currentStep = if (showSuccess) 4 else currentPage + 2,
                 totalSteps = 4,
-                modifier = Modifier.padding(horizontal = Spacing.dp12)
+                modifier = Modifier
             )
 
             HorizontalPager(

@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material3.ripple
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,7 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.ClickableText
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.withLink
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -218,14 +220,13 @@ fun ActivateElectronicInvoiceContent(
                 )
             }
 
-            Spacer(modifier = Modifier.height(Spacing.dp24))
+            Spacer(modifier = Modifier.height(Spacing.dp12))
 
             // Checkbox legal
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { focusManager.clearFocus(); onLegalAcceptedChanged(!legalAccepted) }
-                    .padding(horizontal = Spacing.dp24, vertical = Spacing.dp12),
+                    .padding(horizontal = Spacing.dp24, vertical = Spacing.dp4),
                 verticalAlignment = Alignment.Top
             ) {
                 RoundedCheckbox(
@@ -233,38 +234,40 @@ fun ActivateElectronicInvoiceContent(
                     checkedColor = colors.iberdrolaGreen,
                     uncheckedBorderColor = colors.iberdrolaGreen,
                     checkmarkColor = colors.white,
-                    modifier = Modifier.padding(top = 2.dp)
+                    modifier = Modifier
+                        .padding(Spacing.dp8)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = ripple(bounded = false, radius = 24.dp)
+                        ) { focusManager.clearFocus(); onLegalAcceptedChanged(!legalAccepted) }
                 )
                 Spacer(modifier = Modifier.width(Spacing.dp12))
 
                 val legalAnnotated = buildAnnotatedString {
                     append("He leído y acepto la Política de privacidad, acepto las ")
-                    pushStringAnnotation(tag = "LINK", annotation = "conditions")
-                    withStyle(SpanStyle(
-                        color = colors.iberdrolaDarkGreen,
-                        textDecoration = TextDecoration.Underline,
-                        fontWeight = FontWeight.Bold
-                    )) {
-                        append("Condiciones Generales")
+                    withLink(LinkAnnotation.Clickable("conditions") {
+                        focusManager.clearFocus(); showBanner = true
+                    }) {
+                        withStyle(SpanStyle(
+                            color = colors.iberdrolaDarkGreen,
+                            textDecoration = TextDecoration.Underline,
+                            fontWeight = FontWeight.Bold
+                        )) {
+                            append("Condiciones Generales")
+                        }
                     }
-                    pop()
                     append(" y Particulares de la oferta y la suscripción a Factura Electrónica.")
                 }
 
-                ClickableText(
+                Text(
                     text = legalAnnotated,
-                    modifier = Modifier.padding(top = Spacing.dp10),
+                    modifier = Modifier.padding(vertical = Spacing.dp14),
                     style = TextStyle(
                         color = colors.darkGreyText,
                         fontFamily = IberFontRegular,
                         fontSize = TextSize.sp16,
                         lineHeight = TextSize.sp22
-                    ),
-                    onClick = { offset ->
-                        focusManager.clearFocus()
-                        legalAnnotated.getStringAnnotations("LINK", offset, offset)
-                            .firstOrNull()?.let { showBanner = true }
-                    }
+                    )
                 )
             }
 
@@ -296,31 +299,29 @@ private fun DataProtectionItem(
             append(text)
             append(" ")
         }
-        pushStringAnnotation(tag = "LINK", annotation = "info")
-        withStyle(
-            SpanStyle(
-                color = colors.iberdrolaDarkGreen,
-                fontWeight = FontWeight.ExtraBold,
-                textDecoration = TextDecoration.Underline
-            )
-        ) {
-            append(linkText)
+        withLink(LinkAnnotation.Clickable("info") {
+            focusManager.clearFocus(); onLinkClick()
+        }) {
+            withStyle(
+                SpanStyle(
+                    color = colors.iberdrolaDarkGreen,
+                    fontWeight = FontWeight.ExtraBold,
+                    textDecoration = TextDecoration.Underline
+                )
+            ) {
+                append(linkText)
+            }
         }
-        pop()
     }
 
-    ClickableText(
+    Text(
         text = annotated,
+        modifier = Modifier.padding(vertical = Spacing.dp8),
         style = TextStyle(
             fontFamily = IberFontRegular,
             fontSize = TextSize.sp15,
             lineHeight = TextSize.sp22
-        ),
-        onClick = { offset ->
-            focusManager.clearFocus()
-            annotated.getStringAnnotations("LINK", offset, offset)
-                .firstOrNull()?.let { onLinkClick() }
-        }
+        )
     )
 }
 
