@@ -48,7 +48,7 @@ fun CloseTopBar(
 }
 
 @Preview(name = "CloseTopBar - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "CloseTopBar - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "CloseTopBar - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun CloseTopBarPreview() {
     IberdrolaTheme {

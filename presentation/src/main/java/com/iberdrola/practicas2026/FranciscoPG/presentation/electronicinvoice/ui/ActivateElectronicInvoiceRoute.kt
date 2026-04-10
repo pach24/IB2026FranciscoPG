@@ -34,6 +34,7 @@ fun ActivateElectronicInvoiceRoute(
         onVerificationCodeChanged = viewModel::onVerificationCodeChanged,
         onResendCode = viewModel::onResendCode,
         onBannerDismissed = viewModel::onBannerDismissed,
+        onConfirmed = viewModel::onActivationConfirmed,
         onNavigateBack = onNavigateBack
     )
 }

@@ -176,7 +176,7 @@ private val mockHistoryItems = listOf(
 
 // Pantalla de facturas con datos mockeados
 @Preview(name = "Invoice List - Light", showBackground = true)
-@Preview(name = "Invoice List - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(name = "Invoice List - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun PreviewInvoiceListComposeScreen() {
     IberdrolaTheme {
@@ -202,7 +202,7 @@ private fun PreviewInvoiceListComposeScreen() {
 
 // Pantalla de facturas en estado skeleton
 @Preview(name = "Invoice List Skeleton - Light", showBackground = true)
-@Preview(name = "Invoice List Skeleton - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(name = "Invoice List Skeleton - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun PreviewInvoiceListComposeScreenLoading() {
     IberdrolaTheme {
@@ -222,7 +222,7 @@ private fun PreviewInvoiceListComposeScreenLoading() {
 // Overlay: datos reales + skeleton superpuesto con opacidad
 @OptIn(ExperimentalFoundationApi::class)
 @Preview(name = "Overlay - Light", showBackground = true)
-@Preview(name = "Overlay - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(name = "Overlay - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun PreviewInvoiceListOverlay() {
     IberdrolaTheme {

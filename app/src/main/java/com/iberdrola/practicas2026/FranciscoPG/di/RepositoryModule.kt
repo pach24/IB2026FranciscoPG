@@ -9,6 +9,7 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.repository.ConfigurationRe
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.ContractRepository
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.FeedbackRepository
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.InvoiceRepository
+import com.iberdrola.practicas2026.FranciscoPG.data.local.ContractDao
 import com.iberdrola.practicas2026.FranciscoPG.data.local.InvoiceDao
 import com.iberdrola.practicas2026.FranciscoPG.data.network.InvoiceApiService
 import dagger.Binds
@@ -30,13 +31,15 @@ abstract class RepositoryModule {
         impl: ConfigurationRepositoryImpl
     ): ConfigurationRepository
 
-    @Binds
-    @Singleton
-    abstract fun bindContractRepository(
-        impl: ContractRepositoryImpl
-    ): ContractRepository
-
     companion object {
+
+        @Provides
+        @Singleton
+        fun provideContractRepository(
+            contractDao: ContractDao
+        ): ContractRepository {
+            return ContractRepositoryImpl(contractDao)
+        }
 
         @Provides
         @Singleton

@@ -451,7 +451,7 @@ fun ItemElectronicInvoiceCard(
 }
 
 @Preview(name = "Main Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Main Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Main Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun MainScreenPreview() {
     IberdrolaTheme {

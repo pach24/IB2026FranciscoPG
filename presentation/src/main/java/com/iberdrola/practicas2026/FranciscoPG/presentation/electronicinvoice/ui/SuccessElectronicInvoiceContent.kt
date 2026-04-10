@@ -224,7 +224,7 @@ fun SuccessElectronicInvoiceContent(
 }
 
 @Preview(name = "Success - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Success - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Success - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun SuccessElectronicInvoiceContentPreview() {
     IberdrolaTheme {

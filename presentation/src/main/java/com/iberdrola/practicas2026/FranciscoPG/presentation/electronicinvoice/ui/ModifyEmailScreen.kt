@@ -245,7 +245,7 @@ fun ModifyEmailScreen(
 }
 
 @Preview(name = "Modify Email Screen - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Modify Email Screen - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Modify Email Screen - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ModifyEmailScreenPreview() {
     IberdrolaTheme {

@@ -1,9 +1,12 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.CensorEmailUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ResendCodeUseCase
+import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.UpdateContractEmailUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ValidateEmailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -17,8 +20,14 @@ import javax.inject.Inject
 class ActivateElectronicInvoiceViewModel @Inject constructor(
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val resendCodeUseCase: ResendCodeUseCase,
-    private val censorEmailUseCase: CensorEmailUseCase
+    private val censorEmailUseCase: CensorEmailUseCase,
+    private val updateContractEmailUseCase: UpdateContractEmailUseCase,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    private val supplyType: SupplyType = SupplyType.fromApiValue(
+        savedStateHandle.get<String>("supplyType") ?: "LUZ"
+    )
 
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email.asStateFlow()
@@ -73,5 +82,11 @@ class ActivateElectronicInvoiceViewModel @Inject constructor(
 
     fun onLegalAcceptedChanged(value: Boolean) {
         _legalAccepted.value = value
+    }
+
+    fun onActivationConfirmed() {
+        viewModelScope.launch {
+            updateContractEmailUseCase(supplyType, _email.value)
+        }
     }
 }

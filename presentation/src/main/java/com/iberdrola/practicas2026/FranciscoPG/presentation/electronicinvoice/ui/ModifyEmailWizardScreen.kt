@@ -58,6 +58,7 @@ fun ModifyEmailWizardScreen(
     onVerificationCodeChanged: (String) -> Unit,
     onResendCode: () -> Unit,
     onBannerDismissed: () -> Unit,
+    onConfirmed: () -> Unit,
     onNavigateBack: () -> Unit,
     onComplete: (String) -> Unit
 ) {
@@ -160,6 +161,7 @@ fun ModifyEmailWizardScreen(
                 },
                 onNext = {
                     if (currentPage == 1) {
+                        onConfirmed()
                         showSuccess = true
                     } else {
                         scope.launch { pagerState.animateScrollToPage(currentPage + 1) }
@@ -196,7 +198,7 @@ fun ModifyEmailWizardScreen(
 }
 
 @Preview(name = "Modify Wizard - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Modify Wizard - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Modify Wizard - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ModifyEmailWizardScreenPreview() {
     IberdrolaTheme {
@@ -213,6 +215,7 @@ private fun ModifyEmailWizardScreenPreview() {
             onVerificationCodeChanged = {},
             onResendCode = {},
             onBannerDismissed = {},
+            onConfirmed = {},
             onNavigateBack = {},
             onComplete = {}
         )

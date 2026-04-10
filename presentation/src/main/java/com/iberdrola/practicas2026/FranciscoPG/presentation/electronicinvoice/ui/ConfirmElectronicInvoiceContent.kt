@@ -245,7 +245,7 @@ fun ConfirmElectronicInvoiceContent(
 }
 
 @Preview(name = "Confirm Content - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Confirm Content - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Confirm Content - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ConfirmElectronicInvoiceContentPreview() {
     IberdrolaTheme {

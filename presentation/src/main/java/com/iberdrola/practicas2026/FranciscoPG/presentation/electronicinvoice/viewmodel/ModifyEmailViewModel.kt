@@ -1,9 +1,13 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.CensorEmailUseCase
+import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetContractsUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ResendCodeUseCase
+import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.UpdateContractEmailUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ValidateEmailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -17,10 +21,17 @@ import javax.inject.Inject
 class ModifyEmailViewModel @Inject constructor(
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val resendCodeUseCase: ResendCodeUseCase,
-    private val censorEmailUseCase: CensorEmailUseCase
+    private val censorEmailUseCase: CensorEmailUseCase,
+    private val updateContractEmailUseCase: UpdateContractEmailUseCase,
+    private val getContractsUseCase: GetContractsUseCase,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _currentCensoredEmail = MutableStateFlow(censorEmailUseCase(DEFAULT_EMAIL))
+    private val supplyType: SupplyType = SupplyType.fromApiValue(
+        savedStateHandle.get<String>("supplyType") ?: "LUZ"
+    )
+
+    private val _currentCensoredEmail = MutableStateFlow("")
     val currentCensoredEmail: StateFlow<String> = _currentCensoredEmail.asStateFlow()
 
     private val _email = MutableStateFlow("")
@@ -43,6 +54,20 @@ class ModifyEmailViewModel @Inject constructor(
 
     private val _resendAttemptsLeft = MutableStateFlow(resendCodeUseCase.attemptsLeft)
     val resendAttemptsLeft: StateFlow<Int> = _resendAttemptsLeft.asStateFlow()
+
+    init {
+        loadCurrentEmail()
+    }
+
+    private fun loadCurrentEmail() {
+        viewModelScope.launch {
+            getContractsUseCase().onSuccess { contracts ->
+                val contract = contracts.find { it.supplyType == supplyType }
+                val email = contract?.email ?: ""
+                _currentCensoredEmail.value = if (email.isNotEmpty()) censorEmailUseCase(email) else ""
+            }
+        }
+    }
 
     fun onEmailChanged(value: String) {
         _email.value = value
@@ -71,7 +96,9 @@ class ModifyEmailViewModel @Inject constructor(
         _showBanner.value = false
     }
 
-    companion object {
-        private const val DEFAULT_EMAIL = "pepe2@gmail.com"
+    fun onModificationConfirmed() {
+        viewModelScope.launch {
+            updateContractEmailUseCase(supplyType, _email.value)
+        }
     }
 }

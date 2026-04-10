@@ -30,7 +30,11 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui
 import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.ModifyEmailWizardRoute
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.screens.InvoicesRoute
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
+import java.net.URLDecoder
+import java.net.URLEncoder
 
 private object AppRoutes {
     const val HOME = "home"
@@ -150,13 +154,14 @@ class MainActivity : AppCompatActivity() {
                     ) {
                         ElectronicInvoiceRoute(
                             onNavigateBack = { navController.popBackStack() },
-                            onNavigateToActivate = {
-                                navController.navigate(AppRoutes.ACTIVATE_ELECTRONIC_INVOICE) {
+                            onNavigateToActivate = { supplyType ->
+                                navController.navigate("${AppRoutes.ACTIVATE_ELECTRONIC_INVOICE}/$supplyType") {
                                     launchSingleTop = true
                                 }
                             },
-                            onNavigateToModify = {
-                                navController.navigate(AppRoutes.MODIFY_EMAIL) {
+                            onNavigateToModify = { supplyType, censoredEmail ->
+                                val encoded = URLEncoder.encode(censoredEmail, "UTF-8")
+                                navController.navigate("${AppRoutes.MODIFY_EMAIL}/$supplyType/$encoded") {
                                     launchSingleTop = true
                                 }
                             }
@@ -164,7 +169,8 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     composable(
-                        AppRoutes.ACTIVATE_ELECTRONIC_INVOICE,
+                        "${AppRoutes.ACTIVATE_ELECTRONIC_INVOICE}/{supplyType}",
+                        arguments = listOf(navArgument("supplyType") { type = NavType.StringType }),
                         enterTransition = { slideInHorizontally { it } },
                         exitTransition = { slideOutHorizontally { it } },
                         popEnterTransition = { slideInHorizontally { -it } },
@@ -176,14 +182,21 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     composable(
-                        AppRoutes.MODIFY_EMAIL,
+                        "${AppRoutes.MODIFY_EMAIL}/{supplyType}/{censoredEmail}",
+                        arguments = listOf(
+                            navArgument("supplyType") { type = NavType.StringType },
+                            navArgument("censoredEmail") { type = NavType.StringType; defaultValue = "" }
+                        ),
                         enterTransition = { slideInHorizontally { it } },
                         exitTransition = { slideOutHorizontally { it } },
                         popEnterTransition = { slideInHorizontally { -it } },
                         popExitTransition = { slideOutHorizontally { it } }
                     ) { entry ->
-                        val defaultEmail = getString(R.string.modify_email_current_email)
-                        var currentEmail by remember { mutableStateOf(defaultEmail) }
+                        val supplyType = entry.arguments?.getString("supplyType") ?: "LUZ"
+                        val initialEmail = URLDecoder.decode(
+                            entry.arguments?.getString("censoredEmail") ?: "", "UTF-8"
+                        )
+                        var currentEmail by remember { mutableStateOf(initialEmail) }
                         val savedEmail = entry.savedStateHandle.get<String>("modified_email")
                         if (savedEmail != null) {
                             currentEmail = savedEmail
@@ -193,7 +206,7 @@ class MainActivity : AppCompatActivity() {
                         ModifyEmailScreen(
                             currentEmail = currentEmail,
                             onModifyClick = {
-                                navController.navigate(AppRoutes.MODIFY_EMAIL_WIZARD) {
+                                navController.navigate("${AppRoutes.MODIFY_EMAIL_WIZARD}/$supplyType") {
                                     launchSingleTop = true
                                 }
                             },
@@ -202,7 +215,8 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     composable(
-                        AppRoutes.MODIFY_EMAIL_WIZARD,
+                        "${AppRoutes.MODIFY_EMAIL_WIZARD}/{supplyType}",
+                        arguments = listOf(navArgument("supplyType") { type = NavType.StringType }),
                         enterTransition = { slideInHorizontally { it } },
                         exitTransition = { slideOutHorizontally { it } },
                         popEnterTransition = { slideInHorizontally { -it } },
@@ -210,10 +224,10 @@ class MainActivity : AppCompatActivity() {
                     ) {
                         ModifyEmailWizardRoute(
                             onNavigateBack = { navController.popBackStack() },
-                            onComplete = { newEmail ->
+                            onComplete = { censoredEmail ->
                                 navController.previousBackStackEntry
                                     ?.savedStateHandle
-                                    ?.set("modified_email", newEmail)
+                                    ?.set("modified_email", censoredEmail)
                                 navController.popBackStack()
                             }
                         )

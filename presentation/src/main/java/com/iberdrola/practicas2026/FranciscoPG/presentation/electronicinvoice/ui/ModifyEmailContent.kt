@@ -73,26 +73,6 @@ fun ModifyEmailContent(
     ) {
         Spacer(modifier = Modifier.height(Spacing.dp24))
 
-        // Email vinculado a tu cuenta (censurado)
-        Column(modifier = Modifier.padding(horizontal = Spacing.dp24)) {
-            Text(
-                text = stringResource(R.string.activate_einvoice_linked_email),
-                color = colors.darkGreyText,
-                fontFamily = IberFontRegular,
-                fontSize = TextSize.sp14
-            )
-            Text(
-                text = currentCensoredEmail,
-                color = colors.textPrimary,
-                fontFamily = IberFontBold,
-                fontWeight = FontWeight.Bold,
-                fontSize = TextSize.sp14,
-                modifier = Modifier.padding(top = Spacing.dp2)
-            )
-        }
-
-        Spacer(modifier = Modifier.height(Spacing.dp28))
-
         Text(
             text = stringResource(R.string.modify_email_subtitle),
             color = colors.textPrimary,
@@ -171,7 +151,7 @@ fun ModifyEmailContent(
 }
 
 @Preview(name = "Modify Email Content - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Modify Email Content - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Modify Email Content - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ModifyEmailContentPreview() {
     IberdrolaTheme {

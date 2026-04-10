@@ -11,17 +11,20 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.vi
 @Composable
 fun ElectronicInvoiceRoute(
     onNavigateBack: () -> Unit,
-    onNavigateToActivate: () -> Unit,
-    onNavigateToModify: () -> Unit
+    onNavigateToActivate: (supplyType: String) -> Unit,
+    onNavigateToModify: (supplyType: String, censoredEmail: String) -> Unit
 ) {
     val viewModel: ElectronicInvoiceViewModel = hiltViewModel()
     val contracts by viewModel.contracts.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
+        viewModel.loadContracts()
         viewModel.navigationEvent.collect { event ->
             when (event) {
-                is ElectronicInvoiceNavigationEvent.GoToActivate -> onNavigateToActivate()
-                is ElectronicInvoiceNavigationEvent.GoToModify -> onNavigateToModify()
+                is ElectronicInvoiceNavigationEvent.GoToActivate ->
+                    onNavigateToActivate(event.supplyType)
+                is ElectronicInvoiceNavigationEvent.GoToModify ->
+                    onNavigateToModify(event.supplyType, event.censoredEmail)
             }
         }
     }

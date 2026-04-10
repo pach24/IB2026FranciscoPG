@@ -34,7 +34,8 @@ fun ModifyEmailWizardRoute(
         onVerificationCodeChanged = viewModel::onVerificationCodeChanged,
         onResendCode = viewModel::onResendCode,
         onBannerDismissed = viewModel::onBannerDismissed,
+        onConfirmed = viewModel::onModificationConfirmed,
         onNavigateBack = onNavigateBack,
-        onComplete = onComplete
+        onComplete = { onComplete(censoredEmail) }
     )
 }

@@ -191,7 +191,7 @@ private fun ContractRow(
 }
 
 @Preview(name = "Electronic Invoice - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Electronic Invoice - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Electronic Invoice - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ElectronicInvoiceScreenPreview() {
     IberdrolaTheme {

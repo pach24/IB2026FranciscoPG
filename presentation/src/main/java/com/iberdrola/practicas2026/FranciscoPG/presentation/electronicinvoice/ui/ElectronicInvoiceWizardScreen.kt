@@ -59,6 +59,7 @@ fun ElectronicInvoiceWizardScreen(
     onVerificationCodeChanged: (String) -> Unit,
     onResendCode: () -> Unit,
     onBannerDismissed: () -> Unit,
+    onConfirmed: () -> Unit,
     onNavigateBack: () -> Unit
 ) {
     val colors = IberdrolaTheme.colors
@@ -161,6 +162,7 @@ fun ElectronicInvoiceWizardScreen(
                 },
                 onNext = {
                     if (currentPage == 1) {
+                        onConfirmed()
                         showSuccess = true
                     } else {
                         scope.launch { pagerState.animateScrollToPage(currentPage + 1) }
@@ -197,7 +199,7 @@ fun ElectronicInvoiceWizardScreen(
 }
 
 @Preview(name = "Wizard - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Wizard - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Wizard - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ElectronicInvoiceWizardScreenPreview() {
     IberdrolaTheme {
@@ -215,6 +217,7 @@ private fun ElectronicInvoiceWizardScreenPreview() {
             onVerificationCodeChanged = {},
             onResendCode = {},
             onBannerDismissed = {},
+            onConfirmed = {},
             onNavigateBack = {}
         )
     }

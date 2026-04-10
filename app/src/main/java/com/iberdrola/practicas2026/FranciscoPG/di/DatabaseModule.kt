@@ -3,6 +3,7 @@ package com.iberdrola.practicas2026.FranciscoPG.di
 import android.content.Context
 import androidx.room.Room
 import com.iberdrola.practicas2026.FranciscoPG.data.local.AppDatabase
+import com.iberdrola.practicas2026.FranciscoPG.data.local.ContractDao
 import com.iberdrola.practicas2026.FranciscoPG.data.local.InvoiceDao
 import dagger.Module
 import dagger.Provides
@@ -22,12 +23,18 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "iberdrola_db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides
     @Singleton
     fun provideInvoiceDao(database: AppDatabase): InvoiceDao {
         return database.invoiceDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideContractDao(database: AppDatabase): ContractDao {
+        return database.contractDao()
     }
 }
