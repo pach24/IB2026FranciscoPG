@@ -50,6 +50,7 @@ fun ModifyEmailWizardScreen(
     censoredEmail: String,
     currentCensoredEmail: String,
     isEmailValid: Boolean,
+    isSameAsCurrentEmail: Boolean,
     verificationCode: String,
     isLoading: Boolean,
     showBanner: Boolean,
@@ -133,6 +134,7 @@ fun ModifyEmailWizardScreen(
                     0 -> ModifyEmailContent(
                         email = email,
                         isEmailValid = isEmailValid,
+                        isSameAsCurrentEmail = isSameAsCurrentEmail,
                         currentCensoredEmail = currentCensoredEmail,
                         onEmailChanged = onEmailChanged
                     )
@@ -207,6 +209,7 @@ private fun ModifyEmailWizardScreenPreview() {
             censoredEmail = "",
             currentCensoredEmail = "p**2@gmail.com",
             isEmailValid = true,
+            isSameAsCurrentEmail = false,
             verificationCode = "",
             isLoading = false,
             showBanner = false,

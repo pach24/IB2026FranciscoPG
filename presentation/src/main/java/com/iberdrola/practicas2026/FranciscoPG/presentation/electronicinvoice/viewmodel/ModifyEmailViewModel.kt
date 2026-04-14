@@ -34,6 +34,8 @@ class ModifyEmailViewModel @Inject constructor(
     private val _currentCensoredEmail = MutableStateFlow("")
     val currentCensoredEmail: StateFlow<String> = _currentCensoredEmail.asStateFlow()
 
+    private var currentRawEmail: String = ""
+
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email.asStateFlow()
 
@@ -42,6 +44,9 @@ class ModifyEmailViewModel @Inject constructor(
 
     private val _isEmailValid = MutableStateFlow(false)
     val isEmailValid: StateFlow<Boolean> = _isEmailValid.asStateFlow()
+
+    private val _isSameAsCurrentEmail = MutableStateFlow(false)
+    val isSameAsCurrentEmail: StateFlow<Boolean> = _isSameAsCurrentEmail.asStateFlow()
 
     private val _verificationCode = MutableStateFlow("")
     val verificationCode: StateFlow<String> = _verificationCode.asStateFlow()
@@ -64,14 +69,17 @@ class ModifyEmailViewModel @Inject constructor(
             getContractsUseCase().onSuccess { contracts ->
                 val contract = contracts.find { it.supplyType == supplyType }
                 val email = contract?.email ?: ""
+                currentRawEmail = email
                 _currentCensoredEmail.value = if (email.isNotEmpty()) censorEmailUseCase(email) else ""
             }
         }
     }
 
     fun onEmailChanged(value: String) {
+        val isSame = value.isNotEmpty() && value == currentRawEmail
         _email.value = value
-        _isEmailValid.value = validateEmailUseCase(value)
+        _isSameAsCurrentEmail.value = isSame
+        _isEmailValid.value = validateEmailUseCase(value) && !isSame
         _censoredEmail.value = censorEmailUseCase(value)
     }
 

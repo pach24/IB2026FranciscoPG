@@ -44,6 +44,7 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 fun ModifyEmailContent(
     email: String,
     isEmailValid: Boolean,
+    isSameAsCurrentEmail: Boolean,
     currentCensoredEmail: String,
     onEmailChanged: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -51,7 +52,7 @@ fun ModifyEmailContent(
     val colors = IberdrolaTheme.colors
     val focusManager = LocalFocusManager.current
     var emailHasBlurred by remember { mutableStateOf(false) }
-    val showError = emailHasBlurred && email.isNotEmpty() && !isEmailValid
+    val showError = emailHasBlurred && email.isNotEmpty() && (!isEmailValid || isSameAsCurrentEmail)
     val shakeOffset = remember { Animatable(0f) }
 
     LaunchedEffect(showError) {
@@ -135,8 +136,12 @@ fun ModifyEmailContent(
                                 .background(underlineColor)
                         )
                         if (showError) {
+                            val errorText = if (isSameAsCurrentEmail)
+                                stringResource(R.string.modify_email_input_same_email_error)
+                            else
+                                stringResource(R.string.modify_email_input_error)
                             Text(
-                                text = stringResource(R.string.modify_email_input_error),
+                                text = errorText,
                                 color = colors.errorTextForm,
                                 fontFamily = IberFontRegular,
                                 fontSize = TextSize.sp12,
@@ -158,6 +163,7 @@ private fun ModifyEmailContentPreview() {
         ModifyEmailContent(
             email = "",
             isEmailValid = true,
+            isSameAsCurrentEmail = false,
             currentCensoredEmail = "p**2@gmail.com",
             onEmailChanged = {}
         )

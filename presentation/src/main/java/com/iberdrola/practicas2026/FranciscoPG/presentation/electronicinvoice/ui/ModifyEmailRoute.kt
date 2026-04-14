@@ -14,6 +14,7 @@ fun ModifyEmailWizardRoute(
     val viewModel: ModifyEmailViewModel = hiltViewModel()
     val email by viewModel.email.collectAsStateWithLifecycle()
     val isEmailValid by viewModel.isEmailValid.collectAsStateWithLifecycle()
+    val isSameAsCurrentEmail by viewModel.isSameAsCurrentEmail.collectAsStateWithLifecycle()
     val verificationCode by viewModel.verificationCode.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val showBanner by viewModel.showBanner.collectAsStateWithLifecycle()
@@ -26,6 +27,7 @@ fun ModifyEmailWizardRoute(
         censoredEmail = censoredEmail,
         currentCensoredEmail = currentCensoredEmail,
         isEmailValid = isEmailValid,
+        isSameAsCurrentEmail = isSameAsCurrentEmail,
         verificationCode = verificationCode,
         isLoading = isLoading,
         showBanner = showBanner,
