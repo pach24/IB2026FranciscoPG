@@ -166,29 +166,7 @@ fun MainScreen(
                             )
                     ) {
                         ItemInvoiceCard(onClick = onInvoicesCardClick)
-                    }
-
-                    // Sección "Mis Accesos"
-                    Text(
-                        text = stringResource(R.string.mis_accesos),
-                        color = colors.textPrimary,
-                        fontFamily = IberFontBold,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = TextSize.sp22,
-                        modifier = Modifier.padding(
-                            top = Spacing.dp16,
-                            start = Spacing.dp24
-                        )
-                    )
-
-                    Row(
-                        modifier = Modifier
-                            .horizontalScroll(rememberScrollState())
-                            .padding(
-                                horizontal = Spacing.dp24,
-                                vertical = Spacing.dp16
-                            )
-                    ) {
+                        Spacer(modifier = Modifier.width(Spacing.dp16))
                         ItemElectronicInvoiceCard(onClick = onElectronicInvoiceClick)
                     }
 
@@ -421,7 +399,7 @@ fun ItemElectronicInvoiceCard(
     ) {
         Column {
             Icon(
-                painter = painterResource(R.drawable.file_chart_column),
+                painter = painterResource(R.drawable.ic_electronic_invoice),
                 contentDescription = null,
                 tint = colors.iberdrolaGreen,
                 modifier = Modifier.size(IconSize.dp28)
