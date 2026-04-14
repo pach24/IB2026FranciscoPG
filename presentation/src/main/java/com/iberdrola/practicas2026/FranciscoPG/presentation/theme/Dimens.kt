@@ -45,7 +45,7 @@ object Spacing {
     val dp32 = 32.dp
     val dp40 = 40.dp
     val dp48 = 48.dp
-
+    val dp52 = 52.dp
     val dp64 = 64.dp
 
 }
@@ -80,8 +80,10 @@ object Stroke {
 
 /** Componentes específicos */
 object Component {
-    val promoMinH = 144.dp
-    val promoImgW = 140.dp
+    val promoMinH = 120.dp
+    val promoH = 135.dp
+    val promoImgW = 110.dp
+    val mockSwitchBottomPadding = 120.dp
     val dragW = 60.dp
 
     val compHeigh60 = 60.dp
