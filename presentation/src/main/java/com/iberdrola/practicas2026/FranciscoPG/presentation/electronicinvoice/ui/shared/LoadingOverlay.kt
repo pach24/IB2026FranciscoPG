@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.components
+package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background

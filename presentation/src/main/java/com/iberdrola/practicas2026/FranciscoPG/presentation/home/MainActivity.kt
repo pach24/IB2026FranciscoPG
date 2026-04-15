@@ -24,10 +24,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.MainScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.viewmodel.MainViewModel
-import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.ActivateElectronicInvoiceRoute
-import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.ElectronicInvoiceRoute
-import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.ModifyEmailScreen
-import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.ModifyEmailWizardRoute
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.activate.ActivateElectronicInvoiceRoute
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.list.ElectronicInvoiceRoute
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.modify.ModifyEmailScreen
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.modify.ModifyEmailWizardRoute
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.screens.InvoicesRoute
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import androidx.navigation.NavType

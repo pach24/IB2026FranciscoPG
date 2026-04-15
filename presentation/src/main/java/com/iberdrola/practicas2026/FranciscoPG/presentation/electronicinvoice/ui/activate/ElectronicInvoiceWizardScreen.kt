@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui
+package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.activate
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
 import android.content.res.Configuration
@@ -34,7 +34,9 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.common.ConfirmDialog
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.StepBottomButtonBar
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.StepProgressBar
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.SuccessBannerSMS
-import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.components.LoadingOverlay
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared.ConfirmElectronicInvoiceContent
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared.LoadingOverlay
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared.SuccessElectronicInvoiceContent
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
