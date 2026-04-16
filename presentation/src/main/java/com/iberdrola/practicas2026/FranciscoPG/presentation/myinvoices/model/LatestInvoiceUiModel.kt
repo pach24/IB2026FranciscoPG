@@ -4,6 +4,7 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 
 data class LatestInvoiceUiModel(
     val amount: String,
+    val currencySymbol: String,
     val dateRange: String,
     val supplyTypeLabel: String,
     val statusText: String,

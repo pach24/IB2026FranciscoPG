@@ -114,6 +114,7 @@ fun InvoiceListComposeScreen(
                     if (latestInvoice != null) {
                         LatestInvoiceCardComposable(
                             amount = latestInvoice.amount,
+                            currencySymbol = latestInvoice.currencySymbol,
                             dateRange = latestInvoice.dateRange,
                             supplyType = latestInvoice.supplyTypeLabel,
                             status = latestInvoice.statusText,
@@ -152,6 +153,7 @@ fun InvoiceListComposeScreen(
                                 type = item.type,
                                 status = item.statusText,
                                 amount = item.amount,
+                                currencySymbol = item.currencySymbol,
                                 invoiceStatus = item.status,
                                 onClick = { onHistoryItemClick(item) }
                             )
@@ -165,13 +167,13 @@ fun InvoiceListComposeScreen(
 
 private val mockHistoryItems = listOf(
     InvoiceListItem.HeaderYear("2024"),
-    InvoiceListItem.InvoiceItem("1", "8 de marzo", "Factura Luz", "45,20 €", "Pagada", InvoiceStatus.PAID),
-    InvoiceListItem.InvoiceItem("2", "10 de febrero", "Factura Gas", "32,50 €", "Pagada", InvoiceStatus.PAID),
-    InvoiceListItem.InvoiceItem("3", "12 de enero", "Factura Luz", "58,90 €", "Pendiente de Pago", InvoiceStatus.PENDING),
+    InvoiceListItem.InvoiceItem("1", "8 de marzo", "Factura Luz", "45,20", "€", "Pagada", InvoiceStatus.PAID),
+    InvoiceListItem.InvoiceItem("2", "10 de febrero", "Factura Gas", "32,50", "€", "Pagada", InvoiceStatus.PAID),
+    InvoiceListItem.InvoiceItem("3", "12 de enero", "Factura Luz", "58,90", "€", "Pendiente de Pago", InvoiceStatus.PENDING),
     InvoiceListItem.HeaderYear("2023"),
-    InvoiceListItem.InvoiceItem("4", "5 de diciembre", "Factura Luz", "41,00 €", "Anulada", InvoiceStatus.CANCELLED),
-    InvoiceListItem.InvoiceItem("5", "3 de noviembre", "Factura Gas", "29,80 €", "Pagada", InvoiceStatus.PAID),
-    InvoiceListItem.InvoiceItem("6", "7 de octubre", "Factura Luz", "37,60 €", "En trámite de cobro", InvoiceStatus.PROCESSING)
+    InvoiceListItem.InvoiceItem("4", "5 de diciembre", "Factura Luz", "41,00", "€", "Anulada", InvoiceStatus.CANCELLED),
+    InvoiceListItem.InvoiceItem("5", "3 de noviembre", "Factura Gas", "29,80", "€", "Pagada", InvoiceStatus.PAID),
+    InvoiceListItem.InvoiceItem("6", "7 de octubre", "Factura Luz", "37,60", "€", "En trámite de cobro", InvoiceStatus.PROCESSING)
 )
 
 // Pantalla de facturas con datos mockeados
@@ -184,7 +186,8 @@ private fun PreviewInvoiceListComposeScreen() {
             isLoading = false,
             isRefreshing = false,
             latestInvoice = LatestInvoiceUiModel(
-                amount = "20,00 €",
+                amount = "20,00",
+                currencySymbol = "€",
                 dateRange = "01 feb. 2024 - 04 mar. 2024",
                 supplyTypeLabel = "Factura Luz",
                 statusText = "Pendiente de Pago",
@@ -232,7 +235,8 @@ private fun PreviewInvoiceListOverlay() {
                 isLoading = false,
                 isRefreshing = false,
                 latestInvoice = LatestInvoiceUiModel(
-                    amount = "20,00 €",
+                    amount = "20,00",
+                    currencySymbol = "€",
                     dateRange = "01 feb. 2024 - 04 mar. 2024",
                     supplyTypeLabel = "Factura Luz",
                     statusText = "Pendiente de Pago",

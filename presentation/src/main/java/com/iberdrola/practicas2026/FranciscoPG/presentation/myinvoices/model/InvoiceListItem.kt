@@ -10,6 +10,7 @@ sealed class InvoiceListItem {
         val date: String,
         val type: String,
         val amount: String,
+        val currencySymbol: String,
         val statusText: String,
         val status: InvoiceStatus
     ) : InvoiceListItem()

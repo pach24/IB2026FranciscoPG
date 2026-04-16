@@ -68,6 +68,7 @@ fun InvoiceRowItemComposable(
     type: String,
     status: String,
     amount: String,
+    currencySymbol: String = "€",
     invoiceStatus: InvoiceStatus = InvoiceStatus.PENDING,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
@@ -122,7 +123,7 @@ fun InvoiceRowItemComposable(
             ) {
                 // Importe: "20,00 €"
                 Text(
-                    text = amount,
+                    text = "$amount $currencySymbol",
                     fontFamily = IberFontRegular,
                     fontSize = TextSize.sp16,
                     color = colors.lightGrey
@@ -271,7 +272,7 @@ private fun PreviewInvoiceRowItemComposable() {
             date = "8 de marzo",
             type = "Factura Luz",
             status = "Pendiente de Pago",
-            amount = "20,00 €",
+            amount = "20,00",
             invoiceStatus = InvoiceStatus.PENDING
         )
     }
@@ -286,7 +287,7 @@ private fun PreviewInvoiceRowItemPaidComposable() {
             date = "8 de marzo",
             type = "Factura Luz",
             status = "Pagada",
-            amount = "20,00 €",
+            amount = "20,00",
             invoiceStatus = InvoiceStatus.PAID
         )
     }
@@ -327,7 +328,7 @@ private fun PreviewOverlaySkeletonOnRow() {
                         date = "8 de marzo",
                         type = "Factura Luz",
                         status = "Pendiente de Pago",
-                        amount = "20,00 €",
+                        amount = "20,00",
                         invoiceStatus = InvoiceStatus.PENDING
                     )
                     // Skeleton de la fila (superpuesto)
