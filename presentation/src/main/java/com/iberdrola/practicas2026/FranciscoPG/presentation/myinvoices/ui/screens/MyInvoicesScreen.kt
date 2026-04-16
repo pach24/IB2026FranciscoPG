@@ -177,7 +177,7 @@ fun InvoicesScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .navigationBarsPadding()
-                .padding(bottom = Spacing.dp32)
+                .padding(bottom = Spacing.dp8)
         )
     }
 }
