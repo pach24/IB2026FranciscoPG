@@ -78,75 +78,69 @@ fun InvoiceRowItemComposable(
         modifier = modifier
             .fillMaxWidth()
             .background(colors.background)
+            .clickable(onClick = onClick)
     ) {
-        // Área clickable limitada al contenido del item (sin el divisor)
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable(onClick = onClick)
+                .padding(
+                    top = Spacing.dp14,
+                    start = Spacing.dp32,
+                    end = Spacing.dp32
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        top = Spacing.dp14,
-                        start = Spacing.dp32,
-                        end = Spacing.dp32
-                    ),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    // Fecha de la factura: "8 de marzo"
-                    Text(
-                        text = date,
-                        fontFamily = IberFontBold,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = TextSize.sp14,
-                        color = colors.darkGreyText
-                    )
-                    Spacer(modifier = Modifier.height(Spacing.dp8))
+            Column(modifier = Modifier.weight(1f)) {
+                // Fecha de la factura: "8 de marzo"
+                Text(
+                    text = date,
+                    fontFamily = IberFontBold,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = TextSize.sp14,
+                    color = colors.darkGreyText
+                )
+                Spacer(modifier = Modifier.height(Spacing.dp8))
 
-                    // Tipo de factura: "Factura Luz", "Factura Gas"
-                    Text(
-                        text = type,
-                        fontFamily = IberFontRegular,
-                        fontSize = TextSize.sp12,
-                        color = colors.lightGrey
-                    )
+                // Tipo de factura: "Factura Luz", "Factura Gas"
+                Text(
+                    text = type,
+                    fontFamily = IberFontRegular,
+                    fontSize = TextSize.sp12,
+                    color = colors.lightGrey
+                )
 
-                    // Estado: "Pagada" / "Pendiente de Pago"
-                    StatusPillComposable(
-                        text = status,
-                        status = invoiceStatus,
-                        modifier = Modifier.padding(top = Spacing.dp8)
-                    )
-                }
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // Importe: "20,00 €"
-                    Text(
-                        text = "$amount $currencySymbol",
-                        fontFamily = IberFontRegular,
-                        fontSize = TextSize.sp16,
-                        color = colors.lightGrey
-                    )
-                    Spacer(modifier = Modifier.width(Spacing.dp4))
-                    // Flecha de navegación
-                    Icon(
-                        painter = painterResource(R.drawable.ic_arrow_right),
-                        contentDescription = null,
-                        tint = colors.lightGrey,
-                        modifier = Modifier.size(IconSize.dp30)
-                    )
-                }
+                // Estado: "Pagada" / "Pendiente de Pago"
+                StatusPillComposable(
+                    text = status,
+                    status = invoiceStatus,
+                    modifier = Modifier.padding(top = Spacing.dp8)
+                )
             }
 
-            Spacer(modifier = Modifier.height(Spacing.dp14))
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Importe: "20,00 €"
+                Text(
+                    text = "$amount $currencySymbol",
+                    fontFamily = IberFontRegular,
+                    fontSize = TextSize.sp16,
+                    color = colors.lightGrey
+                )
+                Spacer(modifier = Modifier.width(Spacing.dp4))
+                // Flecha de navegación
+                Icon(
+                    painter = painterResource(R.drawable.ic_arrow_right),
+                    contentDescription = null,
+                    tint = colors.lightGrey,
+                    modifier = Modifier.size(IconSize.dp30)
+                )
+            }
         }
-        // Divisor horizontal fuera del área de foco
+
+        Spacer(modifier = Modifier.height(Spacing.dp14))
+        // Divisor horizontal
         Box(
             modifier = Modifier
                 .fillMaxWidth()
