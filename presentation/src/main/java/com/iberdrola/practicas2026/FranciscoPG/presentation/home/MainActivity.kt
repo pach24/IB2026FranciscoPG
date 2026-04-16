@@ -145,7 +145,11 @@ class MainActivity : AppCompatActivity() {
                     ) {
                         InvoicesRoute(
                             useMock = useMock,
-                            onNavigateBack = { navController.popBackStack() }
+                            onNavigateBack = {
+                                if (navController.previousBackStackEntry != null) {
+                                    navController.popBackStack()
+                                }
+                            }
                         )
                     }
 
@@ -157,7 +161,11 @@ class MainActivity : AppCompatActivity() {
                         popExitTransition = { slideOutHorizontally { it } }
                     ) {
                         ElectronicInvoiceRoute(
-                            onNavigateBack = { navController.popBackStack() },
+                            onNavigateBack = {
+                                if (navController.previousBackStackEntry != null) {
+                                    navController.popBackStack()
+                                }
+                            },
                             onNavigateToActivate = { supplyType ->
                                 navController.navigate("${AppRoutes.ACTIVATE_ELECTRONIC_INVOICE}/$supplyType") {
                                     launchSingleTop = true
