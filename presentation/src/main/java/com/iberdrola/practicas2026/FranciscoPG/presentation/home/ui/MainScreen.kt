@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -64,11 +65,16 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Stroke
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Component
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
+import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.ShimmerHost
+import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.ShimmerBox
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Skeleton
 
 @Composable
 fun MainScreen(
     userName: String,
     isMockEnabled: Boolean,
+    latestInvoiceAmount: String,
+    isLoadingInvoice: Boolean,
     onMockModeChanged: (Boolean) -> Unit,
     onInvoicesCardClick: () -> Unit,
     onElectronicInvoiceClick: () -> Unit,
@@ -157,17 +163,30 @@ fun MainScreen(
                         )
                     )
 
-                    Row(
-                        modifier = Modifier
-                            .horizontalScroll(rememberScrollState())
-                            .padding(
-                                horizontal = Spacing.dp24,
-                                vertical = Spacing.dp16
-                            )
-                    ) {
-                        ItemInvoiceCard(onClick = onInvoicesCardClick)
-                        Spacer(modifier = Modifier.width(Spacing.dp16))
-                        ItemElectronicInvoiceCard(onClick = onElectronicInvoiceClick)
+                    ShimmerHost {
+                        Row(
+                            modifier = Modifier
+                                .horizontalScroll(rememberScrollState())
+                                .padding(
+                                    horizontal = Spacing.dp24,
+                                    vertical = Spacing.dp16
+                                )
+                        ) {
+                            if (isLoadingInvoice) {
+                                ShimmerInvoiceCard()
+                                Spacer(modifier = Modifier.width(Spacing.dp16))
+                                ShimmerInvoiceCard(showAmount = false)
+                            } else {
+                                ItemInvoiceCard(
+                                    amount = latestInvoiceAmount,
+                                    onClick = onInvoicesCardClick
+                                )
+                                Spacer(modifier = Modifier.width(Spacing.dp16))
+                                ItemElectronicInvoiceCard(
+                                    onClick = onElectronicInvoiceClick
+                                )
+                            }
+                        }
                     }
 
                     // Compensación del offset para que el scroll termine correctamente
@@ -323,16 +342,18 @@ private fun PromoCard() {
 
 
 @Composable
-fun ItemInvoiceCard(
+private fun HomeCardContainer(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: (() -> Unit)? = null,
+    content: @Composable () -> Unit
 ) {
     val cardShape = RoundedCornerShape(Radius.dp16)
     val colors = IberdrolaTheme.colors
 
     Box(
         modifier = modifier
-            .padding(end = Spacing.dp16)
+            .height(Component.homeCardH)
+            .widthIn(min = Component.homeCardW)
             .clip(cardShape)
             .background(color = colors.surface)
             .border(
@@ -340,9 +361,46 @@ fun ItemInvoiceCard(
                 color = colors.divider,
                 shape = cardShape
             )
-            .clickable(onClick = onClick)
+            .then(
+                if (onClick != null) Modifier.clickable(onClick = onClick)
+                else Modifier
+            )
             .padding(horizontal = Spacing.dp24, vertical = Spacing.dp18)
     ) {
+        content()
+    }
+}
+@Composable
+fun ShimmerInvoiceCard(
+    modifier: Modifier = Modifier,
+    showAmount: Boolean = true
+) {
+    HomeCardContainer(modifier = modifier) {
+        Column {
+            ShimmerBox(width = IconSize.dp28, height = IconSize.dp28)
+            Spacer(modifier = Modifier.height(Spacing.dp16))
+            if (showAmount) {
+                ShimmerBox(width = Skeleton.homecardAmountW, height = Skeleton.homecardAmountH)
+            } else {
+                Spacer(modifier = Modifier.height(Skeleton.homecardAmountH))
+            }
+            Spacer(modifier = Modifier.height(Spacing.dp8))
+            ShimmerBox(width = 30.dp, height = 16.dp)
+            Spacer(modifier = Modifier.height(Spacing.dp4))
+            ShimmerBox(width = 65.dp, height = 16.dp)
+        }
+    }
+}
+
+@Composable
+fun ItemInvoiceCard(
+    amount: String = "- -",
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
+    val colors = IberdrolaTheme.colors
+
+    HomeCardContainer(modifier = modifier, onClick = onClick) {
         Column {
             Icon(
                 painter = painterResource(R.drawable.file_chart_column),
@@ -354,8 +412,10 @@ fun ItemInvoiceCard(
             Spacer(modifier = Modifier.height(Spacing.dp16))
             Text(
                 text = buildAnnotatedString {
-                    append("20,00")
-                    withStyle(style = SpanStyle(fontSize = 19.sp)) { append("€") }
+                    append(amount)
+                    if (amount != "- -") {
+                        withStyle(style = SpanStyle(fontSize = 19.sp)) { append("€") }
+                    }
                 },
                 color = colors.darkGreyText,
                 fontFamily = IberFontBold,
@@ -382,22 +442,9 @@ fun ItemElectronicInvoiceCard(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
-    val cardShape = RoundedCornerShape(Radius.dp16)
     val colors = IberdrolaTheme.colors
 
-    Box(
-        modifier = modifier
-            .padding(end = Spacing.dp16)
-            .clip(cardShape)
-            .background(color = colors.surface)
-            .border(
-                width = Stroke.dp2,
-                color = colors.divider,
-                shape = cardShape
-            )
-            .clickable(onClick = onClick)
-            .padding(horizontal = Spacing.dp24, vertical = Spacing.dp18)
-    ) {
+    HomeCardContainer(modifier = modifier, onClick = onClick) {
         Column {
             Icon(
                 painter = painterResource(R.drawable.ic_electronic_invoice),
@@ -437,6 +484,8 @@ private fun MainScreenPreview() {
         MainScreen(
             userName = "FRANCISCO",
             isMockEnabled = true,
+            latestInvoiceAmount = "20,30",
+            isLoadingInvoice = false,
             onMockModeChanged = {},
             onInvoicesCardClick = {},
             onElectronicInvoiceClick = {},

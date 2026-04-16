@@ -60,6 +60,8 @@ class MainActivity : AppCompatActivity() {
                 val userName by viewModel.userName.collectAsStateWithLifecycle()
                 val useMock by viewModel.useMock.collectAsStateWithLifecycle()
                 val mockModeChanged by viewModel.mockModeChanged.collectAsStateWithLifecycle()
+                val latestInvoiceAmount by viewModel.latestInvoiceAmount.collectAsStateWithLifecycle()
+                val isLoadingInvoice by viewModel.isLoadingInvoice.collectAsStateWithLifecycle()
 
                 val snackbarHostState = remember { SnackbarHostState() }
                 val navController = rememberNavController()
@@ -107,6 +109,8 @@ class MainActivity : AppCompatActivity() {
                         MainScreen(
                             userName = userName,
                             isMockEnabled = useMock,
+                            latestInvoiceAmount = latestInvoiceAmount,
+                            isLoadingInvoice = isLoadingInvoice,
                             onMockModeChanged = viewModel::updateMockMode,
                             onInvoicesCardClick = {
                                 navController.navigate(AppRoutes.MY_INVOICES) {

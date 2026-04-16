@@ -94,6 +94,9 @@ object Component {
     val touch = 48.dp
     val tabDividerH = 2.dp
     val tabIndicatorH = 6.dp
+
+    val homeCardW = 135.dp
+    val homeCardH = 155.dp
 }
 
 /** Skeleton shimmer */
@@ -124,6 +127,8 @@ object Skeleton {
     val cardIconH = 32.dp
     val cardAmountW = 90.dp
     val cardAmountH = 24.dp
+    val homecardAmountW = 75.dp
+    val homecardAmountH = 24.dp
     val cardDatesW = 150.dp
     val cardDatesH = 12.dp
     val cardStatusW = 115.dp

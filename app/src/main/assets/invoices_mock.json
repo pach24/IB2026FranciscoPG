@@ -4,7 +4,7 @@
     {
       "id": "1",
       "descEstado": "Pendiente de pago",
-      "importeOrdenacion": 20.00,
+      "importeOrdenacion": 22.20,
       "fechaCobro": "04/03/2024",
       "fechaInicio": "01/02/2024",
       "fechaFin": "04/03/2024",
@@ -129,8 +129,8 @@
     },
     {
       "id": "15",
-      "descEstado": "En trámite de cobro",
-      "importeOrdenacion": 73.40,
+      "descEstado": "Pagada",
+      "importeOrdenacion":20.00,
       "fechaCobro": "08/03/2024",
       "fechaInicio": "08/02/2024",
       "fechaFin": "08/03/2024",

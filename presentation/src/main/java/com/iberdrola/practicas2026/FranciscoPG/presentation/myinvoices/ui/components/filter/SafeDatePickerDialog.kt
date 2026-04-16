@@ -1,5 +1,6 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.filter
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
@@ -10,6 +11,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.font.FontWeight
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.InvoiceFilterUIState
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
@@ -68,8 +70,15 @@ fun SafeDatePickerDialog(
         }
     )
 
+    MaterialTheme(
+        colorScheme = MaterialTheme.colorScheme.copy(
+            surface = Color.White,
+            surfaceContainerHigh = Color.White
+        )
+    ) {
     DatePickerDialog(
         onDismissRequest = onDismiss,
+        tonalElevation = 0.dp,
         confirmButton = {
             TextButton(onClick = {
                 datePickerState.selectedDateMillis?.let { millis ->
@@ -92,12 +101,16 @@ fun SafeDatePickerDialog(
         DatePicker(
             state = datePickerState,
             colors = DatePickerDefaults.colors(
+                containerColor = Color.White,
+                titleContentColor = colors.iberdrolaDarkGreen,
+                headlineContentColor = colors.iberdrolaDarkGreen,
                 todayContentColor = colors.iberdrolaDarkGreen,
                 todayDateBorderColor = colors.iberdrolaDarkGreen,
                 selectedDayContainerColor = colors.iberdrolaDarkGreen,
                 selectedDayContentColor = Color.White
             )
         )
+    }
     }
 }
 
