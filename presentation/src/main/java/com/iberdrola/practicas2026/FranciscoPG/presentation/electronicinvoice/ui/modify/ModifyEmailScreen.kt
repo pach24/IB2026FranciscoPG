@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui
+package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.modify
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
 import android.content.res.Configuration
@@ -245,7 +245,7 @@ fun ModifyEmailScreen(
 }
 
 @Preview(name = "Modify Email Screen - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Modify Email Screen - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Modify Email Screen - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ModifyEmailScreenPreview() {
     IberdrolaTheme {

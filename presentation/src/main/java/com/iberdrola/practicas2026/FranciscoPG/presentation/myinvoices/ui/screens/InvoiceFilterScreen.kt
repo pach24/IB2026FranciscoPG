@@ -197,7 +197,7 @@ fun FilterContent(
 }
 
 @Preview(name = "Filter - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Filter - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Filter - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun FilterScreenEmptyPreview() {
     IberdrolaTheme {
@@ -221,7 +221,7 @@ private fun FilterScreenEmptyPreview() {
 }
 
 @Preview(name = "Filter Filled - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Filter Filled - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Filter Filled - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun FilterScreenFilledPreview() {
     IberdrolaTheme {

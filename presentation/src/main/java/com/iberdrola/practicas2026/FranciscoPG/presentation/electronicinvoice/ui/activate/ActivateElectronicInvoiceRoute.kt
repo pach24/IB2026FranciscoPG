@@ -1,40 +1,40 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui
+package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.activate
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.viewmodel.ModifyEmailViewModel
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.viewmodel.ActivateElectronicInvoiceViewModel
 
 @Composable
-fun ModifyEmailWizardRoute(
-    onNavigateBack: () -> Unit,
-    onComplete: (String) -> Unit
+fun ActivateElectronicInvoiceRoute(
+    onNavigateBack: () -> Unit
 ) {
-    val viewModel: ModifyEmailViewModel = hiltViewModel()
+    val viewModel: ActivateElectronicInvoiceViewModel = hiltViewModel()
     val email by viewModel.email.collectAsStateWithLifecycle()
+    val legalAccepted by viewModel.legalAccepted.collectAsStateWithLifecycle()
     val isEmailValid by viewModel.isEmailValid.collectAsStateWithLifecycle()
     val verificationCode by viewModel.verificationCode.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val showBanner by viewModel.showBanner.collectAsStateWithLifecycle()
     val resendAttemptsLeft by viewModel.resendAttemptsLeft.collectAsStateWithLifecycle()
     val censoredEmail by viewModel.censoredEmail.collectAsStateWithLifecycle()
-    val currentCensoredEmail by viewModel.currentCensoredEmail.collectAsStateWithLifecycle()
 
-    ModifyEmailWizardScreen(
+    ElectronicInvoiceWizardScreen(
         email = email,
         censoredEmail = censoredEmail,
-        currentCensoredEmail = currentCensoredEmail,
+        legalAccepted = legalAccepted,
         isEmailValid = isEmailValid,
         verificationCode = verificationCode,
         isLoading = isLoading,
         showBanner = showBanner,
         resendAttemptsLeft = resendAttemptsLeft,
         onEmailChanged = viewModel::onEmailChanged,
+        onLegalAcceptedChanged = viewModel::onLegalAcceptedChanged,
         onVerificationCodeChanged = viewModel::onVerificationCodeChanged,
         onResendCode = viewModel::onResendCode,
         onBannerDismissed = viewModel::onBannerDismissed,
-        onNavigateBack = onNavigateBack,
-        onComplete = onComplete
+        onConfirmed = viewModel::onActivationConfirmed,
+        onNavigateBack = onNavigateBack
     )
 }

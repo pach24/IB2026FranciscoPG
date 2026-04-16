@@ -90,7 +90,7 @@ fun UnavailableBanner(
 }
 
 @Preview(name = "Banner - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Banner - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Banner - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun UnavailableBannerPreview() {
     IberdrolaTheme {

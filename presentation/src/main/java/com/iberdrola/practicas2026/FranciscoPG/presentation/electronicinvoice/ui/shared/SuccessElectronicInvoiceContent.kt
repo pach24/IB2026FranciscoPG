@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui
+package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
 import android.app.Activity
@@ -224,7 +224,7 @@ fun SuccessElectronicInvoiceContent(
 }
 
 @Preview(name = "Success - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Success - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Success - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun SuccessElectronicInvoiceContentPreview() {
     IberdrolaTheme {

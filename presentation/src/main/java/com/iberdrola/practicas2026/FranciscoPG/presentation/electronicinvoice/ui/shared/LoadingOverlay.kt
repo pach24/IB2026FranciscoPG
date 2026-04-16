@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.components
+package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -47,7 +47,7 @@ fun LoadingOverlay() {
 }
 
 @Preview(name = "LoadingOverlay - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "LoadingOverlay - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "LoadingOverlay - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun LoadingOverlayPreview() {
     IberdrolaTheme {

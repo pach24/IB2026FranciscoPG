@@ -1,39 +1,43 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui
+package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.modify
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.viewmodel.ActivateElectronicInvoiceViewModel
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.viewmodel.ModifyEmailViewModel
 
 @Composable
-fun ActivateElectronicInvoiceRoute(
-    onNavigateBack: () -> Unit
+fun ModifyEmailWizardRoute(
+    onNavigateBack: () -> Unit,
+    onComplete: (String) -> Unit
 ) {
-    val viewModel: ActivateElectronicInvoiceViewModel = hiltViewModel()
+    val viewModel: ModifyEmailViewModel = hiltViewModel()
     val email by viewModel.email.collectAsStateWithLifecycle()
-    val legalAccepted by viewModel.legalAccepted.collectAsStateWithLifecycle()
     val isEmailValid by viewModel.isEmailValid.collectAsStateWithLifecycle()
+    val isSameAsCurrentEmail by viewModel.isSameAsCurrentEmail.collectAsStateWithLifecycle()
     val verificationCode by viewModel.verificationCode.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val showBanner by viewModel.showBanner.collectAsStateWithLifecycle()
     val resendAttemptsLeft by viewModel.resendAttemptsLeft.collectAsStateWithLifecycle()
     val censoredEmail by viewModel.censoredEmail.collectAsStateWithLifecycle()
+    val currentCensoredEmail by viewModel.currentCensoredEmail.collectAsStateWithLifecycle()
 
-    ElectronicInvoiceWizardScreen(
+    ModifyEmailWizardScreen(
         email = email,
         censoredEmail = censoredEmail,
-        legalAccepted = legalAccepted,
+        currentCensoredEmail = currentCensoredEmail,
         isEmailValid = isEmailValid,
+        isSameAsCurrentEmail = isSameAsCurrentEmail,
         verificationCode = verificationCode,
         isLoading = isLoading,
         showBanner = showBanner,
         resendAttemptsLeft = resendAttemptsLeft,
         onEmailChanged = viewModel::onEmailChanged,
-        onLegalAcceptedChanged = viewModel::onLegalAcceptedChanged,
         onVerificationCodeChanged = viewModel::onVerificationCodeChanged,
         onResendCode = viewModel::onResendCode,
         onBannerDismissed = viewModel::onBannerDismissed,
-        onNavigateBack = onNavigateBack
+        onConfirmed = viewModel::onModificationConfirmed,
+        onNavigateBack = onNavigateBack,
+        onComplete = { onComplete(censoredEmail) }
     )
 }

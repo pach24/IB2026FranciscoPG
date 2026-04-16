@@ -127,7 +127,7 @@ fun StepBottomButtonBar(
 }
 
 @Preview(name = "StepBottomButtonBar - Enabled", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "StepBottomButtonBar - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "StepBottomButtonBar - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun StepBottomButtonBarPreview() {
     IberdrolaTheme {

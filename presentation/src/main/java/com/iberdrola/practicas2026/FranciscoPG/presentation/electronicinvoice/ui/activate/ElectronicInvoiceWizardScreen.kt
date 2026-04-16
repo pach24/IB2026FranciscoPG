@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui
+package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.activate
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
 import android.content.res.Configuration
@@ -34,7 +34,9 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.common.ConfirmDialog
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.StepBottomButtonBar
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.StepProgressBar
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.SuccessBannerSMS
-import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.components.LoadingOverlay
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared.ConfirmElectronicInvoiceContent
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared.LoadingOverlay
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared.SuccessElectronicInvoiceContent
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
@@ -59,6 +61,7 @@ fun ElectronicInvoiceWizardScreen(
     onVerificationCodeChanged: (String) -> Unit,
     onResendCode: () -> Unit,
     onBannerDismissed: () -> Unit,
+    onConfirmed: () -> Unit,
     onNavigateBack: () -> Unit
 ) {
     val colors = IberdrolaTheme.colors
@@ -161,6 +164,7 @@ fun ElectronicInvoiceWizardScreen(
                 },
                 onNext = {
                     if (currentPage == 1) {
+                        onConfirmed()
                         showSuccess = true
                     } else {
                         scope.launch { pagerState.animateScrollToPage(currentPage + 1) }
@@ -197,7 +201,7 @@ fun ElectronicInvoiceWizardScreen(
 }
 
 @Preview(name = "Wizard - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Wizard - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Wizard - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ElectronicInvoiceWizardScreenPreview() {
     IberdrolaTheme {
@@ -215,6 +219,7 @@ private fun ElectronicInvoiceWizardScreenPreview() {
             onVerificationCodeChanged = {},
             onResendCode = {},
             onBannerDismissed = {},
+            onConfirmed = {},
             onNavigateBack = {}
         )
     }

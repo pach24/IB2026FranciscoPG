@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui
+package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.activate
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
 import android.content.res.Configuration
@@ -326,7 +326,7 @@ private fun DataProtectionItem(
 }
 
 @Preview(name = "Activate Content - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Activate Content - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Activate Content - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ActivateElectronicInvoiceContentPreview() {
     IberdrolaTheme {

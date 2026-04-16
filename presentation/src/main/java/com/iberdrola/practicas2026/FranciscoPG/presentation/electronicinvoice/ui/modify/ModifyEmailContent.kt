@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui
+package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.modify
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
 import android.content.res.Configuration
@@ -44,6 +44,7 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 fun ModifyEmailContent(
     email: String,
     isEmailValid: Boolean,
+    isSameAsCurrentEmail: Boolean,
     currentCensoredEmail: String,
     onEmailChanged: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -51,7 +52,7 @@ fun ModifyEmailContent(
     val colors = IberdrolaTheme.colors
     val focusManager = LocalFocusManager.current
     var emailHasBlurred by remember { mutableStateOf(false) }
-    val showError = emailHasBlurred && email.isNotEmpty() && !isEmailValid
+    val showError = emailHasBlurred && email.isNotEmpty() && (!isEmailValid || isSameAsCurrentEmail)
     val shakeOffset = remember { Animatable(0f) }
 
     LaunchedEffect(showError) {
@@ -72,26 +73,6 @@ fun ModifyEmailContent(
             .verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.height(Spacing.dp24))
-
-        // Email vinculado a tu cuenta (censurado)
-        Column(modifier = Modifier.padding(horizontal = Spacing.dp24)) {
-            Text(
-                text = stringResource(R.string.activate_einvoice_linked_email),
-                color = colors.darkGreyText,
-                fontFamily = IberFontRegular,
-                fontSize = TextSize.sp14
-            )
-            Text(
-                text = currentCensoredEmail,
-                color = colors.textPrimary,
-                fontFamily = IberFontBold,
-                fontWeight = FontWeight.Bold,
-                fontSize = TextSize.sp14,
-                modifier = Modifier.padding(top = Spacing.dp2)
-            )
-        }
-
-        Spacer(modifier = Modifier.height(Spacing.dp28))
 
         Text(
             text = stringResource(R.string.modify_email_subtitle),
@@ -155,8 +136,12 @@ fun ModifyEmailContent(
                                 .background(underlineColor)
                         )
                         if (showError) {
+                            val errorText = if (isSameAsCurrentEmail)
+                                stringResource(R.string.modify_email_input_same_email_error)
+                            else
+                                stringResource(R.string.modify_email_input_error)
                             Text(
-                                text = stringResource(R.string.modify_email_input_error),
+                                text = errorText,
                                 color = colors.errorTextForm,
                                 fontFamily = IberFontRegular,
                                 fontSize = TextSize.sp12,
@@ -171,13 +156,14 @@ fun ModifyEmailContent(
 }
 
 @Preview(name = "Modify Email Content - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Modify Email Content - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Modify Email Content - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ModifyEmailContentPreview() {
     IberdrolaTheme {
         ModifyEmailContent(
             email = "",
             isEmailValid = true,
+            isSameAsCurrentEmail = false,
             currentCensoredEmail = "p**2@gmail.com",
             onEmailChanged = {}
         )

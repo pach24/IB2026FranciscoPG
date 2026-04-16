@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui
+package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.modify
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
 import android.content.res.Configuration
@@ -34,7 +34,9 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.common.ConfirmDialog
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.StepBottomButtonBar
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.StepProgressBar
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.SuccessBannerSMS
-import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.components.LoadingOverlay
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared.ConfirmElectronicInvoiceContent
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared.LoadingOverlay
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared.SuccessElectronicInvoiceContent
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
@@ -50,6 +52,7 @@ fun ModifyEmailWizardScreen(
     censoredEmail: String,
     currentCensoredEmail: String,
     isEmailValid: Boolean,
+    isSameAsCurrentEmail: Boolean,
     verificationCode: String,
     isLoading: Boolean,
     showBanner: Boolean,
@@ -58,6 +61,7 @@ fun ModifyEmailWizardScreen(
     onVerificationCodeChanged: (String) -> Unit,
     onResendCode: () -> Unit,
     onBannerDismissed: () -> Unit,
+    onConfirmed: () -> Unit,
     onNavigateBack: () -> Unit,
     onComplete: (String) -> Unit
 ) {
@@ -132,6 +136,7 @@ fun ModifyEmailWizardScreen(
                     0 -> ModifyEmailContent(
                         email = email,
                         isEmailValid = isEmailValid,
+                        isSameAsCurrentEmail = isSameAsCurrentEmail,
                         currentCensoredEmail = currentCensoredEmail,
                         onEmailChanged = onEmailChanged
                     )
@@ -160,6 +165,7 @@ fun ModifyEmailWizardScreen(
                 },
                 onNext = {
                     if (currentPage == 1) {
+                        onConfirmed()
                         showSuccess = true
                     } else {
                         scope.launch { pagerState.animateScrollToPage(currentPage + 1) }
@@ -196,7 +202,7 @@ fun ModifyEmailWizardScreen(
 }
 
 @Preview(name = "Modify Wizard - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Modify Wizard - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Modify Wizard - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ModifyEmailWizardScreenPreview() {
     IberdrolaTheme {
@@ -205,6 +211,7 @@ private fun ModifyEmailWizardScreenPreview() {
             censoredEmail = "",
             currentCensoredEmail = "p**2@gmail.com",
             isEmailValid = true,
+            isSameAsCurrentEmail = false,
             verificationCode = "",
             isLoading = false,
             showBanner = false,
@@ -213,6 +220,7 @@ private fun ModifyEmailWizardScreenPreview() {
             onVerificationCodeChanged = {},
             onResendCode = {},
             onBannerDismissed = {},
+            onConfirmed = {},
             onNavigateBack = {},
             onComplete = {}
         )

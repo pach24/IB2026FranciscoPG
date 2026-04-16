@@ -78,7 +78,7 @@ fun MainScreen(
 ) {
     val scrollState = rememberScrollState()
     // Definimos cuánto queremos que el fondo verde sobresalga por debajo de la tarjeta
-    val extraBackgroundHeight = IconSize.dp48
+    val extraBackgroundHeight = Spacing.dp48
     val colors = IberdrolaTheme.colors
 
     Scaffold(
@@ -108,7 +108,7 @@ fun MainScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(scrollState)
-                    .padding(bottom = Spacing.dp24)
+                    .padding(bottom = Spacing.dp28)
             ) {
                 // SECCIÓN SUPERIOR: Contiene el fondo dinámico y la cabecera
                 Box(modifier = Modifier.fillMaxWidth()) {
@@ -143,7 +143,7 @@ fun MainScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .offset(y = -extraBackgroundHeight)
+                        .offset(y = -extraBackgroundHeight + Spacing.dp24)
                 ) {
                     Text(
                         text = stringResource(R.string.main_activity_my_energy_title),
@@ -166,29 +166,7 @@ fun MainScreen(
                             )
                     ) {
                         ItemInvoiceCard(onClick = onInvoicesCardClick)
-                    }
-
-                    // Sección "Mis Accesos"
-                    Text(
-                        text = stringResource(R.string.mis_accesos),
-                        color = colors.textPrimary,
-                        fontFamily = IberFontBold,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = TextSize.sp22,
-                        modifier = Modifier.padding(
-                            top = Spacing.dp16,
-                            start = Spacing.dp24
-                        )
-                    )
-
-                    Row(
-                        modifier = Modifier
-                            .horizontalScroll(rememberScrollState())
-                            .padding(
-                                horizontal = Spacing.dp24,
-                                vertical = Spacing.dp16
-                            )
-                    ) {
+                        Spacer(modifier = Modifier.width(Spacing.dp16))
                         ItemElectronicInvoiceCard(onClick = onElectronicInvoiceClick)
                     }
 
@@ -202,7 +180,7 @@ fun MainScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(end = Spacing.dp16, bottom = 120.dp)
+                    .padding(end = Spacing.dp16, bottom = Component.mockSwitchBottomPadding)
             ) {
                 Text(
                     text = stringResource(
@@ -300,7 +278,7 @@ private fun PromoCard() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(IntrinsicSize.Min)
+                .height(Component.promoH)
                 .heightIn(min = Component.promoMinH),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -318,6 +296,7 @@ private fun PromoCard() {
                 modifier = Modifier
                     .weight(1f)
                     .padding(end = Spacing.dp24)
+                    .padding(vertical = Spacing.dp16)
             ) {
                 Text(
                     text = stringResource(R.string.main_activity_promo_title),
@@ -335,7 +314,7 @@ private fun PromoCard() {
                     color = colors.textPrimary,
                     fontFamily = IberFontRegular,
                     fontSize = TextSize.sp15,
-                    lineHeight = TextSize.sp20
+                    lineHeight = TextSize.sp18
                 )
             }
         }
@@ -421,7 +400,7 @@ fun ItemElectronicInvoiceCard(
     ) {
         Column {
             Icon(
-                painter = painterResource(R.drawable.file_chart_column),
+                painter = painterResource(R.drawable.ic_electronic_invoice),
                 contentDescription = null,
                 tint = colors.iberdrolaGreen,
                 modifier = Modifier.size(IconSize.dp28)
@@ -451,7 +430,7 @@ fun ItemElectronicInvoiceCard(
 }
 
 @Preview(name = "Main Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Main Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Main Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun MainScreenPreview() {
     IberdrolaTheme {

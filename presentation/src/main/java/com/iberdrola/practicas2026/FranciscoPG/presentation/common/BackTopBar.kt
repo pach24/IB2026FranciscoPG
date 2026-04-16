@@ -36,7 +36,7 @@ fun BackTopBar(onBack: () -> Unit) {
 }
 
 @Preview(name = "TopBar - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "TopBar - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "TopBar - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun BackTopBarPreview() {
     IberdrolaTheme {

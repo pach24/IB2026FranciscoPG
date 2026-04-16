@@ -90,7 +90,7 @@ visible: Boolean,
 }
 
 @Preview(name = "SuccessBanner - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "SuccessBanner - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "SuccessBanner - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun SuccessBannerSMSPreview() {
     IberdrolaTheme {
