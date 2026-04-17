@@ -228,7 +228,7 @@ fun MainScreen(
 }
 
 @Composable
-private fun HeaderContent(userName: String) {
+internal fun HeaderContent(userName: String) {
     val colors = IberdrolaTheme.colors
     Column(modifier = Modifier.padding(horizontal = Spacing.dp24)) {
         Row(
@@ -284,7 +284,7 @@ private fun HeaderContent(userName: String) {
 }
 
 @Composable
-private fun PromoCard() {
+internal fun PromoCard() {
     val colors = IberdrolaTheme.colors
     Card(
         colors = CardDefaults.cardColors(containerColor = colors.promoBackground),

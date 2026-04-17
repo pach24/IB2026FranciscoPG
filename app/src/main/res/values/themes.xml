@@ -3,8 +3,11 @@
         <item name="colorPrimary">@color/iberdrola_green</item>
         <item name="colorSecondary">@color/iberdrola_green</item>
         <item name="android:statusBarColor">@color/iberdrola_green</item>
-
-
     </style>
 
+    <style name="Theme.IB2026FranciscoPG.Splash" parent="Theme.IB2026FranciscoPG">
+        <item name="android:windowBackground">@color/iberdrola_green</item>
+        <item name="android:statusBarColor">@color/iberdrola_green</item>
+        <item name="android:navigationBarColor">@color/iberdrola_green</item>
+    </style>
 </resources>

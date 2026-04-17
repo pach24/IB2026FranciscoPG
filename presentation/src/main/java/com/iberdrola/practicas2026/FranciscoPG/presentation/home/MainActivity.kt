@@ -22,7 +22,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.MainScreen
+import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.SplashScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.viewmodel.MainViewModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.activate.ActivateElectronicInvoiceRoute
 import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.list.ElectronicInvoiceRoute
@@ -37,6 +43,7 @@ import java.net.URLDecoder
 import java.net.URLEncoder
 
 private object AppRoutes {
+    const val SPLASH = "splash"
     const val HOME = "home"
     const val MY_INVOICES = "my_invoices"
     const val ELECTRONIC_INVOICE = "electronic_invoice"
@@ -93,7 +100,9 @@ class MainActivity : AppCompatActivity() {
                 var previousRoute by remember { mutableStateOf(currentRoute) }
                 LaunchedEffect(currentRoute) {
                     snackbarHostState.currentSnackbarData?.dismiss()
-                    if (currentRoute == AppRoutes.HOME && previousRoute != null && previousRoute != AppRoutes.HOME) {
+                    if (currentRoute == AppRoutes.HOME && previousRoute != null
+                        && previousRoute != AppRoutes.HOME && previousRoute != AppRoutes.SPLASH
+                    ) {
                         viewModel.refreshLatestInvoice()
                     }
                     previousRoute = currentRoute
@@ -101,12 +110,32 @@ class MainActivity : AppCompatActivity() {
 
                 NavHost(
                     navController = navController,
-                    startDestination = AppRoutes.HOME
+                    startDestination = AppRoutes.SPLASH
                 ) {
 
                     composable(
+                        AppRoutes.SPLASH,
+                        enterTransition = { EnterTransition.None },
+                        exitTransition = { fadeOut(tween(300)) }
+                    ) {
+                        SplashScreen(
+                            onSplashFinished = {
+                                navController.navigate(AppRoutes.HOME) {
+                                    popUpTo(AppRoutes.SPLASH) { inclusive = true }
+                                }
+                            }
+                        )
+                    }
+
+                    composable(
                         AppRoutes.HOME,
-                        enterTransition = { slideInHorizontally { -it } },
+                        enterTransition = {
+                            if (initialState.destination.route == AppRoutes.SPLASH) {
+                                fadeIn(tween(300))
+                            } else {
+                                slideInHorizontally { -it }
+                            }
+                        },
                         exitTransition = { slideOutHorizontally { -it } },
                         popEnterTransition = { slideInHorizontally { -it } },
                         popExitTransition = { slideOutHorizontally { it } }
