@@ -70,10 +70,12 @@ fun SafeDatePickerDialog(
         }
     )
 
+    val surfaceColor = colors.surface
+
     MaterialTheme(
         colorScheme = MaterialTheme.colorScheme.copy(
-            surface = Color.White,
-            surfaceContainerHigh = Color.White
+            surface = surfaceColor,
+            surfaceContainerHigh = surfaceColor
         )
     ) {
     DatePickerDialog(
@@ -101,13 +103,13 @@ fun SafeDatePickerDialog(
         DatePicker(
             state = datePickerState,
             colors = DatePickerDefaults.colors(
-                containerColor = Color.White,
+                containerColor = surfaceColor,
                 titleContentColor = colors.iberdrolaDarkGreen,
                 headlineContentColor = colors.iberdrolaDarkGreen,
                 todayContentColor = colors.iberdrolaDarkGreen,
                 todayDateBorderColor = colors.iberdrolaDarkGreen,
                 selectedDayContainerColor = colors.iberdrolaDarkGreen,
-                selectedDayContentColor = Color.White
+                selectedDayContentColor = colors.surface
             )
         )
     }
