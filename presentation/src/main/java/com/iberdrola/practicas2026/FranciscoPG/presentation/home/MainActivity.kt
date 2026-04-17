@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
                     composable(
                         AppRoutes.SPLASH,
                         enterTransition = { EnterTransition.None },
-                        exitTransition = { fadeOut(tween(300)) }
+                        exitTransition = { ExitTransition.None }
                     ) {
                         SplashScreen(
                             onSplashFinished = {
@@ -131,7 +131,7 @@ class MainActivity : AppCompatActivity() {
                         AppRoutes.HOME,
                         enterTransition = {
                             if (initialState.destination.route == AppRoutes.SPLASH) {
-                                fadeIn(tween(300))
+                                fadeIn(tween(durationMillis = 600, delayMillis = 200))
                             } else {
                                 slideInHorizontally { -it }
                             }

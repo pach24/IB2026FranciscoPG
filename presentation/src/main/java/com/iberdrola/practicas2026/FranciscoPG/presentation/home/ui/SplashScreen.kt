@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,23 +49,26 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SplashScreen(onSplashFinished: () -> Unit) {
+
     val progress = remember { Animatable(0f) }
     val logoScale = remember { Animatable(0f) }
     val logoAlpha = remember { Animatable(1f) }
-    // Texto "Iberdrola" y logo se separan horizontalmente
-    val spreadOffset = remember { Animatable(0f) }  // 0 = centrados, 1 = posición final
+    val spreadOffset = remember { Animatable(0f) }
     val textAlpha = remember { Animatable(0f) }
 
     LaunchedEffect(Unit) {
+
         // 1. Logo aparece centrado
         logoScale.animateTo(1f, animationSpec = tween(700, easing = FastOutSlowInEasing))
         // Pausa con el logo visible
         delay(500L)
+
         // 2. Logo se desliza a la izquierda, texto surge desde detrás hacia la derecha
         launch { delay(100L)
                  textAlpha.animateTo(1f, animationSpec = tween(300, easing = FastOutSlowInEasing)) }
         spreadOffset.animateTo(1f, animationSpec = tween(600, easing = FastOutSlowInEasing))
         delay(500L)
+
         // 3. Todo se desvanece y el verde sube
         launch { logoAlpha.animateTo(0f, animationSpec = tween(400, easing = FastOutSlowInEasing)) }
         launch { textAlpha.animateTo(0f, animationSpec = tween(400, easing = FastOutSlowInEasing)) }
@@ -80,7 +84,7 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
         // Medidor invisible: mismos componentes que MainScreen para altura pixel-perfect
