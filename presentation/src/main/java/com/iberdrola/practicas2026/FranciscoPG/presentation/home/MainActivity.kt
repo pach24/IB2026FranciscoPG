@@ -90,8 +90,13 @@ class MainActivity : AppCompatActivity() {
 
                 // Descartar snackbar al cambiar de pantalla
                 val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+                var previousRoute by remember { mutableStateOf(currentRoute) }
                 LaunchedEffect(currentRoute) {
                     snackbarHostState.currentSnackbarData?.dismiss()
+                    if (currentRoute == AppRoutes.HOME && previousRoute != null && previousRoute != AppRoutes.HOME) {
+                        viewModel.refreshLatestInvoice()
+                    }
+                    previousRoute = currentRoute
                 }
 
                 NavHost(

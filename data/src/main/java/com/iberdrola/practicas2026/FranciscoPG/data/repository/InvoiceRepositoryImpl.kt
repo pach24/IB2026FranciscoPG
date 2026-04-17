@@ -73,7 +73,13 @@ class InvoiceRepositoryImpl @Inject constructor(
                 }
             }
         } catch (e: Exception) {
-            Result.failure(e)
+            // Antes de devolver error, intentar devolver datos cacheados de Room
+            val fallback = invoiceDao.getInvoicesBySupplyType(apiValue)
+            if (fallback.isNotEmpty()) {
+                Result.success(fallback.map { it.toDomain() })
+            } else {
+                Result.failure(e)
+            }
         }
     }
 }

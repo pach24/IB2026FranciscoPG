@@ -51,20 +51,37 @@ class MainViewModel @Inject constructor(
         _userName.value = "FRANCISCO"
     }
 
-    private fun fetchLatestInvoice() {
+    fun refreshLatestInvoice() = fetchLatestInvoice(showShimmer = false)
+
+    private fun fetchLatestInvoice(showShimmer: Boolean = true) {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
-            _isLoadingInvoice.value = true
+            if (showShimmer) _isLoadingInvoice.value = true
             try {
-                val minDelay = async { delay(MIN_LOADING_MS) }
-                val result = getInvoicesUseCase(SupplyType.ELECTRICITY)
-                val amount = result.getOrNull()?.firstOrNull()?.amount
-                _latestInvoiceAmount.value = if (amount != null) {
-                    String.format(Locale("es", "ES"), "%.2f", amount)
+                val minDelay = if (showShimmer) async { delay(MIN_LOADING_MS) } else null
+                val electricityInvoices = async { getInvoicesUseCase(SupplyType.ELECTRICITY) }
+                val gasInvoices = async { getInvoicesUseCase(SupplyType.GAS) }
+
+                val all = (electricityInvoices.await().getOrNull().orEmpty() +
+                        gasInvoices.await().getOrNull().orEmpty())
+
+                val latest = all.maxByOrNull { invoice ->
+                    try {
+                        java.time.LocalDate.parse(
+                            invoice.chargeDate,
+                            java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                        )
+                    } catch (_: Exception) {
+                        java.time.LocalDate.MIN
+                    }
+                }
+
+                _latestInvoiceAmount.value = if (latest != null) {
+                    String.format(Locale("es", "ES"), "%.2f", latest.amount)
                 } else {
                     "- -"
                 }
-                minDelay.await()
+                minDelay?.await()
             } finally {
                 _isLoadingInvoice.value = false
             }

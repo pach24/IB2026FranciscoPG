@@ -143,9 +143,13 @@ fun GenericBanner(
                 contentDescription = "Close",
                 tint = IberdrolaTheme.colors.black,
                 modifier = Modifier
-                    .size(Spacing.dp28)
-                    .clickable { onDismiss() }
                     .align(Alignment.Top)
+                    .clickable(
+                        interactionSource = null,
+                        indication = null
+                    ) { onDismiss() }
+                    .padding(Spacing.dp12)
+                    .size(Spacing.dp28)
             )
         }
     }
