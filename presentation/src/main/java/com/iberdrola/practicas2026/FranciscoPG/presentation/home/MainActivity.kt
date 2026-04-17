@@ -100,11 +100,18 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                // Descartar snackbar al cambiar de pantalla
+                // Descartar snackbar al cambiar de pantalla y ajustar barras del sistema
                 val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
                 var previousRoute by remember { mutableStateOf(currentRoute) }
                 LaunchedEffect(currentRoute) {
                     snackbarHostState.currentSnackbarData?.dismiss()
+                    // Cambiar iconos de barras: dark en splash, auto en el resto
+                    if (currentRoute != null && currentRoute != AppRoutes.SPLASH) {
+                        enableEdgeToEdge(
+                            statusBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT),
+                            navigationBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT)
+                        )
+                    }
                     if (currentRoute == AppRoutes.HOME && previousRoute != null
                         && previousRoute != AppRoutes.HOME && previousRoute != AppRoutes.SPLASH
                     ) {
