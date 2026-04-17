@@ -199,9 +199,7 @@ class InvoicesViewModel @Inject constructor(
         Log.d(TAG, "fetchSupply(${stream.supplyType}, mock=$currentMock, force=$forceRefresh)")
 
         val currentGeneration = ++stream.fetchGeneration
-        if (!stream.hasLoaded) {
-            stream.loadingState.value = InvoiceListUiState.Loading
-        }
+        stream.loadingState.value = InvoiceListUiState.Loading
         stream.hasLoaded = false
 
         viewModelScope.launch {
