@@ -120,7 +120,8 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
             }
 
             // Offset: progress 0 → curva al fondo; progress 1 → curva en posición del header
-            val offset = (1f - progressVal) * (h - hdr)
+            val extraMargin = with(density) { 40.dp.toPx() }
+            val offset = (1f - progressVal) * (h - hdr + extraMargin)
 
             // Proporciones del SVG bg_header_curved (viewport 400×380)
             val cornerRx = w * 30f / 400f
