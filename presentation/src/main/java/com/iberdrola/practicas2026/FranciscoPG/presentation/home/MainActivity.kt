@@ -28,8 +28,8 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.MainScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.SplashScreen
@@ -125,7 +125,9 @@ class MainActivity : AppCompatActivity() {
                 NavHost(
                     navController = navController,
                     startDestination = AppRoutes.SPLASH,
-                    modifier = Modifier.background(IberdrolaTheme.colors.background)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(IberdrolaTheme.colors.background)
                 ) {
 
                     composable(
@@ -187,10 +189,10 @@ class MainActivity : AppCompatActivity() {
 
                     composable(
                         AppRoutes.MY_INVOICES,
-                        enterTransition = { slideInHorizontally { it } },
-                        exitTransition = { slideOutHorizontally { it } },
-                        popEnterTransition = { slideInHorizontally { -it } },
-                        popExitTransition = { slideOutHorizontally { it } }
+                        enterTransition = { slideInHorizontally(tween(350)) { it } + fadeIn(tween(200)) },
+                        exitTransition = { slideOutHorizontally(tween(350)) { -it } },
+                        popEnterTransition = { slideInHorizontally(tween(350)) { -it } + fadeIn(tween(200)) },
+                        popExitTransition = { slideOutHorizontally(tween(350)) { it } }
                     ) {
                         InvoicesRoute(
                             useMock = useMock,
