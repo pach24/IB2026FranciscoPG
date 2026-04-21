@@ -29,6 +29,8 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
+import androidx.compose.ui.Modifier
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.MainScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.SplashScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.viewmodel.MainViewModel
@@ -122,7 +124,8 @@ class MainActivity : AppCompatActivity() {
 
                 NavHost(
                     navController = navController,
-                    startDestination = AppRoutes.SPLASH
+                    startDestination = AppRoutes.SPLASH,
+                    modifier = Modifier.background(IberdrolaTheme.colors.background)
                 ) {
 
                     composable(
@@ -201,10 +204,10 @@ class MainActivity : AppCompatActivity() {
 
                     composable(
                         AppRoutes.ELECTRONIC_INVOICE,
-                        enterTransition = { slideInHorizontally { it } },
-                        exitTransition = { slideOutHorizontally { it } },
-                        popEnterTransition = { slideInHorizontally { -it } },
-                        popExitTransition = { slideOutHorizontally { it } }
+                        enterTransition = { slideInHorizontally(tween(350)) { it } + fadeIn(tween(200)) },
+                        exitTransition = { slideOutHorizontally(tween(350)) { -it } },
+                        popEnterTransition = { slideInHorizontally(tween(350)) { -it } + fadeIn(tween(200)) },
+                        popExitTransition = { slideOutHorizontally(tween(350)) { it } }
                     ) {
                         ElectronicInvoiceRoute(
                             onNavigateBack = {
@@ -229,10 +232,10 @@ class MainActivity : AppCompatActivity() {
                     composable(
                         "${AppRoutes.ACTIVATE_ELECTRONIC_INVOICE}/{supplyType}",
                         arguments = listOf(navArgument("supplyType") { type = NavType.StringType }),
-                        enterTransition = { slideInHorizontally { it } },
-                        exitTransition = { slideOutHorizontally { it } },
-                        popEnterTransition = { slideInHorizontally { -it } },
-                        popExitTransition = { slideOutHorizontally { it } }
+                        enterTransition = { slideInHorizontally(tween(350)) { it } + fadeIn(tween(200)) },
+                        exitTransition = { slideOutHorizontally(tween(350)) { -it } },
+                        popEnterTransition = { slideInHorizontally(tween(350)) { -it } + fadeIn(tween(200)) },
+                        popExitTransition = { slideOutHorizontally(tween(350)) { it } }
                     ) {
                         ActivateElectronicInvoiceRoute(
                             onNavigateBack = { navController.popBackStack() }
@@ -245,10 +248,10 @@ class MainActivity : AppCompatActivity() {
                             navArgument("supplyType") { type = NavType.StringType },
                             navArgument("censoredEmail") { type = NavType.StringType; defaultValue = "" }
                         ),
-                        enterTransition = { slideInHorizontally { it } },
-                        exitTransition = { slideOutHorizontally { it } },
-                        popEnterTransition = { slideInHorizontally { -it } },
-                        popExitTransition = { slideOutHorizontally { it } }
+                        enterTransition = { slideInHorizontally(tween(350)) { it } + fadeIn(tween(200)) },
+                        exitTransition = { slideOutHorizontally(tween(350)) { -it } },
+                        popEnterTransition = { slideInHorizontally(tween(350)) { -it } + fadeIn(tween(200)) },
+                        popExitTransition = { slideOutHorizontally(tween(350)) { it } }
                     ) { entry ->
                         val supplyType = entry.arguments?.getString("supplyType") ?: "LUZ"
                         val initialEmail = URLDecoder.decode(
