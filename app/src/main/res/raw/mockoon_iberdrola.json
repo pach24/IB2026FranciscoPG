@@ -1,11 +1,11 @@
 {
   "uuid": "c4c29cf0-45e0-4a6a-9ad0-21d64bdaa7e3",
   "lastMigration": 33,
-  "name": "InvoicesMockoonEnvironment",
+  "name": "mockoon_iberdrola",
   "endpointPrefix": "",
   "latency": 0,
   "port": 3001,
-  "hostname": "",
+  "hostname": "0.0.0.0",
   "folders": [],
   "routes": [
     {
@@ -49,13 +49,13 @@
           "rulesOperator": "OR",
           "disableTemplating": false,
           "fallbackTo404": false,
-          "default": true,
+          "default": false,
           "crudKey": "id",
           "callbacks": []
         },
         {
           "uuid": "8fba3c6d-18ce-4e0b-a69e-096ffefc6841",
-          "body": "{\r\n  \"numFacturas\": 5,\r\n  \"facturas\": [\r\n    {\r\n      \"id\": \"201\",\r\n      \"descEstado\": \"Pendiente de pago\",\r\n      \"importeOrdenacion\": 121.50,\r\n      \"fechaCobro\": \"12/03/2026\",\r\n      \"fechaInicio\": \"12/02/2026\",\r\n      \"fechaFin\": \"12/03/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"202\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 95.40,\r\n      \"fechaCobro\": \"10/02/2026\",\r\n      \"fechaInicio\": \"10/01/2026\",\r\n      \"fechaFin\": \"10/02/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"203\",\r\n      \"descEstado\": \"Anulada\",\r\n      \"importeOrdenacion\": 15.75,\r\n      \"fechaCobro\": \"15/06/2025\",\r\n      \"fechaInicio\": \"15/05/2025\",\r\n      \"fechaFin\": \"15/06/2025\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"204\",\r\n      \"descEstado\": \"En trámite de cobro\",\r\n      \"importeOrdenacion\": 88.20,\r\n      \"fechaCobro\": \"20/03/2026\",\r\n      \"fechaInicio\": \"20/02/2026\",\r\n      \"fechaFin\": \"20/03/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"205\",\r\n      \"descEstado\": \"Cuota fija\",\r\n      \"importeOrdenacion\": 45.00,\r\n      \"fechaCobro\": \"01/04/2026\",\r\n      \"fechaInicio\": \"01/03/2026\",\r\n      \"fechaFin\": \"01/04/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    }\r\n  ]\r\n}",
+          "body": "{\r\n  \"numFacturas\": 5,\r\n  \"facturas\": [\r\n    {\r\n      \"id\": \"201\",\r\n      \"descEstado\": \"Pendiente de pago\",\r\n      \"importeOrdenacion\": 121.50,\r\n      \"fechaCobro\": \"12/03/2026\",\r\n      \"fechaInicio\": \"12/02/2026\",\r\n      \"fechaFin\": \"12/03/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"202\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 99.40,\r\n      \"fechaCobro\": \"10/02/2027\",\r\n      \"fechaInicio\": \"10/01/2027\",\r\n      \"fechaFin\": \"10/02/2027\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"203\",\r\n      \"descEstado\": \"Anulada\",\r\n      \"importeOrdenacion\": 15.75,\r\n      \"fechaCobro\": \"15/06/2025\",\r\n      \"fechaInicio\": \"15/05/2025\",\r\n      \"fechaFin\": \"15/06/2025\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"204\",\r\n      \"descEstado\": \"En trámite de cobro\",\r\n      \"importeOrdenacion\": 88.20,\r\n      \"fechaCobro\": \"20/03/2026\",\r\n      \"fechaInicio\": \"20/02/2026\",\r\n      \"fechaFin\": \"20/03/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"205\",\r\n      \"descEstado\": \"Cuota fija\",\r\n      \"importeOrdenacion\": 45.00,\r\n      \"fechaCobro\": \"01/04/2026\",\r\n      \"fechaInicio\": \"01/03/2026\",\r\n      \"fechaFin\": \"01/04/2026\",\r\n      \"tipoSuministro\": \"LUZ\"\r\n    }\r\n  ]\r\n}",
           "latency": 0,
           "statusCode": 200,
           "label": "Facturas  exclusivamente para el suministro de LUZ",
@@ -68,7 +68,7 @@
           "rulesOperator": "OR",
           "disableTemplating": false,
           "fallbackTo404": false,
-          "default": false,
+          "default": true,
           "crudKey": "id",
           "callbacks": []
         },
@@ -107,11 +107,11 @@
   "proxyHost": "",
   "proxyRemovePrefix": false,
   "tlsOptions": {
-    "enabled": false,
+    "enabled": true,
     "type": "CERT",
     "pfxPath": "",
-    "certPath": "",
-    "keyPath": "",
+    "certPath": ".\\certificado.crt",
+    "keyPath": ".\\clave.key",
     "caPath": "",
     "passphrase": ""
   },
