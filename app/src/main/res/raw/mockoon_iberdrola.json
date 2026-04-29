@@ -13,7 +13,7 @@
       "type": "http",
       "documentation": "",
       "method": "get",
-      "endpoint": "invoices.json",
+      "endpoint": "invoices.json?SUPPLYTUPE=LUZ",
       "responses": [
         {
           "uuid": "1bba9305-48b1-463e-a071-2fbd79702377",
@@ -30,7 +30,7 @@
           "rulesOperator": "OR",
           "disableTemplating": false,
           "fallbackTo404": false,
-          "default": false,
+          "default": true,
           "crudKey": "id",
           "callbacks": []
         },
@@ -68,7 +68,7 @@
           "rulesOperator": "OR",
           "disableTemplating": false,
           "fallbackTo404": false,
-          "default": true,
+          "default": false,
           "crudKey": "id",
           "callbacks": []
         },

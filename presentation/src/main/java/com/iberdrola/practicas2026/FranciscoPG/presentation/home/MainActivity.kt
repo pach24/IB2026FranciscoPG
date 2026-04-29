@@ -156,7 +156,22 @@ class MainActivity : AppCompatActivity() {
                         exitTransition = { slideOutHorizontally { -it } },
                         popEnterTransition = { slideInHorizontally { -it } },
                         popExitTransition = { slideOutHorizontally { it } }
-                    ) {
+                    ){
+                        // 1. Obtenemos el lifecycle
+                        val lifecycleOwner = androidx.compose.ui.platform.LocalLifecycleOwner.current
+
+                        // 2. Registramos el observador
+                        androidx.compose.runtime.DisposableEffect(lifecycleOwner) {
+                            val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+                                if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) {
+                                    viewModel.refreshLatestInvoice()
+                                }
+                            }
+                            lifecycleOwner.lifecycle.addObserver(observer)
+                            onDispose {
+                                lifecycleOwner.lifecycle.removeObserver(observer)
+                            }
+                        }
                         MainScreen(
                             userName = userName,
                             isMockEnabled = useMock,
