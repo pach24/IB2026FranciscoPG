@@ -23,27 +23,12 @@ data class InvoiceFilters(
      * @return Copia corregida de los filtros
      */
     val activeCount: Int
-        get() {
-            var count = 0
-
-            // 1. Categoría Fechas
-            if (startDate != null || endDate != null) {
-                count++
-            }
-
-            // 2. Categoría Estados
-            if (filteredStatuses.isNotEmpty()) {
-                count++
-            }
-
-            // 3. Categoría Importe (Slider)
-            // Suma 1 solo si el mínimo es mayor a 0 o si el máximo ha sido modificado (no es nulo)
-            if ((minAmount != null && minAmount > 0.0) || maxAmount != null) {
-                count++
-            }
-
-            return count
-        }
+        get() = listOf(
+            startDate != null,
+            endDate != null,
+            minAmount != null,
+            maxAmount != null
+        ).count { it } + filteredStatuses.size
 
     val hasAnyFilterApplied: Boolean
         get() = minAmount != null ||

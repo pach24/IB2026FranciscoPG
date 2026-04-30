@@ -175,9 +175,11 @@ fun FilterContent(
                 minLimit = actualMinAmount.toFloat(),
                 maxLimit = actualMaxAmount.toFloat(),
                 onRangeChange = { min, max ->
+                    val roundedMin = (min * 100.0).roundToInt() / 100.0
+                    val roundedMax = (max * 100.0).roundToInt() / 100.0
                     currentFilters = currentFilters.copy(
-                        minAmount = (min * 100.0).roundToInt() / 100.0,
-                        maxAmount = (max * 100.0).roundToInt() / 100.0
+                        minAmount = if (roundedMin <= actualMinAmount) null else roundedMin,
+                        maxAmount = if (roundedMax >= actualMaxAmount) null else roundedMax
                     )
                     onFilterInteraction()
                 }
