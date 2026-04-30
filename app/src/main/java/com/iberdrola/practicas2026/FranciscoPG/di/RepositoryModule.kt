@@ -11,6 +11,7 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.repository.FeedbackReposit
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.InvoiceRepository
 import com.iberdrola.practicas2026.FranciscoPG.data.local.ContractDao
 import com.iberdrola.practicas2026.FranciscoPG.data.local.InvoiceDao
+import com.iberdrola.practicas2026.FranciscoPG.data.network.ContractApiService
 import com.iberdrola.practicas2026.FranciscoPG.data.network.InvoiceApiService
 import dagger.Binds
 import dagger.Module
@@ -36,9 +37,11 @@ abstract class RepositoryModule {
         @Provides
         @Singleton
         fun provideContractRepository(
+            mockApi: ContractApiService,
+            configRepository: ConfigurationRepository,
             contractDao: ContractDao
         ): ContractRepository {
-            return ContractRepositoryImpl(contractDao)
+            return ContractRepositoryImpl(mockApi, configRepository, contractDao)
         }
 
         @Provides

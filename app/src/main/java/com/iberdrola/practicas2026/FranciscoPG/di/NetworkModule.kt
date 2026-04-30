@@ -4,6 +4,7 @@ import android.util.Log
 import co.infinum.retromock.Retromock
 import com.google.gson.GsonBuilder
 import com.iberdrola.practicas2026.FranciscoPG.DeviceUtils.isEmulator
+import com.iberdrola.practicas2026.FranciscoPG.data.network.ContractApiService
 import com.iberdrola.practicas2026.FranciscoPG.data.network.InvoiceApiService
 import android.content.Context
 import dagger.Module
@@ -96,4 +97,9 @@ object NetworkModule {
     @Named("MockApi")
     fun provideMockApiService(retromock: Retromock): InvoiceApiService =
         retromock.create(InvoiceApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideMockContractApiService(retromock: Retromock): ContractApiService =
+        retromock.create(ContractApiService::class.java)
 }

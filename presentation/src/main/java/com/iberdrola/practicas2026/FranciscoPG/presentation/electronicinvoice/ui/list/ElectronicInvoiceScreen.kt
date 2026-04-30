@@ -197,8 +197,8 @@ private fun ElectronicInvoiceScreenPreview() {
     IberdrolaTheme {
         ElectronicInvoiceScreen(
             contracts = listOf(
-                Contract(SupplyType.ELECTRICITY, ContractStatus.ACTIVE, "usuario@email.com"),
-                Contract(SupplyType.GAS, ContractStatus.INACTIVE, null)
+                Contract(id = "LUZ_01", supplyType = SupplyType.ELECTRICITY, status = ContractStatus.ACTIVE, email = "usuario@email.com"),
+                Contract(id = "GAS_01", supplyType = SupplyType.GAS, status = ContractStatus.INACTIVE, email = null)
             ),
             onContractClick = {},
             onNavigateBack = {}

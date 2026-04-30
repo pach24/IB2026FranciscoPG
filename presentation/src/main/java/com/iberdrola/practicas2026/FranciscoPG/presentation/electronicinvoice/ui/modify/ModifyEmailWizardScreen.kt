@@ -78,6 +78,7 @@ fun ModifyEmailWizardScreen(
     var showSuccess by remember { mutableStateOf(false) }
 
     BackHandler {
+        if (isLoading) return@BackHandler
         when {
             showSuccess -> onComplete(email)
             currentPage > 0 -> {

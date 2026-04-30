@@ -77,6 +77,7 @@ fun ElectronicInvoiceWizardScreen(
     var showSuccess by remember { mutableStateOf(false) }
 
     BackHandler {
+        if (isLoading) return@BackHandler
         when {
             showSuccess -> onNavigateBack()
             currentPage > 0 -> {
