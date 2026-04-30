@@ -47,20 +47,27 @@ fun ModifyEmailContent(
     isSameAsCurrentEmail: Boolean,
     currentCensoredEmail: String,
     onEmailChanged: (String) -> Unit,
+    validationTrigger: Int = 0,
     modifier: Modifier = Modifier
 ) {
     val colors = IberdrolaTheme.colors
     val focusManager = LocalFocusManager.current
     var emailHasBlurred by remember { mutableStateOf(false) }
-    val showError = emailHasBlurred && email.isNotEmpty() && (!isEmailValid || isSameAsCurrentEmail)
+    val showError = (emailHasBlurred || validationTrigger > 0) && email.isNotEmpty() && (!isEmailValid || isSameAsCurrentEmail)
     val shakeOffset = remember { Animatable(0f) }
 
-    LaunchedEffect(showError) {
-        if (showError) {
-            for (target in listOf(12f, -12f, 8f, -8f, 4f, 0f)) {
-                shakeOffset.animateTo(target, animationSpec = tween(durationMillis = 50))
-            }
+    suspend fun shakeSequence() {
+        for (target in listOf(12f, -12f, 8f, -8f, 4f, 0f)) {
+            shakeOffset.animateTo(target, animationSpec = tween(durationMillis = 50))
         }
+    }
+
+    LaunchedEffect(showError) {
+        if (showError) shakeSequence()
+    }
+
+    LaunchedEffect(validationTrigger) {
+        if (validationTrigger > 0) shakeSequence()
     }
 
     Column(

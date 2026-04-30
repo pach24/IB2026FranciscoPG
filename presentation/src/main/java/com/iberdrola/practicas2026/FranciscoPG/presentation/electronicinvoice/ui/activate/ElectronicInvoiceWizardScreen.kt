@@ -21,6 +21,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -75,6 +76,7 @@ fun ElectronicInvoiceWizardScreen(
     val hasData = email.isNotEmpty() || legalAccepted
     var showExitDialog by remember { mutableStateOf(false) }
     var showSuccess by remember { mutableStateOf(false) }
+    var validationTrigger by remember { mutableIntStateOf(0) }
 
     BackHandler {
         if (isLoading) return@BackHandler
@@ -138,7 +140,8 @@ fun ElectronicInvoiceWizardScreen(
                         legalAccepted = legalAccepted,
                         isEmailValid = isEmailValid,
                         onEmailChanged = onEmailChanged,
-                        onLegalAcceptedChanged = onLegalAcceptedChanged
+                        onLegalAcceptedChanged = onLegalAcceptedChanged,
+                        validationTrigger = validationTrigger
                     )
                     1 -> ConfirmElectronicInvoiceContent(
                         verificationCode = verificationCode,
@@ -171,6 +174,7 @@ fun ElectronicInvoiceWizardScreen(
                         scope.launch { pagerState.animateScrollToPage(currentPage + 1) }
                     }
                 },
+                onNextDisabled = { if (currentPage == 0) validationTrigger++ },
                 isNextEnabled = when (currentPage) {
                     0 -> isEmailValid && legalAccepted
                     1 -> verificationCode.length == 6
