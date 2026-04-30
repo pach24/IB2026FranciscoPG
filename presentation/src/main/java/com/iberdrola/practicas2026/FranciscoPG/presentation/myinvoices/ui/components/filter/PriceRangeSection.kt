@@ -39,6 +39,8 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
+import kotlin.math.ceil
+import kotlin.math.floor
 import kotlinx.coroutines.launch
 
 // Sección de rango de importe con badge central, slider de doble thumb y etiquetas de límites
@@ -79,8 +81,8 @@ fun PriceRangeSection(
             Text(
                 text = stringResource(
                     R.string.filter_price_range,
-                    animMin.value.toInt(),
-                    animMax.value.toInt()
+                    floor(animMin.value).toInt(),
+                    ceil(animMax.value).toInt()
                 ),
                 fontFamily = IberFontBold,
                 fontWeight = FontWeight.Bold,
@@ -156,13 +158,13 @@ fun PriceRangeSection(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = stringResource(R.string.filter_price_limit, minLimit.toInt()),
+                text = stringResource(R.string.filter_price_limit, floor(minLimit).toInt()),
                 color = colors.textSubtitle,
                 fontFamily = IberFontRegular,
                 fontSize = TextSize.sp12
             )
             Text(
-                text = stringResource(R.string.filter_price_limit, maxLimit.toInt()),
+                text = stringResource(R.string.filter_price_limit, ceil(maxLimit).toInt()),
                 color = colors.textSubtitle,
                 fontFamily = IberFontRegular,
                 fontSize = TextSize.sp12

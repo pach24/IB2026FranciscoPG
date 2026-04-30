@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import kotlin.math.roundToInt
 import androidx.compose.ui.text.font.FontWeight
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import androidx.compose.ui.tooling.preview.Preview
@@ -175,8 +176,8 @@ fun FilterContent(
                 maxLimit = actualMaxAmount.toFloat(),
                 onRangeChange = { min, max ->
                     currentFilters = currentFilters.copy(
-                        minAmount = min.toDouble(),
-                        maxAmount = max.toDouble()
+                        minAmount = (min * 100.0).roundToInt() / 100.0,
+                        maxAmount = (max * 100.0).roundToInt() / 100.0
                     )
                     onFilterInteraction()
                 }

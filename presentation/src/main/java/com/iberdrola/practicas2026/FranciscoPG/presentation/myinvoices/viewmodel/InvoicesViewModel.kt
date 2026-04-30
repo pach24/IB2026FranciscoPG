@@ -25,8 +25,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.ceil
-import kotlin.math.floor
 
 @HiltViewModel
 class InvoicesViewModel @Inject constructor(
@@ -161,8 +159,8 @@ class InvoicesViewModel @Inject constructor(
                 .collect { allInvoices ->
                     if (allInvoices.isNotEmpty()) {
                         filterViewModel.updateStatistics(
-                            minAmount = floor(allInvoices.minAmount()),
-                            maxAmount = ceil(allInvoices.maxAmount()),
+                            minAmount = allInvoices.minAmount(),
+                            maxAmount = allInvoices.maxAmount(),
                             oldestDate = allInvoices.oldestDate(),
                             newestDate = allInvoices.newestDate()
                         )
