@@ -101,6 +101,7 @@
 
     <!-- Banners -->
     <string name="banner_service_unavailable">Este servicio no esta disponible. Por favor, inténtalo de nuevo más tarde.</string>
+    <string name="banner_invoice_not_available">Esta factura aún no está disponible</string>
     <string name="banner_resend_sms_success">Hemos vuelto a enviar un SMS con tu código de verificación.</string>
 
     <!-- Filtros -->

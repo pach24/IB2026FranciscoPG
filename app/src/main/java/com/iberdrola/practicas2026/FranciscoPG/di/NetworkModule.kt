@@ -28,9 +28,9 @@ object NetworkModule {
     fun provideBaseUrl(): String {
         val emulator = isEmulator()
         val url = if (emulator) {
-            "http://10.0.2.2:3001/"
+            "https://10.0.2.2:3001/"
         } else {
-            "http://localhost:3001/"
+            "https://localhost:3001/"
         }
         Log.d("NetworkModule", "isEmulator=$emulator, BASE_URL=$url")
         return url
@@ -61,6 +61,7 @@ object NetworkModule {
             }
             .connectTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
+            .hostnameVerifier { _,_ -> true }
             .build()
     }
 

@@ -17,6 +17,7 @@ class InvoiceUiMapper @Inject constructor() {
         val latestInvoice = invoices.firstOrNull()?.let { invoice ->
             LatestInvoiceUiModel(
                 amount = formatAmount(invoice.amount),
+                currencySymbol = CURRENCY_SYMBOL,
                 dateRange = "${formatPeriodDate(invoice.periodStart)} - ${formatPeriodDate(invoice.periodEnd)}",
                 supplyTypeLabel = typeLabel,
                 statusText = invoice.status.apiValue,
@@ -53,6 +54,7 @@ class InvoiceUiMapper @Inject constructor() {
                         date = formatDateToSpanish(invoice.chargeDate),
                         type = typeLabel,
                         amount = formatAmount(invoice.amount),
+                        currencySymbol = CURRENCY_SYMBOL,
                         statusText = invoice.status.apiValue,
                         status = invoice.status
                     )
@@ -85,7 +87,7 @@ class InvoiceUiMapper @Inject constructor() {
     }
 
     private fun formatAmount(amount: Double): String =
-        String.format(java.util.Locale("es", "ES"), "%.2f €", amount)
+        String.format(java.util.Locale("es", "ES"), "%.2f", amount)
 
     private fun supplyTypeLabel(supplyType: SupplyType): String = when (supplyType) {
         SupplyType.ELECTRICITY -> "Luz"
@@ -98,6 +100,7 @@ class InvoiceUiMapper @Inject constructor() {
     }
 
     private companion object {
+        private const val CURRENCY_SYMBOL = "€"
         private val MONTHS = arrayOf(
             "", "enero", "febrero", "marzo", "abril", "mayo", "junio",
             "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"

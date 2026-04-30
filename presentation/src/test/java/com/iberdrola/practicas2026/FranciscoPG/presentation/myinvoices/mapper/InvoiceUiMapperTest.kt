@@ -51,7 +51,8 @@ class InvoiceUiMapperTest {
         val result = mapper.map(listOf(invoice1, invoice2), SupplyType.ELECTRICITY)
 
         assertNotNull(result.latestInvoice)
-        assertEquals("123,45 €", result.latestInvoice!!.amount)
+        assertEquals("123,45", result.latestInvoice!!.amount)
+        assertEquals("€", result.latestInvoice!!.currencySymbol)
         assertEquals("01 ene. 2024 - 31 ene. 2024", result.latestInvoice!!.dateRange)
         assertEquals("Factura Luz", result.latestInvoice!!.supplyTypeLabel)
         assertEquals("Pagada", result.latestInvoice!!.statusText)
@@ -114,7 +115,8 @@ class InvoiceUiMapperTest {
         val result = mapper.map(listOf(invoice1), SupplyType.ELECTRICITY)
 
         val item = result.historyItems.filterIsInstance<InvoiceListItem.InvoiceItem>().first()
-        assertEquals("123,45 €", item.amount)
+        assertEquals("123,45", item.amount)
+        assertEquals("€", item.currencySymbol)
     }
 
     // Verifica que el estado e isPaid se mapean correctamente para facturas pendientes

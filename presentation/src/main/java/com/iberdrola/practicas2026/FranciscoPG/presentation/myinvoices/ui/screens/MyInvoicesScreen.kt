@@ -31,7 +31,7 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFilters
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.showFilterResultSnackbar
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.showFiltersClearedSnackbar
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.InvoicesUiState
-import com.iberdrola.practicas2026.FranciscoPG.presentation.common.UnavailableBanner
+import com.iberdrola.practicas2026.FranciscoPG.presentation.common.GenericBanner
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel.FeedbackSheetState
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel.FilterViewModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel.InvoicesEvent
@@ -170,13 +170,14 @@ fun InvoicesScreen(
             )
         }
 
-        UnavailableBanner(
+        GenericBanner(
             visible = uiState.showBanner,
+            text = stringResource(R.string.banner_invoice_not_available),
             onDismiss = { onEvent(InvoicesEvent.OnBannerDismissed) },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .navigationBarsPadding()
-                .padding(bottom = Spacing.dp32)
+                .padding(bottom = Spacing.dp8)
         )
     }
 }

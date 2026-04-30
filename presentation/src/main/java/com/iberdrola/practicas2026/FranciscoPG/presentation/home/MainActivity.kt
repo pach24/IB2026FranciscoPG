@@ -1,7 +1,9 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.home
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
+import android.graphics.Color
 import android.os.Bundle
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -22,7 +24,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Modifier
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.MainScreen
+import com.iberdrola.practicas2026.FranciscoPG.presentation.home.ui.SplashScreen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.home.viewmodel.MainViewModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.activate.ActivateElectronicInvoiceRoute
 import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.list.ElectronicInvoiceRoute
@@ -37,6 +47,7 @@ import java.net.URLDecoder
 import java.net.URLEncoder
 
 private object AppRoutes {
+    const val SPLASH = "splash"
     const val HOME = "home"
     const val MY_INVOICES = "my_invoices"
     const val ELECTRONIC_INVOICE = "electronic_invoice"
@@ -52,7 +63,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.dark(Color.TRANSPARENT)
+        )
 
         setContent {
             IberdrolaTheme {
@@ -60,6 +74,8 @@ class MainActivity : AppCompatActivity() {
                 val userName by viewModel.userName.collectAsStateWithLifecycle()
                 val useMock by viewModel.useMock.collectAsStateWithLifecycle()
                 val mockModeChanged by viewModel.mockModeChanged.collectAsStateWithLifecycle()
+                val latestInvoiceAmount by viewModel.latestInvoiceAmount.collectAsStateWithLifecycle()
+                val isLoadingInvoice by viewModel.isLoadingInvoice.collectAsStateWithLifecycle()
 
                 val snackbarHostState = remember { SnackbarHostState() }
                 val navController = rememberNavController()
@@ -86,27 +102,81 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                // Descartar snackbar al cambiar de pantalla
+                // Descartar snackbar al cambiar de pantalla y ajustar barras del sistema
                 val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+                var previousRoute by remember { mutableStateOf(currentRoute) }
                 LaunchedEffect(currentRoute) {
                     snackbarHostState.currentSnackbarData?.dismiss()
+                    // Cambiar iconos de barras: dark en splash, auto en el resto
+                    if (currentRoute != null && currentRoute != AppRoutes.SPLASH) {
+                        enableEdgeToEdge(
+                            statusBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT),
+                            navigationBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT)
+                        )
+                    }
+                    if (currentRoute == AppRoutes.HOME && previousRoute != null
+                        && previousRoute != AppRoutes.HOME && previousRoute != AppRoutes.SPLASH
+                    ) {
+                        viewModel.refreshLatestInvoice()
+                    }
+                    previousRoute = currentRoute
                 }
 
                 NavHost(
                     navController = navController,
-                    startDestination = AppRoutes.HOME
+                    startDestination = AppRoutes.SPLASH,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(IberdrolaTheme.colors.background)
                 ) {
 
                     composable(
+                        AppRoutes.SPLASH,
+                        enterTransition = { EnterTransition.None },
+                        exitTransition = { ExitTransition.None }
+                    ) {
+                        SplashScreen(
+                            onSplashFinished = {
+                                navController.navigate(AppRoutes.HOME) {
+                                    popUpTo(AppRoutes.SPLASH) { inclusive = true }
+                                }
+                            }
+                        )
+                    }
+
+                    composable(
                         AppRoutes.HOME,
-                        enterTransition = { slideInHorizontally { -it } },
+                        enterTransition = {
+                            if (initialState.destination.route == AppRoutes.SPLASH) {
+                                fadeIn(tween(durationMillis = 600, delayMillis = 200))
+                            } else {
+                                slideInHorizontally { -it }
+                            }
+                        },
                         exitTransition = { slideOutHorizontally { -it } },
                         popEnterTransition = { slideInHorizontally { -it } },
                         popExitTransition = { slideOutHorizontally { it } }
-                    ) {
+                    ){
+                        // 1. Obtenemos el lifecycle
+                        val lifecycleOwner = androidx.compose.ui.platform.LocalLifecycleOwner.current
+
+                        // 2. Registramos el observador
+                        androidx.compose.runtime.DisposableEffect(lifecycleOwner) {
+                            val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+                                if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) {
+                                    viewModel.refreshLatestInvoice()
+                                }
+                            }
+                            lifecycleOwner.lifecycle.addObserver(observer)
+                            onDispose {
+                                lifecycleOwner.lifecycle.removeObserver(observer)
+                            }
+                        }
                         MainScreen(
                             userName = userName,
                             isMockEnabled = useMock,
+                            latestInvoiceAmount = latestInvoiceAmount,
+                            isLoadingInvoice = isLoadingInvoice,
                             onMockModeChanged = viewModel::updateMockMode,
                             onInvoicesCardClick = {
                                 navController.navigate(AppRoutes.MY_INVOICES) {
@@ -134,26 +204,34 @@ class MainActivity : AppCompatActivity() {
 
                     composable(
                         AppRoutes.MY_INVOICES,
-                        enterTransition = { slideInHorizontally { it } },
-                        exitTransition = { slideOutHorizontally { it } },
-                        popEnterTransition = { slideInHorizontally { -it } },
-                        popExitTransition = { slideOutHorizontally { it } }
+                        enterTransition = { slideInHorizontally(tween(350)) { it } + fadeIn(tween(200)) },
+                        exitTransition = { slideOutHorizontally(tween(350)) { -it } },
+                        popEnterTransition = { slideInHorizontally(tween(350)) { -it } + fadeIn(tween(200)) },
+                        popExitTransition = { slideOutHorizontally(tween(350)) { it } }
                     ) {
                         InvoicesRoute(
                             useMock = useMock,
-                            onNavigateBack = { navController.popBackStack() }
+                            onNavigateBack = {
+                                if (navController.previousBackStackEntry != null) {
+                                    navController.popBackStack()
+                                }
+                            }
                         )
                     }
 
                     composable(
                         AppRoutes.ELECTRONIC_INVOICE,
-                        enterTransition = { slideInHorizontally { it } },
-                        exitTransition = { slideOutHorizontally { it } },
-                        popEnterTransition = { slideInHorizontally { -it } },
-                        popExitTransition = { slideOutHorizontally { it } }
+                        enterTransition = { slideInHorizontally(tween(350)) { it } + fadeIn(tween(200)) },
+                        exitTransition = { slideOutHorizontally(tween(350)) { -it } },
+                        popEnterTransition = { slideInHorizontally(tween(350)) { -it } + fadeIn(tween(200)) },
+                        popExitTransition = { slideOutHorizontally(tween(350)) { it } }
                     ) {
                         ElectronicInvoiceRoute(
-                            onNavigateBack = { navController.popBackStack() },
+                            onNavigateBack = {
+                                if (navController.previousBackStackEntry != null) {
+                                    navController.popBackStack()
+                                }
+                            },
                             onNavigateToActivate = { supplyType ->
                                 navController.navigate("${AppRoutes.ACTIVATE_ELECTRONIC_INVOICE}/$supplyType") {
                                     launchSingleTop = true
@@ -171,10 +249,10 @@ class MainActivity : AppCompatActivity() {
                     composable(
                         "${AppRoutes.ACTIVATE_ELECTRONIC_INVOICE}/{supplyType}",
                         arguments = listOf(navArgument("supplyType") { type = NavType.StringType }),
-                        enterTransition = { slideInHorizontally { it } },
-                        exitTransition = { slideOutHorizontally { it } },
-                        popEnterTransition = { slideInHorizontally { -it } },
-                        popExitTransition = { slideOutHorizontally { it } }
+                        enterTransition = { slideInHorizontally(tween(350)) { it } + fadeIn(tween(200)) },
+                        exitTransition = { slideOutHorizontally(tween(350)) { -it } },
+                        popEnterTransition = { slideInHorizontally(tween(350)) { -it } + fadeIn(tween(200)) },
+                        popExitTransition = { slideOutHorizontally(tween(350)) { it } }
                     ) {
                         ActivateElectronicInvoiceRoute(
                             onNavigateBack = { navController.popBackStack() }
@@ -187,10 +265,10 @@ class MainActivity : AppCompatActivity() {
                             navArgument("supplyType") { type = NavType.StringType },
                             navArgument("censoredEmail") { type = NavType.StringType; defaultValue = "" }
                         ),
-                        enterTransition = { slideInHorizontally { it } },
-                        exitTransition = { slideOutHorizontally { it } },
-                        popEnterTransition = { slideInHorizontally { -it } },
-                        popExitTransition = { slideOutHorizontally { it } }
+                        enterTransition = { slideInHorizontally(tween(350)) { it } + fadeIn(tween(200)) },
+                        exitTransition = { slideOutHorizontally(tween(350)) { -it } },
+                        popEnterTransition = { slideInHorizontally(tween(350)) { -it } + fadeIn(tween(200)) },
+                        popExitTransition = { slideOutHorizontally(tween(350)) { it } }
                     ) { entry ->
                         val supplyType = entry.arguments?.getString("supplyType") ?: "LUZ"
                         val initialEmail = URLDecoder.decode(

@@ -10,7 +10,8 @@ class ResolvePreferredTabIndexTest {
 
     private val successState = InvoiceListUiState.Success(
         latestInvoice = LatestInvoiceUiModel(
-            amount = "50.00 €",
+            amount = "50.00",
+            currencySymbol = "€",
             dateRange = "01/01/2024 - 31/01/2024",
             supplyTypeLabel = "Factura",
             statusText = "Pagada",
