@@ -55,10 +55,6 @@ fun FilterActionButtons(
 
         Button(
             onClick = onClear,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(64.dp)
-                .padding(horizontal = Spacing.dp24),
             shape = RoundedCornerShape(Radius.dp50),
             colors = ButtonDefaults.buttonColors(
                 containerColor = androidx.compose.ui.graphics.Color.Transparent,
