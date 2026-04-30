@@ -8,7 +8,7 @@ import java.time.LocalDate
 class InvoiceExtensionsTest {
 
     private fun invoice(amount: Double = 0.0, chargeDate: String = "01/01/2025") = Invoice(
-        id = "1", status = InvoiceStatus.PAID, amount = amount,
+        id = "1", contractId = "LUZ_01", status = InvoiceStatus.PAID, amount = amount,
         chargeDate = chargeDate, periodStart = "", periodEnd = "",
         supplyType = SupplyType.ELECTRICITY
     )

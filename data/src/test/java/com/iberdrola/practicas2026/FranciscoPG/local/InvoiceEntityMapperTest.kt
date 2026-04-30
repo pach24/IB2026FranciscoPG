@@ -16,6 +16,7 @@ class InvoiceEntityMapperTest {
     fun `toDomain maps entity to domain model correctly`() {
         val entity = InvoiceEntity(
             id = "E-001",
+            contractId = "LUZ_01",
             status = "Pagada",
             amount = 99.99,
             chargeDate = "10/05/2024",
@@ -27,6 +28,7 @@ class InvoiceEntityMapperTest {
         val invoice = entity.toDomain()
 
         assertEquals("E-001", invoice.id)
+        assertEquals("LUZ_01", invoice.contractId)
         assertEquals(InvoiceStatus.PAID, invoice.status)
         assertEquals(99.99, invoice.amount, 0.001)
         assertEquals("10/05/2024", invoice.chargeDate)
@@ -40,6 +42,7 @@ class InvoiceEntityMapperTest {
     fun `toDomain maps GAS entity`() {
         val entity = InvoiceEntity(
             id = "E-002",
+            contractId = "GAS_01",
             status = "Pendiente de pago",
             amount = 45.0,
             chargeDate = "15/06/2024",
@@ -59,6 +62,7 @@ class InvoiceEntityMapperTest {
     fun `toEntity maps domain model to entity correctly`() {
         val invoice = Invoice(
             id = "D-001",
+            contractId = "GAS_01",
             status = InvoiceStatus.PAID,
             amount = 150.0,
             chargeDate = "20/07/2024",
@@ -70,6 +74,7 @@ class InvoiceEntityMapperTest {
         val entity = invoice.toEntity()
 
         assertEquals("D-001", entity.id)
+        assertEquals("GAS_01", entity.contractId)
         assertEquals("Pagada", entity.status)
         assertEquals(150.0, entity.amount, 0.001)
         assertEquals("20/07/2024", entity.chargeDate)
@@ -83,6 +88,7 @@ class InvoiceEntityMapperTest {
     fun `roundtrip toEntity then toDomain preserves data`() {
         val original = Invoice(
             id = "RT-001",
+            contractId = "LUZ_01",
             status = InvoiceStatus.PENDING,
             amount = 200.50,
             chargeDate = "25/08/2024",
