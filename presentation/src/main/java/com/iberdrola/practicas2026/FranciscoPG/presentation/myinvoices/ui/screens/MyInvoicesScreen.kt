@@ -9,12 +9,14 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -31,7 +33,6 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFilters
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.showFilterResultSnackbar
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.showFiltersClearedSnackbar
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.InvoicesUiState
-import com.iberdrola.practicas2026.FranciscoPG.presentation.common.GenericBanner
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel.FeedbackSheetState
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel.FilterViewModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel.InvoicesEvent
@@ -170,14 +171,22 @@ fun InvoicesScreen(
             )
         }
 
-        GenericBanner(
-            visible = uiState.showBanner,
-            text = stringResource(R.string.banner_invoice_not_available),
-            onDismiss = { onEvent(InvoicesEvent.OnBannerDismissed) },
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .navigationBarsPadding()
-                .padding(bottom = Spacing.dp8)
-        )
+        if (uiState.showBanner) {
+            AlertDialog(
+                onDismissRequest = {},
+                title = {
+                    Text(text = stringResource(R.string.dialog_invoice_not_available_title))
+                },
+                text = {
+                    Text(text = stringResource(R.string.dialog_invoice_not_available_message))
+                },
+                confirmButton = {
+                    TextButton(onClick = { onEvent(InvoicesEvent.OnBannerDismissed) }) {
+                        Text(text = stringResource(R.string.info_dialog_close))
+                    }
+                },
+                containerColor = IberdrolaTheme.colors.surface
+            )
+        }
     }
 }
