@@ -21,6 +21,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
@@ -115,6 +118,16 @@ fun FilterContent(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
+                .drawWithContent {
+                    drawContent()
+                    drawRect(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(Color.Transparent, colors.background),
+                            startY = size.height * 0.8f,
+                            endY = size.height
+                        )
+                    )
+                }
                 .padding(horizontal = Spacing.dp24)
                 .verticalScroll(rememberScrollState())
         ) {
@@ -183,16 +196,16 @@ fun FilterContent(
             )
 
             Spacer(modifier = Modifier.height(Spacing.dp32))
-
-            FilterActionButtons(
-                onApply = { onApplyFilters(currentFilters) },
-                onClear = {
-                    val previousDraft = currentFilters
-                    currentFilters = InvoiceFilters()
-                    onClearFilters(previousDraft)
-                }
-            )
         }
+
+        FilterActionButtons(
+            onApply = { onApplyFilters(currentFilters) },
+            onClear = {
+                val previousDraft = currentFilters
+                currentFilters = InvoiceFilters()
+                onClearFilters(previousDraft)
+            }
+        )
     }
 }
 
