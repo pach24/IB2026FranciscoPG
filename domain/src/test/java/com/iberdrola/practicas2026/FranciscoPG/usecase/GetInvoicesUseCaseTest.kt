@@ -23,8 +23,8 @@ class GetInvoicesUseCaseTest {
     private lateinit var useCase: GetInvoicesUseCase
 
     private val sampleInvoices = listOf(
-        Invoice("1", InvoiceStatus.PAID, 50.0, "15/01/2024", "01/01/2024", "31/01/2024", SupplyType.ELECTRICITY),
-        Invoice("2", InvoiceStatus.PENDING, 100.0, "20/03/2024", "01/03/2024", "31/03/2024", SupplyType.ELECTRICITY)
+        Invoice(id = "1", contractId = "LUZ_01", status = InvoiceStatus.PAID, amount = 50.0, chargeDate = "15/01/2024", periodStart = "01/01/2024", periodEnd = "31/01/2024", supplyType = SupplyType.ELECTRICITY),
+        Invoice(id = "2", contractId = "LUZ_01", status = InvoiceStatus.PENDING, amount = 100.0, chargeDate = "20/03/2024", periodStart = "01/03/2024", periodEnd = "31/03/2024", supplyType = SupplyType.ELECTRICITY)
     )
 
     @Before

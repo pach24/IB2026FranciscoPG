@@ -1,8 +1,10 @@
 {
-  "numFacturas": 16,
-  "facturas": [
+  "code": 200,
+  "error": null,
+  "data": [
     {
       "id": "1",
+      "contractId": "LUZ_01",
       "descEstado": "Pendiente de pago",
       "importeOrdenacion": 22.20,
       "fechaCobro": "04/03/2024",
@@ -12,6 +14,7 @@
     },
     {
       "id": "2",
+      "contractId": "LUZ_01",
       "descEstado": "Pendiente de pago",
       "importeOrdenacion": 20.10,
       "fechaCobro": "06/02/2024",
@@ -21,6 +24,7 @@
     },
     {
       "id": "3",
+      "contractId": "LUZ_01",
       "descEstado": "Pagada",
       "importeOrdenacion": 150.43,
       "fechaCobro": "06/11/2023",
@@ -30,6 +34,7 @@
     },
     {
       "id": "4",
+      "contractId": "GAS_01",
       "descEstado": "Pagada",
       "importeOrdenacion": 45.50,
       "fechaCobro": "15/12/2023",
@@ -39,6 +44,7 @@
     },
     {
       "id": "5",
+      "contractId": "GAS_01",
       "descEstado": "Pendiente de pago",
       "importeOrdenacion": 80.25,
       "fechaCobro": "10/09/2022",
@@ -48,6 +54,7 @@
     },
     {
       "id": "6",
+      "contractId": "GAS_01",
       "descEstado": "Pagada",
       "importeOrdenacion": 60.00,
       "fechaCobro": "20/05/2021",
@@ -57,6 +64,7 @@
     },
     {
       "id": "7",
+      "contractId": "LUZ_01",
       "descEstado": "Pendiente de pago",
       "importeOrdenacion": 95.30,
       "fechaCobro": "12/04/2022",
@@ -66,6 +74,7 @@
     },
     {
       "id": "8",
+      "contractId": "LUZ_01",
       "descEstado": "Pagada",
       "importeOrdenacion": 210.15,
       "fechaCobro": "18/01/2022",
@@ -75,6 +84,7 @@
     },
     {
       "id": "9",
+      "contractId": "GAS_01",
       "descEstado": "Pagada",
       "importeOrdenacion": 32.80,
       "fechaCobro": "25/07/2023",
@@ -84,6 +94,7 @@
     },
     {
       "id": "10",
+      "contractId": "GAS_01",
       "descEstado": "Pendiente de pago",
       "importeOrdenacion": 67.90,
       "fechaCobro": "03/10/2023",
@@ -93,6 +104,7 @@
     },
     {
       "id": "11",
+      "contractId": "LUZ_01",
       "descEstado": "Pagada",
       "importeOrdenacion": 112.25,
       "fechaCobro": "22/08/2022",
@@ -102,6 +114,7 @@
     },
     {
       "id": "12",
+      "contractId": "GAS_01",
       "descEstado": "Pendiente de pago",
       "importeOrdenacion": 40.00,
       "fechaCobro": "30/11/2021",
@@ -111,6 +124,7 @@
     },
     {
       "id": "13",
+      "contractId": "LUZ_01",
       "descEstado": "Anulada",
       "importeOrdenacion": 55.75,
       "fechaCobro": "15/06/2023",
@@ -120,6 +134,7 @@
     },
     {
       "id": "14",
+      "contractId": "GAS_01",
       "descEstado": "Anulada",
       "importeOrdenacion": 28.30,
       "fechaCobro": "10/04/2022",
@@ -129,8 +144,9 @@
     },
     {
       "id": "15",
+      "contractId": "LUZ_01",
       "descEstado": "Pagada",
-      "importeOrdenacion":20.00,
+      "importeOrdenacion": 20.00,
       "fechaCobro": "08/03/2024",
       "fechaInicio": "08/02/2024",
       "fechaFin": "08/03/2024",
@@ -138,6 +154,7 @@
     },
     {
       "id": "16",
+      "contractId": "GAS_01",
       "descEstado": "Cuota fija",
       "importeOrdenacion": 35.00,
       "fechaCobro": "01/01/2024",

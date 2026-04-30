@@ -297,6 +297,7 @@ class FilterInvoicesUseCaseTest {
         date: String
     ) = Invoice(
         id = id,
+        contractId = "LUZ_01",
         status = status,
         amount = amount,
         chargeDate = date,

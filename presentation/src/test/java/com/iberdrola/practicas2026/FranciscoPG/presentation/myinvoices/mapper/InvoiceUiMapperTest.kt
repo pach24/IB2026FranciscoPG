@@ -16,17 +16,17 @@ class InvoiceUiMapperTest {
     private lateinit var mapper: InvoiceUiMapper
 
     private val invoice1 = Invoice(
-        id = "1", status = InvoiceStatus.PAID, amount = 123.45,
+        id = "1", contractId = "LUZ_01", status = InvoiceStatus.PAID, amount = 123.45,
         chargeDate = "15/01/2024", periodStart = "01/01/2024",
         periodEnd = "31/01/2024", supplyType = SupplyType.ELECTRICITY
     )
     private val invoice2 = Invoice(
-        id = "2", status = InvoiceStatus.PENDING, amount = 67.89,
+        id = "2", contractId = "LUZ_01", status = InvoiceStatus.PENDING, amount = 67.89,
         chargeDate = "20/03/2024", periodStart = "01/03/2024",
         periodEnd = "31/03/2024", supplyType = SupplyType.ELECTRICITY
     )
     private val invoice3 = Invoice(
-        id = "3", status = InvoiceStatus.PAID, amount = 200.0,
+        id = "3", contractId = "GAS_01", status = InvoiceStatus.PAID, amount = 200.0,
         chargeDate = "10/02/2025", periodStart = "01/02/2025",
         periodEnd = "28/02/2025", supplyType = SupplyType.GAS
     )

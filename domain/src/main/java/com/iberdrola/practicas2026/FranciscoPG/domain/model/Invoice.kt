@@ -2,6 +2,7 @@ package com.iberdrola.practicas2026.FranciscoPG.domain.model
 
 data class Invoice(
     val id: String,
+    val contractId: String,
     val status: InvoiceStatus,
     val amount: Double,
     val chargeDate: String,
