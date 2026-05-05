@@ -10,25 +10,34 @@ import javax.inject.Inject
 
 class InvoiceUiMapper @Inject constructor() {
 
+    fun mapLatest(invoices: List<Invoice>, supplyType: SupplyType): LatestInvoiceUiModel? {
+        val typeLabel = "Factura ${supplyTypeLabel(supplyType)}"
+        val iconRes = supplyTypeIconRes(supplyType)
+        return buildLatestInvoice(invoices.firstOrNull(), typeLabel, iconRes)
+    }
+
     fun map(invoices: List<Invoice>, supplyType: SupplyType): InvoiceUiModel {
         val typeLabel = "Factura ${supplyTypeLabel(supplyType)}"
         val iconRes = supplyTypeIconRes(supplyType)
-
-        val latestInvoice = invoices.firstOrNull()?.let { invoice ->
-            LatestInvoiceUiModel(
-                amount = formatAmount(invoice.amount),
-                currencySymbol = CURRENCY_SYMBOL,
-                dateRange = "${formatPeriodDate(invoice.periodStart)} - ${formatPeriodDate(invoice.periodEnd)}",
-                supplyTypeLabel = typeLabel,
-                statusText = invoice.status.apiValue,
-                status = invoice.status,
-                iconRes = iconRes
-            )
-        }
-
         return InvoiceUiModel(
-            latestInvoice = latestInvoice,
+            latestInvoice = buildLatestInvoice(invoices.firstOrNull(), typeLabel, iconRes),
             historyItems = buildHistoryItems(invoices, typeLabel)
+        )
+    }
+
+    private fun buildLatestInvoice(
+        invoice: Invoice?,
+        typeLabel: String,
+        iconRes: Int
+    ): LatestInvoiceUiModel? = invoice?.let {
+        LatestInvoiceUiModel(
+            amount = formatAmount(it.amount),
+            currencySymbol = CURRENCY_SYMBOL,
+            dateRange = "${formatPeriodDate(it.periodStart)} - ${formatPeriodDate(it.periodEnd)}",
+            supplyTypeLabel = typeLabel,
+            statusText = it.status.apiValue,
+            status = it.status,
+            iconRes = iconRes
         )
     }
 

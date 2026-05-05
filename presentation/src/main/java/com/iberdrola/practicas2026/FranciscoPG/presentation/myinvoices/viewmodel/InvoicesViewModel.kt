@@ -245,7 +245,7 @@ class InvoicesViewModel @Inject constructor(
 
         val uiModel = invoiceUiMapper.map(filtered, supplyType)
         return InvoiceListUiState.Success(
-            latestInvoice = uiModel.latestInvoice,
+            latestInvoice = invoiceUiMapper.mapLatest(invoices, supplyType),
             historyItems = uiModel.historyItems,
             isFiltered = filterModeActive,
             invoiceCount = filtered.size

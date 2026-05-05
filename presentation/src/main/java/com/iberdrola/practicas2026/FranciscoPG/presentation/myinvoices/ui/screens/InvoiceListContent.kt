@@ -21,6 +21,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -62,6 +63,13 @@ fun InvoiceListComposeScreen(
     listState: LazyListState = rememberLazyListState()
 ) {
     val pullToRefreshState = rememberPullToRefreshState()
+
+    LaunchedEffect(isFiltered) {
+        if (!isLoading) {
+            if (isFiltered) listState.animateScrollToItem(1)
+            else listState.animateScrollToItem(0)
+        }
+    }
 
     PullToRefreshBox(
         state = pullToRefreshState,

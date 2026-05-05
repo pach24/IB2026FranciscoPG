@@ -68,7 +68,7 @@ fun InvoiceTabContent(
                     InvoiceListComposeScreen(
                         isLoading = false,
                         isRefreshing = true,
-                        latestInvoice = if (cached.isFiltered) null else cached.latestInvoice,
+                        latestInvoice = cached.latestInvoice,
                         historyItems = cached.historyItems,
                         listState = listState,
                         onLatestInvoiceClick = onFeatureNotAvailable,
@@ -233,7 +233,7 @@ fun InvoiceTabContent(
             InvoiceListComposeScreen(
                 isLoading = false,
                 isRefreshing = false,
-                latestInvoice = if (uiState.isFiltered) null else uiState.latestInvoice,
+                latestInvoice = uiState.latestInvoice,
                 historyItems = uiState.historyItems,
                 listState = listState,
                 onLatestInvoiceClick = onFeatureNotAvailable,
