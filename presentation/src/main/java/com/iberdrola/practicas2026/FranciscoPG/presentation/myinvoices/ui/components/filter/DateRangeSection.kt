@@ -62,7 +62,7 @@ fun DateRangeSection(
             fontFamily = IberFontBold,
             color = colors.darkGrey
         )
-        Spacer(modifier = Modifier.height(Spacing.dp20))
+        Spacer(modifier = Modifier.height(Spacing.dp8))
         Row(
             horizontalArrangement = Arrangement.spacedBy(Spacing.dp32),
             modifier = Modifier.fillMaxWidth()
@@ -203,7 +203,7 @@ private fun DateField(
             }
         }
 
-        Spacer(modifier = Modifier.height(Spacing.dp12))
+        Spacer(modifier = Modifier.height(Spacing.dp6))
 
         HorizontalDivider(
             color = dividerColor,

@@ -50,7 +50,7 @@ fun FilterActionButtons(
                 onClick = onApply,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(64.dp),
+                    .height(58.dp),
                 shape = RoundedCornerShape(Radius.dp50),
                 colors = ButtonDefaults.buttonColors(containerColor = colors.iberdrolaDarkGreen)
             ) {
@@ -63,7 +63,7 @@ fun FilterActionButtons(
                 )
             }
 
-            Spacer(modifier = Modifier.height(Spacing.dp16))
+            Spacer(modifier = Modifier.height(Spacing.dp12))
 
             Button(
                 onClick = onClear,

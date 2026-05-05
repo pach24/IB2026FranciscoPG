@@ -34,6 +34,7 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontRegula
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
@@ -76,7 +77,7 @@ fun PriceRangeSection(
             modifier = Modifier
                 .background(colors.badgeAmountFilter, RoundedCornerShape(Radius.dp4))
                 .align(Alignment.CenterHorizontally)
-                .padding(horizontal = Spacing.dp12, vertical = Spacing.dp8)
+                .padding(horizontal = Spacing.dp12, vertical = Spacing.dp4)
         ) {
             Text(
                 text = stringResource(
@@ -96,10 +97,24 @@ fun PriceRangeSection(
         RangeSlider(
             value = animMin.value..animMax.value,
             onValueChange = { range ->
+                val minGap = 1f
                 isDragging = true
-                val startValue = if (range.start < minLimit + 0.1f) minLimit else range.start
-                val endValue = if (range.endInclusive > maxLimit - 0.1f) maxLimit else range.endInclusive
-                onRangeChange(startValue, endValue)
+
+                var newStart = range.start
+                var newEnd = range.endInclusive
+
+
+                if (newEnd - newStart < minGap) {
+
+                    if (newStart != animMin.value) {
+
+                        newStart = (newEnd - minGap).coerceAtLeast(minLimit)
+                    } else {
+                        newEnd = (newStart + minGap).coerceAtMost(maxLimit)
+                    }
+                }
+
+                onRangeChange(newStart, newEnd)
             },
             onValueChangeFinished = { isDragging = false },
             valueRange = minLimit..maxLimit,

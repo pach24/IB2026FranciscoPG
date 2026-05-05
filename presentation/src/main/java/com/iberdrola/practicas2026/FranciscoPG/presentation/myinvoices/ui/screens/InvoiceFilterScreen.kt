@@ -2,12 +2,17 @@ package com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.scree
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
 import android.content.res.Configuration
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -19,16 +24,24 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Velocity
 import kotlin.math.roundToInt
 import androidx.compose.ui.text.font.FontWeight
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
+import kotlinx.coroutines.launch
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFilters
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.BackTopBar
@@ -71,6 +84,8 @@ fun FilterContent(
     LaunchedEffect(currentFilters) {
         onDraftChanged(currentFilters)
     }
+
+    val scrollState = rememberScrollState()
 
     var showStartDatePicker by remember { mutableStateOf(false) }
     var showEndDatePicker by remember { mutableStateOf(false) }
@@ -127,16 +142,34 @@ fun FilterContent(
                 .fillMaxWidth()
                 .drawWithContent {
                     drawContent()
-                    drawRect(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(Color.Transparent, colors.background),
-                            startY = size.height * 0.8f,
-                            endY = size.height
+                    val scrolled = scrollState.value
+                    val maxScroll = scrollState.maxValue
+                    // Alpha proporcional a los primeros/últimos 80px de scroll
+                    val topAlpha = (scrolled / 80f).coerceIn(0f, 1f)
+                    val bottomAlpha = if (maxScroll > 0) ((maxScroll - scrolled) / 80f).coerceIn(0f, 1f) else 0f
+                    if (topAlpha > 0f) {
+                        drawRect(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(colors.background, Color.Transparent),
+                                startY = 0f,
+                                endY = size.height * 0.15f
+                            ),
+                            alpha = topAlpha
                         )
-                    )
+                    }
+                    if (bottomAlpha > 0f) {
+                        drawRect(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(Color.Transparent, colors.background),
+                                startY = size.height * 0.8f,
+                                endY = size.height
+                            ),
+                            alpha = bottomAlpha
+                        )
+                    }
                 }
                 .padding(horizontal = Spacing.dp24)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
         ) {
             Text(
                 text = stringResource(R.string.filter_title),
@@ -147,7 +180,7 @@ fun FilterContent(
                 modifier = Modifier.padding(top = Spacing.dp16)
             )
 
-            Spacer(modifier = Modifier.height(Spacing.dp24))
+            Spacer(modifier = Modifier.height(Spacing.dp16))
 
             DateRangeSection(
                 dateFrom = currentFilters.startDate?.format(DATE_FORMATTER) ?: "",
@@ -164,7 +197,7 @@ fun FilterContent(
                 }
             )
 
-            Spacer(modifier = Modifier.height(Spacing.dp32))
+            Spacer(modifier = Modifier.height(Spacing.dp18))
 
             Text(
                 text = stringResource(R.string.filter_price_section_title),
@@ -173,7 +206,7 @@ fun FilterContent(
                 fontFamily = IberFontBold,
                 color = colors.darkGreyText
             )
-            Spacer(modifier = Modifier.height(Spacing.dp16))
+            Spacer(modifier = Modifier.height(Spacing.dp10))
 
             PriceRangeSection(
                 minPrice = safeMin.toFloat(),
@@ -266,6 +299,36 @@ private fun FilterScreenFilledPreview() {
                 onApplyFilters = {},
                 onClearFilters = { _ -> }
             )
+        }
+    }
+}
+
+@Preview(name = "Filter Scroll Fades - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Filter Scroll Fades - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun FilterScreenScrollFadesPreview() {
+    IberdrolaTheme {
+        Box(modifier = Modifier.heightIn(max = 460.dp)) {
+            Scaffold(
+                containerColor = IberdrolaTheme.colors.background,
+                topBar = { BackTopBar(onBack = {}) }
+            ) { padding ->
+                FilterContent(
+                    modifier = Modifier.padding(padding),
+                    uiState = InvoiceFilterUIState(
+                        filters = InvoiceFilters(
+                            startDate = LocalDate.of(2026, 1, 1),
+                            endDate = LocalDate.of(2026, 1, 31),
+                            minAmount = 20.0,
+                            maxAmount = 150.0,
+                            filteredStatuses = setOf(InvoiceStatus.PAID, InvoiceStatus.PENDING)
+                        ),
+                        statistics = InvoiceFilterUIState.FilterStatistics(maxAmount = 200.0)
+                    ),
+                    onApplyFilters = {},
+                    onClearFilters = { _ -> }
+                )
+            }
         }
     }
 }
