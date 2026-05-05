@@ -30,6 +30,8 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.InvoiceListItem
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.LatestInvoiceUiModel
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.ui.unit.dp
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.list.InvoiceHeaderItemComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.list.InvoiceRowItemComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.list.LatestInvoiceCardComposable
@@ -65,9 +67,12 @@ fun InvoiceListComposeScreen(
     val pullToRefreshState = rememberPullToRefreshState()
 
     LaunchedEffect(isFiltered) {
-        if (!isLoading) {
-            if (isFiltered) listState.animateScrollToItem(1)
-            else listState.animateScrollToItem(0)
+        if (isLoading) return@LaunchedEffect
+
+        if (isFiltered) {
+            listState.scrollToItem(1, 0)
+        } else {
+            listState.scrollToItem(0, 0)
         }
     }
 
@@ -166,6 +171,12 @@ fun InvoiceListComposeScreen(
                                 onClick = { onHistoryItemClick(item) }
                             )
                         }
+                    }
+
+                }
+                if (isFiltered) {
+                    item {
+                        Spacer(modifier = Modifier.height(200.dp))
                     }
                 }
             }
