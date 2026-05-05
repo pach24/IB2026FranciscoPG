@@ -6,6 +6,9 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.InvoiceListItem
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.InvoiceUiModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.LatestInvoiceUiModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 class InvoiceUiMapper @Inject constructor() {
@@ -50,7 +53,7 @@ class InvoiceUiMapper @Inject constructor() {
         return buildList {
             var currentYear: String? = null
             for (invoice in invoices) {
-                val yearLabel = invoice.chargeDate.takeLast(4)
+                val yearLabel = invoice.chargeDate.year.toString()
 
                 if (yearLabel != currentYear) {
                     add(InvoiceListItem.HeaderYear(yearLabel))
@@ -72,27 +75,16 @@ class InvoiceUiMapper @Inject constructor() {
         }
     }
 
-    private fun formatDateToSpanish(chargeDate: String): String {
-        val parts = chargeDate.split("/")
-        if (parts.size != 3) return chargeDate
-
-        val day = parts[0].toIntOrNull() ?: return chargeDate
-        val month = parts[1].toIntOrNull() ?: return chargeDate
-        if (month !in 1..12) return chargeDate
-
-        return "$day de ${MONTHS[month]}"
+    private fun formatDateToSpanish(date: LocalDate): String {
+        val monthName = MONTHS[date.monthValue]
+        return "${date.dayOfMonth} de $monthName"
     }
 
-    private fun formatPeriodDate(date: String): String {
-        val parts = date.split("/")
-        if (parts.size != 3) return date
-
-        val day = parts[0].padStart(2, '0')
-        val month = parts[1].toIntOrNull() ?: return date
-        if (month !in 1..12) return date
-        val year = parts[2]
-
-        return "$day ${MONTHS_SHORT[month]} $year"
+    private fun formatPeriodDate(date: LocalDate): String {
+        val day = date.dayOfMonth.toString().padStart(2, '0')
+        val monthShort = MONTHS_SHORT[date.monthValue]
+        val year = date.year
+        return "$day $monthShort $year"
     }
 
     private fun formatAmount(amount: Double): String =

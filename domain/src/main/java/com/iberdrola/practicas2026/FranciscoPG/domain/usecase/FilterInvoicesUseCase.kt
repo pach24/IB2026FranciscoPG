@@ -3,7 +3,6 @@ package com.iberdrola.practicas2026.FranciscoPG.domain.usecase
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFilters
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
-import com.iberdrola.practicas2026.FranciscoPG.domain.model.toLocalDateOrNull
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -50,7 +49,7 @@ class FilterInvoicesUseCase @Inject constructor() {
     ): Boolean {
         if (startDate == null && endDate == null) return true
 
-        val invoiceDate = invoice.chargeDate.toLocalDateOrNull() ?: return false
+        val invoiceDate = invoice.chargeDate
 
         if (startDate != null && invoiceDate.isBefore(startDate)) return false
         if (endDate != null && invoiceDate.isAfter(endDate)) return false

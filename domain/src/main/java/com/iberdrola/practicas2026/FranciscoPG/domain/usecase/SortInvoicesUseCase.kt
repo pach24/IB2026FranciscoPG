@@ -2,9 +2,6 @@ package com.iberdrola.practicas2026.FranciscoPG.domain.usecase
 
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceSortCriteria
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
 import javax.inject.Inject
 
 class SortInvoicesUseCase @Inject constructor() {
@@ -26,7 +23,7 @@ class SortInvoicesUseCase @Inject constructor() {
             .mapIndexed { index, invoice -> index to invoice }
             .sortedWith(
                 compareByDescending<Pair<Int, Invoice>> { (_, invoice) ->
-                    parseChargeDate(invoice.chargeDate) ?: LocalDate.MIN
+                    invoice.chargeDate
                 }.thenBy { (index, _) -> index }
             )
             .map { (_, invoice) -> invoice }
@@ -37,7 +34,7 @@ class SortInvoicesUseCase @Inject constructor() {
             .mapIndexed { index, invoice -> index to invoice }
             .sortedWith(
                 compareBy<Pair<Int, Invoice>> { (_, invoice) ->
-                    parseChargeDate(invoice.chargeDate) ?: LocalDate.MIN
+                    invoice.chargeDate
                 }.thenBy { (index, _) -> index }
             )
             .map { (_, invoice) -> invoice }
@@ -49,17 +46,5 @@ class SortInvoicesUseCase @Inject constructor() {
 
     private fun sortByAmountAscending(invoices: List<Invoice>): List<Invoice> {
         return invoices.sortedBy { it.amount }
-    }
-
-    private fun parseChargeDate(value: String): LocalDate? {
-        return try {
-            LocalDate.parse(value, DATE_FORMATTER)
-        } catch (e: DateTimeParseException) {
-            null
-        }
-    }
-
-    private companion object {
-        private val DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy")
     }
 }

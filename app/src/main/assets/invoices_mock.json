@@ -7,9 +7,9 @@
       "contractId": "LUZ_01",
       "descEstado": "Pendiente de pago",
       "importeOrdenacion": 22.20,
-      "fechaCobro": "04/03/2024",
-      "fechaInicio": "01/02/2024",
-      "fechaFin": "04/03/2024",
+      "fechaCobro": 1709510400000,
+      "fechaInicio": 1706745600000,
+      "fechaFin": 1709510400000,
       "tipoSuministro": "LUZ"
     },
     {
@@ -17,9 +17,9 @@
       "contractId": "LUZ_01",
       "descEstado": "Pendiente de pago",
       "importeOrdenacion": 10.15,
-      "fechaCobro": "06/02/2024",
-      "fechaInicio": "06/01/2024",
-      "fechaFin": "06/02/2024",
+      "fechaCobro": 1707177600000,
+      "fechaInicio": 1706745600000,
+      "fechaFin": 1707177600000,
       "tipoSuministro": "LUZ"
     },
     {
@@ -27,9 +27,9 @@
       "contractId": "LUZ_01",
       "descEstado": "Pagada",
       "importeOrdenacion": 150.43,
-      "fechaCobro": "06/11/2023",
-      "fechaInicio": "06/10/2023",
-      "fechaFin": "06/11/2023",
+      "fechaCobro": 1699228800000,
+      "fechaInicio": 1696550400000,
+      "fechaFin": 1699228800000,
       "tipoSuministro": "LUZ"
     },
     {
@@ -37,9 +37,9 @@
       "contractId": "GAS_01",
       "descEstado": "Pagada",
       "importeOrdenacion": 45.50,
-      "fechaCobro": "15/12/2023",
-      "fechaInicio": "15/11/2023",
-      "fechaFin": "15/12/2023",
+      "fechaCobro": 1702598400000,
+      "fechaInicio": 1700006400000,
+      "fechaFin": 1702598400000,
       "tipoSuministro": "GAS"
     },
     {
@@ -47,9 +47,9 @@
       "contractId": "GAS_01",
       "descEstado": "Pendiente de pago",
       "importeOrdenacion": 80.25,
-      "fechaCobro": "10/09/2022",
-      "fechaInicio": "10/08/2022",
-      "fechaFin": "10/09/2022",
+      "fechaCobro": 1662768000000,
+      "fechaInicio": 1660089600000,
+      "fechaFin": 1662768000000,
       "tipoSuministro": "GAS"
     },
     {
@@ -57,9 +57,9 @@
       "contractId": "GAS_01",
       "descEstado": "Pagada",
       "importeOrdenacion": 60.00,
-      "fechaCobro": "20/05/2021",
-      "fechaInicio": "20/04/2021",
-      "fechaFin": "20/05/2021",
+      "fechaCobro": 1621468800000,
+      "fechaInicio": 1618876800000,
+      "fechaFin": 1621468800000,
       "tipoSuministro": "GAS"
     },
     {
@@ -67,9 +67,9 @@
       "contractId": "LUZ_01",
       "descEstado": "Pendiente de pago",
       "importeOrdenacion": 95.30,
-      "fechaCobro": "12/04/2022",
-      "fechaInicio": "12/03/2022",
-      "fechaFin": "12/04/2024",
+      "fechaCobro": 1649721600000,
+      "fechaInicio": 1647043200000,
+      "fechaFin": 1709510400000,
       "tipoSuministro": "LUZ"
     },
     {
@@ -77,9 +77,9 @@
       "contractId": "LUZ_01",
       "descEstado": "Pagada",
       "importeOrdenacion": 210.15,
-      "fechaCobro": "18/01/2022",
-      "fechaInicio": "18/12/2022",
-      "fechaFin": "18/01/2024",
+      "fechaCobro": 1642464000000,
+      "fechaInicio": 1671321600000,
+      "fechaFin": 1709510400000,
       "tipoSuministro": "LUZ"
     },
     {
@@ -87,9 +87,9 @@
       "contractId": "GAS_01",
       "descEstado": "Pagada",
       "importeOrdenacion": 32.80,
-      "fechaCobro": "25/07/2023",
-      "fechaInicio": "25/06/2023",
-      "fechaFin": "25/07/2023",
+      "fechaCobro": 1690243200000,
+      "fechaInicio": 1687651200000,
+      "fechaFin": 1690243200000,
       "tipoSuministro": "GAS"
     },
     {
@@ -97,9 +97,9 @@
       "contractId": "GAS_01",
       "descEstado": "Pendiente de pago",
       "importeOrdenacion": 67.90,
-      "fechaCobro": "03/10/2023",
-      "fechaInicio": "03/09/2023",
-      "fechaFin": "03/10/2023",
+      "fechaCobro": 1696291200000,
+      "fechaInicio": 1693699200000,
+      "fechaFin": 1696291200000,
       "tipoSuministro": "GAS"
     },
     {
@@ -107,9 +107,9 @@
       "contractId": "LUZ_01",
       "descEstado": "Pagada",
       "importeOrdenacion": 112.25,
-      "fechaCobro": "22/08/2022",
-      "fechaInicio": "22/07/2022",
-      "fechaFin": "22/08/2022",
+      "fechaCobro": 1661126400000,
+      "fechaInicio": 1658448000000,
+      "fechaFin": 1661126400000,
       "tipoSuministro": "LUZ"
     },
     {
@@ -117,9 +117,9 @@
       "contractId": "GAS_01",
       "descEstado": "Pendiente de pago",
       "importeOrdenacion": 40.00,
-      "fechaCobro": "30/11/2021",
-      "fechaInicio": "30/10/2021",
-      "fechaFin": "30/11/2021",
+      "fechaCobro": 1638230400000,
+      "fechaInicio": 1635552000000,
+      "fechaFin": 1638230400000,
       "tipoSuministro": "GAS"
     },
     {
@@ -127,9 +127,9 @@
       "contractId": "LUZ_01",
       "descEstado": "Anulada",
       "importeOrdenacion": 55.75,
-      "fechaCobro": "15/06/2023",
-      "fechaInicio": "15/05/2023",
-      "fechaFin": "15/06/2023",
+      "fechaCobro": 1686787200000,
+      "fechaInicio": 1684108800000,
+      "fechaFin": 1686787200000,
       "tipoSuministro": "LUZ"
     },
     {
@@ -137,9 +137,9 @@
       "contractId": "GAS_01",
       "descEstado": "Anulada",
       "importeOrdenacion": 28.30,
-      "fechaCobro": "10/04/2022",
-      "fechaInicio": "10/03/2022",
-      "fechaFin": "10/04/2022",
+      "fechaCobro": 1649548800000,
+      "fechaInicio": 1646870400000,
+      "fechaFin": 1649548800000,
       "tipoSuministro": "GAS"
     },
     {
@@ -147,9 +147,9 @@
       "contractId": "LUZ_01",
       "descEstado": "Pagada",
       "importeOrdenacion": 20.00,
-      "fechaCobro": "08/03/2024",
-      "fechaInicio": "08/02/2024",
-      "fechaFin": "08/03/2024",
+      "fechaCobro": 1709856000000,
+      "fechaInicio": 1707350400000,
+      "fechaFin": 1709856000000,
       "tipoSuministro": "LUZ"
     },
     {
@@ -157,9 +157,9 @@
       "contractId": "GAS_01",
       "descEstado": "Cuota fija",
       "importeOrdenacion": 35.00,
-      "fechaCobro": "01/01/2024",
-      "fechaInicio": "01/12/2023",
-      "fechaFin": "01/01/2024",
+      "fechaCobro": 1704067200000,
+      "fechaInicio": 1701388800000,
+      "fechaFin": 1704067200000,
       "tipoSuministro": "GAS"
     }
   ]

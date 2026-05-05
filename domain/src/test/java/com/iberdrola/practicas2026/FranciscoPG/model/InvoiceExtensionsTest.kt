@@ -7,9 +7,17 @@ import java.time.LocalDate
 
 class InvoiceExtensionsTest {
 
-    private fun invoice(amount: Double = 0.0, chargeDate: String = "01/01/2025") = Invoice(
-        id = "1", contractId = "LUZ_01", status = InvoiceStatus.PAID, amount = amount,
-        chargeDate = chargeDate, periodStart = "", periodEnd = "",
+    private fun invoice(
+        amount: Double = 0.0,
+        chargeDate: LocalDate = LocalDate.of(2025, 1, 1)
+    ) = Invoice(
+        id = "1",
+        contractId = "LUZ_01",
+        status = InvoiceStatus.PAID,
+        amount = amount,
+        chargeDate = chargeDate,
+        periodStart = LocalDate.now(),
+        periodEnd = LocalDate.now(),
         supplyType = SupplyType.ELECTRICITY
     )
 
@@ -44,14 +52,14 @@ class InvoiceExtensionsTest {
         assertEquals(0.0, emptyList<Invoice>().minAmount(), 0.01)
     }
 
-    //  oldestDate
+    // oldestDate
 
     @Test
     fun `oldestDate returns earliest date`() {
         val invoices = listOf(
-            invoice(chargeDate = "15/06/2025"),
-            invoice(chargeDate = "01/01/2024"),
-            invoice(chargeDate = "30/12/2025")
+            invoice(chargeDate = LocalDate.of(2025, 6, 15)),
+            invoice(chargeDate = LocalDate.of(2024, 1, 1)),
+            invoice(chargeDate = LocalDate.of(2025, 12, 30))
         )
         assertEquals(LocalDate.of(2024, 1, 1), invoices.oldestDate())
     }
@@ -61,29 +69,14 @@ class InvoiceExtensionsTest {
         assertNull(emptyList<Invoice>().oldestDate())
     }
 
-    @Test
-    fun `oldestDate ignores invoices with invalid dates`() {
-        val invoices = listOf(
-            invoice(chargeDate = "invalid"),
-            invoice(chargeDate = "01/03/2025")
-        )
-        assertEquals(LocalDate.of(2025, 3, 1), invoices.oldestDate())
-    }
-
-    @Test
-    fun `oldestDate returns null when all dates are invalid`() {
-        val invoices = listOf(invoice(chargeDate = ""), invoice(chargeDate = "bad"))
-        assertNull(invoices.oldestDate())
-    }
-
     // newestDate
 
     @Test
     fun `newestDate returns latest date`() {
         val invoices = listOf(
-            invoice(chargeDate = "15/06/2025"),
-            invoice(chargeDate = "01/01/2024"),
-            invoice(chargeDate = "30/12/2025")
+            invoice(chargeDate = LocalDate.of(2025, 6, 15)),
+            invoice(chargeDate = LocalDate.of(2024, 1, 1)),
+            invoice(chargeDate = LocalDate.of(2025, 12, 30))
         )
         assertEquals(LocalDate.of(2025, 12, 30), invoices.newestDate())
     }
@@ -91,14 +84,5 @@ class InvoiceExtensionsTest {
     @Test
     fun `newestDate on empty list returns null`() {
         assertNull(emptyList<Invoice>().newestDate())
-    }
-
-    @Test
-    fun `newestDate ignores invoices with invalid dates`() {
-        val invoices = listOf(
-            invoice(chargeDate = "01/01/2025"),
-            invoice(chargeDate = "not-a-date")
-        )
-        assertEquals(LocalDate.of(2025, 1, 1), invoices.newestDate())
     }
 }
