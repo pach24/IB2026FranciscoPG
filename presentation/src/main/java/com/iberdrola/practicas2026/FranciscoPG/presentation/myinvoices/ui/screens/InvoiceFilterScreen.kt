@@ -75,6 +75,12 @@ fun FilterContent(
     var showStartDatePicker by remember { mutableStateOf(false) }
     var showEndDatePicker by remember { mutableStateOf(false) }
 
+    val datePickerStats = uiState.statistics.let { s ->
+        val dynOldest = s.dynamicOldestDateMillis.takeIf { it > 0 } ?: s.oldestDateMillis
+        val dynNewest = s.dynamicNewestDateMillis.takeIf { it > 0 } ?: s.newestDateMillis
+        s.copy(oldestDateMillis = dynOldest, newestDateMillis = dynNewest)
+    }
+
     val actualMinAmount = uiState.statistics.minAmount
     val actualMaxAmount = uiState.statistics.maxAmount.coerceAtLeast(actualMinAmount + 1.0)
     val safeMin = (currentFilters.minAmount ?: actualMinAmount).coerceIn(actualMinAmount, actualMaxAmount)
@@ -83,7 +89,7 @@ fun FilterContent(
     if (showStartDatePicker) {
         SafeDatePickerDialog(
             initialDate = currentFilters.startDate,
-            statistics = uiState.statistics,
+            statistics = datePickerStats,
             otherDate = currentFilters.endDate,
             isStartDate = true,
             onDateSelected = { date ->
@@ -98,7 +104,7 @@ fun FilterContent(
     if (showEndDatePicker) {
         SafeDatePickerDialog(
             initialDate = currentFilters.endDate,
-            statistics = uiState.statistics,
+            statistics = datePickerStats,
             otherDate = currentFilters.startDate,
             isStartDate = false,
             onDateSelected = { date ->

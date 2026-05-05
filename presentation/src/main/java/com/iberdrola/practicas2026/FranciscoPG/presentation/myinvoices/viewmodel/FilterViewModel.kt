@@ -1,7 +1,10 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFilters
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.newestDate
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.oldestDate
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.InvoiceFilterUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,10 +33,13 @@ class FilterViewModel @Inject constructor() : ViewModel() {
     private val _isFilterModeActive = MutableStateFlow(false)
     val isFilterModeActive: StateFlow<Boolean> = _isFilterModeActive.asStateFlow()
 
+    private var _allInvoices: List<Invoice> = emptyList()
+
     // ── Acciones de filtro ───────────────────────────────────────────────────
 
     fun updateFilters(filters: InvoiceFilters) {
         _filterState.value = _filterState.value.copy(filters = filters.normalize())
+        recomputeDynamicDates()
     }
 
     fun applyFilters() {
@@ -45,12 +51,14 @@ class FilterViewModel @Inject constructor() : ViewModel() {
         _filterState.value = _filterState.value.copy(filters = draft)
         _appliedFilters.value = applied
         _isFilterModeActive.value = applied != InvoiceFilters()
+        recomputeDynamicDates()
     }
 
     fun clearFilters() {
         _filterState.value = _filterState.value.copy(filters = InvoiceFilters())
         _appliedFilters.value = InvoiceFilters()
         _isFilterModeActive.value = false
+        recomputeDynamicDates()
     }
 
     // ── Estadísticas ─────────────────────────────────────────────────────────
@@ -60,11 +68,13 @@ class FilterViewModel @Inject constructor() : ViewModel() {
      * Se llama desde InvoicesRoute cuando las facturas de cualquier tab cambian.
      */
     fun updateStatistics(
+        allInvoices: List<Invoice>,
         minAmount: Double,
         maxAmount: Double,
         oldestDate: LocalDate?,
         newestDate: LocalDate?
     ) {
+        _allInvoices = allInvoices
         val newStats = InvoiceFilterUIState.FilterStatistics(
             minAmount = minAmount,
             maxAmount = maxAmount,
@@ -93,6 +103,7 @@ class FilterViewModel @Inject constructor() : ViewModel() {
 
         // Ajustar filtros aplicados al nuevo rango de datos
         expandAppliedFilters(oldStats, newStats, minAmount, maxAmount, oldestDate, newestDate)
+        recomputeDynamicDates()
     }
 
     /**
@@ -125,6 +136,31 @@ class FilterViewModel @Inject constructor() : ViewModel() {
             maxAmount = if (expandMax) maxAmount else applied.maxAmount,
             startDate = if (expandStartDate) oldestDate else applied.startDate,
             endDate = if (expandEndDate) newestDate else applied.endDate
+        )
+    }
+
+    private fun recomputeDynamicDates() {
+        val draftFilters = _filterState.value.filters
+        val draftMin = draftFilters.minAmount
+        val draftMax = draftFilters.maxAmount
+
+        val filtered = if (draftMin != null || draftMax != null) {
+            _allInvoices.filter { invoice ->
+                (draftMin == null || invoice.amount >= draftMin) &&
+                (draftMax == null || invoice.amount <= draftMax)
+            }
+        } else {
+            _allInvoices
+        }
+
+        val dynOldest = filtered.oldestDate()
+        val dynNewest = filtered.newestDate()
+
+        _filterState.value = _filterState.value.copy(
+            statistics = _filterState.value.statistics.copy(
+                dynamicOldestDateMillis = dynOldest.toEpochMilli(),
+                dynamicNewestDateMillis = dynNewest.toEpochMilli()
+            )
         )
     }
 

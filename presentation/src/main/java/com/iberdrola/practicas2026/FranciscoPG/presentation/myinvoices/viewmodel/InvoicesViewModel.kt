@@ -159,6 +159,7 @@ class InvoicesViewModel @Inject constructor(
                 .collect { allInvoices ->
                     if (allInvoices.isNotEmpty()) {
                         filterViewModel.updateStatistics(
+                            allInvoices = allInvoices,
                             minAmount = allInvoices.minAmount(),
                             maxAmount = allInvoices.maxAmount(),
                             oldestDate = allInvoices.oldestDate(),
