@@ -1,11 +1,7 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.screens
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -24,10 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.list.EmptyStateComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.list.ErrorStateComposable
-import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.list.StickyInvoiceHeaderComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.InvoiceListUiState
-import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
-import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -80,38 +73,25 @@ fun InvoiceTabContent(
                     )
                 }
                 is InvoiceListUiState.FilteredEmpty -> {
-                    val pullState = rememberPullToRefreshState()
-                    PullToRefreshBox(
-                        state = pullState,
+                    InvoiceListComposeScreen(
+                        isLoading = false,
                         isRefreshing = true,
+                        latestInvoice = cached.latestInvoice,
+                        historyItems = emptyList(),
+                        listState = listState,
+                        onLatestInvoiceClick = onFeatureNotAvailable,
+                        onFilterClick = onFilterClick,
+                        onHistoryItemClick = {},
                         onRefresh = onRefresh,
-                        modifier = Modifier.fillMaxSize(),
-                        indicator = {
-                            PullToRefreshDefaults.LoadingIndicator(
-                                state = pullState,
-                                isRefreshing = true,
-                                color = MaterialTheme.colorScheme.primary,
-                                containerColor = MaterialTheme.colorScheme.surface,
-                                modifier = Modifier.align(Alignment.TopCenter)
-                            )
-                        }
-                    ) {
-                        Column(modifier = Modifier.fillMaxSize()) {
-                            StickyInvoiceHeaderComposable(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(IberdrolaTheme.colors.background)
-                                    .padding(vertical = Spacing.dp8),
-                                activeFilterCount = activeFilterCount,
-                                isFiltered = isFiltered,
-                                onFilterClick = onFilterClick
-                            )
+                        activeFilterCount = activeFilterCount,
+                        isFiltered = true,
+                        emptyFilteredContent = {
                             EmptyStateComposable(
                                 title = stringResource(R.string.empty_state_filtered_title),
                                 subtitle = stringResource(R.string.empty_state_filtered_subtitle)
                             )
                         }
-                    }
+                    )
                 }
                 else -> {}
             }
@@ -141,40 +121,27 @@ fun InvoiceTabContent(
             }
         }
 
-        // Hay facturas pero los filtros las excluyen todas: sticky header + filtro + empty state
+        // Hay facturas pero los filtros las excluyen todas: sticky header + empty state scrollable
         is InvoiceListUiState.FilteredEmpty -> {
-            val pullState = rememberPullToRefreshState()
-            PullToRefreshBox(
-                state = pullState,
+            InvoiceListComposeScreen(
+                isLoading = false,
                 isRefreshing = false,
+                latestInvoice = uiState.latestInvoice,
+                historyItems = emptyList(),
+                listState = listState,
+                onLatestInvoiceClick = onFeatureNotAvailable,
+                onFilterClick = onFilterClick,
+                onHistoryItemClick = {},
                 onRefresh = onRefresh,
-                modifier = Modifier.fillMaxSize(),
-                indicator = {
-                    PullToRefreshDefaults.LoadingIndicator(
-                        state = pullState,
-                        isRefreshing = false,
-                        color = MaterialTheme.colorScheme.primary,
-                        containerColor = MaterialTheme.colorScheme.surface,
-                        modifier = Modifier.align(Alignment.TopCenter)
-                    )
-                }
-            ) {
-                Column(modifier = Modifier.fillMaxSize()) {
-                    StickyInvoiceHeaderComposable(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(IberdrolaTheme.colors.background)
-                            .padding(vertical = Spacing.dp8),
-                        activeFilterCount = activeFilterCount,
-                        isFiltered = isFiltered,
-                        onFilterClick = onFilterClick
-                    )
+                activeFilterCount = activeFilterCount,
+                isFiltered = true,
+                emptyFilteredContent = {
                     EmptyStateComposable(
                         title = stringResource(R.string.empty_state_filtered_title),
                         subtitle = stringResource(R.string.empty_state_filtered_subtitle)
                     )
                 }
-            }
+            )
         }
 
         is InvoiceListUiState.ServerError -> {

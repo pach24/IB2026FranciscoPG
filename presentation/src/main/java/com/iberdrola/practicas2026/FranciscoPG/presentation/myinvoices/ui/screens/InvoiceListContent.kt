@@ -22,7 +22,12 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalDensity
+import kotlinx.coroutines.delay
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,7 +36,8 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.Inv
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.LatestInvoiceUiModel
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.remember
+
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.list.InvoiceHeaderItemComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.list.InvoiceRowItemComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.list.LatestInvoiceCardComposable
@@ -62,18 +68,59 @@ fun InvoiceListComposeScreen(
     modifier: Modifier = Modifier,
     activeFilterCount: Int = 0,
     isFiltered: Boolean = false,
-    listState: LazyListState = rememberLazyListState()
+    listState: LazyListState = rememberLazyListState(),
+    emptyFilteredContent: (@Composable () -> Unit)? = null
 ) {
     val pullToRefreshState = rememberPullToRefreshState()
 
-    LaunchedEffect(isFiltered) {
-        if (isLoading) return@LaunchedEffect
+    // Spacer calculado dinámicamente: viewport - (sticky + contenido filtrado)
+    // Garantiza que el max scroll = item0H exacto → sin scroll extra hacia abajo
+    var spacerHeightPx by remember { mutableIntStateOf(0) }
 
-        if (isFiltered) {
-            listState.scrollToItem(1, 0)
-        } else {
-            listState.scrollToItem(0, 0)
+    // Caché de la altura del item 0 (puede estar fuera de pantalla si ya se scrolleó)
+    var item0HeightPx by remember { mutableIntStateOf(0) }
+
+    // Scroll preciso al sticky cuando hay filtros, la carga termina o cambia el nº de resultados
+    LaunchedEffect(isFiltered, isLoading, historyItems.size) {
+        if (isLoading) return@LaunchedEffect
+        if (!isFiltered) {
+            spacerHeightPx = 0
+            return@LaunchedEffect
         }
+
+        // Esperar recomposición para que los nuevos items (incl. emptyFilteredContent) estén medidos
+        delay(50L)
+
+        val info = listState.layoutInfo
+        val viewportH = info.viewportSize.height
+
+        // Leer y cachear item0H; si está fuera de pantalla se reutiliza el valor guardado
+        val item0H = info.visibleItemsInfo.firstOrNull { it.index == 0 }?.size
+            ?.also { item0HeightPx = it }
+            ?: item0HeightPx.takeIf { it > 0 }
+            ?: return@LaunchedEffect
+
+        // El spacer es siempre el último item → su índice = totalItemsCount - 1
+        val spacerIndex = info.totalItemsCount - 1
+
+        // Contenido tras item 0 (sticky + filas/emptyState), excluye el spacer
+        val contentAfterItem0 = info.visibleItemsInfo
+            .filter { it.index in 1..<spacerIndex }
+            .sumOf { it.size }
+
+        // Spacer = viewport - contenido → totalContent - viewport = item0H (max scroll exacto)
+        spacerHeightPx = (viewportH - contentAfterItem0).coerceAtLeast(0)
+
+        // Breve espera para que Compose recomponga con el nuevo spacer antes del scroll
+        delay(50L)
+
+        // scrollToItem(0, item0H): mueve item 0 fuera de pantalla por exactamente su altura
+        listState.scrollToItem(0, item0H)
+    }
+
+    // Scroll al inicio solo cuando se desactivan los filtros
+    LaunchedEffect(isFiltered) {
+        if (!isFiltered) listState.scrollToItem(0, 0)
     }
 
     PullToRefreshBox(
@@ -172,11 +219,16 @@ fun InvoiceListComposeScreen(
                             )
                         }
                     }
-
                 }
+
+                // Sin resultados filtrados: contenido vacío justo debajo del sticky header
+                if (isFiltered && historyItems.isEmpty() && emptyFilteredContent != null) {
+                    item { emptyFilteredContent() }
+                }
+
                 if (isFiltered) {
                     item {
-                        Spacer(modifier = Modifier.height(200.dp))
+                        Spacer(modifier = Modifier.height(with(LocalDensity.current) { spacerHeightPx.toDp() }))
                     }
                 }
             }

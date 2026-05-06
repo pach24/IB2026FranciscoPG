@@ -242,7 +242,9 @@ class InvoicesViewModel @Inject constructor(
         if (invoices.isEmpty()) return InvoiceListUiState.Empty
 
         val filtered = filterInvoicesUseCase(invoices, filters)
-        if (filtered.isEmpty()) return InvoiceListUiState.FilteredEmpty
+        if (filtered.isEmpty()) return InvoiceListUiState.FilteredEmpty(
+            latestInvoice = invoiceUiMapper.mapLatest(invoices, supplyType)
+        )
 
         val uiModel = invoiceUiMapper.map(filtered, supplyType)
         return InvoiceListUiState.Success(
