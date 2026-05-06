@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ScrollableTabRow
@@ -67,9 +69,12 @@ fun MyInvoicesComposeScreen(
 
     val colors = IberdrolaTheme.colors
 
+    var isNavigatingBack by remember { mutableStateOf(false) }
+
     // Solo intercepta back cuando NO hay sheet visible;
     // si el sheet está abierto, su propio handler gestiona el back.
     BackHandler(enabled = feedbackSheetState == FeedbackSheetState.Hidden) {
+        isNavigatingBack = true
         onBackClick()
     }
 
@@ -102,8 +107,9 @@ fun MyInvoicesComposeScreen(
         onTabChanged(pagerState.settledPage)
     }
 
+    Box(modifier = modifier.fillMaxSize()) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(colors.background)
             .statusBarsPadding()
@@ -111,7 +117,10 @@ fun MyInvoicesComposeScreen(
         /* BOTON ATRAS */
         BackButton(
             text = stringResource(R.string.my_invoices_back),
-            onClick = onBackClick,
+            onClick = {
+                isNavigatingBack = true
+                onBackClick()
+            },
             color = colors.iberdrolaDarkGreen,
             fontSize = TextSize.sp16,
             modifier = Modifier.padding(start = Spacing.dp16, top = Spacing.dp16)
@@ -211,4 +220,21 @@ fun MyInvoicesComposeScreen(
         onLaterClick = onFeedbackLaterClick,
         onDismiss = onFeedbackDismiss
     )
+
+    // Overlay que bloquea todas las interacciones durante la animación de salida
+    if (isNavigatingBack) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .pointerInput(Unit) {
+                    awaitPointerEventScope {
+                        while (true) {
+                            awaitPointerEvent(PointerEventPass.Initial)
+                                .changes.forEach { it.consume() }
+                        }
+                    }
+                }
+        )
+    }
+    } // Box externo
 }

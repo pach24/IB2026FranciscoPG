@@ -60,6 +60,7 @@ fun InvoicesScreen(
     val undoLabel = stringResource(R.string.snackbar_undo)
 
     var showFilter by rememberSaveable { mutableStateOf(false) }
+    var isNavigatingBack by remember { mutableStateOf(false) }
 
     val electricityListState = rememberLazyListState()
     val gasListState = rememberLazyListState()
@@ -119,6 +120,7 @@ fun InvoicesScreen(
                     preferredTabIndex = uiState.preferredTabIndex,
                     onTabChanged = { onEvent(InvoicesEvent.OnTabChanged(it)) },
                     onBackClick = {
+                        isNavigatingBack = true
                         Log.d("InvoicesScreen", "Back pressed, evaluating feedback")
                         onBackClick()
                     },
@@ -135,8 +137,16 @@ fun InvoicesScreen(
                         InvoiceTabContent(
                             uiState = uiState.electricityState,
                             listState = electricityListState,
-                            onFeatureNotAvailable = { onEvent(InvoicesEvent.OnFeatureNotAvailable) },
-                            onFilterClick = { showFilter = true },
+                            onFeatureNotAvailable = {
+                                if (feedbackSheetState == FeedbackSheetState.Hidden && !isNavigatingBack) {
+                                    onEvent(InvoicesEvent.OnFeatureNotAvailable)
+                                }
+                            },
+                            onFilterClick = {
+                                if (feedbackSheetState == FeedbackSheetState.Hidden && !isNavigatingBack) {
+                                    showFilter = true
+                                }
+                            },
                             onRefresh = { onEvent(InvoicesEvent.OnRefresh) },
                             activeFilterCount = uiState.activeFilterCount,
                             isFiltered = uiState.isFiltered
@@ -146,8 +156,16 @@ fun InvoicesScreen(
                         InvoiceTabContent(
                             uiState = uiState.gasState,
                             listState = gasListState,
-                            onFeatureNotAvailable = { onEvent(InvoicesEvent.OnFeatureNotAvailable) },
-                            onFilterClick = { showFilter = true },
+                            onFeatureNotAvailable = {
+                                if (feedbackSheetState == FeedbackSheetState.Hidden && !isNavigatingBack) {
+                                    onEvent(InvoicesEvent.OnFeatureNotAvailable)
+                                }
+                            },
+                            onFilterClick = {
+                                if (feedbackSheetState == FeedbackSheetState.Hidden && !isNavigatingBack) {
+                                    showFilter = true
+                                }
+                            },
                             onRefresh = { onEvent(InvoicesEvent.OnRefresh) },
                             activeFilterCount = uiState.activeFilterCount,
                             isFiltered = uiState.isFiltered
