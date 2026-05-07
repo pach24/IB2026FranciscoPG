@@ -38,6 +38,7 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel.InvoicesEvent
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -98,7 +99,20 @@ fun InvoicesScreen(
                     filterViewModel = filterViewModel,
                     onFiltersApplied = {
                         scope.showFilterResultSnackbar(snackbarHostState, onGetFilteredCount())
-                        showFilter = false
+                        scope.launch {
+                            // Esperar a que los filtros se propaguen por el chain de corrutinas
+                            // antes de iniciar la transición, para no mostrar la card en ningún frame
+                            delay(50L)
+                            // scrollToItem se cuelga en LazyListStates sin primer layout
+                            // (pestañas en Empty/Loading no renderizan el LazyColumn)
+                            if (electricityListState.layoutInfo.totalItemsCount > 1) {
+                                electricityListState.scrollToItem(1, 0)
+                            }
+                            if (gasListState.layoutInfo.totalItemsCount > 1) {
+                                gasListState.scrollToItem(1, 0)
+                            }
+                            showFilter = false
+                        }
                     },
                     onFiltersCleared = { previousDraft, previousApplied ->
                         scope.showFiltersClearedSnackbar(
