@@ -32,14 +32,14 @@ class InvoiceRepositoryImplTest {
 
     private val sampleDto = InvoiceDto(
         id = "1", contractId = "LUZ_01", descEstado = "Pagada", importeOrdenacion = 50.0,
-        fechaCobro = "15/01/2024", fechaInicio = "01/01/2024",
-        fechaFin = "31/01/2024", tipoSuministro = "LUZ"
+        fechaCobro = 0L, fechaInicio = 0L,
+        fechaFin = 0L, tipoSuministro = "LUZ"
     )
 
     private val sampleEntity = InvoiceEntity(
         id = "1", contractId = "LUZ_01", status = "Pagada", amount = 50.0,
-        chargeDate = "15/01/2024", periodStart = "01/01/2024",
-        periodEnd = "31/01/2024", supplyType = "LUZ"
+        chargeDate = 0L, periodStart = 0L,
+        periodEnd = 0L, supplyType = "LUZ"
     )
 
     private fun mockCall(response: ApiResponse<List<InvoiceDto>>): Call<ApiResponse<List<InvoiceDto>>> {
