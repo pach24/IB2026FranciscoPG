@@ -14,7 +14,7 @@ sealed class InvoiceListUiState {
     object Empty : InvoiceListUiState()
 
     // Hay facturas pero los filtros aplicados las excluyen todas
-    object FilteredEmpty : InvoiceListUiState()
+    data class FilteredEmpty(val latestInvoice: LatestInvoiceUiModel?) : InvoiceListUiState()
 
     data class ServerError(val message: String) : InvoiceListUiState()
 

@@ -105,6 +105,9 @@ class MainActivity : AppCompatActivity() {
                 // Descartar snackbar al cambiar de pantalla y ajustar barras del sistema
                 val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
                 var previousRoute by remember { mutableStateOf(currentRoute) }
+                // Gate de navegación: bloquea taps repetidos hasta que el destino cambie
+                var isNavigating by remember { mutableStateOf(false) }
+                LaunchedEffect(currentRoute) { isNavigating = false }
                 LaunchedEffect(currentRoute) {
                     snackbarHostState.currentSnackbarData?.dismiss()
                     // Cambiar iconos de barras: dark en splash, auto en el resto
@@ -153,7 +156,13 @@ class MainActivity : AppCompatActivity() {
                                 slideInHorizontally { -it }
                             }
                         },
-                        exitTransition = { slideOutHorizontally { -it } },
+                        exitTransition = {
+                            if (targetState.destination.route == AppRoutes.MY_INVOICES) {
+                                ExitTransition.None
+                            } else {
+                                slideOutHorizontally { -it }
+                            }
+                        },
                         popEnterTransition = { slideInHorizontally { -it } },
                         popExitTransition = { slideOutHorizontally { it } }
                     ){
@@ -179,20 +188,26 @@ class MainActivity : AppCompatActivity() {
                             isLoadingInvoice = isLoadingInvoice,
                             onMockModeChanged = viewModel::updateMockMode,
                             onInvoicesCardClick = {
-                                navController.navigate(AppRoutes.MY_INVOICES) {
-                                    launchSingleTop = true
-                                    restoreState = true
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
+                                if (!isNavigating) {
+                                    isNavigating = true
+                                    navController.navigate(AppRoutes.MY_INVOICES) {
+                                        launchSingleTop = true
+                                        restoreState = true
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
                                     }
                                 }
                             },
                             onElectronicInvoiceClick = {
-                                navController.navigate(AppRoutes.ELECTRONIC_INVOICE) {
-                                    launchSingleTop = true
-                                    restoreState = true
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
+                                if (!isNavigating) {
+                                    isNavigating = true
+                                    navController.navigate(AppRoutes.ELECTRONIC_INVOICE) {
+                                        launchSingleTop = true
+                                        restoreState = true
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
                                     }
                                 }
                             },

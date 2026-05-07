@@ -25,8 +25,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.ceil
-import kotlin.math.floor
 
 @HiltViewModel
 class InvoicesViewModel @Inject constructor(
@@ -161,8 +159,9 @@ class InvoicesViewModel @Inject constructor(
                 .collect { allInvoices ->
                     if (allInvoices.isNotEmpty()) {
                         filterViewModel.updateStatistics(
-                            minAmount = floor(allInvoices.minAmount()),
-                            maxAmount = ceil(allInvoices.maxAmount()),
+                            allInvoices = allInvoices,
+                            minAmount = allInvoices.minAmount(),
+                            maxAmount = allInvoices.maxAmount(),
                             oldestDate = allInvoices.oldestDate(),
                             newestDate = allInvoices.newestDate()
                         )
@@ -243,11 +242,13 @@ class InvoicesViewModel @Inject constructor(
         if (invoices.isEmpty()) return InvoiceListUiState.Empty
 
         val filtered = filterInvoicesUseCase(invoices, filters)
-        if (filtered.isEmpty()) return InvoiceListUiState.FilteredEmpty
+        if (filtered.isEmpty()) return InvoiceListUiState.FilteredEmpty(
+            latestInvoice = invoiceUiMapper.mapLatest(invoices, supplyType)
+        )
 
         val uiModel = invoiceUiMapper.map(filtered, supplyType)
         return InvoiceListUiState.Success(
-            latestInvoice = uiModel.latestInvoice,
+            latestInvoice = invoiceUiMapper.mapLatest(invoices, supplyType),
             historyItems = uiModel.historyItems,
             isFiltered = filterModeActive,
             invoiceCount = filtered.size

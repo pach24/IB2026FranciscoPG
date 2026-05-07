@@ -18,7 +18,7 @@ fun ContractEntity.toDomain(): Contract =
     Contract(
         id = id,
         supplyType = SupplyType.fromApiValue(supplyType),
-        status = ContractStatus.valueOf(status),
+        status = ContractStatus.entries.firstOrNull { it.name == status } ?: ContractStatus.INACTIVE,
         email = email
     )
 

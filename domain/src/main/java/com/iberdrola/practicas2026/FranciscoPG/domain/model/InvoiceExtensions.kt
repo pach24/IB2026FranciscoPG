@@ -25,14 +25,14 @@ fun List<Invoice>.minAmount(): Double =
  * @return LocalDate más antiguo o null si no hay fechas válidas
  */
 fun List<Invoice>.oldestDate(): LocalDate? =
-    mapNotNull { it.chargeDate.toLocalDateOrNull() }.minOrNull()
+    map { it.chargeDate }.minOrNull()
 
 /**
  * Obtiene la fecha más reciente de las facturas.
  * @return LocalDate más reciente o null si no hay fechas válidas
  */
 fun List<Invoice>.newestDate(): LocalDate? =
-    mapNotNull { it.chargeDate.toLocalDateOrNull() }.maxOrNull()
+    map { it.chargeDate }.maxOrNull()
 
 /**
  * Convierte una fecha en formato "dd/MM/yyyy" a LocalDate.

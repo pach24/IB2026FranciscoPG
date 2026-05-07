@@ -30,6 +30,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.net.UnknownHostException
+import java.time.LocalDate
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class InvoicesViewModelTest {
@@ -43,8 +44,26 @@ class InvoicesViewModelTest {
     private lateinit var viewModel: InvoicesViewModel
 
     private val sampleInvoices = listOf(
-        Invoice(id = "1", contractId = "LUZ_01", status = InvoiceStatus.PAID, amount = 50.0, chargeDate = "15/01/2024", periodStart = "01/01/2024", periodEnd = "31/01/2024", supplyType = SupplyType.ELECTRICITY),
-        Invoice(id = "2", contractId = "LUZ_01", status = InvoiceStatus.PENDING, amount = 100.0, chargeDate = "20/03/2024", periodStart = "01/03/2024", periodEnd = "31/03/2024", supplyType = SupplyType.ELECTRICITY)
+        Invoice(
+            id = "1",
+            contractId = "LUZ_01",
+            status = InvoiceStatus.PAID,
+            amount = 50.0,
+            chargeDate = LocalDate.of(2024, 1, 15),
+            periodStart = LocalDate.of(2024, 1, 1),
+            periodEnd = LocalDate.of(2024, 1, 31),
+            supplyType = SupplyType.ELECTRICITY
+        ),
+        Invoice(
+            id = "2",
+            contractId = "LUZ_01",
+            status = InvoiceStatus.PENDING,
+            amount = 100.0,
+            chargeDate = LocalDate.of(2024, 3, 20),
+            periodStart = LocalDate.of(2024, 3, 1),
+            periodEnd = LocalDate.of(2024, 3, 31),
+            supplyType = SupplyType.ELECTRICITY
+        )
     )
 
     private val sampleUiModel = InvoiceUiModel(
@@ -87,6 +106,7 @@ class InvoicesViewModelTest {
         coEvery { getInvoicesUseCase(SupplyType.ELECTRICITY, any(), any()) } returns Result.success(sampleInvoices)
         coEvery { getInvoicesUseCase(SupplyType.GAS, any(), any()) } returns Result.success(emptyList())
         every { invoiceUiMapper.map(sampleInvoices, SupplyType.ELECTRICITY) } returns sampleUiModel
+        every { invoiceUiMapper.mapLatest(sampleInvoices, SupplyType.ELECTRICITY) } returns sampleUiModel.latestInvoice
 
         val collector = launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.uiState.collect {}
@@ -204,6 +224,7 @@ class InvoicesViewModelTest {
         coEvery { getInvoicesUseCase(SupplyType.ELECTRICITY, any(), any()) } returns Result.success(sampleInvoices)
         coEvery { getInvoicesUseCase(SupplyType.GAS, any(), any()) } returns Result.success(emptyList())
         every { invoiceUiMapper.map(sampleInvoices, SupplyType.ELECTRICITY) } returns sampleUiModel
+        every { invoiceUiMapper.mapLatest(sampleInvoices, SupplyType.ELECTRICITY) } returns sampleUiModel.latestInvoice
 
         val collector = launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.uiState.collect {}

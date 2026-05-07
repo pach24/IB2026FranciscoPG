@@ -20,9 +20,9 @@ class FilterInvoicesUseCaseTest {
         useCase = FilterInvoicesUseCase()
 
         baseList = listOf(
-            createInvoice(id = "1", amount = 100.0, status = InvoiceStatus.PAID, date = "01/01/2025"),
-            createInvoice(id = "2", amount = 200.0, status = InvoiceStatus.PENDING, date = "01/02/2025"),
-            createInvoice(id = "3", amount = 300.0, status = InvoiceStatus.PAID, date = "01/03/2025")
+            createInvoice(id = "1", amount = 100.0, status = InvoiceStatus.PAID, date = LocalDate.of(2025, 1, 1)),
+            createInvoice(id = "2", amount = 200.0, status = InvoiceStatus.PENDING, date = LocalDate.of(2025, 2, 1)),
+            createInvoice(id = "3", amount = 300.0, status = InvoiceStatus.PAID, date = LocalDate.of(2025, 3, 1))
         )
     }
 
@@ -80,7 +80,7 @@ class FilterInvoicesUseCaseTest {
         val result = useCase(invoices = baseList, filters = filters)
 
         assertEquals(1, result.size)
-        assertEquals("01/02/2025", result[0].chargeDate)
+        assertEquals(LocalDate.of(2025, 2, 1), result[0].chargeDate)
     }
 
     @Test
@@ -99,7 +99,7 @@ class FilterInvoicesUseCaseTest {
         with(result[0]) {
             assertEquals(InvoiceStatus.PAID, status)
             assertEquals(100.0, amount, 0.01)
-            assertEquals("01/01/2025", chargeDate)
+            assertEquals(LocalDate.of(2025, 1, 1), chargeDate)
         }
     }
 
@@ -110,22 +110,6 @@ class FilterInvoicesUseCaseTest {
         )
 
         val result = useCase(invoices = baseList, filters = filters)
-
-        assertEquals(3, result.size)
-    }
-
-    @Test
-    fun `when filter by date range invoices without valid date are excluded`() {
-        val listWithBadDate = baseList + createInvoice(
-            id = "4", amount = 150.0, status = InvoiceStatus.PAID, date = ""
-        )
-
-        val filters = InvoiceFilters(
-            startDate = LocalDate.of(2025, 1, 1),
-            endDate = LocalDate.of(2025, 12, 31)
-        )
-
-        val result = useCase(invoices = listWithBadDate, filters = filters)
 
         assertEquals(3, result.size)
     }
@@ -205,22 +189,6 @@ class FilterInvoicesUseCaseTest {
         assertTrue(result.any { it.id == "3" })
     }
 
-    @Test
-    fun `when chargeDate has partial format invoice is excluded from date filter`() {
-        val listWithBadFormat = baseList + createInvoice(
-            id = "5", amount = 50.0, status = InvoiceStatus.PAID, date = "01/2025"
-        )
-        val filters = InvoiceFilters(
-            startDate = LocalDate.of(2020, 1, 1),
-            endDate = LocalDate.of(2030, 12, 31)
-        )
-
-        val result = useCase(invoices = listWithBadFormat, filters = filters)
-
-        assertEquals(3, result.size)
-        assertTrue(result.none { it.id == "5" })
-    }
-
     // ── Casos límite: importes parciales ──────────────────────────────────────
 
     @Test
@@ -255,7 +223,7 @@ class FilterInvoicesUseCaseTest {
     @Test
     fun `when invoice amount is zero and minAmount is zero it is included`() {
         val listWithZero = baseList + createInvoice(
-            id = "6", amount = 0.0, status = InvoiceStatus.PAID, date = "01/04/2025"
+            id = "6", amount = 0.0, status = InvoiceStatus.PAID, date = LocalDate.of(2025, 4, 1)
         )
         val filters = InvoiceFilters(minAmount = 0.0, maxAmount = 50.0)
 
@@ -268,7 +236,7 @@ class FilterInvoicesUseCaseTest {
     @Test
     fun `when invoice has negative amount and no min filter it is excluded`() {
         val listWithNegative = baseList + createInvoice(
-            id = "7", amount = -10.0, status = InvoiceStatus.PAID, date = "01/04/2025"
+            id = "7", amount = -10.0, status = InvoiceStatus.PAID, date = LocalDate.of(2025, 4, 1)
         )
         val filters = InvoiceFilters()
 
@@ -294,15 +262,15 @@ class FilterInvoicesUseCaseTest {
         id: String,
         amount: Double,
         status: InvoiceStatus,
-        date: String
+        date: LocalDate
     ) = Invoice(
         id = id,
         contractId = "LUZ_01",
         status = status,
         amount = amount,
         chargeDate = date,
-        periodStart = "01/01/2025",
-        periodEnd = "31/01/2025",
+        periodStart = LocalDate.of(2025, 1, 1),
+        periodEnd = LocalDate.of(2025, 1, 31),
         supplyType = SupplyType.ELECTRICITY
     )
 }

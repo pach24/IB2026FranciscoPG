@@ -18,7 +18,6 @@ fun ElectronicInvoiceRoute(
     val contracts by viewModel.contracts.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.loadContracts()
         viewModel.navigationEvent.collect { event ->
             when (event) {
                 is ElectronicInvoiceNavigationEvent.GoToActivate ->

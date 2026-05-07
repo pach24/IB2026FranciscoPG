@@ -69,16 +69,7 @@ class MainViewModel @Inject constructor(
                 val all = (electricityInvoices.await().getOrNull().orEmpty() +
                         gasInvoices.await().getOrNull().orEmpty())
 
-                val latest = all.maxByOrNull { invoice ->
-                    try {
-                        java.time.LocalDate.parse(
-                            invoice.chargeDate,
-                            java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")
-                        )
-                    } catch (_: Exception) {
-                        java.time.LocalDate.MIN
-                    }
-                }
+                val latest = all.maxByOrNull { it.chargeDate }
 
                 _latestInvoiceAmount.value = if (latest != null) {
                     String.format(Locale("es", "ES"), "%.2f", latest.amount)

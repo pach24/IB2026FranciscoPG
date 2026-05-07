@@ -2,10 +2,12 @@ package com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.compo
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -21,7 +23,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -38,7 +39,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
@@ -62,7 +62,7 @@ fun DateRangeSection(
             fontFamily = IberFontBold,
             color = colors.darkGrey
         )
-        Spacer(modifier = Modifier.height(Spacing.dp20))
+        Spacer(modifier = Modifier.height(Spacing.dp8))
         Row(
             horizontalArrangement = Arrangement.spacedBy(Spacing.dp32),
             modifier = Modifier.fillMaxWidth()
@@ -100,21 +100,17 @@ private fun DateField(
     var displayValue by remember { mutableStateOf(value) }
     if (value.isNotEmpty()) displayValue = value
 
-    val labelSize by animateFloatAsState(
-        targetValue = if (hasValue) 10f else 12f,
-        animationSpec = tween(300),
-        label = "labelSize"
-    )
-    val dividerColor by animateColorAsState(
-        targetValue = if (hasValue) colors.iberdrolaGreen else colors.darkGrey,
-        animationSpec = tween(300),
+    val transition = updateTransition(targetState = hasValue, label = "dateField")
+
+    val dividerColor by transition.animateColor(
+        transitionSpec = { tween(300) },
         label = "dividerColor"
-    )
-    val dividerThickness by animateFloatAsState(
-        targetValue = if (hasValue) 2f else 1f,
-        animationSpec = tween(300),
+    ) { if (it) colors.iberdrolaGreen else colors.darkGrey }
+
+    val dividerThickness by transition.animateFloat(
+        transitionSpec = { tween(300) },
         label = "dividerThickness"
-    )
+    ) { if (it) 2f else 1f }
 
     Column(
         modifier = modifier
@@ -125,35 +121,54 @@ private fun DateField(
                 onClick = onClick
             )
     ) {
-        //Label
+        // Área fija para el label flotante (siempre reserva espacio)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(top = 8.dp)
+                .height(16.dp),
+            contentAlignment = Alignment.BottomStart
         ) {
-            Text(
-                text = label,
-                fontSize = labelSize.sp,
-                color = colors.textSubtitle
-            )
+            transition.AnimatedVisibility(
+                visible = { it },
+                enter = fadeIn(tween(300)) + slideInVertically(tween(300)) { it * 3 },
+                exit = fadeOut(tween(200)) + slideOutVertically(tween(200)) { it * 3 }
+            ) {
+                Text(
+                    text = label,
+                    fontSize = TextSize.sp10,
+                    color = colors.textSubtitle
+                )
+            }
         }
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(Spacing.dp32),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.Bottom
         ) {
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(top = 4.dp)
+                    .padding(bottom = 4.dp)
             ) {
-                androidx.compose.animation.AnimatedVisibility(
-                    visible = hasValue,
-                    enter = fadeIn(tween(300)) + slideInVertically(tween(300)) { -it },
+                // Placeholder: visible cuando no hay fecha, sale hacia arriba
+                transition.AnimatedVisibility(
+                    visible = { !it },
+                    enter = fadeIn(tween(200)) + slideInVertically(tween(200)) { -it },
                     exit = fadeOut(tween(300)) + slideOutVertically(tween(300)) { -it }
+                ) {
+                    Text(
+                        text = label,
+                        fontSize = TextSize.sp14,
+                        color = colors.textSubtitle
+                    )
+                }
+                // Fecha: entra desde abajo cuando se selecciona
+                transition.AnimatedVisibility(
+                    visible = { it },
+                    enter = fadeIn(tween(300)) + slideInVertically(tween(300)) { -it },
+                    exit = fadeOut(tween(200)) + slideOutVertically(tween(200)) { it }
                 ) {
                     Text(
                         text = displayValue,
@@ -188,8 +203,7 @@ private fun DateField(
             }
         }
 
-        // Espacio pequeño para que el texto casi toque la barra
-        Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = Modifier.height(Spacing.dp6))
 
         HorizontalDivider(
             color = dividerColor,
@@ -215,7 +229,7 @@ private fun DateRangeSectionEmptyPreview() {
     }
 }
 
-@Preview(name = "Con fechas - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Con fechas - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, widthDp = 360, heightDp = 120)
 @Composable
 private fun DateRangeSectionFilledPreview() {
     IberdrolaTheme {
@@ -226,6 +240,43 @@ private fun DateRangeSectionFilledPreview() {
                 onFromClick = {},
                 onToClick = {}
             )
+        }
+    }
+}
+
+// Preview para el Animation Inspector de Android Studio.
+// Cómo usar:
+//   1. Pulsa ▶ (Start Animation Preview) en el panel de previews
+//   2. Usa el botón para disparar la transición
+//   3. Pausa y arrastra el scrubber para ir frame a frame
+@Preview(name = "Animación - Inspector", showBackground = true, widthDp = 360, heightDp = 200)
+@Composable
+private fun DateFieldAnimationInspectorPreview() {
+    IberdrolaTheme {
+        var hasDate by remember { mutableStateOf(false) }
+
+        Column(
+            modifier = Modifier
+                .padding(24.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            DateRangeSection(
+                dateFrom = if (hasDate) "01/01/2026" else "",
+                dateTo = if (hasDate) "15/02/2026" else "",
+                onFromClick = {},
+                onToClick = {},
+                onFromClear = { hasDate = false },
+                onToClear = { hasDate = false }
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            androidx.compose.material3.Button(
+                onClick = { hasDate = !hasDate }
+            ) {
+                Text(if (hasDate) "← Quitar fecha" else "Seleccionar fecha →")
+            }
         }
     }
 }

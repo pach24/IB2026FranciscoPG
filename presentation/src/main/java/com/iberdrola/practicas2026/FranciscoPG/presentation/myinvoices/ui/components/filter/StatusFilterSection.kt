@@ -1,6 +1,9 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.filter
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.material3.ripple
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -48,8 +51,8 @@ fun StatusFilterSection(
         Spacer(modifier = Modifier.height(Spacing.dp24))
 
         Column(
-            verticalArrangement = Arrangement.spacedBy(Spacing.dp32),
-            modifier = Modifier.padding(start = Spacing.dp8)
+            verticalArrangement = Arrangement.spacedBy(Spacing.dp4),
+            modifier = Modifier.padding(start = Spacing.dp0)
         ) {
             statusOptions.forEach { (status, label) ->
                 val isChecked = selectedStatuses.contains(status)
@@ -57,12 +60,14 @@ fun StatusFilterSection(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(min = 24.dp)
+                        .heightIn(min = 48.dp)
+                        .clip(RoundedCornerShape(48.dp))
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
+                            indication = ripple(),
                             role = Role.Checkbox
                         ) { onStatusToggle(status) }
+                        .padding(horizontal = Spacing.dp12)
                 ) {
                     RoundedCheckbox(
                         checked = isChecked,

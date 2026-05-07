@@ -5,6 +5,9 @@ import androidx.room.PrimaryKey
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 
 @Entity(tableName = "invoices")
 data class InvoiceEntity(
@@ -12,9 +15,9 @@ data class InvoiceEntity(
     val contractId: String,
     val status: String,
     val amount: Double,
-    val chargeDate: String,
-    val periodStart: String,
-    val periodEnd: String,
+    val chargeDate: Long,
+    val periodStart: Long,
+    val periodEnd: Long,
     val supplyType: String
 )
 
@@ -24,9 +27,9 @@ fun InvoiceEntity.toDomain(): Invoice =
         contractId = contractId,
         status = InvoiceStatus.fromApiValue(status),
         amount = amount,
-        chargeDate = chargeDate,
-        periodStart = periodStart,
-        periodEnd = periodEnd,
+        chargeDate = chargeDate.toLocalDate(),
+        periodStart = periodStart.toLocalDate(),
+        periodEnd = periodEnd.toLocalDate(),
         supplyType = SupplyType.fromApiValue(supplyType)
     )
 
@@ -36,8 +39,14 @@ fun Invoice.toEntity(): InvoiceEntity =
         contractId = contractId,
         status = status.apiValue,
         amount = amount,
-        chargeDate = chargeDate,
-        periodStart = periodStart,
-        periodEnd = periodEnd,
+        chargeDate = chargeDate.toLong(),
+        periodStart = periodStart.toLong(),
+        periodEnd = periodEnd.toLong(),
         supplyType = supplyType.apiValue
     )
+
+private fun Long.toLocalDate(): LocalDate =
+    Instant.ofEpochMilli(this).atZone(ZoneId.systemDefault()).toLocalDate()
+
+private fun LocalDate.toLong(): Long =
+    atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()

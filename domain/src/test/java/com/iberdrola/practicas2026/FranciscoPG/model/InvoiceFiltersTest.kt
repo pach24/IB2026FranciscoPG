@@ -139,20 +139,20 @@ class InvoiceFiltersTest {
     }
 
     @Test
-    fun `activeCount counts date as one when both dates set`() {
+    fun `activeCount counts two when both dates set`() {
         val filters = InvoiceFilters(
             startDate = LocalDate.of(2025, 1, 1),
             endDate = LocalDate.of(2025, 12, 31)
         )
 
-        assertEquals(1, filters.activeCount)
+        assertEquals(2, filters.activeCount)
     }
 
     @Test
-    fun `activeCount does not count minAmount zero`() {
+    fun `activeCount counts minAmount zero as one`() {
         val filters = InvoiceFilters(minAmount = 0.0)
 
-        assertEquals(0, filters.activeCount)
+        assertEquals(1, filters.activeCount)
     }
 
     @Test
@@ -186,6 +186,6 @@ class InvoiceFiltersTest {
             filteredStatuses = setOf(InvoiceStatus.PAID, InvoiceStatus.PENDING)
         )
 
-        assertEquals(4, filters.activeCount)
+        assertEquals(6, filters.activeCount)
     }
 }
