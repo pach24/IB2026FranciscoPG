@@ -5,8 +5,8 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.ConfigurationRepository
 import com.iberdrola.practicas2026.FranciscoPG.data.local.InvoiceDao
 import com.iberdrola.practicas2026.FranciscoPG.data.local.InvoiceEntity
+import com.iberdrola.practicas2026.FranciscoPG.data.model.ApiResponse
 import com.iberdrola.practicas2026.FranciscoPG.data.model.InvoiceDto
-import com.iberdrola.practicas2026.FranciscoPG.data.model.InvoiceListResponseDto
 import com.iberdrola.practicas2026.FranciscoPG.data.network.InvoiceApiService
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -19,6 +19,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import retrofit2.Call
 import java.net.UnknownHostException
 
 class InvoiceRepositoryImplTest {
@@ -30,16 +31,30 @@ class InvoiceRepositoryImplTest {
     private lateinit var repository: InvoiceRepositoryImpl
 
     private val sampleDto = InvoiceDto(
-        id = "1", descEstado = "Pagada", importeOrdenacion = 50.0,
-        fechaCobro = "15/01/2024", fechaInicio = "01/01/2024",
-        fechaFin = "31/01/2024", tipoSuministro = "LUZ"
+        id = "1", contractId = "LUZ_01", descEstado = "Pagada", importeOrdenacion = 50.0,
+        fechaCobro = 0L, fechaInicio = 0L,
+        fechaFin = 0L, tipoSuministro = "LUZ"
     )
 
     private val sampleEntity = InvoiceEntity(
-        id = "1", status = "Pagada", amount = 50.0,
-        chargeDate = "15/01/2024", periodStart = "01/01/2024",
-        periodEnd = "31/01/2024", supplyType = "LUZ"
+        id = "1", contractId = "LUZ_01", status = "Pagada", amount = 50.0,
+        chargeDate = 0L, periodStart = 0L,
+        periodEnd = 0L, supplyType = "LUZ"
     )
+
+    private fun mockCall(response: ApiResponse<List<InvoiceDto>>): Call<ApiResponse<List<InvoiceDto>>> {
+        val call = mockk<Call<ApiResponse<List<InvoiceDto>>>>()
+        every { call.enqueue(any()) } answers {
+            val callback = firstArg<retrofit2.Callback<ApiResponse<List<InvoiceDto>>>>()
+            val retrofitResponse = mockk<retrofit2.Response<ApiResponse<List<InvoiceDto>>>>()
+            every { retrofitResponse.isSuccessful } returns true
+            every { retrofitResponse.body() } returns response
+            every { retrofitResponse.code() } returns 200
+            callback.onResponse(call, retrofitResponse)
+        }
+        every { call.cancel() } just runs
+        return call
+    }
 
     @Before
     fun setUp() {
@@ -57,9 +72,8 @@ class InvoiceRepositoryImplTest {
     @Test
     fun `mock mode returns data from mock API`() = runTest {
         every { configRepo.isMockEnabled() } returns true
-        coEvery { mockApi.getInvoices("LUZ") } returns InvoiceListResponseDto(
-            numFacturas = 1, facturas = listOf(sampleDto)
-        )
+        val apiResponse = ApiResponse(code = 200, error = null, data = listOf(sampleDto))
+        every { mockApi.getInvoicesCall("LUZ") } returns mockCall(apiResponse)
 
         val result = repository.getInvoices(SupplyType.ELECTRICITY)
 
@@ -72,15 +86,26 @@ class InvoiceRepositoryImplTest {
     @Test
     fun `mock mode filters by supply type`() = runTest {
         every { configRepo.isMockEnabled() } returns true
-        val gasDto = sampleDto.copy(id = "2", tipoSuministro = "GAS")
-        coEvery { mockApi.getInvoices("LUZ") } returns InvoiceListResponseDto(
-            numFacturas = 2, facturas = listOf(sampleDto, gasDto)
-        )
+        val gasDto = sampleDto.copy(id = "2", contractId = "GAS_01", tipoSuministro = "GAS")
+        val apiResponse = ApiResponse(code = 200, error = null, data = listOf(sampleDto, gasDto))
+        every { mockApi.getInvoicesCall("LUZ") } returns mockCall(apiResponse)
 
         val result = repository.getInvoices(SupplyType.ELECTRICITY)
 
         assertEquals(1, result.getOrThrow().size)
         assertEquals("1", result.getOrThrow().first().id)
+    }
+
+    // En modo mock, si la API devuelve código de error, devuelve failure
+    @Test
+    fun `mock mode returns failure when API code is not 200`() = runTest {
+        every { configRepo.isMockEnabled() } returns true
+        val apiResponse = ApiResponse<List<InvoiceDto>>(code = 500, error = "Server error", data = null)
+        every { mockApi.getInvoicesCall("LUZ") } returns mockCall(apiResponse)
+
+        val result = repository.getInvoices(SupplyType.ELECTRICITY)
+
+        assertTrue(result.isFailure)
     }
 
     // ── Real mode: first load (forceRefresh=false) ─────────────────────
@@ -90,9 +115,7 @@ class InvoiceRepositoryImplTest {
     fun `real mode first load with empty Room fetches from API and caches`() = runTest {
         every { configRepo.isMockEnabled() } returns false
         coEvery { dao.getInvoicesBySupplyType("LUZ") } returns emptyList() andThen listOf(sampleEntity)
-        coEvery { realApi.getInvoices("LUZ") } returns InvoiceListResponseDto(
-            numFacturas = 1, facturas = listOf(sampleDto)
-        )
+        coEvery { realApi.getInvoices("LUZ") } returns ApiResponse(200, null, listOf(sampleDto))
 
         val result = repository.getInvoices(SupplyType.ELECTRICITY, forceRefresh = false)
 
@@ -130,9 +153,7 @@ class InvoiceRepositoryImplTest {
     @Test
     fun `real mode forceRefresh syncs API data into Room`() = runTest {
         every { configRepo.isMockEnabled() } returns false
-        coEvery { realApi.getInvoices("LUZ") } returns InvoiceListResponseDto(
-            numFacturas = 1, facturas = listOf(sampleDto)
-        )
+        coEvery { realApi.getInvoices("LUZ") } returns ApiResponse(200, null, listOf(sampleDto))
         coEvery { dao.getInvoicesBySupplyType("LUZ") } returns listOf(sampleEntity)
 
         val result = repository.getInvoices(SupplyType.ELECTRICITY, forceRefresh = true)

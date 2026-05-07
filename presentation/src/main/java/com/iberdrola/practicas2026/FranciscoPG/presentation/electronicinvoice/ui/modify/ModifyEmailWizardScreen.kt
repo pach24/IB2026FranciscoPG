@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui
+package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.modify
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
 import android.content.res.Configuration
@@ -21,6 +21,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -34,7 +35,9 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.common.ConfirmDialog
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.StepBottomButtonBar
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.StepProgressBar
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.SuccessBannerSMS
-import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.components.LoadingOverlay
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared.ConfirmElectronicInvoiceContent
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared.LoadingOverlay
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared.SuccessElectronicInvoiceContent
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
@@ -50,6 +53,7 @@ fun ModifyEmailWizardScreen(
     censoredEmail: String,
     currentCensoredEmail: String,
     isEmailValid: Boolean,
+    isSameAsCurrentEmail: Boolean,
     verificationCode: String,
     isLoading: Boolean,
     showBanner: Boolean,
@@ -58,6 +62,7 @@ fun ModifyEmailWizardScreen(
     onVerificationCodeChanged: (String) -> Unit,
     onResendCode: () -> Unit,
     onBannerDismissed: () -> Unit,
+    onConfirmed: () -> Unit,
     onNavigateBack: () -> Unit,
     onComplete: (String) -> Unit
 ) {
@@ -72,10 +77,12 @@ fun ModifyEmailWizardScreen(
     val hasData = email.isNotEmpty()
     var showExitDialog by remember { mutableStateOf(false) }
     var showSuccess by remember { mutableStateOf(false) }
+    var validationTrigger by remember { mutableIntStateOf(0) }
 
     BackHandler {
+        if (isLoading) return@BackHandler
         when {
-            showSuccess -> onComplete(email)
+            showSuccess -> onComplete(censoredEmail)
             currentPage > 0 -> {
                 onBannerDismissed()
                 scope.launch { pagerState.animateScrollToPage(currentPage - 1) }
@@ -132,8 +139,10 @@ fun ModifyEmailWizardScreen(
                     0 -> ModifyEmailContent(
                         email = email,
                         isEmailValid = isEmailValid,
+                        isSameAsCurrentEmail = isSameAsCurrentEmail,
                         currentCensoredEmail = currentCensoredEmail,
-                        onEmailChanged = onEmailChanged
+                        onEmailChanged = onEmailChanged,
+                        validationTrigger = validationTrigger
                     )
                     1 -> ConfirmElectronicInvoiceContent(
                         verificationCode = verificationCode,
@@ -160,11 +169,13 @@ fun ModifyEmailWizardScreen(
                 },
                 onNext = {
                     if (currentPage == 1) {
+                        onConfirmed()
                         showSuccess = true
                     } else {
                         scope.launch { pagerState.animateScrollToPage(currentPage + 1) }
                     }
                 },
+                onNextDisabled = { if (currentPage == 0) validationTrigger++ },
                 isNextEnabled = when (currentPage) {
                     0 -> isEmailValid
                     1 -> verificationCode.length == 6
@@ -187,8 +198,8 @@ fun ModifyEmailWizardScreen(
         ) {
             SuccessElectronicInvoiceContent(
                 email = censoredEmail,
-                onAccept = { onComplete(email) },
-                onClose = { onComplete(email) },
+                onAccept = { onComplete(censoredEmail) },
+                onClose = { onComplete(censoredEmail) },
                 title = stringResource(R.string.success_modify_email_title),
             )
         }
@@ -196,7 +207,7 @@ fun ModifyEmailWizardScreen(
 }
 
 @Preview(name = "Modify Wizard - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Modify Wizard - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Modify Wizard - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ModifyEmailWizardScreenPreview() {
     IberdrolaTheme {
@@ -205,6 +216,7 @@ private fun ModifyEmailWizardScreenPreview() {
             censoredEmail = "",
             currentCensoredEmail = "p**2@gmail.com",
             isEmailValid = true,
+            isSameAsCurrentEmail = false,
             verificationCode = "",
             isLoading = false,
             showBanner = false,
@@ -213,6 +225,7 @@ private fun ModifyEmailWizardScreenPreview() {
             onVerificationCodeChanged = {},
             onResendCode = {},
             onBannerDismissed = {},
+            onConfirmed = {},
             onNavigateBack = {},
             onComplete = {}
         )

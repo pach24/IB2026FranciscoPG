@@ -6,19 +6,28 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.time.LocalDate
+import java.time.ZoneId
 
 class InvoiceDtoMapperTest {
+
+    private fun LocalDate.toMillis() = atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
     // Verifica que todos los campos del DTO se mapean correctamente al modelo de dominio
     @Test
     fun `toDomain maps all fields correctly`() {
+        val chargeDate = LocalDate.of(2024, 1, 15)
+        val periodStart = LocalDate.of(2024, 1, 1)
+        val periodEnd = LocalDate.of(2024, 1, 31)
+
         val dto = InvoiceDto(
             id = "INV-001",
+            contractId = "LUZ_01",
             descEstado = "Pagada",
             importeOrdenacion = 123.45,
-            fechaCobro = "15/01/2024",
-            fechaInicio = "01/01/2024",
-            fechaFin = "31/01/2024",
+            fechaCobro = chargeDate.toMillis(),
+            fechaInicio = periodStart.toMillis(),
+            fechaFin = periodEnd.toMillis(),
             tipoSuministro = "LUZ"
         )
 
@@ -27,9 +36,9 @@ class InvoiceDtoMapperTest {
         assertEquals("INV-001", invoice.id)
         assertEquals(InvoiceStatus.PAID, invoice.status)
         assertEquals(123.45, invoice.amount, 0.001)
-        assertEquals("15/01/2024", invoice.chargeDate)
-        assertEquals("01/01/2024", invoice.periodStart)
-        assertEquals("31/01/2024", invoice.periodEnd)
+        assertEquals(chargeDate, invoice.chargeDate)
+        assertEquals(periodStart, invoice.periodStart)
+        assertEquals(periodEnd, invoice.periodEnd)
         assertEquals(SupplyType.ELECTRICITY, invoice.supplyType)
     }
 
@@ -38,11 +47,12 @@ class InvoiceDtoMapperTest {
     fun `toDomain maps GAS supply type`() {
         val dto = InvoiceDto(
             id = "INV-002",
+            contractId = "GAS_01",
             descEstado = "Pendiente de pago",
             importeOrdenacion = 80.0,
-            fechaCobro = "20/02/2024",
-            fechaInicio = "01/02/2024",
-            fechaFin = "29/02/2024",
+            fechaCobro = LocalDate.of(2024, 2, 20).toMillis(),
+            fechaInicio = LocalDate.of(2024, 2, 1).toMillis(),
+            fechaFin = LocalDate.of(2024, 2, 29).toMillis(),
             tipoSuministro = "GAS"
         )
 
@@ -57,11 +67,12 @@ class InvoiceDtoMapperTest {
     fun `toDomain handles unknown status defaulting to PENDING`() {
         val dto = InvoiceDto(
             id = "INV-003",
+            contractId = "LUZ_01",
             descEstado = "Desconocido",
             importeOrdenacion = 0.0,
-            fechaCobro = "01/01/2024",
-            fechaInicio = "01/01/2024",
-            fechaFin = "31/01/2024",
+            fechaCobro = 0L,
+            fechaInicio = 0L,
+            fechaFin = 0L,
             tipoSuministro = "LUZ"
         )
 
@@ -73,11 +84,12 @@ class InvoiceDtoMapperTest {
     fun `toDomain handles unknown supply type defaulting to ELECTRICITY`() {
         val dto = InvoiceDto(
             id = "INV-004",
+            contractId = "LUZ_01",
             descEstado = "Pagada",
             importeOrdenacion = 0.0,
-            fechaCobro = "01/01/2024",
-            fechaInicio = "01/01/2024",
-            fechaFin = "31/01/2024",
+            fechaCobro = 0L,
+            fechaInicio = 0L,
+            fechaFin = 0L,
             tipoSuministro = "AGUA"
         )
 

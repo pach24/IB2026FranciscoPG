@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Contract
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.ContractStatus
-import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
+import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.CensorEmailUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetContractsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,13 +17,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed class ElectronicInvoiceNavigationEvent {
-    data class GoToActivate(val contract: Contract) : ElectronicInvoiceNavigationEvent()
-    data class GoToModify(val contract: Contract) : ElectronicInvoiceNavigationEvent()
+    data class GoToActivate(val supplyType: String) : ElectronicInvoiceNavigationEvent()
+    data class GoToModify(val supplyType: String, val censoredEmail: String) : ElectronicInvoiceNavigationEvent()
 }
 
 @HiltViewModel
 class ElectronicInvoiceViewModel @Inject constructor(
-    private val getContractsUseCase: GetContractsUseCase
+    private val getContractsUseCase: GetContractsUseCase,
+    private val censorEmailUseCase: CensorEmailUseCase
 ) : ViewModel() {
 
     private val _contracts = MutableStateFlow<List<Contract>>(emptyList())
@@ -36,24 +37,10 @@ class ElectronicInvoiceViewModel @Inject constructor(
         loadContracts()
     }
 
-    private fun loadContracts() {
+    fun loadContracts() {
         viewModelScope.launch {
             getContractsUseCase().onSuccess { contracts ->
                 _contracts.value = contracts
-            }.onFailure {
-                // Fallback: contratos por defecto
-                _contracts.value = listOf(
-                    Contract(
-                        supplyType = SupplyType.ELECTRICITY,
-                        status = ContractStatus.ACTIVE,
-                        email = "usuario@email.com"
-                    ),
-                    Contract(
-                        supplyType = SupplyType.GAS,
-                        status = ContractStatus.INACTIVE,
-                        email = null
-                    )
-                )
             }
         }
     }
@@ -62,10 +49,15 @@ class ElectronicInvoiceViewModel @Inject constructor(
         viewModelScope.launch {
             when (contract.status) {
                 ContractStatus.ACTIVE -> _navigationEvent.emit(
-                    ElectronicInvoiceNavigationEvent.GoToModify(contract)
+                    ElectronicInvoiceNavigationEvent.GoToModify(
+                        supplyType = contract.supplyType.apiValue,
+                        censoredEmail = censorEmailUseCase(contract.email ?: "")
+                    )
                 )
                 ContractStatus.INACTIVE -> _navigationEvent.emit(
-                    ElectronicInvoiceNavigationEvent.GoToActivate(contract)
+                    ElectronicInvoiceNavigationEvent.GoToActivate(
+                        supplyType = contract.supplyType.apiValue
+                    )
                 )
             }
         }

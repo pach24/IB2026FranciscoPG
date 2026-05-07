@@ -23,7 +23,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontRegular
@@ -44,6 +47,7 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 @Composable
 fun LatestInvoiceCardComposable(
     amount: String,
+    currencySymbol: String,
     dateRange: String,
     modifier: Modifier = Modifier,
     supplyType: String = "Factura Luz",
@@ -112,7 +116,13 @@ fun LatestInvoiceCardComposable(
 
             // Importe: "20,00 €"
             Text(
-                text = amount,
+                text = buildAnnotatedString {
+                    append(amount)
+                    append(" ")
+                    withStyle(SpanStyle(fontSize = TextSize.sp16)) {
+                        append(currencySymbol)
+                    }
+                },
                 fontFamily = IberFontBold,
                 fontWeight = FontWeight.Bold,
                 fontSize = TextSize.sp24,
@@ -252,7 +262,8 @@ private fun SkeletonBox(
 private fun PreviewLatestInvoiceCardComposable() {
     IberdrolaTheme {
         LatestInvoiceCardComposable(
-            amount = "20,00 \u20AC",
+            amount = "20,00",
+            currencySymbol = "€",
             dateRange = "01 feb. 2024 - 04 mar. 2024",
             status = "Pagada",
             invoiceStatus = InvoiceStatus.PAID
@@ -278,7 +289,8 @@ private fun PreviewOverlaySkeletonOnCard() {
             Box {
                 // Última factura (real)
                 LatestInvoiceCardComposable(
-                    amount = "20,00 €",
+                    amount = "20,00",
+                    currencySymbol = "€",
                     dateRange = "01 feb. 2024 - 04 mar. 2024",
                     status = "Pagada",
                     invoiceStatus = InvoiceStatus.PAID

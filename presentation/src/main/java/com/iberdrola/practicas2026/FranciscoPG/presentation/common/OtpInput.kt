@@ -193,7 +193,7 @@ private fun OtpDigitBox(
 }
 
 @Preview(name = "OtpInput - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "OtpInput - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "OtpInput - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun OtpInputPreview() {
     IberdrolaTheme {

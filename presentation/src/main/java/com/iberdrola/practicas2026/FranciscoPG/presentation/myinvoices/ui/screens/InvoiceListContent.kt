@@ -21,7 +21,13 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalDensity
+import kotlinx.coroutines.delay
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,6 +35,9 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.InvoiceListItem
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.LatestInvoiceUiModel
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.runtime.remember
+
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.list.InvoiceHeaderItemComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.list.InvoiceRowItemComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.list.LatestInvoiceCardComposable
@@ -59,9 +68,60 @@ fun InvoiceListComposeScreen(
     modifier: Modifier = Modifier,
     activeFilterCount: Int = 0,
     isFiltered: Boolean = false,
-    listState: LazyListState = rememberLazyListState()
+    listState: LazyListState = rememberLazyListState(),
+    emptyFilteredContent: (@Composable () -> Unit)? = null
 ) {
     val pullToRefreshState = rememberPullToRefreshState()
+
+    // Spacer calculado dinámicamente: viewport - (sticky + contenido filtrado)
+    // Garantiza que el max scroll = item0H exacto → sin scroll extra hacia abajo
+    var spacerHeightPx by remember { mutableIntStateOf(0) }
+
+    // Caché de la altura del item 0 (puede estar fuera de pantalla si ya se scrolleó)
+    var item0HeightPx by remember { mutableIntStateOf(0) }
+
+    // Scroll preciso al sticky cuando hay filtros, la carga termina o cambia el nº de resultados
+    LaunchedEffect(isFiltered, isLoading, historyItems.size) {
+        if (isLoading) return@LaunchedEffect
+        if (!isFiltered) {
+            spacerHeightPx = 0
+            return@LaunchedEffect
+        }
+
+        // Esperar recomposición para que los nuevos items (incl. emptyFilteredContent) estén medidos
+        delay(50L)
+
+        val info = listState.layoutInfo
+        val viewportH = info.viewportSize.height
+
+        // Leer y cachear item0H; si está fuera de pantalla se reutiliza el valor guardado
+        val item0H = info.visibleItemsInfo.firstOrNull { it.index == 0 }?.size
+            ?.also { item0HeightPx = it }
+            ?: item0HeightPx.takeIf { it > 0 }
+            ?: return@LaunchedEffect
+
+        // El spacer es siempre el último item → su índice = totalItemsCount - 1
+        val spacerIndex = info.totalItemsCount - 1
+
+        // Contenido tras item 0 (sticky + filas/emptyState), excluye el spacer
+        val contentAfterItem0 = info.visibleItemsInfo
+            .filter { it.index in 1..<spacerIndex }
+            .sumOf { it.size }
+
+        // Spacer = viewport - contenido → totalContent - viewport = item0H (max scroll exacto)
+        spacerHeightPx = (viewportH - contentAfterItem0).coerceAtLeast(0)
+
+        // Breve espera para que Compose recomponga con el nuevo spacer antes del scroll
+        delay(50L)
+
+        // scrollToItem(0, item0H): mueve item 0 fuera de pantalla por exactamente su altura
+        listState.scrollToItem(0, item0H)
+    }
+
+    // Scroll al inicio solo cuando se desactivan los filtros
+    LaunchedEffect(isFiltered) {
+        if (!isFiltered) listState.scrollToItem(0, 0)
+    }
 
     PullToRefreshBox(
         state = pullToRefreshState,
@@ -114,6 +174,7 @@ fun InvoiceListComposeScreen(
                     if (latestInvoice != null) {
                         LatestInvoiceCardComposable(
                             amount = latestInvoice.amount,
+                            currencySymbol = latestInvoice.currencySymbol,
                             dateRange = latestInvoice.dateRange,
                             supplyType = latestInvoice.supplyTypeLabel,
                             status = latestInvoice.statusText,
@@ -152,10 +213,22 @@ fun InvoiceListComposeScreen(
                                 type = item.type,
                                 status = item.statusText,
                                 amount = item.amount,
+                                currencySymbol = item.currencySymbol,
                                 invoiceStatus = item.status,
                                 onClick = { onHistoryItemClick(item) }
                             )
                         }
+                    }
+                }
+
+                // Sin resultados filtrados: contenido vacío justo debajo del sticky header
+                if (isFiltered && historyItems.isEmpty() && emptyFilteredContent != null) {
+                    item { emptyFilteredContent() }
+                }
+
+                if (isFiltered) {
+                    item {
+                        Spacer(modifier = Modifier.height(with(LocalDensity.current) { spacerHeightPx.toDp() }))
                     }
                 }
             }
@@ -165,18 +238,18 @@ fun InvoiceListComposeScreen(
 
 private val mockHistoryItems = listOf(
     InvoiceListItem.HeaderYear("2024"),
-    InvoiceListItem.InvoiceItem("1", "8 de marzo", "Factura Luz", "45,20 €", "Pagada", InvoiceStatus.PAID),
-    InvoiceListItem.InvoiceItem("2", "10 de febrero", "Factura Gas", "32,50 €", "Pagada", InvoiceStatus.PAID),
-    InvoiceListItem.InvoiceItem("3", "12 de enero", "Factura Luz", "58,90 €", "Pendiente de Pago", InvoiceStatus.PENDING),
+    InvoiceListItem.InvoiceItem("1", "8 de marzo", "Factura Luz", "45,20", "€", "Pagada", InvoiceStatus.PAID),
+    InvoiceListItem.InvoiceItem("2", "10 de febrero", "Factura Gas", "32,50", "€", "Pagada", InvoiceStatus.PAID),
+    InvoiceListItem.InvoiceItem("3", "12 de enero", "Factura Luz", "58,90", "€", "Pendiente de Pago", InvoiceStatus.PENDING),
     InvoiceListItem.HeaderYear("2023"),
-    InvoiceListItem.InvoiceItem("4", "5 de diciembre", "Factura Luz", "41,00 €", "Anulada", InvoiceStatus.CANCELLED),
-    InvoiceListItem.InvoiceItem("5", "3 de noviembre", "Factura Gas", "29,80 €", "Pagada", InvoiceStatus.PAID),
-    InvoiceListItem.InvoiceItem("6", "7 de octubre", "Factura Luz", "37,60 €", "En trámite de cobro", InvoiceStatus.PROCESSING)
+    InvoiceListItem.InvoiceItem("4", "5 de diciembre", "Factura Luz", "41,00", "€", "Anulada", InvoiceStatus.CANCELLED),
+    InvoiceListItem.InvoiceItem("5", "3 de noviembre", "Factura Gas", "29,80", "€", "Pagada", InvoiceStatus.PAID),
+    InvoiceListItem.InvoiceItem("6", "7 de octubre", "Factura Luz", "37,60", "€", "En trámite de cobro", InvoiceStatus.PROCESSING)
 )
 
 // Pantalla de facturas con datos mockeados
 @Preview(name = "Invoice List - Light", showBackground = true)
-@Preview(name = "Invoice List - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(name = "Invoice List - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun PreviewInvoiceListComposeScreen() {
     IberdrolaTheme {
@@ -184,7 +257,8 @@ private fun PreviewInvoiceListComposeScreen() {
             isLoading = false,
             isRefreshing = false,
             latestInvoice = LatestInvoiceUiModel(
-                amount = "20,00 €",
+                amount = "20,00",
+                currencySymbol = "€",
                 dateRange = "01 feb. 2024 - 04 mar. 2024",
                 supplyTypeLabel = "Factura Luz",
                 statusText = "Pendiente de Pago",
@@ -202,7 +276,7 @@ private fun PreviewInvoiceListComposeScreen() {
 
 // Pantalla de facturas en estado skeleton
 @Preview(name = "Invoice List Skeleton - Light", showBackground = true)
-@Preview(name = "Invoice List Skeleton - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(name = "Invoice List Skeleton - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun PreviewInvoiceListComposeScreenLoading() {
     IberdrolaTheme {
@@ -222,7 +296,7 @@ private fun PreviewInvoiceListComposeScreenLoading() {
 // Overlay: datos reales + skeleton superpuesto con opacidad
 @OptIn(ExperimentalFoundationApi::class)
 @Preview(name = "Overlay - Light", showBackground = true)
-@Preview(name = "Overlay - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(name = "Overlay - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun PreviewInvoiceListOverlay() {
     IberdrolaTheme {
@@ -232,7 +306,8 @@ private fun PreviewInvoiceListOverlay() {
                 isLoading = false,
                 isRefreshing = false,
                 latestInvoice = LatestInvoiceUiModel(
-                    amount = "20,00 €",
+                    amount = "20,00",
+                    currencySymbol = "€",
                     dateRange = "01 feb. 2024 - 04 mar. 2024",
                     supplyTypeLabel = "Factura Luz",
                     statusText = "Pendiente de Pago",

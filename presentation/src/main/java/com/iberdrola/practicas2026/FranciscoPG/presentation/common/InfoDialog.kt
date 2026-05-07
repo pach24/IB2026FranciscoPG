@@ -99,7 +99,7 @@ fun InfoDialog(
 }
 
 @Preview(name = "InfoDialog - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "InfoDialog - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "InfoDialog - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun InfoDialogPreview() {
     IberdrolaTheme {

@@ -10,25 +10,32 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.time.LocalDate
 
 class InvoiceUiMapperTest {
 
     private lateinit var mapper: InvoiceUiMapper
 
     private val invoice1 = Invoice(
-        id = "1", status = InvoiceStatus.PAID, amount = 123.45,
-        chargeDate = "15/01/2024", periodStart = "01/01/2024",
-        periodEnd = "31/01/2024", supplyType = SupplyType.ELECTRICITY
+        id = "1", contractId = "LUZ_01", status = InvoiceStatus.PAID, amount = 123.45,
+        chargeDate = LocalDate.of(2024, 1, 15),
+        periodStart = LocalDate.of(2024, 1, 1),
+        periodEnd = LocalDate.of(2024, 1, 31),
+        supplyType = SupplyType.ELECTRICITY
     )
     private val invoice2 = Invoice(
-        id = "2", status = InvoiceStatus.PENDING, amount = 67.89,
-        chargeDate = "20/03/2024", periodStart = "01/03/2024",
-        periodEnd = "31/03/2024", supplyType = SupplyType.ELECTRICITY
+        id = "2", contractId = "LUZ_01", status = InvoiceStatus.PENDING, amount = 67.89,
+        chargeDate = LocalDate.of(2024, 3, 20),
+        periodStart = LocalDate.of(2024, 3, 1),
+        periodEnd = LocalDate.of(2024, 3, 31),
+        supplyType = SupplyType.ELECTRICITY
     )
     private val invoice3 = Invoice(
-        id = "3", status = InvoiceStatus.PAID, amount = 200.0,
-        chargeDate = "10/02/2025", periodStart = "01/02/2025",
-        periodEnd = "28/02/2025", supplyType = SupplyType.GAS
+        id = "3", contractId = "GAS_01", status = InvoiceStatus.PAID, amount = 200.0,
+        chargeDate = LocalDate.of(2025, 2, 10),
+        periodStart = LocalDate.of(2025, 2, 1),
+        periodEnd = LocalDate.of(2025, 2, 28),
+        supplyType = SupplyType.GAS
     )
 
     @Before
@@ -51,7 +58,8 @@ class InvoiceUiMapperTest {
         val result = mapper.map(listOf(invoice1, invoice2), SupplyType.ELECTRICITY)
 
         assertNotNull(result.latestInvoice)
-        assertEquals("123,45 €", result.latestInvoice!!.amount)
+        assertEquals("123,45", result.latestInvoice!!.amount)
+        assertEquals("€", result.latestInvoice!!.currencySymbol)
         assertEquals("01 ene. 2024 - 31 ene. 2024", result.latestInvoice!!.dateRange)
         assertEquals("Factura Luz", result.latestInvoice!!.supplyTypeLabel)
         assertEquals("Pagada", result.latestInvoice!!.statusText)
@@ -114,7 +122,8 @@ class InvoiceUiMapperTest {
         val result = mapper.map(listOf(invoice1), SupplyType.ELECTRICITY)
 
         val item = result.historyItems.filterIsInstance<InvoiceListItem.InvoiceItem>().first()
-        assertEquals("123,45 €", item.amount)
+        assertEquals("123,45", item.amount)
+        assertEquals("€", item.currencySymbol)
     }
 
     // Verifica que el estado e isPaid se mapean correctamente para facturas pendientes
@@ -127,13 +136,21 @@ class InvoiceUiMapperTest {
         assertEquals(InvoiceStatus.PENDING, item.status)
     }
 
-    // Verifica que una fecha con formato invalido se devuelve tal cual sin crashear
+    // Verifica que mapLatest devuelve null con lista vacia
     @Test
-    fun `formatDateToSpanish handles invalid format gracefully`() {
-        val badInvoice = invoice1.copy(chargeDate = "invalid")
-        val result = mapper.map(listOf(badInvoice), SupplyType.ELECTRICITY)
+    fun `mapLatest with empty list returns null`() {
+        val result = mapper.mapLatest(emptyList(), SupplyType.ELECTRICITY)
 
-        val item = result.historyItems.filterIsInstance<InvoiceListItem.InvoiceItem>().first()
-        assertEquals("invalid", item.date)
+        assertNull(result)
+    }
+
+    // Verifica que mapLatest selecciona la primera factura de la lista
+    @Test
+    fun `mapLatest returns first invoice`() {
+        val result = mapper.mapLatest(listOf(invoice1, invoice2), SupplyType.ELECTRICITY)
+
+        assertNotNull(result)
+        assertEquals("123,45", result!!.amount)
+        assertEquals(InvoiceStatus.PAID, result.status)
     }
 }

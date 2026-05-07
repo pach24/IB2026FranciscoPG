@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui
+package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.list
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
 import android.content.res.Configuration
@@ -191,14 +191,14 @@ private fun ContractRow(
 }
 
 @Preview(name = "Electronic Invoice - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Electronic Invoice - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Electronic Invoice - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ElectronicInvoiceScreenPreview() {
     IberdrolaTheme {
         ElectronicInvoiceScreen(
             contracts = listOf(
-                Contract(SupplyType.ELECTRICITY, ContractStatus.ACTIVE, "usuario@email.com"),
-                Contract(SupplyType.GAS, ContractStatus.INACTIVE, null)
+                Contract(id = "LUZ_01", supplyType = SupplyType.ELECTRICITY, status = ContractStatus.ACTIVE, email = "usuario@email.com"),
+                Contract(id = "GAS_01", supplyType = SupplyType.GAS, status = ContractStatus.INACTIVE, email = null)
             ),
             onContractClick = {},
             onNavigateBack = {}

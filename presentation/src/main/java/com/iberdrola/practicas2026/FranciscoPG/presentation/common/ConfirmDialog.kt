@@ -116,7 +116,7 @@ fun ConfirmDialog(
 }
 
 @Preview(name = "ConfirmDialog - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "ConfirmDialog - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "ConfirmDialog - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ConfirmDialogPreview() {
     IberdrolaTheme {

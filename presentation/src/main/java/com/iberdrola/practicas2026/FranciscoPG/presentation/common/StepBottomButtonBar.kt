@@ -9,7 +9,9 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +25,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,6 +45,7 @@ fun StepBottomButtonBar(
     onBack: () -> Unit,
     onNext: () -> Unit,
     isNextEnabled: Boolean,
+    onNextDisabled: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val colors = IberdrolaTheme.colors
@@ -101,6 +105,7 @@ fun StepBottomButtonBar(
             }
 
             // Botón Siguiente
+            val nextInteractionSource = remember { MutableInteractionSource() }
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -108,10 +113,10 @@ fun StepBottomButtonBar(
                     .graphicsLayer { scaleX = buttonScale; scaleY = buttonScale }
                     .clip(CircleShape)
                     .background(buttonBgColor)
-                    .then(
-                        if (isNextEnabled) Modifier.clickable { onNext() }
-                        else Modifier
-                    ),
+                    .clickable(
+                        interactionSource = nextInteractionSource,
+                        indication = if (isNextEnabled) LocalIndication.current else null
+                    ) { if (isNextEnabled) onNext() else onNextDisabled() },
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -127,7 +132,7 @@ fun StepBottomButtonBar(
 }
 
 @Preview(name = "StepBottomButtonBar - Enabled", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "StepBottomButtonBar - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "StepBottomButtonBar - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun StepBottomButtonBarPreview() {
     IberdrolaTheme {

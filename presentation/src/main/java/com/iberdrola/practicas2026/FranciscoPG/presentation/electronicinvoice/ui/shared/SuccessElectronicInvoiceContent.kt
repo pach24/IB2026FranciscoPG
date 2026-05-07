@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui
+package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
 import android.app.Activity
@@ -11,6 +11,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material3.ripple
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -134,7 +136,10 @@ fun SuccessElectronicInvoiceContent(
                 tint = Color.White,
                 modifier = Modifier
                     .size(IconSize.dp28)
-                    .clickable { onClose() }
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = ripple(bounded = false, radius = IconSize.dp20)
+                    ) { onClose() }
             )
         }
 
@@ -224,7 +229,7 @@ fun SuccessElectronicInvoiceContent(
 }
 
 @Preview(name = "Success - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Success - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Success - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun SuccessElectronicInvoiceContentPreview() {
     IberdrolaTheme {

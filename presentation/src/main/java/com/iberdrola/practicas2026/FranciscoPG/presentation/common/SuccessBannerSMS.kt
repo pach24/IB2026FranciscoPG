@@ -7,6 +7,9 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material3.ripple
+import androidx.compose.runtime.remember
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -81,16 +84,19 @@ visible: Boolean,
                 contentDescription = "Close",
                 tint = IberdrolaTheme.colors.black,
                 modifier = Modifier
-                    .size(Spacing.dp18)
-                    .clickable { onDismiss() }
                     .align(Alignment.CenterVertically)
+                    .size(Spacing.dp18)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = ripple(bounded = false, radius = Spacing.dp18)
+                    ) { onDismiss() }
             )
         }
     }
 }
 
 @Preview(name = "SuccessBanner - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "SuccessBanner - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "SuccessBanner - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun SuccessBannerSMSPreview() {
     IberdrolaTheme {

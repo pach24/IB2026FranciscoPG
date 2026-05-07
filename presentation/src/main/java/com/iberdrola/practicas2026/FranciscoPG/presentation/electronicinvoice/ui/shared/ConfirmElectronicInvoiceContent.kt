@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui
+package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
 import android.content.res.Configuration
@@ -99,9 +99,9 @@ fun ConfirmElectronicInvoiceContent(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = Spacing.dp12)
+                .padding(horizontal = Spacing.dp24)
                 .clickable { showOtpSheet = true }
-                .padding(horizontal = Spacing.dp12, vertical = Spacing.dp12)
+                .padding(horizontal = Spacing.dp4, vertical = Spacing.dp8)
         ) {
             Box(modifier = Modifier.padding(bottom = Spacing.dp8)) {
                 if (verificationCode.isEmpty()) {
@@ -245,7 +245,7 @@ fun ConfirmElectronicInvoiceContent(
 }
 
 @Preview(name = "Confirm Content - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Confirm Content - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Confirm Content - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ConfirmElectronicInvoiceContentPreview() {
     IberdrolaTheme {

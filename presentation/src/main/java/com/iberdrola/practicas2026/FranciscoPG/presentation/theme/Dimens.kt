@@ -45,7 +45,7 @@ object Spacing {
     val dp32 = 32.dp
     val dp40 = 40.dp
     val dp48 = 48.dp
-
+    val dp52 = 52.dp
     val dp64 = 64.dp
 
 }
@@ -80,8 +80,10 @@ object Stroke {
 
 /** Componentes específicos */
 object Component {
-    val promoMinH = 144.dp
-    val promoImgW = 140.dp
+    val promoMinH = 120.dp
+    val promoH = 135.dp
+    val promoImgW = 110.dp
+    val mockSwitchBottomPadding = 120.dp
     val dragW = 60.dp
 
     val compHeigh60 = 60.dp
@@ -92,6 +94,9 @@ object Component {
     val touch = 48.dp
     val tabDividerH = 2.dp
     val tabIndicatorH = 6.dp
+
+    val homeCardW = 135.dp
+    val homeCardH = 155.dp
 }
 
 /** Skeleton shimmer */
@@ -122,6 +127,8 @@ object Skeleton {
     val cardIconH = 32.dp
     val cardAmountW = 90.dp
     val cardAmountH = 24.dp
+    val homecardAmountW = 75.dp
+    val homecardAmountH = 24.dp
     val cardDatesW = 150.dp
     val cardDatesH = 12.dp
     val cardStatusW = 115.dp

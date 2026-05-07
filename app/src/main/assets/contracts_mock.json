@@ -1,0 +1,18 @@
+{
+  "code": 200,
+  "error": null,
+  "data": [
+    {
+      "id": "LUZ_01",
+      "tipoSuministro": "LUZ",
+      "estado": "ACTIVE",
+      "email": "usuario@email.com"
+    },
+    {
+      "id": "GAS_01",
+      "tipoSuministro": "GAS",
+      "estado": "INACTIVE",
+      "email": null
+    }
+  ]
+}

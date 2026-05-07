@@ -1,0 +1,170 @@
+{
+  "uuid": "c4c29cf0-45e0-4a6a-9ad0-21d64bdaa7e3",
+  "lastMigration": 33,
+  "name": "mockoon_iberdrola",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 3001,
+  "hostname": "0.0.0.0",
+  "folders": [],
+  "routes": [
+    {
+      "uuid": "a652c605-ac40-4237-83e4-f00db3ffb25a",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "invoices.json",
+      "responses": [
+        {
+          "uuid": "1bba9305-48b1-463e-a071-2fbd79702377",
+          "body": "{\"code\":200,\"error\":null,\"data\":[{\"id\":\"201\",\"contractId\":\"LUZ_01\",\"descEstado\":\"Pendiente de pago\",\"importeOrdenacion\":121.50,\"fechaCobro\":1773273600000,\"fechaInicio\":1770854400000,\"fechaFin\":1773273600000,\"tipoSuministro\":\"LUZ\"},{\"id\":\"102\",\"contractId\":\"GAS_01\",\"descEstado\":\"Pagada\",\"importeOrdenacion\":42.15,\"fechaCobro\":1773100800000,\"fechaInicio\":1770681600000,\"fechaFin\":1773100800000,\"tipoSuministro\":\"GAS\"},{\"id\":\"203\",\"contractId\":\"LUZ_01\",\"descEstado\":\"Anulada\",\"importeOrdenacion\":15.75,\"fechaCobro\":1749945600000,\"fechaInicio\":1747267200000,\"fechaFin\":1749945600000,\"tipoSuministro\":\"LUZ\"},{\"id\":\"104\",\"contractId\":\"GAS_01\",\"descEstado\":\"En tr\\u00e1mite de cobro\",\"importeOrdenacion\":38.90,\"fechaCobro\":1774396800000,\"fechaInicio\":1771977600000,\"fechaFin\":1774396800000,\"tipoSuministro\":\"GAS\"},{\"id\":\"205\",\"contractId\":\"LUZ_01\",\"descEstado\":\"Cuota fija\",\"importeOrdenacion\":45.00,\"fechaCobro\":1775001600000,\"fechaInicio\":1772323200000,\"fechaFin\":1775001600000,\"tipoSuministro\":\"LUZ\"},{\"id\":\"202\",\"contractId\":\"LUZ_01\",\"descEstado\":\"Pagada\",\"importeOrdenacion\":95.40,\"fechaCobro\":1770681600000,\"fechaInicio\":1768003200000,\"fechaFin\":1770681600000,\"tipoSuministro\":\"LUZ\"},{\"id\":\"101\",\"contractId\":\"GAS_01\",\"descEstado\":\"Pendiente de pago\",\"importeOrdenacion\":55.20,\"fechaCobro\":1776211200000,\"fechaInicio\":1773532800000,\"fechaFin\":1776211200000,\"tipoSuministro\":\"GAS\"},{\"id\":\"103\",\"contractId\":\"GAS_01\",\"descEstado\":\"Anulada\",\"importeOrdenacion\":12.30,\"fechaCobro\":1768435200000,\"fechaInicio\":1765756800000,\"fechaFin\":1768435200000,\"tipoSuministro\":\"GAS\"},{\"id\":\"204\",\"contractId\":\"LUZ_01\",\"descEstado\":\"En tr\\u00e1mite de cobro\",\"importeOrdenacion\":88.20,\"fechaCobro\":1773964800000,\"fechaInicio\":1771545600000,\"fechaFin\":1773964800000,\"tipoSuministro\":\"LUZ\"},{\"id\":\"105\",\"contractId\":\"GAS_01\",\"descEstado\":\"Cuota fija\",\"importeOrdenacion\":25.00,\"fechaCobro\":1775001600000,\"fechaInicio\":1772323200000,\"fechaFin\":1775001600000,\"tipoSuministro\":\"GAS\"}]}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Facturas  de ambos tipos de suministro LUZ / GAS",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "5e99b272-b735-4db6-9cd6-377a6274492d",
+          "body": "{\"code\":200,\"error\":null,\"data\":[{\"id\":\"101\",\"contractId\":\"GAS_01\",\"descEstado\":\"Pendiente de pago\",\"importeOrdenacion\":55.20,\"fechaCobro\":1776211200000,\"fechaInicio\":1773532800000,\"fechaFin\":1776211200000,\"tipoSuministro\":\"GAS\"},{\"id\":\"102\",\"contractId\":\"GAS_01\",\"descEstado\":\"Pagada\",\"importeOrdenacion\":42.15,\"fechaCobro\":1773100800000,\"fechaInicio\":1770681600000,\"fechaFin\":1773100800000,\"tipoSuministro\":\"GAS\"},{\"id\":\"103\",\"contractId\":\"GAS_01\",\"descEstado\":\"Anulada\",\"importeOrdenacion\":12.30,\"fechaCobro\":1768435200000,\"fechaInicio\":1765756800000,\"fechaFin\":1768435200000,\"tipoSuministro\":\"GAS\"},{\"id\":\"104\",\"contractId\":\"GAS_01\",\"descEstado\":\"En tr\\u00e1mite de cobro\",\"importeOrdenacion\":38.90,\"fechaCobro\":1774396800000,\"fechaInicio\":1771977600000,\"fechaFin\":1774396800000,\"tipoSuministro\":\"GAS\"},{\"id\":\"105\",\"contractId\":\"GAS_01\",\"descEstado\":\"Cuota fija\",\"importeOrdenacion\":25.00,\"fechaCobro\":1775001600000,\"fechaInicio\":1772323200000,\"fechaFin\":1775001600000,\"tipoSuministro\":\"GAS\"}]}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Facturas  exclusivamente para el suministro de GAS",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "8fba3c6d-18ce-4e0b-a69e-096ffefc6841",
+          "body": "{\"code\":200,\"error\":null,\"data\":[{\"id\":\"201\",\"contractId\":\"LUZ_01\",\"descEstado\":\"Pendiente de pago\",\"importeOrdenacion\":121.50,\"fechaCobro\":1773273600000,\"fechaInicio\":1770854400000,\"fechaFin\":1773273600000,\"tipoSuministro\":\"LUZ\"},{\"id\":\"202\",\"contractId\":\"LUZ_01\",\"descEstado\":\"Pagada\",\"importeOrdenacion\":99.40,\"fechaCobro\":1802217600000,\"fechaInicio\":1799539200000,\"fechaFin\":1802217600000,\"tipoSuministro\":\"LUZ\"},{\"id\":\"203\",\"contractId\":\"LUZ_01\",\"descEstado\":\"Anulada\",\"importeOrdenacion\":15.75,\"fechaCobro\":1749945600000,\"fechaInicio\":1747267200000,\"fechaFin\":1749945600000,\"tipoSuministro\":\"LUZ\"},{\"id\":\"204\",\"contractId\":\"LUZ_01\",\"descEstado\":\"En tr\\u00e1mite de cobro\",\"importeOrdenacion\":88.20,\"fechaCobro\":1773964800000,\"fechaInicio\":1771545600000,\"fechaFin\":1773964800000,\"tipoSuministro\":\"LUZ\"},{\"id\":\"205\",\"contractId\":\"LUZ_01\",\"descEstado\":\"Cuota fija\",\"importeOrdenacion\":45.00,\"fechaCobro\":1775001600000,\"fechaInicio\":1772323200000,\"fechaFin\":1775001600000,\"tipoSuministro\":\"LUZ\"}]}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Facturas  exclusivamente para el suministro de LUZ",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "47947e19-6244-4272-bcfa-cdaf36d896ad",
+          "body": "{\"code\":200,\"error\":null,\"data\":[{\"id\":\"1\",\"contractId\":\"LUZ_01\",\"descEstado\":\"Pendiente de pago\",\"importeOrdenacion\":65.40,\"fechaCobro\":1773532800000,\"fechaInicio\":1771113600000,\"fechaFin\":1773532800000,\"tipoSuministro\":\"LUZ\"},{\"id\":\"2\",\"contractId\":\"GAS_01\",\"descEstado\":\"Pagada\",\"importeOrdenacion\":42.15,\"fechaCobro\":1773100800000,\"fechaInicio\":1770681600000,\"fechaFin\":1773100800000,\"tipoSuministro\":\"GAS\"},{\"id\":\"3\",\"contractId\":\"LUZ_01\",\"descEstado\":\"En tr\\u00e1mite de cobro\",\"importeOrdenacion\":78.30,\"fechaCobro\":1773964800000,\"fechaInicio\":1771372800000,\"fechaFin\":1773792000000,\"tipoSuministro\":\"LUZ\"},{\"id\":\"4\",\"contractId\":\"GAS_01\",\"descEstado\":\"Anulada\",\"importeOrdenacion\":95.50,\"fechaCobro\":1770249600000,\"fechaInicio\":1767571200000,\"fechaFin\":1770249600000,\"tipoSuministro\":\"GAS\"},{\"id\":\"5\",\"contractId\":\"LUZ_01\",\"descEstado\":\"Cuota fija\",\"importeOrdenacion\":50.00,\"fechaCobro\":1775001600000,\"fechaInicio\":1772323200000,\"fechaFin\":1775001600000,\"tipoSuministro\":\"LUZ\"},{\"id\":\"6\",\"contractId\":\"GAS_01\",\"descEstado\":\"En tr\\u00e1mite de cobro\",\"importeOrdenacion\":45.20,\"fechaCobro\":1774396800000,\"fechaInicio\":1771718400000,\"fechaFin\":1774137600000,\"tipoSuministro\":\"GAS\"},{\"id\":\"7\",\"contractId\":\"GAS_01\",\"descEstado\":\"Anulada\",\"importeOrdenacion\":925.50,\"fechaCobro\":1770249600000,\"fechaInicio\":1767571200000,\"fechaFin\":1770249600000,\"tipoSuministro\":\"GAS\"},{\"id\":\"8\",\"contractId\":\"GAS_01\",\"descEstado\":\"Anulada\",\"importeOrdenacion\":23.50,\"fechaCobro\":1770249600000,\"fechaInicio\":1767571200000,\"fechaFin\":1770249600000,\"tipoSuministro\":\"GAS\"}]}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "5c9ed884-9c90-4396-b05d-31fde1bbc171",
+          "body": "{\r\n  \"code\": 200,\r\n  \"error\": null,\r\n  \"data\": [\r\n    {\r\n      \"id\": \"301\",\r\n      \"contractId\": \"LUZ_02\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 10.00,\r\n      \"fechaCobro\": 1767225600000,\r\n      \"fechaInicio\": 1764547200000,\r\n      \"fechaFin\": 1767139200000,\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"302\",\r\n      \"contractId\": \"LUZ_02\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 20.00,\r\n      \"fechaCobro\": 1769904000000,\r\n      \"fechaInicio\": 1767225600000,\r\n      \"fechaFin\": 1769817600000,\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"303\",\r\n      \"contractId\": \"LUZ_02\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 30.00,\r\n      \"fechaCobro\": 1772323200000,\r\n      \"fechaInicio\": 1769904000000,\r\n      \"fechaFin\": 1772236800000,\r\n      \"tipoSuministro\": \"LUZ\"\r\n    },\r\n    {\r\n      \"id\": \"304\",\r\n      \"contractId\": \"LUZ_02\",\r\n      \"descEstado\": \"Pagada\",\r\n      \"importeOrdenacion\": 40.00,\r\n      \"fechaCobro\": 1775001600000,\r\n      \"fechaInicio\": 1772323200000,\r\n      \"fechaFin\": 1774915200000,\r\n      \"tipoSuministro\": \"LUZ\"\r\n    }\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Endpoint para comprobar rango dinámico de fechas al cambiar filtro de importe mínimo y máximo",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    }
+  ],
+  "rootChildren": [
+    {
+      "type": "route",
+      "uuid": "a652c605-ac40-4237-83e4-f00db3ffb25a"
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": true,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": ".\\certificado.crt",
+    "keyPath": ".\\clave.key",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    },
+    {
+      "key": "Access-Control-Allow-Origin",
+      "value": "*"
+    },
+    {
+      "key": "Access-Control-Allow-Methods",
+      "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+    },
+    {
+      "key": "Access-Control-Allow-Headers",
+      "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "data": [],
+  "callbacks": []
+}

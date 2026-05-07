@@ -9,12 +9,14 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -31,12 +33,12 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFilters
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.showFilterResultSnackbar
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.showFiltersClearedSnackbar
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.InvoicesUiState
-import com.iberdrola.practicas2026.FranciscoPG.presentation.common.UnavailableBanner
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel.FeedbackSheetState
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel.FilterViewModel
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel.InvoicesEvent
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -59,6 +61,7 @@ fun InvoicesScreen(
     val undoLabel = stringResource(R.string.snackbar_undo)
 
     var showFilter by rememberSaveable { mutableStateOf(false) }
+    var isNavigatingBack by remember { mutableStateOf(false) }
 
     val electricityListState = rememberLazyListState()
     val gasListState = rememberLazyListState()
@@ -96,7 +99,20 @@ fun InvoicesScreen(
                     filterViewModel = filterViewModel,
                     onFiltersApplied = {
                         scope.showFilterResultSnackbar(snackbarHostState, onGetFilteredCount())
-                        showFilter = false
+                        scope.launch {
+                            // Esperar a que los filtros se propaguen por el chain de corrutinas
+                            // antes de iniciar la transición, para no mostrar la card en ningún frame
+                            delay(50L)
+                            // scrollToItem se cuelga en LazyListStates sin primer layout
+                            // (pestañas en Empty/Loading no renderizan el LazyColumn)
+                            if (electricityListState.layoutInfo.totalItemsCount > 1) {
+                                electricityListState.scrollToItem(1, 0)
+                            }
+                            if (gasListState.layoutInfo.totalItemsCount > 1) {
+                                gasListState.scrollToItem(1, 0)
+                            }
+                            showFilter = false
+                        }
                     },
                     onFiltersCleared = { previousDraft, previousApplied ->
                         scope.showFiltersClearedSnackbar(
@@ -118,6 +134,7 @@ fun InvoicesScreen(
                     preferredTabIndex = uiState.preferredTabIndex,
                     onTabChanged = { onEvent(InvoicesEvent.OnTabChanged(it)) },
                     onBackClick = {
+                        isNavigatingBack = true
                         Log.d("InvoicesScreen", "Back pressed, evaluating feedback")
                         onBackClick()
                     },
@@ -134,8 +151,16 @@ fun InvoicesScreen(
                         InvoiceTabContent(
                             uiState = uiState.electricityState,
                             listState = electricityListState,
-                            onFeatureNotAvailable = { onEvent(InvoicesEvent.OnFeatureNotAvailable) },
-                            onFilterClick = { showFilter = true },
+                            onFeatureNotAvailable = {
+                                if (feedbackSheetState == FeedbackSheetState.Hidden && !isNavigatingBack) {
+                                    onEvent(InvoicesEvent.OnFeatureNotAvailable)
+                                }
+                            },
+                            onFilterClick = {
+                                if (feedbackSheetState == FeedbackSheetState.Hidden && !isNavigatingBack) {
+                                    showFilter = true
+                                }
+                            },
                             onRefresh = { onEvent(InvoicesEvent.OnRefresh) },
                             activeFilterCount = uiState.activeFilterCount,
                             isFiltered = uiState.isFiltered
@@ -145,8 +170,16 @@ fun InvoicesScreen(
                         InvoiceTabContent(
                             uiState = uiState.gasState,
                             listState = gasListState,
-                            onFeatureNotAvailable = { onEvent(InvoicesEvent.OnFeatureNotAvailable) },
-                            onFilterClick = { showFilter = true },
+                            onFeatureNotAvailable = {
+                                if (feedbackSheetState == FeedbackSheetState.Hidden && !isNavigatingBack) {
+                                    onEvent(InvoicesEvent.OnFeatureNotAvailable)
+                                }
+                            },
+                            onFilterClick = {
+                                if (feedbackSheetState == FeedbackSheetState.Hidden && !isNavigatingBack) {
+                                    showFilter = true
+                                }
+                            },
                             onRefresh = { onEvent(InvoicesEvent.OnRefresh) },
                             activeFilterCount = uiState.activeFilterCount,
                             isFiltered = uiState.isFiltered
@@ -170,13 +203,22 @@ fun InvoicesScreen(
             )
         }
 
-        UnavailableBanner(
-            visible = uiState.showBanner,
-            onDismiss = { onEvent(InvoicesEvent.OnBannerDismissed) },
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .navigationBarsPadding()
-                .padding(bottom = Spacing.dp32)
-        )
+        if (uiState.showBanner) {
+            AlertDialog(
+                onDismissRequest = {},
+                title = {
+                    Text(text = stringResource(R.string.dialog_invoice_not_available_title))
+                },
+                text = {
+                    Text(text = stringResource(R.string.dialog_invoice_not_available_message))
+                },
+                confirmButton = {
+                    TextButton(onClick = { onEvent(InvoicesEvent.OnBannerDismissed) }) {
+                        Text(text = stringResource(R.string.info_dialog_close))
+                    }
+                },
+                containerColor = IberdrolaTheme.colors.surface
+            )
+        }
     }
 }

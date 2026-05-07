@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui
+package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.activate
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
 import android.content.res.Configuration
@@ -21,6 +21,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -34,7 +35,9 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.common.ConfirmDialog
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.StepBottomButtonBar
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.StepProgressBar
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.SuccessBannerSMS
-import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.components.LoadingOverlay
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared.ConfirmElectronicInvoiceContent
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared.LoadingOverlay
+import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.shared.SuccessElectronicInvoiceContent
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
@@ -59,6 +62,7 @@ fun ElectronicInvoiceWizardScreen(
     onVerificationCodeChanged: (String) -> Unit,
     onResendCode: () -> Unit,
     onBannerDismissed: () -> Unit,
+    onConfirmed: () -> Unit,
     onNavigateBack: () -> Unit
 ) {
     val colors = IberdrolaTheme.colors
@@ -72,8 +76,10 @@ fun ElectronicInvoiceWizardScreen(
     val hasData = email.isNotEmpty() || legalAccepted
     var showExitDialog by remember { mutableStateOf(false) }
     var showSuccess by remember { mutableStateOf(false) }
+    var validationTrigger by remember { mutableIntStateOf(0) }
 
     BackHandler {
+        if (isLoading) return@BackHandler
         when {
             showSuccess -> onNavigateBack()
             currentPage > 0 -> {
@@ -134,7 +140,8 @@ fun ElectronicInvoiceWizardScreen(
                         legalAccepted = legalAccepted,
                         isEmailValid = isEmailValid,
                         onEmailChanged = onEmailChanged,
-                        onLegalAcceptedChanged = onLegalAcceptedChanged
+                        onLegalAcceptedChanged = onLegalAcceptedChanged,
+                        validationTrigger = validationTrigger
                     )
                     1 -> ConfirmElectronicInvoiceContent(
                         verificationCode = verificationCode,
@@ -161,11 +168,13 @@ fun ElectronicInvoiceWizardScreen(
                 },
                 onNext = {
                     if (currentPage == 1) {
+                        onConfirmed()
                         showSuccess = true
                     } else {
                         scope.launch { pagerState.animateScrollToPage(currentPage + 1) }
                     }
                 },
+                onNextDisabled = { if (currentPage == 0) validationTrigger++ },
                 isNextEnabled = when (currentPage) {
                     0 -> isEmailValid && legalAccepted
                     1 -> verificationCode.length == 6
@@ -197,7 +206,7 @@ fun ElectronicInvoiceWizardScreen(
 }
 
 @Preview(name = "Wizard - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Wizard - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Wizard - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ElectronicInvoiceWizardScreenPreview() {
     IberdrolaTheme {
@@ -215,6 +224,7 @@ private fun ElectronicInvoiceWizardScreenPreview() {
             onVerificationCodeChanged = {},
             onResendCode = {},
             onBannerDismissed = {},
+            onConfirmed = {},
             onNavigateBack = {}
         )
     }

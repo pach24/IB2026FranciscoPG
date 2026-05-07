@@ -18,7 +18,8 @@
         <!-- 2. La Activity de inicio debe ser MainActivity -->
         <activity
             android:name="com.iberdrola.practicas2026.FranciscoPG.presentation.home.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.IB2026FranciscoPG.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

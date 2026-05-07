@@ -1,4 +1,4 @@
-package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui
+package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.ui.activate
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
 import android.content.res.Configuration
@@ -52,6 +52,7 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Stroke
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
+import kotlinx.coroutines.launch
 
 @Composable
 fun ActivateElectronicInvoiceContent(
@@ -60,19 +61,31 @@ fun ActivateElectronicInvoiceContent(
     isEmailValid: Boolean,
     onEmailChanged: (String) -> Unit,
     onLegalAcceptedChanged: (Boolean) -> Unit,
+    validationTrigger: Int = 0,
     modifier: Modifier = Modifier
 ) {
     val colors = IberdrolaTheme.colors
     val focusManager = LocalFocusManager.current
     var showBanner by remember { mutableStateOf(false) }
     var emailHasBlurred by remember { mutableStateOf(false) }
-    val showError = emailHasBlurred && email.isNotEmpty() && !isEmailValid
-    val shakeOffset = remember { Animatable(0f) }
+    val showError = (emailHasBlurred || validationTrigger > 0) && email.isNotEmpty() && !isEmailValid
+    val emailShakeOffset = remember { Animatable(0f) }
+    val checkboxShakeOffset = remember { Animatable(0f) }
+
+    suspend fun shakeSequence(animatable: Animatable<Float, *>) {
+        for (target in listOf(12f, -12f, 8f, -8f, 4f, 0f)) {
+            animatable.animateTo(target, animationSpec = tween(durationMillis = 50))
+        }
+    }
+
     LaunchedEffect(showError) {
-        if (showError) {
-            for (target in listOf(12f, -12f, 8f, -8f, 4f, 0f)) {
-                shakeOffset.animateTo(target, animationSpec = tween(durationMillis = 50))
-            }
+        if (showError) shakeSequence(emailShakeOffset)
+    }
+
+    LaunchedEffect(validationTrigger) {
+        if (validationTrigger > 0) {
+            launch { if (!isEmailValid) shakeSequence(emailShakeOffset) }
+            launch { if (!legalAccepted) shakeSequence(checkboxShakeOffset) }
         }
     }
 
@@ -124,7 +137,7 @@ fun ActivateElectronicInvoiceContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = Spacing.dp24)
-                    .graphicsLayer { translationX = shakeOffset.value }
+                    .graphicsLayer { translationX = emailShakeOffset.value }
             ) {
                 BasicTextField(
                     value = email,
@@ -226,7 +239,8 @@ fun ActivateElectronicInvoiceContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = Spacing.dp24, vertical = Spacing.dp4),
+                    .padding(horizontal = Spacing.dp24, vertical = Spacing.dp4)
+                    .graphicsLayer { translationX = checkboxShakeOffset.value },
                 verticalAlignment = Alignment.Top
             ) {
                 RoundedCheckbox(
@@ -326,7 +340,7 @@ private fun DataProtectionItem(
 }
 
 @Preview(name = "Activate Content - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Activate Content - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Activate Content - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ActivateElectronicInvoiceContentPreview() {
     IberdrolaTheme {

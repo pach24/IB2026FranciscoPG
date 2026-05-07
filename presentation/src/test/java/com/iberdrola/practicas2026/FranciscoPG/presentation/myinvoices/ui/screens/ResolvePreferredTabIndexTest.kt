@@ -10,7 +10,8 @@ class ResolvePreferredTabIndexTest {
 
     private val successState = InvoiceListUiState.Success(
         latestInvoice = LatestInvoiceUiModel(
-            amount = "50.00 €",
+            amount = "50.00",
+            currencySymbol = "€",
             dateRange = "01/01/2024 - 31/01/2024",
             supplyTypeLabel = "Factura",
             statusText = "Pagada",
@@ -126,7 +127,7 @@ class ResolvePreferredTabIndexTest {
     @Test
     fun `electricity filtered empty and gas with data switches to gas`() {
         val result = resolvePreferredTabIndex(
-            electricityState = InvoiceListUiState.FilteredEmpty,
+            electricityState = InvoiceListUiState.FilteredEmpty(null),
             gasState = successState,
             bothLoaded = true,
             currentTab = 0
@@ -139,7 +140,7 @@ class ResolvePreferredTabIndexTest {
     fun `gas filtered empty and electricity with data switches to electricity`() {
         val result = resolvePreferredTabIndex(
             electricityState = successState,
-            gasState = InvoiceListUiState.FilteredEmpty,
+            gasState = InvoiceListUiState.FilteredEmpty(null),
             bothLoaded = true,
             currentTab = 1
         )
@@ -150,8 +151,8 @@ class ResolvePreferredTabIndexTest {
     @Test
     fun `both filtered empty stays on current tab`() {
         val result = resolvePreferredTabIndex(
-            electricityState = InvoiceListUiState.FilteredEmpty,
-            gasState = InvoiceListUiState.FilteredEmpty,
+            electricityState = InvoiceListUiState.FilteredEmpty(null),
+            gasState = InvoiceListUiState.FilteredEmpty(null),
             bothLoaded = true,
             currentTab = 1
         )
@@ -175,7 +176,7 @@ class ResolvePreferredTabIndexTest {
     fun `electricity empty and gas filtered empty stays on current tab`() {
         val result = resolvePreferredTabIndex(
             electricityState = InvoiceListUiState.Empty,
-            gasState = InvoiceListUiState.FilteredEmpty,
+            gasState = InvoiceListUiState.FilteredEmpty(null),
             bothLoaded = true,
             currentTab = 0
         )

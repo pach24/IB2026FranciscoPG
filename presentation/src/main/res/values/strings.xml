@@ -85,6 +85,7 @@
     <string name="modify_email_button">Modificar email</string>
     <string name="modify_email_input_label">* Nuevo email</string>
     <string name="modify_email_input_error">Introduce un email válido</string>
+    <string name="modify_email_input_same_email_error">Este email ya está en uso</string>
     <string name="success_modify_email_title">¡Has modificado correctamente tu email!</string>
 
     <!-- Dialog info factura electrónica -->
@@ -100,6 +101,9 @@
 
     <!-- Banners -->
     <string name="banner_service_unavailable">Este servicio no esta disponible. Por favor, inténtalo de nuevo más tarde.</string>
+    <string name="banner_invoice_not_available">Esta factura aún no está disponible</string>
+    <string name="dialog_invoice_not_available_title">Información</string>
+    <string name="dialog_invoice_not_available_message">Esta factura aún no está disponible</string>
     <string name="banner_resend_sms_success">Hemos vuelto a enviar un SMS con tu código de verificación.</string>
 
     <!-- Filtros -->
