@@ -153,7 +153,13 @@ class MainActivity : AppCompatActivity() {
                                 slideInHorizontally { -it }
                             }
                         },
-                        exitTransition = { slideOutHorizontally { -it } },
+                        exitTransition = {
+                            if (targetState.destination.route == AppRoutes.MY_INVOICES) {
+                                ExitTransition.None
+                            } else {
+                                slideOutHorizontally { -it }
+                            }
+                        },
                         popEnterTransition = { slideInHorizontally { -it } },
                         popExitTransition = { slideOutHorizontally { it } }
                     ){
