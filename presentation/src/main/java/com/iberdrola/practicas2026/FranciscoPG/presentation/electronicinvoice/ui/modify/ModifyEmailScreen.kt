@@ -175,8 +175,9 @@ fun ModifyEmailScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(horizontal = Spacing.dp24)
                     .clickable { showInfoDialog = true }
-                    .padding(horizontal = Spacing.dp24),
+                    .padding(horizontal = Spacing.dp4, vertical = Spacing.dp8),
                 verticalAlignment = Alignment.Top
             ) {
                 Icon(

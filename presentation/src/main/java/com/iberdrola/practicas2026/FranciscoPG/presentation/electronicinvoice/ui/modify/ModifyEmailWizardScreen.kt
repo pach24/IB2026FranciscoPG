@@ -80,7 +80,7 @@ fun ModifyEmailWizardScreen(
     BackHandler {
         if (isLoading) return@BackHandler
         when {
-            showSuccess -> onComplete(email)
+            showSuccess -> onComplete(censoredEmail)
             currentPage > 0 -> {
                 onBannerDismissed()
                 scope.launch { pagerState.animateScrollToPage(currentPage - 1) }
@@ -194,8 +194,8 @@ fun ModifyEmailWizardScreen(
         ) {
             SuccessElectronicInvoiceContent(
                 email = censoredEmail,
-                onAccept = { onComplete(email) },
-                onClose = { onComplete(email) },
+                onAccept = { onComplete(censoredEmail) },
+                onClose = { onComplete(censoredEmail) },
                 title = stringResource(R.string.success_modify_email_title),
             )
         }
