@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "61379356423",
+    "project_id": "ib2026franciscopg",
+    "storage_bucket": "ib2026franciscopg.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:61379356423:android:9690b1e3d8c1e8fa7887a2",
+        "android_client_info": {
+          "package_name": "com.iberdrola.practicas2026.FranciscoPG"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvAvOA7hyysVVJDaC9qVnR3lE2vlbDqqA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
