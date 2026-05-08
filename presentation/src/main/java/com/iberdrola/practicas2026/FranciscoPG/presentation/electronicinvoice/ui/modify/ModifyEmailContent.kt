@@ -25,6 +25,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
@@ -52,22 +54,20 @@ fun ModifyEmailContent(
 ) {
     val colors = IberdrolaTheme.colors
     val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
     var emailHasBlurred by remember { mutableStateOf(false) }
-    val showError = (emailHasBlurred || validationTrigger > 0) && email.isNotEmpty() && (!isEmailValid || isSameAsCurrentEmail)
+
+    LaunchedEffect(Unit) { focusRequester.requestFocus() }
+    LaunchedEffect(validationTrigger) { if (validationTrigger > 0) emailHasBlurred = true }
+    val showError = emailHasBlurred && email.isNotEmpty() && (!isEmailValid || isSameAsCurrentEmail)
     val shakeOffset = remember { Animatable(0f) }
 
-    suspend fun shakeSequence() {
-        for (target in listOf(12f, -12f, 8f, -8f, 4f, 0f)) {
-            shakeOffset.animateTo(target, animationSpec = tween(durationMillis = 50))
-        }
-    }
-
     LaunchedEffect(showError) {
-        if (showError) shakeSequence()
-    }
-
-    LaunchedEffect(validationTrigger) {
-        if (validationTrigger > 0) shakeSequence()
+        if (showError) {
+            for (target in listOf(12f, -12f, 8f, -8f, 4f, 0f)) {
+                shakeOffset.animateTo(target, animationSpec = tween(durationMillis = 50))
+            }
+        }
     }
 
     Column(
@@ -110,6 +110,7 @@ fun ModifyEmailContent(
                 cursorBrush = SolidColor(colors.iberdrolaDarkGreen),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .focusRequester(focusRequester)
                     .onFocusChanged { focusState ->
                         if (focusState.isFocused) {
                             emailHasBlurred = false
