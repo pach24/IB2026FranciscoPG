@@ -2,8 +2,10 @@ package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.v
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.iberdrola.practicas2026.FranciscoPG.domain.config.RemoteConfigProvider
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Contract
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.ContractStatus
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.CensorEmailUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetContractsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +26,8 @@ sealed class ElectronicInvoiceNavigationEvent {
 @HiltViewModel
 class ElectronicInvoiceViewModel @Inject constructor(
     private val getContractsUseCase: GetContractsUseCase,
-    private val censorEmailUseCase: CensorEmailUseCase
+    private val censorEmailUseCase: CensorEmailUseCase,
+    private val remoteConfig: RemoteConfigProvider
 ) : ViewModel() {
 
     private val _contracts = MutableStateFlow<List<Contract>>(emptyList())
@@ -40,7 +43,8 @@ class ElectronicInvoiceViewModel @Inject constructor(
     fun loadContracts() {
         viewModelScope.launch {
             getContractsUseCase().onSuccess { contracts ->
-                _contracts.value = contracts
+                _contracts.value = if (remoteConfig.isGasContractsEnabled) contracts
+                    else contracts.filter { it.supplyType != SupplyType.GAS }
             }
         }
     }
