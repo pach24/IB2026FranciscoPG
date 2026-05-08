@@ -10,6 +10,7 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ResendCodeUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.UpdateContractEmailUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ValidateEmailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -87,11 +88,13 @@ class ModifyEmailViewModel @Inject constructor(
         _verificationCode.value = value
     }
 
+    private var resendJob: Job? = null
+
     fun onResendCode() {
         if (!resendCodeUseCase.canResend) return
-        viewModelScope.launch {
-            _isLoading.value = true
-            _showBanner.value = false
+        _isLoading.value = true
+        _showBanner.value = false
+        resendJob = viewModelScope.launch {
             resendCodeUseCase.resend()
             _resendAttemptsLeft.value = resendCodeUseCase.attemptsLeft
             delay(2000)
@@ -101,12 +104,17 @@ class ModifyEmailViewModel @Inject constructor(
     }
 
     fun onBannerDismissed() {
+        resendJob?.cancel()
+        resendJob = null
+        _isLoading.value = false
         _showBanner.value = false
     }
 
-    fun onModificationConfirmed() {
+    fun onModificationConfirmed(): Boolean {
+        if (_isLoading.value) return false
         viewModelScope.launch {
             updateContractEmailUseCase(supplyType, _email.value)
         }
+        return true
     }
 }
