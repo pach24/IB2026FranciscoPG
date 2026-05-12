@@ -42,9 +42,12 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.screen
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsEvent
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsTracker
 import dagger.hilt.android.AndroidEntryPoint
 import java.net.URLDecoder
 import java.net.URLEncoder
+import javax.inject.Inject
 
 private object AppRoutes {
     const val SPLASH = "splash"
@@ -60,6 +63,8 @@ private object AppRoutes {
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
+
+    @Inject lateinit var analyticsTracker: AnalyticsTracker
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,6 +126,9 @@ class MainActivity : AppCompatActivity() {
                         && previousRoute != AppRoutes.HOME && previousRoute != AppRoutes.SPLASH
                     ) {
                         viewModel.refreshLatestInvoice()
+                    }
+                    if (currentRoute == AppRoutes.HOME) {
+                        analyticsTracker.logScreenView(AnalyticsEvent.SCREEN_HOME)
                     }
                     previousRoute = currentRoute
                 }
@@ -190,6 +198,7 @@ class MainActivity : AppCompatActivity() {
                             onInvoicesCardClick = {
                                 if (!isNavigating) {
                                     isNavigating = true
+                                    viewModel.onMyInvoicesCardClick()
                                     navController.navigate(AppRoutes.MY_INVOICES) {
                                         launchSingleTop = true
                                         restoreState = true
@@ -202,6 +211,7 @@ class MainActivity : AppCompatActivity() {
                             onElectronicInvoiceClick = {
                                 if (!isNavigating) {
                                     isNavigating = true
+                                    viewModel.onElectronicInvoiceCardClick()
                                     navController.navigate(AppRoutes.ELECTRONIC_INVOICE) {
                                         launchSingleTop = true
                                         restoreState = true
