@@ -63,7 +63,13 @@ fun ElectronicInvoiceWizardScreen(
     onResendCode: () -> Unit,
     onBannerDismissed: () -> Unit,
     onConfirmed: () -> Unit,
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    onNextPage: () -> Unit = {},
+    onAbandonWizard: () -> Unit = {},
+    onEmailFieldFocused: () -> Unit = {},
+    onConditionsLinkClick: () -> Unit = {},
+    onMoreInfoClick: () -> Unit = {},
+    onOtpFieldTap: () -> Unit = {}
 ) {
     val colors = IberdrolaTheme.colors
     val scope = rememberCoroutineScope()
@@ -97,7 +103,7 @@ fun ElectronicInvoiceWizardScreen(
             message = stringResource(R.string.exit_wizard_dialog_message),
             confirmText = stringResource(R.string.exit_wizard_dialog_confirm),
             dismissText = stringResource(R.string.exit_wizard_dialog_cancel),
-            onConfirm = { showExitDialog = false; onNavigateBack() },
+            onConfirm = { showExitDialog = false; onAbandonWizard(); onNavigateBack() },
             onDismiss = { showExitDialog = false }
         )
     }
@@ -141,13 +147,17 @@ fun ElectronicInvoiceWizardScreen(
                         isEmailValid = isEmailValid,
                         onEmailChanged = onEmailChanged,
                         onLegalAcceptedChanged = onLegalAcceptedChanged,
-                        validationTrigger = validationTrigger
+                        validationTrigger = validationTrigger,
+                        onEmailFieldFocused = onEmailFieldFocused,
+                        onConditionsLinkClick = onConditionsLinkClick,
+                        onMoreInfoClick = onMoreInfoClick
                     )
                     1 -> ConfirmElectronicInvoiceContent(
                         verificationCode = verificationCode,
                         onVerificationCodeChanged = onVerificationCodeChanged,
                         onResendCode = onResendCode,
-                        resendAttemptsLeft = resendAttemptsLeft
+                        resendAttemptsLeft = resendAttemptsLeft,
+                        onOtpFieldTap = onOtpFieldTap
                     )
                 }
             }
@@ -171,6 +181,7 @@ fun ElectronicInvoiceWizardScreen(
                         onConfirmed()
                         showSuccess = true
                     } else {
+                        onNextPage()
                         scope.launch { pagerState.animateScrollToPage(currentPage + 1) }
                     }
                 },

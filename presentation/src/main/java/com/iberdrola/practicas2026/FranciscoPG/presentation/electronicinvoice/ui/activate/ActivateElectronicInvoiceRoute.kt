@@ -35,6 +35,12 @@ fun ActivateElectronicInvoiceRoute(
         onResendCode = viewModel::onResendCode,
         onBannerDismissed = viewModel::onBannerDismissed,
         onConfirmed = viewModel::onActivationConfirmed,
-        onNavigateBack = onNavigateBack
+        onNavigateBack = onNavigateBack,
+        onNextPage = viewModel::onNextPage,
+        onAbandonWizard = viewModel::onAbandonWizard,
+        onEmailFieldFocused = viewModel::onEmailFieldFocused,
+        onConditionsLinkClick = viewModel::onConditionsLinkClick,
+        onMoreInfoClick = viewModel::onMoreInfoClick,
+        onOtpFieldTap = viewModel::onOtpFieldTap
     )
 }

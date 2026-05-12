@@ -62,7 +62,10 @@ fun ActivateElectronicInvoiceContent(
     onEmailChanged: (String) -> Unit,
     onLegalAcceptedChanged: (Boolean) -> Unit,
     validationTrigger: Int = 0,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onEmailFieldFocused: () -> Unit = {},
+    onConditionsLinkClick: () -> Unit = {},
+    onMoreInfoClick: () -> Unit = {}
 ) {
     val colors = IberdrolaTheme.colors
     val focusManager = LocalFocusManager.current
@@ -154,6 +157,7 @@ fun ActivateElectronicInvoiceContent(
                         .onFocusChanged { focusState ->
                             if (focusState.isFocused) {
                                 emailHasBlurred = false
+                                onEmailFieldFocused()
                             } else if (email.isNotEmpty()) {
                                 emailHasBlurred = true
                             }
@@ -215,21 +219,21 @@ fun ActivateElectronicInvoiceContent(
                     boldPrefix = "Responsable:",
                     text = " Iberdrola Clientes S.A.U.",
                     linkText = stringResource(R.string.activate_einvoice_more_info),
-                    onLinkClick = { focusManager.clearFocus(); showBanner = true }
+                    onLinkClick = { focusManager.clearFocus(); onMoreInfoClick(); showBanner = true }
                 )
                 Spacer(modifier = Modifier.height(Spacing.dp8))
                 DataProtectionItem(
                     boldPrefix = "Finalidad:",
                     text = " Gestión de la factura electrónica.",
                     linkText = stringResource(R.string.activate_einvoice_more_info),
-                    onLinkClick = { focusManager.clearFocus(); showBanner = true }
+                    onLinkClick = { focusManager.clearFocus(); onMoreInfoClick(); showBanner = true }
                 )
                 Spacer(modifier = Modifier.height(Spacing.dp8))
                 DataProtectionItem(
                     boldPrefix = "Derechos:",
                     text = " Acceso, rectificación, supresión, limitación del tratamiento, portabilidad de datos u oposición, incluida la oposición a decisiones individuales automatizadas.",
                     linkText = stringResource(R.string.activate_einvoice_more_info),
-                    onLinkClick = { focusManager.clearFocus(); showBanner = true }
+                    onLinkClick = { focusManager.clearFocus(); onMoreInfoClick(); showBanner = true }
                 )
             }
 
@@ -260,7 +264,7 @@ fun ActivateElectronicInvoiceContent(
                 val legalAnnotated = buildAnnotatedString {
                     append("He leído y acepto la Política de privacidad, acepto las ")
                     withLink(LinkAnnotation.Clickable("conditions") {
-                        focusManager.clearFocus(); showBanner = true
+                        focusManager.clearFocus(); onConditionsLinkClick(); showBanner = true
                     }) {
                         withStyle(SpanStyle(
                             color = colors.iberdrolaDarkGreen,

@@ -2,6 +2,8 @@ package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.v
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsEvent
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsTracker
 import com.iberdrola.practicas2026.FranciscoPG.domain.config.RemoteConfigProvider
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Contract
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.ContractStatus
@@ -27,7 +29,8 @@ sealed class ElectronicInvoiceNavigationEvent {
 class ElectronicInvoiceViewModel @Inject constructor(
     private val getContractsUseCase: GetContractsUseCase,
     private val censorEmailUseCase: CensorEmailUseCase,
-    private val remoteConfig: RemoteConfigProvider
+    private val remoteConfig: RemoteConfigProvider,
+    private val analyticsTracker: AnalyticsTracker
 ) : ViewModel() {
 
     private val _contracts = MutableStateFlow<List<Contract>>(emptyList())
@@ -50,6 +53,10 @@ class ElectronicInvoiceViewModel @Inject constructor(
     }
 
     fun onContractClick(contract: Contract) {
+        analyticsTracker.logEvent(
+            AnalyticsEvent.TAP_CONTRACT,
+            mapOf(AnalyticsEvent.PARAM_SUPPLY_TYPE to contract.supplyType.apiValue)
+        )
         viewModelScope.launch {
             when (contract.status) {
                 ContractStatus.ACTIVE -> _navigationEvent.emit(

@@ -53,7 +53,8 @@ fun ConfirmElectronicInvoiceContent(
     onVerificationCodeChanged: (String) -> Unit,
     onResendCode: () -> Unit,
     resendAttemptsLeft: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onOtpFieldTap: () -> Unit = {}
 ) {
     val colors = IberdrolaTheme.colors
     var showOtpSheet by remember { mutableStateOf(false) }
@@ -100,7 +101,7 @@ fun ConfirmElectronicInvoiceContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = Spacing.dp24)
-                .clickable { showOtpSheet = true }
+                .clickable { onOtpFieldTap(); showOtpSheet = true }
                 .padding(horizontal = Spacing.dp4, vertical = Spacing.dp8)
         ) {
             Box(modifier = Modifier.padding(bottom = Spacing.dp8)) {
