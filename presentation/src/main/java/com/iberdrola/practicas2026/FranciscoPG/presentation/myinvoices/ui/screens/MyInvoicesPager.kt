@@ -50,6 +50,7 @@ fun MyInvoicesComposeScreen(
     modifier: Modifier = Modifier,
     feedbackSheetState: FeedbackSheetState = FeedbackSheetState.Hidden,
     isGlobalEmpty: Boolean = false,
+    isGasEnabled: Boolean = true,
     preferredTabIndex: Int = 0,
     onTabChanged: (Int) -> Unit = {},
     onBackClick: () -> Unit = {},
@@ -60,7 +61,11 @@ fun MyInvoicesComposeScreen(
     electricityTabContent: @Composable () -> Unit = {},
     gasTabContent: @Composable () -> Unit = {}
 ) {
-    val tabs = listOf(stringResource(R.string.tab_light), stringResource(R.string.tab_gas))
+    val tabs = if (isGasEnabled) {
+        listOf(stringResource(R.string.tab_light), stringResource(R.string.tab_gas))
+    } else {
+        listOf(stringResource(R.string.tab_light))
+    }
     val pagerState = rememberPagerState(
         initialPage = 0,
         pageCount = { tabs.size }

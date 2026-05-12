@@ -16,6 +16,7 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.mapper.InvoiceUiMapper
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.InvoiceListUiState
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.InvoicesUiState
+import com.iberdrola.practicas2026.FranciscoPG.domain.config.RemoteConfigProvider
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.screens.resolvePreferredTabIndex
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,8 +32,11 @@ class InvoicesViewModel @Inject constructor(
     private val getInvoicesUseCase: GetInvoicesUseCase,
     private val filterInvoicesUseCase: FilterInvoicesUseCase,
     private val invoiceUiMapper: InvoiceUiMapper,
-    private val errorClassifier: ErrorClassifier
+    private val errorClassifier: ErrorClassifier,
+    private val remoteConfig: RemoteConfigProvider
 ) : ViewModel() {
+
+    private val isGasEnabled = remoteConfig.isGasContractsEnabled
 
     // ── Supply streams ───────────────────────────────────────────────────────
 
@@ -73,13 +77,15 @@ class InvoicesViewModel @Inject constructor(
     private val bothLoaded: StateFlow<Boolean> = combine(
         electricityListState, gasListState
     ) { elec, gas ->
-        elec !is InvoiceListUiState.Loading && gas !is InvoiceListUiState.Loading
+        if (!isGasEnabled) elec !is InvoiceListUiState.Loading
+        else elec !is InvoiceListUiState.Loading && gas !is InvoiceListUiState.Loading
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
 
     private val isGlobalEmpty: StateFlow<Boolean> = combine(
         electricityListState, gasListState, bothLoaded
     ) { elec, gas, loaded ->
-        loaded && elec is InvoiceListUiState.Empty && gas is InvoiceListUiState.Empty
+        if (!isGasEnabled) loaded && elec is InvoiceListUiState.Empty
+        else loaded && elec is InvoiceListUiState.Empty && gas is InvoiceListUiState.Empty
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
 
     // ── Public: unified UI state ─────────────────────────────────────────────
@@ -112,7 +118,8 @@ class InvoicesViewModel @Inject constructor(
             isFiltered = isFiltered,
             isGlobalEmpty = globalEmpty,
             preferredTabIndex = preferredTab,
-            showBanner = banner
+            showBanner = banner,
+            isGasEnabled = isGasEnabled
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), InvoicesUiState())
 
@@ -121,7 +128,9 @@ class InvoicesViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             combine(electricityListState, gasListState, bothLoaded, _activeTab) { elec, gas, loaded, tab ->
-                if (loaded) resolvePreferredTabIndex(elec, gas, loaded, tab) else tab
+                if (!isGasEnabled) 0
+                else if (loaded) resolvePreferredTabIndex(elec, gas, loaded, tab)
+                else tab
             }.collect { resolved ->
                 if (resolved != _activeTab.value) {
                     _preferredTabIndex.value = resolved
@@ -172,7 +181,7 @@ class InvoicesViewModel @Inject constructor(
 
     fun getFilteredTotalCount(): Int {
         val elecCount = (electricityListState.value as? InvoiceListUiState.Success)?.invoiceCount ?: 0
-        val gasCount = (gasListState.value as? InvoiceListUiState.Success)?.invoiceCount ?: 0
+        val gasCount = if (isGasEnabled) (gasListState.value as? InvoiceListUiState.Success)?.invoiceCount ?: 0 else 0
         return elecCount + gasCount
     }
 
@@ -190,7 +199,7 @@ class InvoicesViewModel @Inject constructor(
 
     private fun fetchBoth(forceRefresh: Boolean) {
         fetchSupply(electricity, forceRefresh)
-        fetchSupply(gas, forceRefresh)
+        if (isGasEnabled) fetchSupply(gas, forceRefresh)
     }
 
     private fun fetchSupply(stream: SupplyStream, forceRefresh: Boolean) {
