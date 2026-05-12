@@ -49,7 +49,11 @@ fun FilterRoute(
                     onFiltersCleared(previousDraft, previousApplied)
                 },
                 onFilterInteraction = onFilterInteraction,
-                onDraftChanged = { filterViewModel.updateFilters(it) }
+                onDraftChanged = { filterViewModel.updateFilters(it) },
+                onStartDateTap = filterViewModel::onStartDateTap,
+                onEndDateTap = filterViewModel::onEndDateTap,
+                onRangeSliderFinished = filterViewModel::onRangeSliderFinished,
+                onStatusCheckboxToggled = filterViewModel::onStatusCheckboxToggled
             )
         }
     }

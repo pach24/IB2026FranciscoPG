@@ -52,13 +52,15 @@ fun PriceRangeSection(
     maxPrice: Float,
     minLimit: Float = 0f,
     maxLimit: Float = 500f,
-    onRangeChange: (Float, Float) -> Unit
+    onRangeChange: (Float, Float) -> Unit,
+    onRangeChangeFinished: (Float, Float) -> Unit = { _, _ -> }
 ) {
     val colors = IberdrolaTheme.colors
 
     val animMin = remember { Animatable(minPrice) }
     val animMax = remember { Animatable(maxPrice) }
     var isDragging by remember { mutableStateOf(false) }
+    var lastRange by remember { mutableStateOf(minPrice to maxPrice) }
 
     LaunchedEffect(minPrice, maxPrice) {
         if (isDragging) {
@@ -114,9 +116,13 @@ fun PriceRangeSection(
                     }
                 }
 
+                lastRange = newStart to newEnd
                 onRangeChange(newStart, newEnd)
             },
-            onValueChangeFinished = { isDragging = false },
+            onValueChangeFinished = {
+                isDragging = false
+                onRangeChangeFinished(lastRange.first, lastRange.second)
+            },
             valueRange = minLimit..maxLimit,
             steps = 0,
             modifier = Modifier.fillMaxWidth(),

@@ -1,8 +1,11 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsEvent
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsTracker
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFilters
+import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.newestDate
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.oldestDate
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.InvoiceFilterUIState
@@ -19,7 +22,9 @@ import javax.inject.Inject
  * Fuente única de verdad: los filtros se aplican a todos los tabs simultáneamente.
  */
 @HiltViewModel
-class FilterViewModel @Inject constructor() : ViewModel() {
+class FilterViewModel @Inject constructor(
+    private val analyticsTracker: AnalyticsTracker
+) : ViewModel() {
 
     // Filtros que el usuario está modificando en la UI (draft)
     private val _filterState = MutableStateFlow(InvoiceFilterUIState())
@@ -45,6 +50,10 @@ class FilterViewModel @Inject constructor() : ViewModel() {
     fun applyFilters() {
         _appliedFilters.value = _filterState.value.filters
         _isFilterModeActive.value = true
+        analyticsTracker.logEvent(
+            AnalyticsEvent.APPLY_FILTERS,
+            mapOf(AnalyticsEvent.PARAM_FILTER_COUNT to _filterState.value.filters.activeCount.toString())
+        )
     }
 
     fun restoreFilters(draft: InvoiceFilters, applied: InvoiceFilters) {
@@ -59,7 +68,28 @@ class FilterViewModel @Inject constructor() : ViewModel() {
         _appliedFilters.value = InvoiceFilters()
         _isFilterModeActive.value = false
         recomputeDynamicDates()
+        analyticsTracker.logEvent(AnalyticsEvent.CLEAR_FILTERS)
     }
+
+    fun onStartDateTap() = analyticsTracker.logEvent(AnalyticsEvent.FILTER_TAP_START_DATE)
+
+    fun onEndDateTap() = analyticsTracker.logEvent(AnalyticsEvent.FILTER_TAP_END_DATE)
+
+    fun onRangeSliderFinished(min: Float, max: Float) = analyticsTracker.logEvent(
+        AnalyticsEvent.FILTER_RANGE_SLIDER_CHANGED,
+        mapOf(
+            AnalyticsEvent.PARAM_MIN_AMOUNT to min.toInt().toString(),
+            AnalyticsEvent.PARAM_MAX_AMOUNT to max.toInt().toString()
+        )
+    )
+
+    fun onStatusCheckboxToggled(status: InvoiceStatus, checked: Boolean) = analyticsTracker.logEvent(
+        AnalyticsEvent.FILTER_TAP_STATUS_CHECKBOX,
+        mapOf(
+            AnalyticsEvent.PARAM_STATUS to status.name,
+            AnalyticsEvent.PARAM_CHECKED to checked.toString()
+        )
+    )
 
     // ── Estadísticas ─────────────────────────────────────────────────────────
 
