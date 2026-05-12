@@ -159,6 +159,7 @@ fun InvoicesScreen(
                             },
                             onFilterClick = {
                                 if (feedbackSheetState == FeedbackSheetState.Hidden && !isNavigatingBack) {
+                                    onEvent(InvoicesEvent.OnOpenFilters)
                                     showFilter = true
                                 }
                             },
@@ -178,6 +179,7 @@ fun InvoicesScreen(
                             },
                             onFilterClick = {
                                 if (feedbackSheetState == FeedbackSheetState.Hidden && !isNavigatingBack) {
+                                    onEvent(InvoicesEvent.OnOpenFilters)
                                     showFilter = true
                                 }
                             },

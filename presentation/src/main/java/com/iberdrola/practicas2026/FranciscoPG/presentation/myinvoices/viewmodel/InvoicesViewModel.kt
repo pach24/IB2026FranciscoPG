@@ -16,6 +16,8 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.mapper.InvoiceUiMapper
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.InvoiceListUiState
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.InvoicesUiState
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsEvent
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsTracker
 import com.iberdrola.practicas2026.FranciscoPG.domain.config.RemoteConfigProvider
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.screens.resolvePreferredTabIndex
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,7 +35,8 @@ class InvoicesViewModel @Inject constructor(
     private val filterInvoicesUseCase: FilterInvoicesUseCase,
     private val invoiceUiMapper: InvoiceUiMapper,
     private val errorClassifier: ErrorClassifier,
-    private val remoteConfig: RemoteConfigProvider
+    private val remoteConfig: RemoteConfigProvider,
+    private val analyticsTracker: AnalyticsTracker
 ) : ViewModel() {
 
     private val isGasEnabled = remoteConfig.isGasContractsEnabled
@@ -145,10 +148,24 @@ class InvoicesViewModel @Inject constructor(
     fun onEvent(event: InvoicesEvent) {
         when (event) {
             is InvoicesEvent.OnMockModeChanged -> onMockModeChanged(event.useMock)
-            is InvoicesEvent.OnRefresh -> refresh()
-            is InvoicesEvent.OnTabChanged -> _activeTab.value = event.index
+            is InvoicesEvent.OnRefresh -> {
+                val supplyType = if (_activeTab.value == 0) "luz" else "gas"
+                analyticsTracker.logEvent(
+                    AnalyticsEvent.PULL_TO_REFRESH,
+                    mapOf(AnalyticsEvent.PARAM_SUPPLY_TYPE to supplyType)
+                )
+                refresh()
+            }
+            is InvoicesEvent.OnTabChanged -> {
+                if (event.index != _activeTab.value) {
+                    val eventName = if (event.index == 0) AnalyticsEvent.TAP_TAB_LUZ else AnalyticsEvent.TAP_TAB_GAS
+                    analyticsTracker.logEvent(eventName)
+                }
+                _activeTab.value = event.index
+            }
             is InvoicesEvent.OnFeatureNotAvailable -> _showBanner.value = true
             is InvoicesEvent.OnBannerDismissed -> _showBanner.value = false
+            is InvoicesEvent.OnOpenFilters -> analyticsTracker.logEvent(AnalyticsEvent.TAP_OPEN_FILTERS)
         }
     }
 
