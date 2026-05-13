@@ -142,6 +142,7 @@ fun InvoicesScreen(
                     onFeedbackFaceClick = onFeedbackRated,
                     onFeedbackLaterClick = onFeedbackLater,
                     onFeedbackDismiss = onFeedbackDismiss,
+                    onRefresh = { onEvent(InvoicesEvent.OnRefresh) },
                     onTabReselected = { index ->
                         scope.launch {
                             if (index == 0) electricityListState.animateScrollToItem(0)

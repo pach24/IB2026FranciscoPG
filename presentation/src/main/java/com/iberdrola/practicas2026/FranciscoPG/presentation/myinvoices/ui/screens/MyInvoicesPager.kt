@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.foundation.pager.HorizontalPager
@@ -27,6 +29,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,7 +50,7 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Stroke
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun MyInvoicesComposeScreen(
     address: String,
@@ -58,6 +65,7 @@ fun MyInvoicesComposeScreen(
     onFeedbackLaterClick: () -> Unit = {},
     onFeedbackDismiss: () -> Unit = {},
     onTabReselected: (Int) -> Unit = {},
+    onRefresh: () -> Unit = {},
     electricityTabContent: @Composable () -> Unit = {},
     gasTabContent: @Composable () -> Unit = {}
 ) {
@@ -150,11 +158,31 @@ fun MyInvoicesComposeScreen(
 
         if (isGlobalEmpty) {
             /* EMPTY STATE GLOBAL: sin facturas en ningun tab */
-            EmptyStateComposable(
-                title = stringResource(R.string.empty_state_global_title),
-                subtitle = stringResource(R.string.empty_state_global_subtitle),
-                modifier = Modifier.fillMaxSize()
-            )
+            val pullState = rememberPullToRefreshState()
+            PullToRefreshBox(
+                state = pullState,
+                isRefreshing = false,
+                onRefresh = onRefresh,
+                modifier = Modifier.fillMaxSize(),
+                indicator = {
+                    PullToRefreshDefaults.LoadingIndicator(
+                        state = pullState,
+                        isRefreshing = false,
+                        containerColor = Color.Transparent,
+                        modifier = Modifier.align(Alignment.TopCenter)
+                    )
+                }
+            ) {
+                // verticalScroll para que PullToRefreshBox reciba los eventos de nested scroll
+                // (sin un contenedor scrolleable el gesto de pull no se detecta)
+                EmptyStateComposable(
+                    title = stringResource(R.string.empty_state_global_title),
+                    subtitle = stringResource(R.string.empty_state_global_subtitle),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                )
+            }
         } else {
             /* TABS + INDICADOR */
             Box(modifier = Modifier.padding(top = Spacing.dp16)) {
