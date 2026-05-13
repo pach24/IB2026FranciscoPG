@@ -48,6 +48,7 @@
     import androidx.compose.ui.platform.LocalSoftwareKeyboardController
     import androidx.compose.ui.unit.dp
     import androidx.compose.ui.res.painterResource
+    import androidx.compose.ui.res.pluralStringResource
     import androidx.compose.ui.res.stringResource
     import androidx.compose.ui.text.font.FontWeight
     import androidx.compose.ui.text.style.TextDecoration
@@ -199,7 +200,7 @@
 
                         val hintText = if (resendAttemptsLeft < 3) {
                             stringResource(R.string.confirm_einvoice_resend_hint) +
-                                "\n" + stringResource(R.string.confirm_einvoice_resend_attempts, resendAttemptsLeft)
+                                "\n" + pluralStringResource(R.plurals.confirm_einvoice_resend_attempts, resendAttemptsLeft, resendAttemptsLeft)
                         } else {
                             stringResource(R.string.confirm_einvoice_resend_hint)
                         }
