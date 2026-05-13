@@ -3,13 +3,14 @@ package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.v
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsEvent
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsTracker
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.CensorEmailUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ResendCodeUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.UpdateContractEmailUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ValidateEmailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,12 +24,20 @@ class ActivateElectronicInvoiceViewModel @Inject constructor(
     private val resendCodeUseCase: ResendCodeUseCase,
     private val censorEmailUseCase: CensorEmailUseCase,
     private val updateContractEmailUseCase: UpdateContractEmailUseCase,
+    private val analyticsTracker: AnalyticsTracker,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val supplyType: SupplyType = SupplyType.fromApiValue(
         savedStateHandle.get<String>("supplyType") ?: "LUZ"
     )
+
+    init {
+        analyticsTracker.logEvent(
+            AnalyticsEvent.ACTIVATE_WIZARD_START,
+            mapOf(AnalyticsEvent.PARAM_SUPPLY_TYPE to supplyType.apiValue)
+        )
+    }
 
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email.asStateFlow()
@@ -58,13 +67,15 @@ class ActivateElectronicInvoiceViewModel @Inject constructor(
         _verificationCode.value = value
     }
 
-    private var resendJob: Job? = null
-
     fun onResendCode() {
         if (!resendCodeUseCase.canResend) return
-        _isLoading.value = true
-        _showBanner.value = false
-        resendJob = viewModelScope.launch {
+        analyticsTracker.logEvent(
+            AnalyticsEvent.ACTIVATE_WIZARD_RESEND_CODE,
+            mapOf(AnalyticsEvent.PARAM_SUPPLY_TYPE to supplyType.apiValue)
+        )
+        viewModelScope.launch {
+            _isLoading.value = true
+            _showBanner.value = false
             resendCodeUseCase.resend()
             _resendAttemptsLeft.value = resendCodeUseCase.attemptsLeft
             delay(2000)
@@ -74,9 +85,6 @@ class ActivateElectronicInvoiceViewModel @Inject constructor(
     }
 
     fun onBannerDismissed() {
-        resendJob?.cancel()
-        resendJob = null
-        _isLoading.value = false
         _showBanner.value = false
     }
 
@@ -88,13 +96,38 @@ class ActivateElectronicInvoiceViewModel @Inject constructor(
 
     fun onLegalAcceptedChanged(value: Boolean) {
         _legalAccepted.value = value
+        analyticsTracker.logEvent(AnalyticsEvent.ACTIVATE_WIZARD_TAP_LEGAL_CHECKBOX)
     }
 
-    fun onActivationConfirmed(): Boolean {
-        if (_isLoading.value) return false
+    fun onActivationConfirmed() {
+        analyticsTracker.logEvent(
+            AnalyticsEvent.ACTIVATE_WIZARD_TAP_CONFIRM,
+            mapOf(AnalyticsEvent.PARAM_SUPPLY_TYPE to supplyType.apiValue)
+        )
+        analyticsTracker.logEvent(
+            AnalyticsEvent.ACTIVATE_WIZARD_COMPLETE,
+            mapOf(AnalyticsEvent.PARAM_SUPPLY_TYPE to supplyType.apiValue)
+        )
         viewModelScope.launch {
             updateContractEmailUseCase(supplyType, _email.value)
         }
-        return true
     }
+
+    fun onEmailFieldFocused() = analyticsTracker.logEvent(AnalyticsEvent.ACTIVATE_WIZARD_TAP_EMAIL_FIELD)
+
+    fun onConditionsLinkClick() = analyticsTracker.logEvent(AnalyticsEvent.ACTIVATE_WIZARD_TAP_CONDITIONS_LINK)
+
+    fun onMoreInfoClick() = analyticsTracker.logEvent(AnalyticsEvent.ACTIVATE_WIZARD_TAP_MORE_INFO)
+
+    fun onOtpFieldTap() = analyticsTracker.logEvent(AnalyticsEvent.ACTIVATE_WIZARD_TAP_OTP_FIELD)
+
+    fun onNextPage() = analyticsTracker.logEvent(
+        AnalyticsEvent.ACTIVATE_WIZARD_TAP_NEXT,
+        mapOf(AnalyticsEvent.PARAM_SUPPLY_TYPE to supplyType.apiValue)
+    )
+
+    fun onAbandonWizard() = analyticsTracker.logEvent(
+        AnalyticsEvent.ACTIVATE_WIZARD_ABANDON,
+        mapOf(AnalyticsEvent.PARAM_SUPPLY_TYPE to supplyType.apiValue)
+    )
 }

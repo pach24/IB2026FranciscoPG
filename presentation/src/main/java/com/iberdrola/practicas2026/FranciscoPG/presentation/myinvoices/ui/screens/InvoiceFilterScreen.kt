@@ -68,7 +68,11 @@ fun FilterContent(
     onApplyFilters: (InvoiceFilters) -> Unit,
     onClearFilters: (previousDraft: InvoiceFilters) -> Unit,
     onFilterInteraction: () -> Unit = {},
-    onDraftChanged: (InvoiceFilters) -> Unit = {}
+    onDraftChanged: (InvoiceFilters) -> Unit = {},
+    onStartDateTap: () -> Unit = {},
+    onEndDateTap: () -> Unit = {},
+    onRangeSliderFinished: (Float, Float) -> Unit = { _, _ -> },
+    onStatusCheckboxToggled: (InvoiceStatus, Boolean) -> Unit = { _, _ -> }
 ) {
     val statusEntries = listOf(
         InvoiceStatus.PAID to stringResource(R.string.filter_status_paid),
@@ -185,8 +189,14 @@ fun FilterContent(
             DateRangeSection(
                 dateFrom = currentFilters.startDate?.format(DATE_FORMATTER) ?: "",
                 dateTo = currentFilters.endDate?.format(DATE_FORMATTER) ?: "",
-                onFromClick = { showStartDatePicker = true },
-                onToClick = { showEndDatePicker = true },
+                onFromClick = {
+                    onStartDateTap()
+                    showStartDatePicker = true
+                },
+                onToClick = {
+                    onEndDateTap()
+                    showEndDatePicker = true
+                },
                 onFromClear = {
                     currentFilters = currentFilters.copy(startDate = null)
                     onFilterInteraction()
@@ -221,7 +231,8 @@ fun FilterContent(
                         maxAmount = if (roundedMax >= actualMaxAmount) null else roundedMax
                     )
                     onFilterInteraction()
-                }
+                },
+                onRangeChangeFinished = { min, max -> onRangeSliderFinished(min, max) }
             )
 
             Spacer(modifier = Modifier.height(Spacing.dp32))
@@ -230,9 +241,11 @@ fun FilterContent(
                 statusOptions = statusEntries,
                 selectedStatuses = currentFilters.filteredStatuses,
                 onStatusToggle = { status ->
+                    val wasChecked = status in currentFilters.filteredStatuses
                     val newStates = currentFilters.filteredStatuses.toMutableSet()
-                    if (status in newStates) newStates.remove(status) else newStates.add(status)
+                    if (wasChecked) newStates.remove(status) else newStates.add(status)
                     currentFilters = currentFilters.copy(filteredStatuses = newStates)
+                    onStatusCheckboxToggled(status, !wasChecked)
                     onFilterInteraction()
                 }
             )

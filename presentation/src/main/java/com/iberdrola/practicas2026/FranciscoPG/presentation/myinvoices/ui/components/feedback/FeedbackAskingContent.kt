@@ -4,6 +4,7 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,9 +18,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,6 +32,7 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontRegular
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.dp
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.preview.DevicePreview
 import androidx.compose.ui.unit.sp
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
@@ -69,16 +74,36 @@ fun FeedbackBottomSheetComposable(
                 .padding(Spacing.dp24),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            val rippleSource = remember { MutableInteractionSource() }
+
             Box(
                 modifier = Modifier
-                    .padding(top = Spacing.dp8)
-                    .width(Component.dragW)
-                    .height(Component.dragH)
-                    .background(
-                        color = colors.handlerColor,
-                        shape = RoundedCornerShape(Radius.dp8)
+                    .fillMaxWidth()
+                    .padding(bottom = Spacing.dp8),
+                contentAlignment = Alignment.Center
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(width = 86.dp, height = 29.dp)
+                        .clip(RoundedCornerShape(Radius.dp50))
+                        .clickable(
+                            interactionSource = rippleSource,
+                            indication = ripple(bounded = true),
+                            onClick = {}
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .width(Component.dragW)
+                            .height(Component.dragH)
+                            .background(
+                                color = colors.handlerColor,
+                                shape = RoundedCornerShape(Radius.dp8)
+                            )
                     )
-            )
+                }
+            }
 
             Text(
                 text = stringResource(R.string.feedback_title),
@@ -119,7 +144,8 @@ fun FeedbackBottomSheetComposable(
                 faces.forEach { face ->
                     Box(
                         modifier = Modifier
-                            .size(IconSize.dp48)
+                            .size(IconSize.dp64)
+                            .clip(RoundedCornerShape(64.dp))
                             .clickable(onClick = onFaceClick),
                         contentAlignment = Alignment.Center
                     ) {
@@ -133,21 +159,29 @@ fun FeedbackBottomSheetComposable(
                 }
             }
 
-            Text(
-                text = stringResource(R.string.feedback_later),
+            Box(
                 modifier = Modifier
                     .padding(
                         top = Spacing.dp32,
                         bottom = Spacing.dp8
                     )
+                    .clip(RoundedCornerShape(Radius.dp50))
                     .clickable(onClick = onLaterClick)
-                    .padding(Spacing.dp8),
-                textDecoration = TextDecoration.Underline,
-                fontFamily = IberFontBold,
-                fontWeight = FontWeight.Bold,
-                fontSize = TextSize.sp16,
-                color = colors.iberdrolaDarkGreen
-            )
+                    .padding(
+                        horizontal = Spacing.dp12,
+                        vertical = Spacing.dp8
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = stringResource(R.string.feedback_later),
+                    textDecoration = TextDecoration.Underline,
+                    fontFamily = IberFontBold,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = TextSize.sp16,
+                    color = colors.iberdrolaDarkGreen
+                )
+            }
 
         }
     }

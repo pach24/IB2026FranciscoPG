@@ -3,6 +3,8 @@ package com.iberdrola.practicas2026.FranciscoPG.presentation.home.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsEvent
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsTracker
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetMockModeUseCase
@@ -22,7 +24,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val getMockModeUseCase: GetMockModeUseCase,
     private val setMockModeUseCase: SetMockModeUseCase,
-    private val getInvoicesUseCase: GetInvoicesUseCase
+    private val getInvoicesUseCase: GetInvoicesUseCase,
+    private val analyticsTracker: AnalyticsTracker
 ) : ViewModel() {
 
     private val _userName = MutableStateFlow("")
@@ -98,5 +101,17 @@ class MainViewModel @Inject constructor(
 
     fun onMockModeEventConsumed() {
         _mockModeChanged.value = null
+    }
+
+    fun onMyInvoicesCardClick() {
+        analyticsTracker.logEvent(AnalyticsEvent.TAP_MY_INVOICES_CARD)
+    }
+
+    fun onLatestInvoiceCardClick() {
+        analyticsTracker.logEvent(AnalyticsEvent.TAP_LATEST_INVOICE_CARD)
+    }
+
+    fun onElectronicInvoiceCardClick() {
+        analyticsTracker.logEvent(AnalyticsEvent.TAP_ELECTRONIC_INVOICE_CARD)
     }
 }

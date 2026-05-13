@@ -7,5 +7,6 @@ data class InvoicesUiState(
     val isFiltered: Boolean = false,
     val isGlobalEmpty: Boolean = false,
     val preferredTabIndex: Int = 0,
-    val showBanner: Boolean = false
+    val showBanner: Boolean = false,
+    val isGasEnabled: Boolean = true
 )

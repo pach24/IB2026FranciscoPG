@@ -3,6 +3,8 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
@@ -114,9 +116,14 @@ fun InvoiceTabContent(
                     )
                 }
             ) {
+                // verticalScroll para que PullToRefreshBox reciba los eventos de nested scroll
+                // (sin un contenedor scrolleable el gesto de pull no se detecta)
                 EmptyStateComposable(
                     title = stringResource(R.string.empty_state_tab_title),
-                    subtitle = stringResource(R.string.empty_state_tab_subtitle)
+                    subtitle = stringResource(R.string.empty_state_tab_subtitle),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
                 )
             }
         }
