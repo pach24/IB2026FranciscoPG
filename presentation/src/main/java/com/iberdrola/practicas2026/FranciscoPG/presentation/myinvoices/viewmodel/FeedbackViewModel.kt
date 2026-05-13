@@ -3,6 +3,8 @@ package com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmode
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsEvent
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsTracker
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.FeedbackInteraction
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.IncrementExitCounterUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ShouldShowFeedbackPromptUseCase
@@ -28,7 +30,8 @@ sealed class FeedbackSheetState {
 class FeedbackViewModel @Inject constructor(
     private val incrementExitCounterUseCase: IncrementExitCounterUseCase,
     private val shouldShowFeedbackPromptUseCase: ShouldShowFeedbackPromptUseCase,
-    private val updateFeedbackInteractionUseCase: UpdateFeedbackInteractionUseCase
+    private val updateFeedbackInteractionUseCase: UpdateFeedbackInteractionUseCase,
+    private val analyticsTracker: AnalyticsTracker
 ) : ViewModel() {
 
     private val _sheetState = MutableStateFlow<FeedbackSheetState>(FeedbackSheetState.Hidden)
@@ -56,6 +59,7 @@ class FeedbackViewModel @Inject constructor(
 
     fun onFeedbackRated() {
         explicitActionTaken = true
+        analyticsTracker.logEvent(AnalyticsEvent.FEEDBACK_RATED)
         viewModelScope.launch {
             updateFeedbackInteractionUseCase(FeedbackInteraction.RATED)
             _sheetState.value = FeedbackSheetState.ThankYou
@@ -67,6 +71,7 @@ class FeedbackViewModel @Inject constructor(
 
     fun onFeedbackLater() {
         explicitActionTaken = true
+        analyticsTracker.logEvent(AnalyticsEvent.FEEDBACK_LATER)
         viewModelScope.launch {
             updateFeedbackInteractionUseCase(FeedbackInteraction.LATER)
             _sheetState.value = FeedbackSheetState.Hidden
@@ -76,7 +81,7 @@ class FeedbackViewModel @Inject constructor(
 
     fun onSheetDismissed() {
         if (explicitActionTaken) return
-
+        analyticsTracker.logEvent(AnalyticsEvent.FEEDBACK_DISMISSED)
         viewModelScope.launch {
             updateFeedbackInteractionUseCase(FeedbackInteraction.DISMISSED)
             _sheetState.value = FeedbackSheetState.Hidden

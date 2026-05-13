@@ -6,4 +6,5 @@ sealed interface InvoicesEvent {
     data class OnTabChanged(val index: Int) : InvoicesEvent
     object OnFeatureNotAvailable : InvoicesEvent
     object OnBannerDismissed : InvoicesEvent
+    object OnOpenFilters : InvoicesEvent
 }

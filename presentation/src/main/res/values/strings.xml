@@ -44,7 +44,10 @@
     <string name="confirm_einvoice_not_received">¿No has recibido el código?</string>
     <string name="confirm_einvoice_resend_hint">Si no lo encuentras, podemos volver a enviar el SMS.</string>
     <string name="confirm_einvoice_resend_link">Volver a enviar</string>
-    <string name="confirm_einvoice_resend_attempts">Recuerda que hoy te quedan %d intentos.</string>
+    <plurals name="confirm_einvoice_resend_attempts">
+        <item quantity="one">Recuerda que hoy te queda %d intento.</item>
+        <item quantity="other">Recuerda que hoy te quedan %d intentos.</item>
+    </plurals>
     <string name="confirm_einvoice_no_attempts_title">Has agotado los intentos</string>
     <string name="confirm_einvoice_no_attempts_message">Inténtalo de nuevo más tarde o contacta con soporte.</string>
     <string name="my_invoices_back"><u>Atrás</u></string>

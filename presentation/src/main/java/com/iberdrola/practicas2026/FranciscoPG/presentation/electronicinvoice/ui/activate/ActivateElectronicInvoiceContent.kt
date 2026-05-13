@@ -4,7 +4,9 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.material3.ripple
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +33,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.graphics.SolidColor
@@ -46,9 +50,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.RoundedCheckbox
 import com.iberdrola.practicas2026.FranciscoPG.presentation.common.UnavailableBanner
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontBold
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberFontRegular
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Radius
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Stroke
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
@@ -62,12 +69,18 @@ fun ActivateElectronicInvoiceContent(
     onEmailChanged: (String) -> Unit,
     onLegalAcceptedChanged: (Boolean) -> Unit,
     validationTrigger: Int = 0,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onEmailFieldFocused: () -> Unit = {},
+    onConditionsLinkClick: () -> Unit = {},
+    onMoreInfoClick: () -> Unit = {}
 ) {
     val colors = IberdrolaTheme.colors
     val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
     var showBanner by remember { mutableStateOf(false) }
     var emailHasBlurred by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) { focusRequester.requestFocus() }
     val showError = (emailHasBlurred || validationTrigger > 0) && email.isNotEmpty() && !isEmailValid
     val emailShakeOffset = remember { Animatable(0f) }
     val checkboxShakeOffset = remember { Animatable(0f) }
@@ -139,10 +152,22 @@ fun ActivateElectronicInvoiceContent(
                     .padding(horizontal = Spacing.dp24)
                     .graphicsLayer { translationX = emailShakeOffset.value }
             ) {
+                val fieldInteractionSource = remember { MutableInteractionSource() }
+                val rippleSource = remember { MutableInteractionSource() }
+                LaunchedEffect(fieldInteractionSource) {
+                    fieldInteractionSource.interactions.collect { interaction ->
+                        when (interaction) {
+                            is PressInteraction.Press,
+                            is PressInteraction.Release,
+                            is PressInteraction.Cancel -> rippleSource.emit(interaction)
+                        }
+                    }
+                }
                 BasicTextField(
                     value = email,
                     onValueChange = onEmailChanged,
                     singleLine = true,
+                    interactionSource = fieldInteractionSource,
                     textStyle = TextStyle(
                         fontFamily = IberFontRegular,
                         fontSize = TextSize.sp15,
@@ -151,9 +176,14 @@ fun ActivateElectronicInvoiceContent(
                     cursorBrush = SolidColor(colors.iberdrolaDarkGreen),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .clip(RoundedCornerShape(Radius.dp24))
+                        .indication(rippleSource, ripple())
+                        .padding(start = Spacing.dp16, end = Spacing.dp16, bottom = Spacing.dp4)
+                        .focusRequester(focusRequester)
                         .onFocusChanged { focusState ->
                             if (focusState.isFocused) {
                                 emailHasBlurred = false
+                                onEmailFieldFocused()
                             } else if (email.isNotEmpty()) {
                                 emailHasBlurred = true
                             }
@@ -166,7 +196,7 @@ fun ActivateElectronicInvoiceContent(
                         }
 
                         Column {
-                            Box(modifier = Modifier.padding(bottom = Spacing.dp8, top = Spacing.dp20)) {
+                            Box(modifier = Modifier.padding(bottom = Spacing.dp8, top = Spacing.dp8)) {
                                 if (email.isEmpty()) {
                                     Text(
                                         text = stringResource(R.string.activate_einvoice_email_label),
@@ -215,21 +245,21 @@ fun ActivateElectronicInvoiceContent(
                     boldPrefix = "Responsable:",
                     text = " Iberdrola Clientes S.A.U.",
                     linkText = stringResource(R.string.activate_einvoice_more_info),
-                    onLinkClick = { focusManager.clearFocus(); showBanner = true }
+                    onLinkClick = { focusManager.clearFocus(); onMoreInfoClick(); showBanner = true }
                 )
                 Spacer(modifier = Modifier.height(Spacing.dp8))
                 DataProtectionItem(
                     boldPrefix = "Finalidad:",
                     text = " Gestión de la factura electrónica.",
                     linkText = stringResource(R.string.activate_einvoice_more_info),
-                    onLinkClick = { focusManager.clearFocus(); showBanner = true }
+                    onLinkClick = { focusManager.clearFocus(); onMoreInfoClick(); showBanner = true }
                 )
                 Spacer(modifier = Modifier.height(Spacing.dp8))
                 DataProtectionItem(
                     boldPrefix = "Derechos:",
                     text = " Acceso, rectificación, supresión, limitación del tratamiento, portabilidad de datos u oposición, incluida la oposición a decisiones individuales automatizadas.",
                     linkText = stringResource(R.string.activate_einvoice_more_info),
-                    onLinkClick = { focusManager.clearFocus(); showBanner = true }
+                    onLinkClick = { focusManager.clearFocus(); onMoreInfoClick(); showBanner = true }
                 )
             }
 
@@ -260,7 +290,7 @@ fun ActivateElectronicInvoiceContent(
                 val legalAnnotated = buildAnnotatedString {
                     append("He leído y acepto la Política de privacidad, acepto las ")
                     withLink(LinkAnnotation.Clickable("conditions") {
-                        focusManager.clearFocus(); showBanner = true
+                        focusManager.clearFocus(); onConditionsLinkClick(); showBanner = true
                     }) {
                         withStyle(SpanStyle(
                             color = colors.iberdrolaDarkGreen,

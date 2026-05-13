@@ -155,8 +155,9 @@ fun ModifyEmailScreen(
                         end = Spacing.dp24,
                         top = Spacing.dp4
                     )
+                    .clip(RoundedCornerShape(Radius.dp24))
                     .clickable { onModifyClick() }
-                    .padding(horizontal = Spacing.dp8, vertical = Spacing.dp4)
+                    .padding(horizontal = Spacing.dp16, vertical = Spacing.dp4)
             ) {
                 Text(
                     text = currentEmail,
@@ -176,8 +177,9 @@ fun ModifyEmailScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = Spacing.dp24)
+                    .clip(RoundedCornerShape(Radius.dp32))
                     .clickable { showInfoDialog = true }
-                    .padding(horizontal = Spacing.dp4, vertical = Spacing.dp8),
+                    .padding(horizontal = Spacing.dp16, vertical = Spacing.dp8),
                 verticalAlignment = Alignment.Top
             ) {
                 Icon(
