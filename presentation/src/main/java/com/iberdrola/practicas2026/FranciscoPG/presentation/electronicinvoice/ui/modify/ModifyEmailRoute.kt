@@ -33,11 +33,15 @@ fun ModifyEmailWizardRoute(
         showBanner = showBanner,
         resendAttemptsLeft = resendAttemptsLeft,
         onEmailChanged = viewModel::onEmailChanged,
+        onEmailFocused = viewModel::onEmailFieldFocused,
+        onNextTapped = viewModel::onNextTapped,
+        onOtpFieldTapped = viewModel::onOtpFieldTapped,
         onVerificationCodeChanged = viewModel::onVerificationCodeChanged,
         onResendCode = viewModel::onResendCode,
         onBannerDismissed = viewModel::onBannerDismissed,
         onConfirmed = viewModel::onModificationConfirmed,
         onNavigateBack = onNavigateBack,
-        onComplete = { onComplete(censoredEmail) }
+        onComplete = { viewModel.onWizardComplete(); onComplete(censoredEmail) },
+        onWizardAbandoned = viewModel::onWizardAbandoned
     )
 }

@@ -131,6 +131,7 @@ fun InvoicesScreen(
                     address = stringResource(R.string.my_invoices_mock_address),
                     feedbackSheetState = feedbackSheetState,
                     isGlobalEmpty = uiState.isGlobalEmpty,
+                    isGasEnabled = uiState.isGasEnabled,
                     preferredTabIndex = uiState.preferredTabIndex,
                     onTabChanged = { onEvent(InvoicesEvent.OnTabChanged(it)) },
                     onBackClick = {
@@ -158,6 +159,7 @@ fun InvoicesScreen(
                             },
                             onFilterClick = {
                                 if (feedbackSheetState == FeedbackSheetState.Hidden && !isNavigatingBack) {
+                                    onEvent(InvoicesEvent.OnOpenFilters)
                                     showFilter = true
                                 }
                             },
@@ -177,6 +179,7 @@ fun InvoicesScreen(
                             },
                             onFilterClick = {
                                 if (feedbackSheetState == FeedbackSheetState.Hidden && !isNavigatingBack) {
+                                    onEvent(InvoicesEvent.OnOpenFilters)
                                     showFilter = true
                                 }
                             },

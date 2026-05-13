@@ -49,6 +49,7 @@ fun ModifyEmailContent(
     isSameAsCurrentEmail: Boolean,
     currentCensoredEmail: String,
     onEmailChanged: (String) -> Unit,
+    onEmailFocused: () -> Unit = {},
     validationTrigger: Int = 0,
     modifier: Modifier = Modifier
 ) {
@@ -114,6 +115,7 @@ fun ModifyEmailContent(
                     .onFocusChanged { focusState ->
                         if (focusState.isFocused) {
                             emailHasBlurred = false
+                            onEmailFocused()
                         } else if (email.isNotEmpty()) {
                             emailHasBlurred = true
                         }
