@@ -77,6 +77,7 @@ fun MainScreen(
     isLoadingInvoice: Boolean,
     onMockModeChanged: (Boolean) -> Unit,
     onInvoicesCardClick: () -> Unit,
+    onLatestInvoiceCardClick: () -> Unit,
     onElectronicInvoiceClick: () -> Unit,
     snackbarHostState: SnackbarHostState,
     snackbarContainerColor: Color,
@@ -179,7 +180,10 @@ fun MainScreen(
                             } else {
                                 ItemInvoiceCard(
                                     amount = latestInvoiceAmount,
-                                    onClick = onInvoicesCardClick
+                                    onClick = {
+                                        onLatestInvoiceCardClick()
+                                        onInvoicesCardClick()
+                                    }
                                 )
                                 Spacer(modifier = Modifier.width(Spacing.dp16))
                                 ItemElectronicInvoiceCard(
@@ -488,6 +492,7 @@ private fun MainScreenPreview() {
             isLoadingInvoice = false,
             onMockModeChanged = {},
             onInvoicesCardClick = {},
+            onLatestInvoiceCardClick = {},
             onElectronicInvoiceClick = {},
             snackbarHostState = SnackbarHostState(),
             snackbarContainerColor = IberdrolaTheme.colors.snackbar,
