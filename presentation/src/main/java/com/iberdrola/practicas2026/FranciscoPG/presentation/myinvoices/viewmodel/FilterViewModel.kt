@@ -68,6 +68,10 @@ class FilterViewModel @Inject constructor(
         _appliedFilters.value = InvoiceFilters()
         _isFilterModeActive.value = false
         recomputeDynamicDates()
+    }
+
+    fun onExplicitClearFilters() {
+        clearFilters()
         analyticsTracker.logEvent(AnalyticsEvent.CLEAR_FILTERS)
     }
 
