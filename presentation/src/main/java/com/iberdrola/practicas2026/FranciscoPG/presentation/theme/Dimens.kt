@@ -58,6 +58,7 @@ object IconSize {
     val dp30 = 30.dp
     val dp32 = 32.dp
     val dp48 = 48.dp
+    val dp64 = 64.dp
     val dp90 = 90.dp
 }
 

@@ -40,6 +40,7 @@
     import androidx.compose.runtime.setValue
     import androidx.compose.ui.Alignment
     import androidx.compose.ui.Modifier
+    import androidx.compose.ui.layout.layout
     import androidx.compose.ui.unit.dp
     import androidx.compose.ui.res.painterResource
     import androidx.compose.ui.res.stringResource
@@ -159,7 +160,7 @@
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = Spacing.dp20)
+                    .padding(start = Spacing.dp20, end = Spacing.dp20, bottom = Spacing.dp32)
                     .background(
                         color = if (hasAttempts) colors.infoBannerBackground else colors.snackbar,
                         shape = bannerShape
@@ -207,15 +208,39 @@
 
                         Spacer(modifier = Modifier.height(Spacing.dp6))
 
-                        Text(
-                            text = stringResource(R.string.confirm_einvoice_resend_link),
-                            color = colors.textPrimary,
-                            fontFamily = IberFontBold,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = TextSize.sp12,
-                            textDecoration = TextDecoration.Underline,
-                            modifier = Modifier.clickable { onResendCode() }
-                        )
+
+                        val resendInteraction = remember { MutableInteractionSource() }
+                        Box(
+                            modifier = Modifier
+                                .layout { measurable, constraints ->
+                                    val placeable = measurable.measure(constraints)
+                                    layout(
+                                        width  = placeable.width  - Spacing.dp12.roundToPx() * 2,
+                                        height = placeable.height - Spacing.dp6.roundToPx()  * 2
+                                    ) {
+                                        placeable.placeRelative(
+                                            x = -Spacing.dp12.roundToPx(),
+                                            y = -Spacing.dp6.roundToPx()
+                                        )
+                                    }
+                                }
+                                .clip(RoundedCornerShape(Radius.dp50))
+                                .clickable(
+                                    interactionSource = resendInteraction,
+                                    indication = ripple(bounded = false),
+                                    onClick = onResendCode
+                                )
+                                .padding(horizontal = Spacing.dp12, vertical = Spacing.dp6)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.confirm_einvoice_resend_link),
+                                color = colors.textPrimary,
+                                fontFamily = IberFontBold,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = TextSize.sp12,
+                                textDecoration = TextDecoration.Underline
+                            )
+                        }
                     } else {
                         Text(
                             text = stringResource(R.string.confirm_einvoice_no_attempts_title),
