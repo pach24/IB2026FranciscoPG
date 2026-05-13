@@ -2,73 +2,107 @@
 
 Aplicacion nativa Android construida con **Jetpack Compose** para la gestion y visualizacion de facturas energeticas, con cambio de fuente de datos en tiempo real y arquitectura modular.
 
-> **Estado del proyecto:** v1.0.0 – Marzo 2026
+> Mayo 2026 (Entrega 3)
 
-**Clean Architecture · MVVM · Multi-Modulo · UI Reactiva**
+**Clean Architecture · MVVM · Multi-Módulo (`:app`, `:presentation`, `:domain`, `:data`) · UI Reactiva**
 
 ![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white)
 ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
-![Hilt](https://img.shields.io/badge/Hilt-00BFA5?style=for-the-badge&logo=google&logoColor=white)
 ![Retrofit](https://img.shields.io/badge/Retrofit-48B983?style=for-the-badge)
 
 ---
 
 ## Descripcion general
 
-Aplicacion que implementa una arquitectura **Clean Architecture de tres capas** desacopladas, permitiendo que la logica de negocio opere de forma independiente al framework de UI o la fuente de datos.
+Aplicacion que implementa una arquitectura **Clean Architecture multi-módulo** (`:app`, `:presentation`, `:domain`, `:data`), permitiendo que la logica de negocio opere de forma independiente al framework de UI o la fuente de datos.
 
 El diferenciador clave es la **flexibilidad de datos**: mediante inyeccion de dependencias, el usuario puede alternar entre un entorno local (RetroMock) y un servidor real (Retrofit + Mockoon) con un solo tap, ideal para demos tecnicas y entornos de desarrollo aislados.
 
 ---
 
-# 🆕 What’s New – Entrega 2
+# 🆕 What’s New – Entrega 3
 
-Esta entrega introduce mejoras clave centradas en **filtrado avanzado, experiencia de usuario y gestión de estados**.
+Entrega centrada en el **flujo completo de Factura Electrónica** y un refactor arquitectónico que separa la presentación en su propio módulo.
 
-### 🔎 Sistema de filtrado completo
+### 📄 Flujo de Factura Electrónica
 
-- Implementación de **pantalla de filtros funcional** accesible desde el botón de filtrado.
-- Permite filtrar facturas por:
-  - **Fecha**
-  - **Importe** 
-  - **Estado**
-- Aplicación de filtros en tiempo real mostrando únicamente los resultados que cumplen las condiciones.
-- Persistencia temporal de filtros aplicada dentro del flujo de UI.
+- Nueva pantalla **Factura Electrónica** accesible desde Home, con listado de contratos por suministro (**Luz / Gas**) y su estado (**Activo / Inactivo**).
+- **Wizard de activación** de 4 pasos (`HorizontalPager` con scroll deshabilitado): selección de contrato → email + consentimiento legal → verificación SMS (6 dígitos) → confirmación de éxito.
+- **Wizard de modificación de email** paralelo para contratos ya activos, con la misma mecánica de validación y verificación.
+- **Pantalla de éxito** compartida que cierra ambos wizards con feedback visual claro.
+- Validaciones en tiempo real: `EmailValidator` (regex RFC), `ValidateVerificationCodeUseCase` (6 dígitos numéricos), botón *Siguiente* deshabilitado hasta cumplir condiciones.
+- Reenvío de SMS con `LoadingOverlay` semitransparente que bloquea interacción y `SuccessBannerSMS` auto-dismissible.
 
-### 🧾 Nuevos estados de factura
+### 🚀 Splash Screen
 
-- Actualización de los JSON (Mockoon + local) para incluir **todos los estados posibles** de factura.
-- Mejora del modelado en dominio para soportar estos estados.
-- Representación visual diferenciada en UI.
+- Splash inicial con tema dedicado (`Theme.IB2026FranciscoPG.Splash`) que precarga datos antes de navegar a Home.
 
-### 🗑️ Eliminación con opción de deshacer
+### 🧱 Refactor arquitectónico — módulo `:presentation`
 
-- Implementación de **borrado de facturas** con opción de *undo*.
-- Mejora de la interacción mediante feedback inmediato al usuario.
+- Extraída toda la UI de `:app` a un nuevo módulo **`:presentation`**, dejando `:app` como contenedor mínimo (Activity, Hilt, Manifest).
+- Re-namespacing de paquetes en `:domain` y `:data` para mantener coherencia (`com.iberdrola.practicas2026.FranciscoPG.*`).
 
-### 📭 Empty State inteligente
+### 🧰 Componentes UI reutilizables
 
-- Nuevo estado visual cuando no hay facturas en un tab.
-- **Auto-navegación al tab con datos disponibles** si el actual está vacío.
-- Mejora significativa de la UX en escenarios sin datos.
+- `StepProgressBar` (barra animada del wizard), `StepBottomButtonBar` (Back/Next), `CloseTopBar`, `OtpInput` (entrada de 6 dígitos), `RoundedCheckbox`, `GenericBanner`, `ConfirmDialog`, `InfoDialog`, `UnavailableBanner` (refactorizado a `common`).
+
+### 🌐 Mockoon ahora con HTTPS
+
+- Entorno Mockoon trasladado de `assets/InvoicesMockoonEnvironment.json` a `res/raw/mockoon_iberdrola.json`, ampliado con endpoints de contratos.
+- Soporte de **TLS** mediante certificado auto-firmado (`res/raw/certificado.crt` + `clave.key`) y `network_security_config.xml` con `<trust-anchors>`.
+
+### 🗃️ Backend de contratos (mockeado de extremo a extremo)
+
+- Nuevo `ContractApiService` y `ContractDao`/`ContractEntity` (Room) con la misma forma que el resto del stack, **pero hoy todo el flujo es mock**:
+  - **Modo RetroMock:** lee `assets/contracts_mock.json` mediante la anotación `@Mock` de RetroMock (sin llamada HTTP real).
+  - **Modo Retrofit:** Mockoon **no expone aún** la ruta `contracts.json`, así que `ContractRepositoryImpl` devuelve una **semilla hardcodeada** dentro del propio repositorio cuando el modo mock está desactivado.
+  - **`updateEmail`** persiste sólo en Room (`ContractDao.updateEmail`); no hay PUT/PATCH contra Mockoon.
+- El andamiaje (DTOs, `ApiResponse`, cache en Room) queda preparado para conectar la API real en una entrega futura sin tocar UI ni dominio.
 
 ---
 
 ## Galería visual
 
+### <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/main/Symbols/Dizzy.webp" alt="Dizzy" width="25" height="25" /> Novedades – Entrega 3
+
+> Flujo de Factura Electrónica, y componentes UX comunes
+
+| Pantalla de contratos | Wizard — Email + legal | Wizard — Código OTP |
+|:---------------------:|:----------------------:|:-------------------:|
+| <img src="https://github.com/user-attachments/assets/5b2e9394-bbe3-4047-8796-4b7b11cd16c1" width="200" alt="Contratos"/> | <img src="https://github.com/user-attachments/assets/eac865d5-31c4-430e-a335-db550770d035" width="200" alt="Email + legal"/> | <img src="https://github.com/user-attachments/assets/3f230f25-e626-4104-8e67-defc8c5e79f8" width="200" alt="OTP"/> |
+
+| Pantalla de éxito (modificar) | Modificar email | Pantalla de éxito (activar) |
+|:-----------------:|:---------------:|:-----------------:|
+| <img src="https://github.com/user-attachments/assets/e7fe35d5-6a40-4eb0-a1b0-2d87f76f803e" width="200" alt="Éxito"/> | <img src="https://github.com/user-attachments/assets/5b67a719-9356-4120-afd8-b5fa30869265" width="200" alt="Modificar email"/> | <img src="https://github.com/user-attachments/assets/ee33c344-49d9-4f3c-a377-9afc72cb6825" width="200" alt="Extra"/> |
+
+---
+
+<details>
+<summary><strong>📱 Pantallas principales</strong></summary>
+
+<br>
+
 | Home y Toggle | Lista de facturas | Carga (Skeleton) | Bottom Sheet |
 |:-------------:|:-----------------:|:----------------:|:-----------:|
 | <img src="https://github.com/user-attachments/assets/7d5016e4-bb5d-49a1-bf66-2efb6a4ef19d" width="200"/> | <img src="https://github.com/user-attachments/assets/700552ba-a6e1-4fb5-acd8-2bb5809a8daf" width="200"/> | <img src="https://github.com/user-attachments/assets/72041eaa-bfa3-497b-ac73-c1ddcd86d82a" width="200"/> | <img src="https://github.com/user-attachments/assets/f05b74c3-7565-4396-af56-73417e326141" width="200"/> |
 
-### <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/main/Symbols/Dizzy.webp" alt="Dizzy" width="25" height="25" /> Novedades – Entrega 2
+</details>
+
+---
+
+<details>
+<summary><strong>🎨 Filtros y estados</strong></summary>
+
+<br>
 
 > Nuevas funcionalidades centradas en filtrado, estados y experiencia de usuario
 
-
-| Pantalla de filtros | Modo oscuro| Lista filtrada | EmptyState |
+| Pantalla de filtros | Modo oscuro | Lista filtrada | EmptyState |
 |:-------------:|:-----------------:|:----------------:|:-----------:|
-| <img src="https://github.com/user-attachments/assets/a770b86b-d78f-4845-a63c-93a66256d930" width="200"/> | <img src="https://github.com/user-attachments/assets/c7f86169-52ab-4709-bedb-be88341b14e6"  width="200"/> | <img src="https://github.com/user-attachments/assets/bfd64d74-c1ea-4128-ae86-ed3500dc9df0" width="200"/> | <img src="https://github.com/user-attachments/assets/9fbe45e5-9ff1-4934-8ed7-3ec06227219d" width="200"/> |
+| <img src="https://github.com/user-attachments/assets/a770b86b-d78f-4845-a63c-93a66256d930" width="200"/> | <img src="https://github.com/user-attachments/assets/c7f86169-52ab-4709-bedb-be88341b14e6" width="200"/> | <img src="https://github.com/user-attachments/assets/bfd64d74-c1ea-4128-ae86-ed3500dc9df0" width="200"/> | <img src="https://github.com/user-attachments/assets/9fbe45e5-9ff1-4934-8ed7-3ec06227219d" width="200"/> |
+
+</details>
 
 
 
@@ -84,6 +118,8 @@ Esta entrega introduce mejoras clave centradas en **filtrado avanzado, experienc
   - **Skeleton Loading** con Shimmer para percepcion de carga instantanea.
   - Auto-switch de tab inteligente (si un tipo de suministro esta vacio, navega al que tiene datos).
 - **Estados de error diferenciados:** Error de servidor y error de conexion con iconografia y mensajes distintos, boton de reintento y pull-to-refresh.
+- **Factura Electrónica:** Gestion de contratos por suministro y wizards de **activacion** y **modificacion de email** (4 pasos cada uno) con validacion en tiempo real, verificacion SMS, loading overlay y banners auto-dismissibles.
+- **Splash Screen:** Pantalla de carga inicial con tema dedicado.
 
 ---
 
@@ -95,27 +131,32 @@ El proyecto sigue los principios **SOLID** y las recomendaciones oficiales de Go
 
 ```
 IB2026FranciscoPG/
-├── :app (Capa de Presentacion)
-│   ├── di/              # Modulos Hilt (AppModule, inyeccion de dependencias)
-│   ├── core/            # Utilidades transversales (ErrorClassifier)
+├── :app (Punto de entrada)
+│   ├── di/                # Modulos Hilt (AppModule, DatabaseModule, NetworkModule, RepositoryModule)
+│   └── DeviceUtils.kt     # Helpers especificos de plataforma
+├── :presentation (Capa de Presentacion)
+│   ├── core/              # Utilidades transversales (ErrorClassifier)
 │   └── presentation/
-│       ├── home/        # MainActivity, MainScreen, MainViewModel
-│       ├── invoices/    # Pantallas, componentes, ViewModel y mapper de facturas
-│       └── theme/       # Tokens de diseno (Spacing, TextSize, Radius...)
+│       ├── home/                  # MainActivity, MainScreen, SplashScreen, MainViewModel
+│       ├── myinvoices/            # Listado, filtros, feedback, detalle de facturas
+│       ├── electronicinvoice/     # Listado de contratos + wizards (activar / modificar email) + pantalla de exito
+│       ├── common/                # StepProgressBar, OtpInput, banners, dialogos, top bars
+│       └── theme/                 # Tokens de diseno (Color, Spacing, Type, Theme)
 ├── :domain (Capa de Negocio)
-│   ├── model/           # Entidades de dominio (Invoice, SupplyType, InvoiceStatus)
-│   ├── repository/      # Contratos (interfaces)
-│   └── usecase/         # Casos de uso (GetInvoices, SortInvoices)
+│   ├── model/             # Invoice, Contract, ContractStatus, SupplyType, InvoiceStatus, EmailValidator…
+│   ├── repository/        # Contratos: InvoiceRepository, ContractRepository, ConfigurationRepository, FeedbackRepository
+│   └── usecase/           # GetInvoices, FilterInvoices, GetContracts, ValidateEmail, ValidateVerificationCode, ResendCode, UpdateContractEmail, CensorEmail…
 └── :data (Capa de Datos)
-    ├── local/           # Room (InvoiceDao, InvoiceEntity)
-    ├── model/           # DTOs (InvoiceDto, mappers)
-    ├── network/         # Retrofit + Retromock (InvoiceApiService)
-    └── repository/      # Implementaciones de repositorio
+    ├── local/             # Room: AppDatabase, InvoiceDao/Entity, ContractDao/Entity
+    ├── model/             # DTOs (InvoiceDto, ContractDto, ApiEnvelopeDto, ApiResponse) y mappers
+    ├── network/           # Retrofit + Retromock: InvoiceApiService, ContractApiService, SafeAwait
+    └── repository/        # InvoiceRepositoryImpl, ContractRepositoryImpl, ConfigurationRepositoryImpl, FeedbackRepositoryImpl
 ```
 
-1. **`:app` (Presentacion):** UI en Compose, ViewModels con `StateFlow`, y configuracion Hilt. Implementa **UDF (Unidirectional Data Flow)**.
-2. **`:domain` (Negocio):** Modulo Kotlin puro sin dependencias Android. Define entidades, enums de dominio (`SupplyType`, `InvoiceStatus`), contratos de repositorio y casos de uso.
-3. **`:data` (Datos):** Implementaciones de repositorio, DTOs, servicios Retrofit/Retromock, cache con Room y logica de seleccion de fuente de datos.
+1. **`:app`:** Punto de entrada minimo. `MainActivity`, configuracion Hilt y `AndroidManifest`. No contiene UI.
+2. **`:presentation`:** UI en Compose, ViewModels con `StateFlow`, navegacion, splash y todos los componentes reutilizables. Implementa **UDF (Unidirectional Data Flow)**.
+3. **`:domain`:** Modulo Kotlin puro sin dependencias Android. Entidades, enums, validators, contratos de repositorio y casos de uso.
+4. **`:data`:** Implementaciones de repositorio, DTOs, servicios Retrofit/Retromock, cache con Room y seleccion de fuente de datos.
 
 ---
 
@@ -156,13 +197,16 @@ cd IB2026FranciscoPG
 > ### ⚠️ ARCHIVO DE ENTORNO REQUERIDO
 > Para que el modo **Retrofit** funcione, debes importar manualmente el siguiente archivo en tu aplicación **Mockoon**:
 >
-> 📂 **Ruta:** `app/src/main/assets/InvoicesMockoonEnvironment.json`
+> 📂 **Ruta:** `app/src/main/res/raw/mockoon_iberdrola.json`
 >
 > **Instrucciones rápidas:**
 > 1. Abre **Mockoon**.
 > 2. `File` > `Open environment` (o `Ctrl+O`).
 > 3. Selecciona el archivo en la ruta indicada arriba.
-> 4. Asegúrate de que el servidor esté en **Play** sobre el puerto `3001`.
+> 4. El entorno está configurado para servir por **HTTPS** con un certificado auto-firmado (`certificado.crt` + `clave.key` en `app/src/main/res/raw/`). Mockoon los espera en su directorio de trabajo: copia ambos junto al `.json` o ajusta `certPath` / `keyPath` desde la pestaña *TLS* de Mockoon.
+> 5. Asegúrate de que el servidor esté en **Play** sobre el puerto `3001`.
+>
+> El cert auto-firmado ya está confiado por la app vía `network_security_config.xml` (`<trust-anchors>` → `@raw/certificado`). Si lo regeneras, sustituye el archivo en `res/raw/`.
 
 
 
@@ -172,8 +216,8 @@ La app detecta automaticamente si se ejecuta en emulador o dispositivo fisico:
 
 | Entorno | URL base | Notas |
 |---|---|---|
-| **Emulador AVD** | `http://10.0.2.2:3001/` | `10.0.2.2` es el alias del host en el emulador de Android |
-| **Dispositivo fisico** | `http://localhost:3001/` | Requiere redireccion de puerto antes de cada ejecucion |
+| **Emulador AVD** | `https://10.0.2.2:3001/` | `10.0.2.2` es el alias del host en el emulador de Android |
+| **Dispositivo fisico** | `https://localhost:3001/` | Requiere redireccion de puerto antes de cada ejecucion |
 
 #### Dispositivo fisico: redireccion de puerto
 
@@ -196,25 +240,6 @@ adb reverse tcp:3001 tcp:3001
 En la pantalla principal, el switch en la esquina inferior derecha permite alternar entre:
 
 - **RetroMock:** Datos simulados desde un JSON local embebido en la app. No requiere Mockoon ni conexion de red.
-- **Retrofit (Mockoon):** Llamadas HTTP reales contra el servidor Mockoon local. Requiere que Mockoon este en ejecucion.
+- **Retrofit (Mockoon):** Llamadas HTTPS reales contra el servidor Mockoon local (TLS con certificado auto-firmado). Requiere que Mockoon este en ejecucion.
 
 ---
-
-## Modos de datos en detalle
-
-### RetroMock (mock local)
-
-- Usa el fichero `invoices_mock.json` incluido en `assets/`.
-- Simula latencia aleatoria (1-3 segundos) para reproducir condiciones reales.
-- No requiere configuracion de red.
-- Ideal para desarrollo rapido y pruebas offline.
-
-### Retrofit + Mockoon (servidor local)
-
-- Llamadas HTTP reales contra los endpoints configurados en Mockoon.
-- Los datos se cachean en **Room** para acceso offline posterior.
-- Si la API falla pero hay cache disponible, la app muestra los datos cacheados en lugar de un error.
-- Permite modificar las respuestas en Mockoon en tiempo real para probar distintos escenarios (facturas vacias, errores de servidor, etc.).
-
----
-
