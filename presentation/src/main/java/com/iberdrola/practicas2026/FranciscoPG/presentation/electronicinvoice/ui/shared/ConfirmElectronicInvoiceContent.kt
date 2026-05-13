@@ -24,8 +24,12 @@
     import androidx.compose.foundation.indication
     import androidx.compose.foundation.interaction.MutableInteractionSource
     import androidx.compose.foundation.interaction.PressInteraction
+    import androidx.activity.compose.BackHandler
+    import androidx.compose.foundation.layout.WindowInsets
+    import androidx.compose.foundation.layout.ime
     import androidx.compose.runtime.rememberCoroutineScope
     import androidx.compose.ui.input.pointer.pointerInput
+    import androidx.compose.ui.platform.LocalDensity
     import androidx.compose.material3.ExperimentalMaterial3Api
     import androidx.compose.material3.Icon
     import androidx.compose.material3.ModalBottomSheet
@@ -41,6 +45,7 @@
     import androidx.compose.ui.Alignment
     import androidx.compose.ui.Modifier
     import androidx.compose.ui.layout.layout
+    import androidx.compose.ui.platform.LocalSoftwareKeyboardController
     import androidx.compose.ui.unit.dp
     import androidx.compose.ui.res.painterResource
     import androidx.compose.ui.res.stringResource
@@ -70,6 +75,7 @@
         onOtpFieldTap: () -> Unit = {}
     ) {
         val colors = IberdrolaTheme.colors
+        val keyboardController = LocalSoftwareKeyboardController.current
         var showOtpSheet by remember { mutableStateOf(false) }
         val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
@@ -109,7 +115,7 @@
 
             Spacer(modifier = Modifier.height(Spacing.dp32))
 
-            // Campo display — abre el OTP sheet al tocar
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -274,6 +280,13 @@
                 val rippleSource = remember { MutableInteractionSource() }
                 val scope = rememberCoroutineScope()
 
+
+                val density = LocalDensity.current
+                val isKeyboardVisible = WindowInsets.ime.getBottom(density) > 0
+                BackHandler(enabled = isKeyboardVisible) {
+                    keyboardController?.hide()
+                }
+
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -292,25 +305,15 @@
                                 awaitEachGesture {
                                     val down = awaitFirstDown()
                                     down.consume()
-
                                     val press = PressInteraction.Press(down.position)
-
-                                    scope.launch {
-                                        rippleSource.emit(press)
-                                    }
-
+                                    scope.launch { rippleSource.emit(press) }
                                     val up = waitForUpOrCancellation()
-
                                     scope.launch {
                                         if (up != null) {
                                             up.consume()
-                                            rippleSource.emit(
-                                                PressInteraction.Release(press)
-                                            )
+                                            rippleSource.emit(PressInteraction.Release(press))
                                         } else {
-                                            rippleSource.emit(
-                                                PressInteraction.Cancel(press)
-                                            )
+                                            rippleSource.emit(PressInteraction.Cancel(press))
                                         }
                                     }
                                 }
