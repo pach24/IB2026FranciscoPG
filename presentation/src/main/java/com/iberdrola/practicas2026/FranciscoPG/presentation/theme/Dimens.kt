@@ -69,6 +69,7 @@ object Radius {
     val dp10 = 10.dp
     val dp16 = 16.dp
     val dp24 = 24.dp
+    val dp32 = 32.dp
     val dp50 = 50.dp
 }
 
