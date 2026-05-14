@@ -3,6 +3,8 @@ package com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.v
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsEvent
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsTracker
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.CensorEmailUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetContractsUseCase
@@ -24,6 +26,7 @@ class ModifyEmailViewModel @Inject constructor(
     private val censorEmailUseCase: CensorEmailUseCase,
     private val updateContractEmailUseCase: UpdateContractEmailUseCase,
     private val getContractsUseCase: GetContractsUseCase,
+    private val analyticsTracker: AnalyticsTracker,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -87,8 +90,27 @@ class ModifyEmailViewModel @Inject constructor(
         _verificationCode.value = value
     }
 
+    fun onEmailFieldFocused() {
+        analyticsTracker.logEvent(AnalyticsEvent.MODIFY_WIZARD_TAP_EMAIL_FIELD)
+    }
+
+    fun onNextTapped() {
+        analyticsTracker.logEvent(
+            AnalyticsEvent.MODIFY_WIZARD_TAP_NEXT,
+            mapOf(AnalyticsEvent.PARAM_SUPPLY_TYPE to supplyType.apiValue)
+        )
+    }
+
+    fun onOtpFieldTapped() {
+        analyticsTracker.logEvent(AnalyticsEvent.MODIFY_WIZARD_TAP_OTP_FIELD)
+    }
+
     fun onResendCode() {
         if (!resendCodeUseCase.canResend) return
+        analyticsTracker.logEvent(
+            AnalyticsEvent.MODIFY_WIZARD_RESEND_CODE,
+            mapOf(AnalyticsEvent.PARAM_SUPPLY_TYPE to supplyType.apiValue)
+        )
         viewModelScope.launch {
             _isLoading.value = true
             _showBanner.value = false
@@ -105,8 +127,26 @@ class ModifyEmailViewModel @Inject constructor(
     }
 
     fun onModificationConfirmed() {
+        analyticsTracker.logEvent(
+            AnalyticsEvent.MODIFY_WIZARD_TAP_CONFIRM,
+            mapOf(AnalyticsEvent.PARAM_SUPPLY_TYPE to supplyType.apiValue)
+        )
         viewModelScope.launch {
             updateContractEmailUseCase(supplyType, _email.value)
         }
+    }
+
+    fun onWizardComplete() {
+        analyticsTracker.logEvent(
+            AnalyticsEvent.MODIFY_WIZARD_COMPLETE,
+            mapOf(AnalyticsEvent.PARAM_SUPPLY_TYPE to supplyType.apiValue)
+        )
+    }
+
+    fun onWizardAbandoned() {
+        analyticsTracker.logEvent(
+            AnalyticsEvent.MODIFY_WIZARD_ABANDON,
+            mapOf(AnalyticsEvent.PARAM_SUPPLY_TYPE to supplyType.apiValue)
+        )
     }
 }

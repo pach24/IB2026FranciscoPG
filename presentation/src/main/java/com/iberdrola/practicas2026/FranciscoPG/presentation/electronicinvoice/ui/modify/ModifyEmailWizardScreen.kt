@@ -59,12 +59,16 @@ fun ModifyEmailWizardScreen(
     showBanner: Boolean,
     resendAttemptsLeft: Int,
     onEmailChanged: (String) -> Unit,
+    onEmailFocused: () -> Unit,
+    onNextTapped: () -> Unit,
+    onOtpFieldTapped: () -> Unit,
     onVerificationCodeChanged: (String) -> Unit,
     onResendCode: () -> Unit,
     onBannerDismissed: () -> Unit,
     onConfirmed: () -> Unit,
     onNavigateBack: () -> Unit,
-    onComplete: (String) -> Unit
+    onComplete: (String) -> Unit,
+    onWizardAbandoned: () -> Unit
 ) {
     val colors = IberdrolaTheme.colors
     val scope = rememberCoroutineScope()
@@ -82,7 +86,7 @@ fun ModifyEmailWizardScreen(
     BackHandler {
         if (isLoading) return@BackHandler
         when {
-            showSuccess -> onComplete(censoredEmail)
+            showSuccess -> { onComplete(censoredEmail) }
             currentPage > 0 -> {
                 onBannerDismissed()
                 scope.launch { pagerState.animateScrollToPage(currentPage - 1) }
@@ -98,7 +102,7 @@ fun ModifyEmailWizardScreen(
             message = stringResource(R.string.exit_wizard_dialog_message),
             confirmText = stringResource(R.string.exit_wizard_dialog_confirm),
             dismissText = stringResource(R.string.exit_wizard_dialog_cancel),
-            onConfirm = { showExitDialog = false; onNavigateBack() },
+            onConfirm = { showExitDialog = false; onWizardAbandoned(); onNavigateBack() },
             onDismiss = { showExitDialog = false }
         )
     }
@@ -142,13 +146,15 @@ fun ModifyEmailWizardScreen(
                         isSameAsCurrentEmail = isSameAsCurrentEmail,
                         currentCensoredEmail = currentCensoredEmail,
                         onEmailChanged = onEmailChanged,
+                        onEmailFocused = onEmailFocused,
                         validationTrigger = validationTrigger
                     )
                     1 -> ConfirmElectronicInvoiceContent(
                         verificationCode = verificationCode,
                         onVerificationCodeChanged = onVerificationCodeChanged,
                         onResendCode = onResendCode,
-                        resendAttemptsLeft = resendAttemptsLeft
+                        resendAttemptsLeft = resendAttemptsLeft,
+                        onOtpFieldTap = onOtpFieldTapped
                     )
                 }
             }
@@ -172,6 +178,7 @@ fun ModifyEmailWizardScreen(
                         onConfirmed()
                         showSuccess = true
                     } else {
+                        onNextTapped()
                         scope.launch { pagerState.animateScrollToPage(currentPage + 1) }
                     }
                 },
@@ -222,12 +229,16 @@ private fun ModifyEmailWizardScreenPreview() {
             showBanner = false,
             resendAttemptsLeft = 3,
             onEmailChanged = {},
+            onEmailFocused = {},
+            onNextTapped = {},
+            onOtpFieldTapped = {},
             onVerificationCodeChanged = {},
             onResendCode = {},
             onBannerDismissed = {},
             onConfirmed = {},
             onNavigateBack = {},
-            onComplete = {}
+            onComplete = {},
+            onWizardAbandoned = {}
         )
     }
 }

@@ -45,7 +45,7 @@ fun FilterRoute(
                 },
                 onClearFilters = { previousDraft ->
                     val previousApplied = filterViewModel.appliedFilters.value
-                    filterViewModel.clearFilters()
+                    filterViewModel.onExplicitClearFilters()
                     onFiltersCleared(previousDraft, previousApplied)
                 },
                 onFilterInteraction = onFilterInteraction,

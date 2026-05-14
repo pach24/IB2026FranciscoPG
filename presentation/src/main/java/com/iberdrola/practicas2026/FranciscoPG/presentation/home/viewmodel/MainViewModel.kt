@@ -109,6 +109,10 @@ class MainViewModel @Inject constructor(
         analyticsTracker.logEvent(AnalyticsEvent.TAP_MY_INVOICES_CARD)
     }
 
+    fun onLatestInvoiceCardClick() {
+        analyticsTracker.logEvent(AnalyticsEvent.TAP_LATEST_INVOICE_CARD)
+    }
+
     fun onElectronicInvoiceCardClick() {
         analyticsTracker.logEvent(AnalyticsEvent.TAP_ELECTRONIC_INVOICE_CARD)
     }

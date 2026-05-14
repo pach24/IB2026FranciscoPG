@@ -81,7 +81,7 @@ class FeedbackViewModel @Inject constructor(
 
     fun onSheetDismissed() {
         if (explicitActionTaken) return
-
+        analyticsTracker.logEvent(AnalyticsEvent.FEEDBACK_DISMISSED)
         viewModelScope.launch {
             updateFeedbackInteractionUseCase(FeedbackInteraction.DISMISSED)
             _sheetState.value = FeedbackSheetState.Hidden

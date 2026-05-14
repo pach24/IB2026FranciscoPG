@@ -2,6 +2,10 @@ package com.iberdrola.practicas2026.FranciscoPG.domain.analytics
 
 object AnalyticsEvent {
 
+    // adb shell setprop debug.firebase.analytics.app com.iberdrola.practicas2026.FranciscoPG
+    // adb shell setprop debug.firebase.analytics.app .none.
+
+
     // ── Pantalla Home ────────────────────────────────────────────────────────
     const val TAP_MY_INVOICES_CARD = "tap_my_invoices_card"
     const val TAP_ELECTRONIC_INVOICE_CARD = "tap_electronic_invoice_card"
@@ -15,6 +19,7 @@ object AnalyticsEvent {
     const val PULL_TO_REFRESH = "pull_to_refresh"
     const val FEEDBACK_RATED = "feedback_rated"
     const val FEEDBACK_LATER = "feedback_later"
+    const val FEEDBACK_DISMISSED = "feedback_dismissed"
 
     // ── Pantalla Filtros ─────────────────────────────────────────────────────
     const val FILTER_TAP_START_DATE = "filter_tap_start_date"

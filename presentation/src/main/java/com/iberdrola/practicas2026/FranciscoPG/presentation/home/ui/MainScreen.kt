@@ -78,6 +78,7 @@ fun MainScreen(
     isLoadingInvoice: Boolean,
     onMockModeChanged: (Boolean) -> Unit,
     onInvoicesCardClick: () -> Unit,
+    onLatestInvoiceCardClick: () -> Unit,
     onElectronicInvoiceClick: () -> Unit,
     onForceCrashClick: () -> Unit,
     snackbarHostState: SnackbarHostState,
@@ -181,7 +182,10 @@ fun MainScreen(
                             } else {
                                 ItemInvoiceCard(
                                     amount = latestInvoiceAmount,
-                                    onClick = onInvoicesCardClick
+                                    onClick = {
+                                        onLatestInvoiceCardClick()
+                                        onInvoicesCardClick()
+                                    }
                                 )
                                 Spacer(modifier = Modifier.width(Spacing.dp16))
                                 ItemElectronicInvoiceCard(
@@ -510,6 +514,7 @@ private fun MainScreenPreview() {
             isLoadingInvoice = false,
             onMockModeChanged = {},
             onInvoicesCardClick = {},
+            onLatestInvoiceCardClick = {},
             onElectronicInvoiceClick = {},
             onForceCrashClick = {},
             snackbarHostState = SnackbarHostState(),

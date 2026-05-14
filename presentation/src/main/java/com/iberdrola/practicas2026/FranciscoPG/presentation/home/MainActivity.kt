@@ -127,8 +127,13 @@ class MainActivity : AppCompatActivity() {
                     ) {
                         viewModel.refreshLatestInvoice()
                     }
-                    if (currentRoute == AppRoutes.HOME) {
-                        analyticsTracker.logScreenView(AnalyticsEvent.SCREEN_HOME)
+                    when (currentRoute) {
+                        AppRoutes.HOME -> analyticsTracker.logScreenView(AnalyticsEvent.SCREEN_HOME)
+                        AppRoutes.MY_INVOICES -> analyticsTracker.logScreenView(AnalyticsEvent.SCREEN_MY_INVOICES)
+                        AppRoutes.ELECTRONIC_INVOICE -> analyticsTracker.logScreenView(AnalyticsEvent.SCREEN_ELECTRONIC_INVOICE)
+                        "${AppRoutes.ACTIVATE_ELECTRONIC_INVOICE}/{supplyType}" -> analyticsTracker.logScreenView(AnalyticsEvent.SCREEN_ACTIVATE_INVOICE)
+                        "${AppRoutes.MODIFY_EMAIL}/{supplyType}/{censoredEmail}" -> analyticsTracker.logScreenView(AnalyticsEvent.SCREEN_MODIFY_EMAIL)
+                        "${AppRoutes.MODIFY_EMAIL_WIZARD}/{supplyType}" -> analyticsTracker.logScreenView(AnalyticsEvent.SCREEN_MODIFY_EMAIL_WIZARD)
                     }
                     previousRoute = currentRoute
                 }
@@ -195,6 +200,7 @@ class MainActivity : AppCompatActivity() {
                             latestInvoiceAmount = latestInvoiceAmount,
                             isLoadingInvoice = isLoadingInvoice,
                             onMockModeChanged = viewModel::updateMockMode,
+                            onLatestInvoiceCardClick = viewModel::onLatestInvoiceCardClick,
                             onInvoicesCardClick = {
                                 if (!isNavigating) {
                                     isNavigating = true
