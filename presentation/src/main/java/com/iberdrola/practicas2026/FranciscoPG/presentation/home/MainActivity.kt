@@ -227,6 +227,7 @@ class MainActivity : AppCompatActivity() {
                                     }
                                 }
                             },
+                            onForceCrashClick = viewModel::onForceCrashClick,
                             snackbarHostState = snackbarHostState,
                             snackbarContainerColor = snackbarContainer,
                             snackbarContentColor = snackbarContent

@@ -52,6 +52,7 @@ object Spacing {
 
 /** Tamaños de iconos */
 object IconSize {
+    val dp16 = 16.dp
     val dp20 = 20.dp
     val dp24 = 24.dp
     val dp28 = 28.dp

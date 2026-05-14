@@ -11,7 +11,6 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -20,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -27,11 +27,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -39,7 +41,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -79,6 +80,7 @@ fun MainScreen(
     onInvoicesCardClick: () -> Unit,
     onLatestInvoiceCardClick: () -> Unit,
     onElectronicInvoiceClick: () -> Unit,
+    onForceCrashClick: () -> Unit,
     snackbarHostState: SnackbarHostState,
     snackbarContainerColor: Color,
     snackbarContentColor: Color
@@ -198,34 +200,54 @@ fun MainScreen(
                 }
             }
 
-            // Switch fijo en esquina inferior derecha, por encima del snackbar
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = Spacing.dp16, bottom = Component.mockSwitchBottomPadding)
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .padding(start = Spacing.dp16, end = Spacing.dp16, bottom = Component.mockSwitchBottomPadding)
             ) {
-                Text(
-                    text = stringResource(
-                        if (isMockEnabled) R.string.switch_mock_mode_retromock
-                        else R.string.switch_mock_mode_retrofit
-                    ),
-                    color = colors.textPrimary,
-                    fontFamily = IberFontRegular
-                )
-                Spacer(modifier = Modifier.width(Spacing.dp8))
-                Switch(
-                    checked = isMockEnabled,
-                    onCheckedChange = onMockModeChanged,
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = colors.surface,
-                        checkedTrackColor = colors.iberdrolaGreen,
-                        checkedBorderColor = colors.iberdrolaGreen,
-                        uncheckedThumbColor = colors.lightGrey,
-                        uncheckedTrackColor = colors.surface,
-                        uncheckedBorderColor = colors.lightGrey
+                Button(
+                    onClick = onForceCrashClick,
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(containerColor = colors.crashButton),
+                    contentPadding = PaddingValues(horizontal = Spacing.dp16),
+                    modifier = Modifier.height(Spacing.dp32)
+                ) {
+                    Text(
+                        text = stringResource(R.string.main_force_crash),
+                        color = Color.White,
+                        fontFamily = IberFontBold,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = TextSize.sp15
                     )
-                )
+                }
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = stringResource(
+                            if (isMockEnabled) R.string.switch_mock_mode_retromock
+                            else R.string.switch_mock_mode_retrofit
+                        ),
+                        color = colors.textPrimary,
+                        fontFamily = IberFontRegular
+                    )
+                    Spacer(modifier = Modifier.width(Spacing.dp8))
+                    Switch(
+                        checked = isMockEnabled,
+                        onCheckedChange = onMockModeChanged,
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = colors.surface,
+                            checkedTrackColor = colors.iberdrolaGreen,
+                            checkedBorderColor = colors.iberdrolaGreen,
+                            uncheckedThumbColor = colors.lightGrey,
+                            uncheckedTrackColor = colors.surface,
+                            uncheckedBorderColor = colors.lightGrey
+                        )
+                    )
+                }
             }
         }
     }
@@ -494,6 +516,7 @@ private fun MainScreenPreview() {
             onInvoicesCardClick = {},
             onLatestInvoiceCardClick = {},
             onElectronicInvoiceClick = {},
+            onForceCrashClick = {},
             snackbarHostState = SnackbarHostState(),
             snackbarContainerColor = IberdrolaTheme.colors.snackbar,
             snackbarContentColor = IberdrolaTheme.colors.black

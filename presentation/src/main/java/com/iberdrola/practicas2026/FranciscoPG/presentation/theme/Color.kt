@@ -106,6 +106,9 @@ val buttonTextActiveDark = Color(0xFFFFFFFF)
 
 val errorTextForm = Color(0xFFFF2C2C)
 
+val CrashButtonLight = Color(0xFFB72727)
+val CrashButtonDark  = Color(0xFF7A1515)
+
 val InfoBannerBgLight = Color(0xFFDDF5FF)
 val InfoBannerBgDark = Color(0x8D183241)
 val InfoBannerIconLight = Color(0xFF626262)
@@ -168,6 +171,7 @@ data class IberdrolaColors(
     val infoBannerIcon: Color,
     val loadingSpinnerRail: Color,
     val successBannerBackground: Color,
+    val crashButton: Color,
 )
 
 val LightIberdrolaColors = IberdrolaColors(
@@ -211,6 +215,7 @@ val LightIberdrolaColors = IberdrolaColors(
     infoBannerIcon = InfoBannerIconLight,
     loadingSpinnerRail = LoadingRailLight,
     successBannerBackground = SuccessBannerBgLight,
+    crashButton = CrashButtonLight,
 )
 
 val DarkIberdrolaColors = IberdrolaColors(
@@ -254,6 +259,7 @@ val DarkIberdrolaColors = IberdrolaColors(
     infoBannerIcon = InfoBannerIconDark,
     loadingSpinnerRail = LoadingRailDark,
     successBannerBackground = SuccessBannerBgDark,
+    crashButton = CrashButtonDark,
 )
 
 val LocalIberdrolaColors = staticCompositionLocalOf { LightIberdrolaColors }
