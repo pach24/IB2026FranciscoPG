@@ -12,6 +12,7 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ResendCodeUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.UpdateContractEmailUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ValidateEmailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -63,6 +64,8 @@ class ModifyEmailViewModel @Inject constructor(
     private val _resendAttemptsLeft = MutableStateFlow(resendCodeUseCase.attemptsLeft)
     val resendAttemptsLeft: StateFlow<Int> = _resendAttemptsLeft.asStateFlow()
 
+    private var resendJob: Job? = null
+
     init {
         loadCurrentEmail()
     }
@@ -111,7 +114,8 @@ class ModifyEmailViewModel @Inject constructor(
             AnalyticsEvent.MODIFY_WIZARD_RESEND_CODE,
             mapOf(AnalyticsEvent.PARAM_SUPPLY_TYPE to supplyType.apiValue)
         )
-        viewModelScope.launch {
+        resendJob?.cancel()
+        resendJob = viewModelScope.launch {
             _isLoading.value = true
             _showBanner.value = false
             resendCodeUseCase.resend()
@@ -123,10 +127,14 @@ class ModifyEmailViewModel @Inject constructor(
     }
 
     fun onBannerDismissed() {
+        resendJob?.cancel()
+        resendJob = null
+        _isLoading.value = false
         _showBanner.value = false
     }
 
-    fun onModificationConfirmed() {
+    fun onModificationConfirmed(): Boolean {
+        if (resendJob?.isActive == true) return false
         analyticsTracker.logEvent(
             AnalyticsEvent.MODIFY_WIZARD_TAP_CONFIRM,
             mapOf(AnalyticsEvent.PARAM_SUPPLY_TYPE to supplyType.apiValue)
@@ -134,6 +142,7 @@ class ModifyEmailViewModel @Inject constructor(
         viewModelScope.launch {
             updateContractEmailUseCase(supplyType, _email.value)
         }
+        return true
     }
 
     fun onWizardComplete() {

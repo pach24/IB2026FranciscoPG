@@ -20,6 +20,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -62,7 +64,7 @@ fun ElectronicInvoiceWizardScreen(
     onVerificationCodeChanged: (String) -> Unit,
     onResendCode: () -> Unit,
     onBannerDismissed: () -> Unit,
-    onConfirmed: () -> Unit,
+    onConfirmed: () -> Boolean,
     onNavigateBack: () -> Unit,
     onNextPage: () -> Unit = {},
     onAbandonWizard: () -> Unit = {},
@@ -73,6 +75,7 @@ fun ElectronicInvoiceWizardScreen(
 ) {
     val colors = IberdrolaTheme.colors
     val scope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
     val pagerState = rememberPagerState(
         initialPage = 0,
         pageCount = { WIZARD_PAGE_COUNT }
@@ -83,6 +86,8 @@ fun ElectronicInvoiceWizardScreen(
     var showExitDialog by remember { mutableStateOf(false) }
     var showSuccess by remember { mutableStateOf(false) }
     var validationTrigger by remember { mutableIntStateOf(0) }
+
+    LaunchedEffect(currentPage) { focusManager.clearFocus() }
 
     BackHandler {
         if (isLoading) return@BackHandler
@@ -157,7 +162,8 @@ fun ElectronicInvoiceWizardScreen(
                         onVerificationCodeChanged = onVerificationCodeChanged,
                         onResendCode = onResendCode,
                         resendAttemptsLeft = resendAttemptsLeft,
-                        onOtpFieldTap = onOtpFieldTap
+                        onOtpFieldTap = onOtpFieldTap,
+                        enabled = !isLoading && !showSuccess && !pagerState.isScrollInProgress
                     )
                 }
             }
@@ -169,6 +175,7 @@ fun ElectronicInvoiceWizardScreen(
 
             StepBottomButtonBar(
                 onBack = {
+                    if (pagerState.isScrollInProgress) return@StepBottomButtonBar
                     if (currentPage == 0) {
                         if (hasData) showExitDialog = true else onNavigateBack()
                     } else {
@@ -177,9 +184,9 @@ fun ElectronicInvoiceWizardScreen(
                     }
                 },
                 onNext = {
+                    if (pagerState.isScrollInProgress) return@StepBottomButtonBar
                     if (currentPage == 1) {
-                        onConfirmed()
-                        showSuccess = true
+                        if (onConfirmed()) showSuccess = true
                     } else {
                         onNextPage()
                         scope.launch { pagerState.animateScrollToPage(currentPage + 1) }
@@ -235,7 +242,7 @@ private fun ElectronicInvoiceWizardScreenPreview() {
             onVerificationCodeChanged = {},
             onResendCode = {},
             onBannerDismissed = {},
-            onConfirmed = {},
+            onConfirmed = { true },
             onNavigateBack = {}
         )
     }
