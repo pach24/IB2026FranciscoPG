@@ -6,6 +6,7 @@ object AnalyticsEvent {
     const val TAP_MY_INVOICES_CARD = "tap_my_invoices_card"
     const val TAP_ELECTRONIC_INVOICE_CARD = "tap_electronic_invoice_card"
     const val TAP_LATEST_INVOICE_CARD = "tap_latest_invoice_card"
+    const val TAP_FORCE_CRASH = "tap_force_crash"
 
     // ── Pantalla Mis Facturas ────────────────────────────────────────────────
     const val TAP_TAB_LUZ = "tap_tab_luz"

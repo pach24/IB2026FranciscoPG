@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="action_filter">Filtrar</string>
+    <string name="main_force_crash">Forzar crash</string>
     <string name="app_name">IB2026 FranciscoPG</string>
     <string name="card_title_latest_invoice">Última factura</string>
     <string name="feedback_later">Responder más tarde</string>

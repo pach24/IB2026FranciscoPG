@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsEvent
 import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsTracker
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.CrashReporter
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetMockModeUseCase
@@ -25,7 +26,8 @@ class MainViewModel @Inject constructor(
     private val getMockModeUseCase: GetMockModeUseCase,
     private val setMockModeUseCase: SetMockModeUseCase,
     private val getInvoicesUseCase: GetInvoicesUseCase,
-    private val analyticsTracker: AnalyticsTracker
+    private val analyticsTracker: AnalyticsTracker,
+    private val crashReporter: CrashReporter
 ) : ViewModel() {
 
     private val _userName = MutableStateFlow("")
@@ -109,5 +111,10 @@ class MainViewModel @Inject constructor(
 
     fun onElectronicInvoiceCardClick() {
         analyticsTracker.logEvent(AnalyticsEvent.TAP_ELECTRONIC_INVOICE_CARD)
+    }
+
+    fun onForceCrashClick() {
+        analyticsTracker.logEvent(AnalyticsEvent.TAP_FORCE_CRASH)
+        crashReporter.forceCrash()
     }
 }
