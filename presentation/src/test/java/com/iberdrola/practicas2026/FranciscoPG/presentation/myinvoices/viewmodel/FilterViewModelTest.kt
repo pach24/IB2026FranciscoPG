@@ -1,5 +1,6 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel
 
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsTracker
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceFilters
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
@@ -17,10 +18,14 @@ class FilterViewModelTest {
 
     @Before
     fun setUp() {
-        viewModel = FilterViewModel()
+        val noOpTracker = object : AnalyticsTracker {
+            override fun logScreenView(screenName: String) {}
+            override fun logEvent(name: String, params: Map<String, String>) {}
+        }
+        viewModel = FilterViewModel(noOpTracker)
     }
 
-    // ── Estado inicial ────────────────────────────────────────────────────────
+
 
     @Test
     fun `initial state has empty filters`() {
@@ -38,7 +43,7 @@ class FilterViewModelTest {
         assertEquals(0L, stats.newestDateMillis)
     }
 
-    // ── updateFilters ─────────────────────────────────────────────────────────
+
 
     @Test
     fun `updateFilters changes draft but not applied`() {
@@ -74,7 +79,7 @@ class FilterViewModelTest {
         assertEquals(start, result.endDate)
     }
 
-    // ── applyFilters ──────────────────────────────────────────────────────────
+
 
     @Test
     fun `applyFilters copies draft to applied and activates filter mode`() {
@@ -96,7 +101,7 @@ class FilterViewModelTest {
         assertTrue(viewModel.isFilterModeActive.value)
     }
 
-    // ── clearFilters ──────────────────────────────────────────────────────────
+
 
     @Test
     fun `clearFilters resets draft, applied, and deactivates filter mode`() {
@@ -110,7 +115,7 @@ class FilterViewModelTest {
         assertFalse(viewModel.isFilterModeActive.value)
     }
 
-    // ── restoreFilters ────────────────────────────────────────────────────────
+
 
     @Test
     fun `restoreFilters restores draft and applied from snapshot`() {
@@ -137,7 +142,7 @@ class FilterViewModelTest {
         assertFalse(viewModel.isFilterModeActive.value)
     }
 
-    // ── updateStatistics ──────────────────────────────────────────────────────
+
 
     @Test
     fun `updateStatistics sets statistics correctly`() {
@@ -278,7 +283,7 @@ class FilterViewModelTest {
         assertEquals(30.0, filters.minAmount!!, 0.0)
     }
 
-    // ── updateStatistics: expansion de filtros aplicados ──────────────────────
+
 
     @Test
     fun `updateStatistics expands applied maxAmount when at ceiling`() {

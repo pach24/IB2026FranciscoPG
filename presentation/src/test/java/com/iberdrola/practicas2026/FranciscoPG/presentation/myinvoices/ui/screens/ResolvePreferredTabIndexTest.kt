@@ -121,7 +121,7 @@ class ResolvePreferredTabIndexTest {
         assertEquals(0, result)
     }
 
-    // ── FilteredEmpty tests ──────────────────────────────────────────────────
+
 
     // Electricidad filtrada vacía y Gas con datos, currentTab=0 → tab 1 (Gas)
     @Test

@@ -85,7 +85,6 @@ fun DateRangeSection(
     }
 }
 
-// Campo de fecha individual con floating label animado.
 @Composable
 private fun DateField(
     label: String,
@@ -212,8 +211,6 @@ private fun DateField(
     }
 }
 
-// --- Previews ---
-
 @Preview(name = "Vacío - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun DateRangeSectionEmptyPreview() {
@@ -244,11 +241,6 @@ private fun DateRangeSectionFilledPreview() {
     }
 }
 
-// Preview para el Animation Inspector de Android Studio.
-// Cómo usar:
-//   1. Pulsa ▶ (Start Animation Preview) en el panel de previews
-//   2. Usa el botón para disparar la transición
-//   3. Pausa y arrastra el scrubber para ir frame a frame
 @Preview(name = "Animación - Inspector", showBackground = true, widthDp = 360, heightDp = 200)
 @Composable
 private fun DateFieldAnimationInspectorPreview() {

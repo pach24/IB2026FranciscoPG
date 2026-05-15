@@ -66,7 +66,7 @@ class InvoiceRepositoryImplTest {
         repository = InvoiceRepositoryImpl(realApi, mockApi, configRepo, dao)
     }
 
-    // ── Mock mode ──────────────────────────────────────────────────────
+
 
     // En modo mock, obtiene facturas directamente de la API mock sin tocar Room
     @Test
@@ -108,7 +108,7 @@ class InvoiceRepositoryImplTest {
         assertTrue(result.isFailure)
     }
 
-    // ── Real mode: first load (forceRefresh=false) ─────────────────────
+
 
     // Primera carga con Room vacio: llama a la API y guarda en Room
     @Test
@@ -147,7 +147,7 @@ class InvoiceRepositoryImplTest {
         assertTrue(result.isFailure)
     }
 
-    // ── Real mode: force refresh ───────────────────────────────────────
+
 
     // ForceRefresh sincroniza datos de la API en Room
     @Test

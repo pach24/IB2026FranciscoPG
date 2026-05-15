@@ -149,7 +149,7 @@ class FilterInvoicesUseCaseTest {
         assertEquals(0, result.size)
     }
 
-    // ── Casos límite: fechas parciales ────────────────────────────────────────
+
 
     @Test
     fun `when only startDate set filters from that date onwards`() {
@@ -189,7 +189,7 @@ class FilterInvoicesUseCaseTest {
         assertTrue(result.any { it.id == "3" })
     }
 
-    // ── Casos límite: importes parciales ──────────────────────────────────────
+
 
     @Test
     fun `when only minAmount set filters from that amount upwards`() {
@@ -247,7 +247,7 @@ class FilterInvoicesUseCaseTest {
         assertTrue(result.none { it.id == "7" })
     }
 
-    // ── Casos límite: estados ─────────────────────────────────────────────────
+
 
     @Test
     fun `when filter status matches no invoice returns empty`() {

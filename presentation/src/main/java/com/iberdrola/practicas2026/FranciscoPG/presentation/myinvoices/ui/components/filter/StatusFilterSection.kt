@@ -31,7 +31,6 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Spacing
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 
-// Sección de filtrado por estado con checkboxes redondeados para cada opción
 @Composable
 fun StatusFilterSection(
     statusOptions: List<Pair<InvoiceStatus, String>>,

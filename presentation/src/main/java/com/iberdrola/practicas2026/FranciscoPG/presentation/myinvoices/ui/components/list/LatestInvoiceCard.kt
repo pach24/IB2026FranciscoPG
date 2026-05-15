@@ -81,7 +81,6 @@ fun LatestInvoiceCardComposable(
                 verticalAlignment = Alignment.Top
             ) {
                 Column(modifier = Modifier.weight(1f)) {
-                    // Título: "Última factura"
                     Text(
                         text = stringResource(R.string.card_title_latest_invoice),
                         fontFamily = IberFontBold,
@@ -91,7 +90,6 @@ fun LatestInvoiceCardComposable(
                         color = colors.darkGreyText
                     )
                     Spacer(modifier = Modifier.height(Spacing.dp4))
-                    // Tipo de suministro: "Factura Luz"
                     Text(
                         text = supplyType,
                         fontFamily = IberFontRegular,
@@ -101,7 +99,6 @@ fun LatestInvoiceCardComposable(
                     )
                 }
 
-                // Icono de suministro (Luz/Gas)
                 Icon(
                     painter = painterResource(iconRes),
                     contentDescription = null,
@@ -114,7 +111,6 @@ fun LatestInvoiceCardComposable(
 
             Spacer(modifier = Modifier.height(Spacing.dp14))
 
-            // Importe: "20,00 €"
             Text(
                 text = buildAnnotatedString {
                     append(amount)
@@ -132,7 +128,6 @@ fun LatestInvoiceCardComposable(
 
             Spacer(modifier = Modifier.height(Spacing.dp4))
 
-            // Rango de fechas: "01 feb. 2024 - 04 mar. 2024"
             Text(
                 text = dateRange,
                 fontFamily = IberFontRegular,
@@ -143,7 +138,6 @@ fun LatestInvoiceCardComposable(
 
             Spacer(modifier = Modifier.height(Spacing.dp10))
 
-            // Divisor horizontal
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -153,7 +147,6 @@ fun LatestInvoiceCardComposable(
 
             Spacer(modifier = Modifier.height(Spacing.dp14))
 
-            // Estado: "Pagada" / "Pendiente de Pago"
             StatusPillComposable(
                 text = status,
                 status = invoiceStatus
@@ -188,20 +181,17 @@ fun SkeletonLatestInvoiceCardComposable(modifier: Modifier = Modifier) {
                 verticalAlignment = Alignment.Top
             ) {
                 Column {
-                    // Titulo: "Ultima factura"
                     SkeletonBox(
                         width = Skeleton.cardTitleW,
                         height = Skeleton.cardTitleH
                     )
                     Spacer(modifier = Modifier.height(Spacing.dp8))
-                    // Tipo de suministro: "Factura Luz"
                     SkeletonBox(
                         width = Skeleton.cardSubW,
                         height = Skeleton.cardSubH
                     )
                 }
 
-                // Icono de suministro (Luz/Gas)
                 SkeletonBox(
                     width = Skeleton.cardIconW,
                     height = Skeleton.cardIconH,
@@ -209,21 +199,18 @@ fun SkeletonLatestInvoiceCardComposable(modifier: Modifier = Modifier) {
             }
 
             Spacer(modifier = Modifier.height(Spacing.dp21))
-            // Importe: "20,00 €"
             SkeletonBox(
                 width = Skeleton.cardAmountW,
                 height = Skeleton.cardAmountH
             )
 
             Spacer(modifier = Modifier.height(Spacing.dp10))
-            // Rango de fechas: "01 feb. 2024 - 04 mar. 2024"
             SkeletonBox(
                 width = Skeleton.cardDatesW,
                 height = Skeleton.cardDatesH
             )
 
             Spacer(modifier = Modifier.height(Spacing.dp14))
-            // Divisor horizontal
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -232,7 +219,6 @@ fun SkeletonLatestInvoiceCardComposable(modifier: Modifier = Modifier) {
             )
 
             Spacer(modifier = Modifier.height(Spacing.dp12))
-            // Estado: "Pagada" / "Pendiente de Pago"
             ShimmerBox(
                 width = Skeleton.cardStatusW,
                 height = Skeleton.cardStatusH,
@@ -256,7 +242,6 @@ private fun SkeletonBox(
     )
 }
 
-// Última factura
 @DevicePreview
 @Composable
 private fun PreviewLatestInvoiceCardComposable() {
@@ -271,7 +256,6 @@ private fun PreviewLatestInvoiceCardComposable() {
     }
 }
 
-// Skeleton de la última factura
 @DevicePreview
 @Composable
 private fun PreviewSkeletonLatestInvoiceCardComposable() {
@@ -280,14 +264,12 @@ private fun PreviewSkeletonLatestInvoiceCardComposable() {
     }
 }
 
-// Overlay: última factura + skeleton superpuesto
 @DevicePreview
 @Composable
 private fun PreviewOverlaySkeletonOnCard() {
     IberdrolaTheme {
         ShimmerHost {
             Box {
-                // Última factura (real)
                 LatestInvoiceCardComposable(
                     amount = "20,00",
                     currencySymbol = "€",
@@ -295,7 +277,6 @@ private fun PreviewOverlaySkeletonOnCard() {
                     status = "Pagada",
                     invoiceStatus = InvoiceStatus.PAID
                 )
-                // Skeleton de la última factura (superpuesto)
                 SkeletonLatestInvoiceCardComposable(
                     modifier = Modifier.alpha(0.8f)
                 )

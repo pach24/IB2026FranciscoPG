@@ -43,14 +43,11 @@ fun GenericBanner(
     modifier: Modifier = Modifier,
     durationMillis: Long = 4000L
 ) {
-    // Progreso de entrada: 0f = oculto, 1f = visible
     val progress = remember { Animatable(0f) }
-    // Escala con spring bounce
     val scale = remember { Animatable(0f) }
 
     LaunchedEffect(visible) {
         if (visible) {
-            // Entrada: slide + fade con spring, y scale con bounce
             launch {
                 progress.animateTo(
                     targetValue = 1f,
@@ -69,11 +66,9 @@ fun GenericBanner(
                     )
                 )
             }
-            // Auto-dismiss
             delay(durationMillis)
             onDismiss()
         } else {
-            // Salida: suave y rápida
             launch {
                 progress.animateTo(
                     targetValue = 0f,
@@ -89,7 +84,6 @@ fun GenericBanner(
         }
     }
 
-    // Solo renderizar si hay animación activa
     if (progress.value > 0f || scale.value > 0f) {
         val shape = RoundedCornerShape(Radius.dp16)
 
@@ -97,11 +91,8 @@ fun GenericBanner(
             modifier = modifier
                 .padding(horizontal = Spacing.dp12)
                 .graphicsLayer {
-                    // Slide desde abajo con overshoot (spring)
                     translationY = (1f - progress.value) * 200f
-                    // Fade in
                     alpha = progress.value.coerceIn(0f, 1f)
-                    // Scale bounce
                     scaleX = scale.value.coerceIn(0f, 1.2f)
                     scaleY = scale.value.coerceIn(0f, 1.2f)
                 }

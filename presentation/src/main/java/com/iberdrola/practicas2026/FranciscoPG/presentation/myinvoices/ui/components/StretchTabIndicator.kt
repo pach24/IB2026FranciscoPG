@@ -22,8 +22,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 
-// ── Geometria del indicador (testable, pura) ─────────────────────────────────
-
 /**
  * Resultado del calculo de posicion y tamaño del indicador stretch.
  */
@@ -64,8 +62,6 @@ fun computeStretchGeometry(
     )
 }
 
-// ── Animacion de posicion (testable) ─────────────────────────────────────────
-
 private const val CLICK_DURATION_MS = 500
 
 /**
@@ -86,8 +82,6 @@ fun resolveIndicatorTarget(
         pagerState.currentPage + pagerState.currentPageOffsetFraction
     }
 }
-
-// ── Composable ───────────────────────────────────────────────────────────────
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

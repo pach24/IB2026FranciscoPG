@@ -9,7 +9,7 @@ import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 
 class InvoiceFiltersTest {
 
-    // ── normalize ─────────────────────────────────────────────────────────────
+
 
     @Test
     fun `normalize swaps inverted dates`() {
@@ -117,7 +117,7 @@ class InvoiceFiltersTest {
         assertNull(normalized.maxAmount)
     }
 
-    // ── activeCount ───────────────────────────────────────────────────────────
+
 
     @Test
     fun `activeCount is zero when no filters set`() {

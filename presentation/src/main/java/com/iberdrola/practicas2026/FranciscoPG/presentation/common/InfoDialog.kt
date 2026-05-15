@@ -76,7 +76,6 @@ fun InfoDialog(
 
             Spacer(modifier = Modifier.height(Spacing.dp24))
 
-            // Botón cerrar
             androidx.compose.foundation.layout.Box(
                 modifier = Modifier
                     .fillMaxWidth()

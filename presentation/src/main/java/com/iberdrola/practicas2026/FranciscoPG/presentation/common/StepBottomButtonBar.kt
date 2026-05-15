@@ -81,7 +81,6 @@ fun StepBottomButtonBar(
                     bottom = Spacing.dp16 + Spacing.dp48 ),
             horizontalArrangement = Arrangement.spacedBy(Spacing.dp12)
         ) {
-            // Botón Anterior
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -104,7 +103,6 @@ fun StepBottomButtonBar(
                 )
             }
 
-            // Botón Siguiente
             val nextInteractionSource = remember { MutableInteractionSource() }
             Box(
                 modifier = Modifier

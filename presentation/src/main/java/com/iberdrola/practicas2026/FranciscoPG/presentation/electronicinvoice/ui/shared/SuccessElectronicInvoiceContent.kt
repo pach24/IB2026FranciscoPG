@@ -58,10 +58,8 @@ import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.Stroke
 import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.TextSize
 import kotlinx.coroutines.delay
 
-// ── Posición manual de los destellos  ──────────────────────────
 private val SPARKLES_OFFSET_X = 70.dp   // positivo → derecha, negativo → izquierda
 private val SPARKLES_OFFSET_Y = (-80).dp // positivo → abajo,   negativo → arriba
-// ─────────────────────────────────────────────────────────────────────────────
 
 @Composable
 fun SuccessElectronicInvoiceContent(

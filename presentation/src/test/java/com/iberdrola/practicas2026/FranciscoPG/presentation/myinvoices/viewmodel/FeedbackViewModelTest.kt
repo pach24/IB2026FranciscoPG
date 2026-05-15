@@ -1,6 +1,7 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel
 
 import app.cash.turbine.test
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsTracker
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.FeedbackInteraction
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.IncrementExitCounterUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.ShouldShowFeedbackPromptUseCase
@@ -43,10 +44,15 @@ class FeedbackViewModelTest {
         coEvery { incrementExitCounter() } just runs
         coEvery { updateFeedbackInteraction(any()) } just runs
 
+        val noOpTracker = object : AnalyticsTracker {
+            override fun logScreenView(screenName: String) {}
+            override fun logEvent(name: String, params: Map<String, String>) {}
+        }
         viewModel = FeedbackViewModel(
             incrementExitCounter,
             shouldShowFeedback,
-            updateFeedbackInteraction
+            updateFeedbackInteraction,
+            noOpTracker
         )
     }
 
@@ -169,11 +175,11 @@ class FeedbackViewModelTest {
         viewModel.onFeedbackLater()
         advanceUntilIdle()
 
-        // Now dismiss — should be ignored because explicitActionTaken = true
+
         viewModel.onSheetDismissed()
         advanceUntilIdle()
 
-        // DISMISSED should NOT have been called
+
         coVerify(exactly = 0) { updateFeedbackInteraction(FeedbackInteraction.DISMISSED) }
     }
 }

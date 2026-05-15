@@ -40,8 +40,6 @@ class FilterViewModel @Inject constructor(
 
     private var _allInvoices: List<Invoice> = emptyList()
 
-    // ── Acciones de filtro ───────────────────────────────────────────────────
-
     fun updateFilters(filters: InvoiceFilters) {
         _filterState.value = _filterState.value.copy(filters = filters.normalize())
         recomputeDynamicDates()
@@ -94,8 +92,6 @@ class FilterViewModel @Inject constructor(
             AnalyticsEvent.PARAM_CHECKED to checked.toString()
         )
     )
-
-    // ── Estadísticas ─────────────────────────────────────────────────────────
 
     /**
      * Actualiza las estadísticas del filtro combinando datos de ambos tabs.

@@ -40,17 +40,11 @@ class InvoicesViewModel @Inject constructor(
 
     private val isGasEnabled = remoteConfig.isGasContractsEnabled
 
-    // ── Supply streams ───────────────────────────────────────────────────────
-
     private val electricity = SupplyStream(SupplyType.ELECTRICITY)
     private val gas = SupplyStream(SupplyType.GAS)
 
-    // ── Filters (connected from FilterViewModel via Route) ───────────────────
-
     private val _appliedFilters = MutableStateFlow(InvoiceFilters())
     private val _isFilterModeActive = MutableStateFlow(false)
-
-    // ── Tab / UI state ───────────────────────────────────────────────────────
 
     private val _activeTab = MutableStateFlow(0)
     private val _preferredTabIndex = MutableStateFlow(0)
@@ -59,8 +53,6 @@ class InvoicesViewModel @Inject constructor(
 
     private var currentMock = true
     private var filtersConnected = false
-
-    // ── Derived: per-supply list states ──────────────────────────────────────
 
     private val electricityListState: StateFlow<InvoiceListUiState> = combine(
         electricity.allInvoices, _appliedFilters, electricity.loadingState, _isFilterModeActive
@@ -73,8 +65,6 @@ class InvoicesViewModel @Inject constructor(
     ) { invoices, filters, loadState, filterModeActive ->
         resolveListState(invoices, filters, loadState, filterModeActive, SupplyType.GAS)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), InvoiceListUiState.Loading)
-
-    // ── Derived: coordination states ─────────────────────────────────────────
 
     private val bothLoaded: StateFlow<Boolean> = combine(
         electricityListState, gasListState
@@ -89,8 +79,6 @@ class InvoicesViewModel @Inject constructor(
         if (!isGasEnabled) loaded && elec is InvoiceListUiState.Empty
         else loaded && elec is InvoiceListUiState.Empty && gas is InvoiceListUiState.Empty
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
-
-    // ── Public: unified UI state ─────────────────────────────────────────────
 
     @Suppress("UNCHECKED_CAST")
     val uiState: StateFlow<InvoicesUiState> = combine(
@@ -125,8 +113,6 @@ class InvoicesViewModel @Inject constructor(
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), InvoicesUiState())
 
-    // ── Init: auto-switch tab ────────────────────────────────────────────────
-
     init {
         viewModelScope.launch {
             combine(electricityListState, gasListState, bothLoaded, _activeTab) { elec, gas, loaded, tab ->
@@ -141,8 +127,6 @@ class InvoicesViewModel @Inject constructor(
             }
         }
     }
-
-    // ── Public API ───────────────────────────────────────────────────────────
 
     fun onEvent(event: InvoicesEvent) {
         when (event) {
@@ -201,8 +185,6 @@ class InvoicesViewModel @Inject constructor(
         return elecCount + gasCount
     }
 
-    // ── Private: fetch logic ─────────────────────────────────────────────────
-
     private fun onMockModeChanged(useMock: Boolean) {
         val modeChanged = useMock != currentMock
         currentMock = useMock
@@ -246,8 +228,6 @@ class InvoicesViewModel @Inject constructor(
         }
     }
 
-    // ── Private: list state resolution ───────────────────────────────────────
-
     private fun resolveListState(
         invoices: List<Invoice>,
         filters: InvoiceFilters,
@@ -275,8 +255,6 @@ class InvoicesViewModel @Inject constructor(
             invoiceCount = filtered.size
         )
     }
-
-    // ── Inner class: per-supply mutable state ────────────────────────────────
 
     private inner class SupplyStream(val supplyType: SupplyType) {
         val allInvoices = MutableStateFlow<List<Invoice>>(emptyList())

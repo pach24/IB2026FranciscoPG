@@ -1,4 +1,3 @@
-// Archivo: SetMockModeUseCase.kt (Ubicación: domain/usecase)
 package com.iberdrola.practicas2026.FranciscoPG.domain.usecase
 
 import com.iberdrola.practicas2026.FranciscoPG.domain.repository.ConfigurationRepository

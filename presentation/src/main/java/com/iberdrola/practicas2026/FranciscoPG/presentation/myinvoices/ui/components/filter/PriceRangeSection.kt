@@ -44,7 +44,6 @@ import kotlin.math.ceil
 import kotlin.math.floor
 import kotlinx.coroutines.launch
 
-// Sección de rango de importe con badge central, slider de doble thumb y etiquetas de límites
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PriceRangeSection(
@@ -153,7 +152,6 @@ fun PriceRangeSection(
                     val startPos = width * ((rangeSliderState.activeRangeStart - minLimit) / (maxLimit - minLimit))
                     val endPos = width * ((rangeSliderState.activeRangeEnd - minLimit) / (maxLimit - minLimit))
 
-                    // Línea inactiva (fondo)
                     drawLine(
                         color = inactiveColor,
                         start = Offset(0f, trackHeight / 2),
@@ -161,7 +159,6 @@ fun PriceRangeSection(
                         strokeWidth = trackHeight,
                         cap = StrokeCap.Round
                     )
-                    // Línea activa (verde)
                     drawLine(
                         color = trackColor,
                         start = Offset(startPos, trackHeight / 2),
@@ -173,7 +170,6 @@ fun PriceRangeSection(
             }
         )
 
-        // Etiquetas de extremos
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween

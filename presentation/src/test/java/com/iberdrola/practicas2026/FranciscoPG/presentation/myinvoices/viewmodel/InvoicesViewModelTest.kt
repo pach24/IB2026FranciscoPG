@@ -1,6 +1,8 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel
 
 import com.iberdrola.practicas2026.FranciscoPG.core.error.ErrorClassifier
+import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsTracker
+import com.iberdrola.practicas2026.FranciscoPG.domain.config.RemoteConfigProvider
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.Invoice
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.InvoiceStatus
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
@@ -86,7 +88,16 @@ class InvoicesViewModelTest {
         filterInvoicesUseCase = FilterInvoicesUseCase()
         invoiceUiMapper = mockk()
         errorClassifier = ErrorClassifier()
-        viewModel = InvoicesViewModel(getInvoicesUseCase, filterInvoicesUseCase, invoiceUiMapper, errorClassifier)
+        val remoteConfig = object : RemoteConfigProvider {
+            override val isGasContractsEnabled = true
+            override val gasContractsEnabledFlow = kotlinx.coroutines.flow.MutableStateFlow(true)
+            override suspend fun fetchAndActivate() {}
+        }
+        val noOpTracker = object : AnalyticsTracker {
+            override fun logScreenView(screenName: String) {}
+            override fun logEvent(name: String, params: Map<String, String>) {}
+        }
+        viewModel = InvoicesViewModel(getInvoicesUseCase, filterInvoicesUseCase, invoiceUiMapper, errorClassifier, remoteConfig, noOpTracker)
     }
 
     @After
