@@ -85,10 +85,18 @@ afterEvaluate {
     tasks.named("assembleDebug") {
         doLast {
             val adb = "${android.sdkDirectory}/platform-tools/adb"
-            ProcessBuilder(adb, "reverse", "tcp:3001", "tcp:3001")
-                .inheritIO()
+            val devices = ProcessBuilder(adb, "devices")
                 .start()
-                .waitFor()
+                .inputStream.bufferedReader().readLines()
+                .filter { it.endsWith("\tdevice") && !it.startsWith("emulator-") }
+                .map { it.substringBefore("\t") }
+
+            devices.forEach { serial ->
+                ProcessBuilder(adb, "-s", serial, "reverse", "tcp:3001", "tcp:3001")
+                    .inheritIO()
+                    .start()
+                    .waitFor()
+            }
         }
     }
 }

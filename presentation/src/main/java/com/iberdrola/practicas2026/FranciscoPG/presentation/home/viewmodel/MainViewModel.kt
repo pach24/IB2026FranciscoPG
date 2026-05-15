@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsEvent
 import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsTracker
 import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.CrashReporter
+import com.iberdrola.practicas2026.FranciscoPG.domain.config.RemoteConfigProvider
 import com.iberdrola.practicas2026.FranciscoPG.domain.model.SupplyType
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetInvoicesUseCase
 import com.iberdrola.practicas2026.FranciscoPG.domain.usecase.GetMockModeUseCase
@@ -27,8 +28,11 @@ class MainViewModel @Inject constructor(
     private val setMockModeUseCase: SetMockModeUseCase,
     private val getInvoicesUseCase: GetInvoicesUseCase,
     private val analyticsTracker: AnalyticsTracker,
-    private val crashReporter: CrashReporter
+    private val crashReporter: CrashReporter,
+    remoteConfig: RemoteConfigProvider
 ) : ViewModel() {
+
+    private val isGasEnabled = remoteConfig.isGasContractsEnabled
 
     private val _userName = MutableStateFlow("")
     val userName: StateFlow<String> = _userName.asStateFlow()
@@ -69,10 +73,10 @@ class MainViewModel @Inject constructor(
             try {
                 val minDelay = if (showShimmer) async { delay(MIN_LOADING_MS) } else null
                 val electricityInvoices = async { getInvoicesUseCase(SupplyType.ELECTRICITY, forceRefresh = true) }
-                val gasInvoices = async { getInvoicesUseCase(SupplyType.GAS, forceRefresh = true) }
+                val gasInvoices = if (isGasEnabled) async { getInvoicesUseCase(SupplyType.GAS, forceRefresh = true) } else null
 
                 val all = (electricityInvoices.await().getOrNull().orEmpty() +
-                        gasInvoices.await().getOrNull().orEmpty())
+                        gasInvoices?.await()?.getOrNull().orEmpty())
 
                 val latest = all.maxByOrNull { it.chargeDate }
 
