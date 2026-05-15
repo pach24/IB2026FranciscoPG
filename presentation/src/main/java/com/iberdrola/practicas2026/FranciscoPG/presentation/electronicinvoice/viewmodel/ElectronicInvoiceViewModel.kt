@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,6 +34,8 @@ class ElectronicInvoiceViewModel @Inject constructor(
     private val analyticsTracker: AnalyticsTracker
 ) : ViewModel() {
 
+    private val _allContracts = MutableStateFlow<List<Contract>>(emptyList())
+
     private val _contracts = MutableStateFlow<List<Contract>>(emptyList())
     val contracts: StateFlow<List<Contract>> = _contracts.asStateFlow()
 
@@ -40,15 +43,27 @@ class ElectronicInvoiceViewModel @Inject constructor(
     val navigationEvent: SharedFlow<ElectronicInvoiceNavigationEvent> = _navigationEvent.asSharedFlow()
 
     init {
+        viewModelScope.launch {
+            combine(_allContracts, remoteConfig.gasContractsEnabledFlow) { all, gasEnabled ->
+                if (gasEnabled) all else all.filter { it.supplyType != SupplyType.GAS }
+            }.collect { filtered ->
+                _contracts.value = filtered
+            }
+        }
         loadContracts()
     }
 
     fun loadContracts() {
         viewModelScope.launch {
             getContractsUseCase().onSuccess { contracts ->
-                _contracts.value = if (remoteConfig.isGasContractsEnabled) contracts
-                    else contracts.filter { it.supplyType != SupplyType.GAS }
+                _allContracts.value = contracts
             }
+        }
+    }
+
+    fun onResume() {
+        viewModelScope.launch {
+            remoteConfig.fetchAndActivate()
         }
     }
 

@@ -73,6 +73,7 @@
         onResendCode: () -> Unit,
         resendAttemptsLeft: Int,
         modifier: Modifier = Modifier,
+        enabled: Boolean = true,
         onOtpFieldTap: () -> Unit = {}
     ) {
         val colors = IberdrolaTheme.colors
@@ -122,7 +123,7 @@
                     .fillMaxWidth()
                     .padding(horizontal = Spacing.dp24)
                     .clip(RoundedCornerShape(Radius.dp24))
-                    .clickable { onOtpFieldTap(); showOtpSheet = true }
+                    .then(if (enabled) Modifier.clickable { onOtpFieldTap(); showOtpSheet = true } else Modifier)
                     .padding(horizontal = Spacing.dp16, vertical = Spacing.dp8)
             ) {
                 Box(modifier = Modifier.padding(bottom = Spacing.dp8)) {
@@ -232,10 +233,12 @@
                                     }
                                 }
                                 .clip(RoundedCornerShape(Radius.dp50))
-                                .clickable(
-                                    interactionSource = resendInteraction,
-                                    indication = ripple(bounded = false),
-                                    onClick = onResendCode
+                                .then(
+                                    if (enabled) Modifier.clickable(
+                                        interactionSource = resendInteraction,
+                                        indication = ripple(bounded = false),
+                                        onClick = onResendCode
+                                    ) else Modifier
                                 )
                                 .padding(horizontal = Spacing.dp12, vertical = Spacing.dp6)
                         ) {
