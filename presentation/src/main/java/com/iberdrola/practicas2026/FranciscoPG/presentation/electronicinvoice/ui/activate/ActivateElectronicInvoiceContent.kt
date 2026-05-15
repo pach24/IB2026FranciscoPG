@@ -80,7 +80,7 @@ fun ActivateElectronicInvoiceContent(
     var showBanner by remember { mutableStateOf(false) }
     var emailHasBlurred by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) { focusRequester.requestFocus() }
+    LaunchedEffect(Unit) { if (email.isEmpty()) focusRequester.requestFocus() }
     val showError = (emailHasBlurred || validationTrigger > 0) && email.isNotEmpty() && !isEmailValid
     val emailShakeOffset = remember { Animatable(0f) }
     val checkboxShakeOffset = remember { Animatable(0f) }

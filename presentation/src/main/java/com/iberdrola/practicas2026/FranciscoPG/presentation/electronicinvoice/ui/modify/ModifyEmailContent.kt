@@ -64,7 +64,7 @@ fun ModifyEmailContent(
     val focusRequester = remember { FocusRequester() }
     var emailHasBlurred by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) { focusRequester.requestFocus() }
+    LaunchedEffect(Unit) { if (email.isEmpty()) focusRequester.requestFocus() }
     LaunchedEffect(validationTrigger) { if (validationTrigger > 0) emailHasBlurred = true }
     val showError = emailHasBlurred && email.isNotEmpty() && (!isEmailValid || isSameAsCurrentEmail)
     val shakeOffset = remember { Animatable(0f) }
