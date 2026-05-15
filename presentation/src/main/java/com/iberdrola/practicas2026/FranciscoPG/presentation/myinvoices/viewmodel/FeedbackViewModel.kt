@@ -1,6 +1,5 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsEvent
@@ -47,7 +46,6 @@ class FeedbackViewModel @Inject constructor(
         viewModelScope.launch {
             incrementExitCounterUseCase()
             val shouldShow = shouldShowFeedbackPromptUseCase()
-            Log.d(TAG, "onExitInvoices -> shouldShowFeedback=$shouldShow")
             if (shouldShow) {
                 explicitActionTaken = false
                 _sheetState.value = FeedbackSheetState.Asking
@@ -91,7 +89,6 @@ class FeedbackViewModel @Inject constructor(
 
 
     companion object {
-        private const val TAG = "FeedbackVM"
         private const val THANK_YOU_DELAY_MS = 1500L
     }
 }

@@ -1,6 +1,5 @@
 package com.iberdrola.practicas2026.FranciscoPG.data.firebase
 
-import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.remoteconfig.ConfigUpdate
 import com.google.firebase.remoteconfig.ConfigUpdateListener
@@ -33,15 +32,11 @@ class FirebaseRemoteConfigProvider @Inject constructor() : RemoteConfigProvider 
 
         remoteConfig.addOnConfigUpdateListener(object : ConfigUpdateListener {
             override fun onUpdate(configUpdate: ConfigUpdate) {
-                Log.d(TAG, "onUpdate keys=${configUpdate.updatedKeys}")
                 remoteConfig.activate().addOnSuccessListener {
-                    val newValue = remoteConfig.getBoolean(KEY_GAS_CONTRACTS_ENABLED)
-                    Log.d(TAG, "activated → $KEY_GAS_CONTRACTS_ENABLED=$newValue")
-                    _gasContractsEnabled.value = newValue
+                    _gasContractsEnabled.value = remoteConfig.getBoolean(KEY_GAS_CONTRACTS_ENABLED)
                 }
             }
             override fun onError(error: FirebaseRemoteConfigException) {
-                Log.e(TAG, "realtime config error: ${error.message}")
             }
         })
     }
@@ -56,6 +51,5 @@ class FirebaseRemoteConfigProvider @Inject constructor() : RemoteConfigProvider 
 
     companion object {
         private const val KEY_GAS_CONTRACTS_ENABLED = "gas_contracts_enabled"
-        private const val TAG = "RemoteConfig"
     }
 }

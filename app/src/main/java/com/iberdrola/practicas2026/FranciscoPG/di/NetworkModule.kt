@@ -1,6 +1,5 @@
 package com.iberdrola.practicas2026.FranciscoPG.di
 
-import android.util.Log
 import co.infinum.retromock.Retromock
 import com.google.gson.GsonBuilder
 import com.iberdrola.practicas2026.FranciscoPG.DeviceUtils.isEmulator
@@ -13,7 +12,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -33,33 +31,13 @@ object NetworkModule {
         } else {
             "https://localhost:3001/"
         }
-        Log.d("NetworkModule", "isEmulator=$emulator, BASE_URL=$url")
         return url
     }
 
     @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
-        val logging = HttpLoggingInterceptor { message ->
-            Log.d("OkHttp", message)
-        }.apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-
         return OkHttpClient.Builder()
-            .addInterceptor(logging)
-            .addInterceptor { chain ->
-                val request = chain.request()
-                Log.d("OkHttp", "${request.method} ${request.url}")
-                try {
-                    val response = chain.proceed(request)
-                    Log.d("OkHttp", "Response ${response.code} ${request.url}")
-                    response
-                } catch (e: Exception) {
-                    Log.e("OkHttp", "Error connecting to ${request.url}: ${e.javaClass.simpleName}: ${e.message}")
-                    throw e
-                }
-            }
             .connectTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
             .hostnameVerifier { _,_ -> true }

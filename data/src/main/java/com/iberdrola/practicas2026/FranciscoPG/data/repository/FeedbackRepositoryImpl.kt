@@ -1,7 +1,6 @@
 package com.iberdrola.practicas2026.FranciscoPG.data.repository
 
 import android.content.Context
-import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -31,12 +30,10 @@ class FeedbackRepositoryImpl @Inject constructor(
         val count = context.feedbackDataStore.data
             .map { prefs -> prefs[exitCountKey] ?: 0 }
             .first()
-        Log.d(TAG, "getExitCount() = $count")
         return count
     }
 
     override suspend fun setExitCount(count: Int) {
-        Log.d(TAG, "setExitCount($count)")
         context.feedbackDataStore.edit { prefs ->
             prefs[exitCountKey] = count
         }
@@ -51,18 +48,13 @@ class FeedbackRepositoryImpl @Inject constructor(
         } catch (_: IllegalArgumentException) {
             FeedbackInteraction.NONE
         }
-        Log.d(TAG, "getLastInteraction() = $interaction (raw=$value)")
         return interaction
     }
 
     override suspend fun setLastInteraction(interaction: FeedbackInteraction) {
-        Log.d(TAG, "setLastInteraction($interaction)")
         context.feedbackDataStore.edit { prefs ->
             prefs[lastInteractionKey] = interaction.name
         }
     }
 
-    companion object {
-        private const val TAG = "FeedbackRepo"
-    }
 }

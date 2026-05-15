@@ -1,7 +1,6 @@
 package com.iberdrola.practicas2026.FranciscoPG
 
 import android.os.Build
-import android.util.Log
 
 object DeviceUtils {
     fun isEmulator(): Boolean {
@@ -23,11 +22,6 @@ object DeviceUtils {
                 Build.HARDWARE == "goldfish" ||
                 Build.HARDWARE.contains("ranchu"))
 
-        Log.d("DeviceUtils", "isEmulator=$result | " +
-                "FINGERPRINT=${Build.FINGERPRINT} | " +
-                "MODEL=${Build.MODEL} | " +
-                "MANUFACTURER=${Build.MANUFACTURER} | " +
-                "HARDWARE=${Build.HARDWARE}")
         return result
     }
 }

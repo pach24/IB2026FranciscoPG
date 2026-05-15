@@ -1,6 +1,5 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iberdrola.practicas2026.FranciscoPG.core.error.ErrorClassifier
@@ -221,7 +220,6 @@ class InvoicesViewModel @Inject constructor(
 
     private fun fetchSupply(stream: SupplyStream, forceRefresh: Boolean) {
         if (stream.hasLoaded && !forceRefresh) return
-        Log.d(TAG, "fetchSupply(${stream.supplyType}, mock=$currentMock, force=$forceRefresh)")
 
         val currentGeneration = ++stream.fetchGeneration
         stream.loadingState.value = InvoiceListUiState.Loading
@@ -233,19 +231,16 @@ class InvoicesViewModel @Inject constructor(
                 if (currentGeneration != stream.fetchGeneration) return@launch
                 result.fold(
                     onSuccess = { invoices ->
-                        Log.d(TAG, "Fetched ${invoices.size} ${stream.supplyType} invoices")
                         stream.hasLoaded = true
                         stream.allInvoices.value = invoices
                         stream.loadingState.value = InvoiceListUiState.Empty // placeholder, combine decides
                     },
                     onFailure = { error ->
-                        Log.e(TAG, "Error fetching ${stream.supplyType} invoices", error)
                         stream.loadingState.value = errorClassifier.classify(error)
                     }
                 )
             } catch (e: Exception) {
                 if (currentGeneration != stream.fetchGeneration) return@launch
-                Log.e(TAG, "Unexpected exception fetching ${stream.supplyType} invoices", e)
                 stream.loadingState.value = errorClassifier.classify(e)
             }
         }
@@ -290,7 +285,4 @@ class InvoicesViewModel @Inject constructor(
         var hasLoaded = false
     }
 
-    companion object {
-        private const val TAG = "InvoicesVM"
-    }
 }

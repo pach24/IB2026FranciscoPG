@@ -1,6 +1,5 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.home.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.AnalyticsEvent
@@ -64,8 +63,6 @@ class MainViewModel @Inject constructor(
     fun refreshLatestInvoice() = fetchLatestInvoice(showShimmer = false)
 
     private fun fetchLatestInvoice(showShimmer: Boolean = true) {
-
-        Log.d("DEBUG_REFRESH", "Refrescando datos...")
 
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {

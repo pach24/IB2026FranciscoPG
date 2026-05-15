@@ -1,7 +1,6 @@
 package com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.screens
 import com.iberdrola.practicas2026.FranciscoPG.presentation.R
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.slideInHorizontally
@@ -136,7 +135,6 @@ fun InvoicesScreen(
                     onTabChanged = { onEvent(InvoicesEvent.OnTabChanged(it)) },
                     onBackClick = {
                         isNavigatingBack = true
-                        Log.d("InvoicesScreen", "Back pressed, evaluating feedback")
                         onBackClick()
                     },
                     onFeedbackFaceClick = onFeedbackRated,
