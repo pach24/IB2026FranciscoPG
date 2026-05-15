@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.viewmodel.ElectronicInvoiceNavigationEvent
 import com.iberdrola.practicas2026.FranciscoPG.presentation.electronicinvoice.viewmodel.ElectronicInvoiceViewModel
@@ -16,6 +17,11 @@ fun ElectronicInvoiceRoute(
 ) {
     val viewModel: ElectronicInvoiceViewModel = hiltViewModel()
     val contracts by viewModel.contracts.collectAsStateWithLifecycle()
+
+    LifecycleResumeEffect(Unit) {
+        viewModel.onResume()
+        onPauseOrDispose {}
+    }
 
     LaunchedEffect(Unit) {
         viewModel.navigationEvent.collect { event ->
