@@ -1,5 +1,5 @@
 package com.iberdrola.practicas2026.FranciscoPG.data.firebase
-/*
+
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.iberdrola.practicas2026.FranciscoPG.domain.analytics.CrashReporter
 import javax.inject.Inject
@@ -19,4 +19,3 @@ class FirebaseCrashReporter @Inject constructor() : CrashReporter {
         throw RuntimeException("Forced test crash — 4ª entrega")
     }
 }
-*/
