@@ -7,7 +7,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -23,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.list.EmptyStateComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.ui.components.list.ErrorStateComposable
 import com.iberdrola.practicas2026.FranciscoPG.presentation.myinvoices.model.InvoiceListUiState
+import com.iberdrola.practicas2026.FranciscoPG.presentation.theme.IberdrolaTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -110,8 +110,8 @@ fun InvoiceTabContent(
                     PullToRefreshDefaults.LoadingIndicator(
                         state = pullState,
                         isRefreshing = false,
-                        color = MaterialTheme.colorScheme.primary,
-                        containerColor = MaterialTheme.colorScheme.surface,
+                        color = IberdrolaTheme.colors.iberdrolaGreen,
+                        containerColor = IberdrolaTheme.colors.surface,
                         modifier = Modifier.align(Alignment.TopCenter)
                     )
                 }
@@ -162,8 +162,8 @@ fun InvoiceTabContent(
                     PullToRefreshDefaults.LoadingIndicator(
                         state = pullState,
                         isRefreshing = false,
-                        color = MaterialTheme.colorScheme.primary,
-                        containerColor = MaterialTheme.colorScheme.surface,
+                        color = IberdrolaTheme.colors.iberdrolaGreen,
+                        containerColor = IberdrolaTheme.colors.surface,
                         modifier = Modifier.align(Alignment.TopCenter)
                     )
                 }
@@ -188,8 +188,8 @@ fun InvoiceTabContent(
                     PullToRefreshDefaults.LoadingIndicator(
                         state = pullState,
                         isRefreshing = false,
-                        color = MaterialTheme.colorScheme.primary,
-                        containerColor = MaterialTheme.colorScheme.surface,
+                        color = IberdrolaTheme.colors.iberdrolaGreen,
+                        containerColor = IberdrolaTheme.colors.surface,
                         modifier = Modifier.align(Alignment.TopCenter)
                     )
                 }

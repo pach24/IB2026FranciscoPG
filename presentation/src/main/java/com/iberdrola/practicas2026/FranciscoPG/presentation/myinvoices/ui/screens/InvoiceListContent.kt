@@ -132,8 +132,8 @@ fun InvoiceListComposeScreen(
             PullToRefreshDefaults.LoadingIndicator(
                 state = pullToRefreshState,
                 isRefreshing = isRefreshing,
-                color = MaterialTheme.colorScheme.primary,
-                containerColor = MaterialTheme.colorScheme.surface,
+                color = IberdrolaTheme.colors.iberdrolaGreen,
+                containerColor = IberdrolaTheme.colors.surface,
                 modifier = Modifier.align(Alignment.TopCenter)
             )
         }

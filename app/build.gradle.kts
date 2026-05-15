@@ -81,3 +81,16 @@ dependencies {
     implementation(libs.firebase.crashlytics)
 }
 
+afterEvaluate {
+    tasks.named("assembleDebug") {
+        doLast {
+            val adb = "${android.sdkDirectory}/platform-tools/adb"
+            ProcessBuilder(adb, "reverse", "tcp:3001", "tcp:3001")
+                .inheritIO()
+                .start()
+                .waitFor()
+        }
+    }
+}
+
+
