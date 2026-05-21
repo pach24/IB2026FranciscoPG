@@ -1,4 +1,4 @@
-# IB2026FranciscoPG
+# IberQube
 
 Aplicación nativa Android construida con **Jetpack Compose** para la gestión y visualización de facturas energéticas, con cambio de fuente de datos en tiempo real y arquitectura modular.
 
@@ -98,4 +98,118 @@ Entrega centrada en la integración de Firebase.
 * **Splash Screen:** Pantalla de carga inicial con tema dedicado.
 * **Firebase Analytics:** Tracking de navegación e interacciones de usuario a través de una abstracción en `:domain` (`AnalyticsTracker`) implementada en `:data` con el SDK de Firebase, sin acoplar la UI al proveedor.
 * **Firebase Remote Config:** Flag `gas_contracts_enabled` que activa o desactiva la sección de contratos de Gas sin necesidad de una nueva publicación en Play Store.
-* **Firebase Crashlytics:** Infraestructura preparada para reporting de crashes en produc
+* **Firebase Crashlytics:** Infraestructura preparada para el reporting de crashes en producción mediante `FirebaseCrashReporter` (implementa `CrashReporter` del dominio), con activación completa prevista en una entrega posterior.
+ 
+## Requisitos previos
+ 
+| Herramienta | Versión mínima |
+|---|---|
+| Android Studio | Ladybug (2024.2) o superior |
+| JDK | 11 |
+| Kotlin | 2.0.21 |
+| AGP (Android Gradle Plugin) | 8.13.2 |
+| Android SDK — `compileSdk` | 36 |
+| Android SDK — `minSdk` | 29 (Android 10) |
+| Android SDK — `targetSdk` | 36 |
+| Mockoon (para modo servidor real) | Cualquier versión reciente |
+ 
+> **Dispositivo / emulador:** Android 10 (API 29) o superior.
+ 
+---
+ 
+## Instalación y configuración
+ 
+### 1. Clonar el repositorio
+ 
+```bash
+git clone https://github.com/<org>/ib2026franciscopg.git
+cd ib2026franciscopg
+```
+ 
+### 2. Configurar Firebase
+ 
+El proyecto requiere un archivo `google-services.json` válido vinculado a tu proyecto Firebase.
+ 
+1. Accede a la [consola de Firebase](https://console.firebase.google.com/) y abre (o crea) el proyecto correspondiente.
+2. Descarga el `google-services.json` desde **Configuración del proyecto → Tus apps → Android**.
+3. Cópialo en `app/google-services.json` (ya existe un placeholder en el repositorio; sustitúyelo).
+### 3. Levantar Mockoon (modo servidor real)
+ 
+El modo de datos real apunta a `https://localhost:3001/`. Para activarlo:
+ 
+1. Instala [Mockoon](https://mockoon.com/).
+2. Importa el entorno incluido en el proyecto: `app/src/main/res/raw/mockoon_iberdrola.json`.
+3. Arranca el servidor en el puerto **3001**.
+4. En la app, activa el toggle **"Servidor real"** desde la pantalla principal.
+> Si usas un emulador, `localhost` resuelve directamente al host. En dispositivo físico puede ser necesario usar la IP de tu máquina y ajustar `network_security_config.xml`.
+ 
+### 4. Abrir y compilar
+ 
+Abre el proyecto con Android Studio, sincroniza Gradle y ejecuta la app en un emulador o dispositivo con API ≥ 29.
+ 
+---
+ 
+## Estructura de módulos
+ 
+El proyecto sigue una arquitectura **Clean Architecture multi-módulo**. Cada módulo tiene una responsabilidad única y solo depende hacia las capas internas:
+ 
+```
+:app
+ └── punto de entrada, DI raíz (Hilt), AndroidManifest principal
+ 
+:presentation
+ └── UI (Jetpack Compose, Material 3), ViewModels, navegación
+     Depende de: :domain
+ 
+:domain
+ └── modelos de negocio, repositorios (interfaces), use cases, abstracciones de analytics/crash
+     Sin dependencias de Android Framework
+ 
+:data
+ └── implementaciones de repositorios, Retrofit, RetroMock, Room, Firebase
+     Depende de: :domain
+```
+ 
+### Dependencias entre módulos
+ 
+```
+:app ──► :presentation ──► :domain ◄── :data
+  └─────────────────────────────────────────┘
+```
+ 
+`:domain` no conoce ni a `:data` ni a `:presentation`; la inversión de dependencias se gestiona vía Hilt en `:app`.
+ 
+---
+ 
+## Diagrama de arquitectura
+ 
+```
+┌─────────────────────────────────────────────────────────┐
+│                        :presentation                    │
+│  Compose UI → ViewModel → UseCase (domain)              │
+│  UiState / UiEvent  │  StateFlow / SharedFlow           │
+└───────────────────────────┬─────────────────────────────┘
+                            │ llama a
+┌───────────────────────────▼─────────────────────────────┐
+│                          :domain                        │
+│  UseCase · Repository (interfaz) · Model · Analytics    │
+└──────────┬──────────────────────────────────────────────┘
+           │ implementado en
+┌──────────▼──────────────────────────────────────────────┐
+│                           :data                         │
+│  Retrofit / RetroMock · Room · Firebase SDK             │
+│  RepositoryImpl · Mappers · DTO                         │
+└─────────────────────────────────────────────────────────┘
+```
+ 
+**Fuente de datos intercambiable en caliente:**
+ 
+```
+NetworkModule
+    ├── RetroMock  (JSON local en assets/)   ← modo desarrollo
+    └── Retrofit   (Mockoon localhost:3001)  ← modo servidor real
+```
+ 
+El toggle en `MainScreen` llama a `SetMockUseCase`, que actualiza el flag en `ConfigurationRepository`; Hilt reinyecta la dependencia en el siguiente ciclo.
+ 
+---
